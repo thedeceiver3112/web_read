@@ -439,7 +439,7 @@ async function processPdfFile(file) {
     const formData = new FormData();
     formData.append('pdf', file, file.name);
 
-    const res = await fetch('/api/extract-pdf', {
+    const res = await fetch('api/extract-pdf', {
       method: 'POST',
       body: formData
     });
