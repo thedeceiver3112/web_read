@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/nhthemcw/public_html/reader
+    - export DEPLOYPATH=/home/nhthemcw/public_html
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/static
     - /bin/cp index.html $DEPLOYPATH/index.html
