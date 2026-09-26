@@ -1,23 +1,42 @@
 /* ==========================================================
-   MICROSOFT EXCEL 365 STEALTH READER THEME
-   Pixel-perfect Office design for incognito reading at work
+   MULTI-THEME STEALTH WORKSPACE DISGUISE SYSTEM
+   Supports: Google Sheets (Primary), Excel 365, and VS Code IDE
    ========================================================== */
 
 :root {
+  /* Fonts */
+  --font-gsheet: 'Google Sans', Roboto, RobotoDraft, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --font-excel: 'Segoe UI', Calibri, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  --font-vscode: 'Consolas', 'Courier New', Menlo, Monaco, monospace;
+  
+  --story-font-family: 'Arial', sans-serif;
+  --story-font-size: 10pt;
+  --story-color: #202124;
+
+  /* Google Sheets Colors */
+  --gs-green: #0F9D58;
+  --gs-blue: #1a73e8;
+  --gs-toolbar-bg: #edf2fa;
+  --gs-border: #e0e0e0;
+  --gs-grid-header: #f8f9fa;
+  --gs-active-cell: #1a73e8;
+
+  /* Excel Colors */
   --excel-green: #107c41;
-  --excel-green-dark: #0b552c;
-  --excel-green-light: #21a366;
-  --excel-header-bg: #107c41;
   --excel-ribbon-bg: #f3f2f1;
   --excel-border: #e1dfdd;
-  --excel-cell-border: #d4d4d4;
-  --excel-selected-cell: #107c41;
-  --excel-header-hover: #e1dfdd;
-  --excel-header-selected: #c8c6c4;
-  --excel-font: 'Segoe UI', Calibri, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-  --story-font-family: 'Calibri', 'Segoe UI', sans-serif;
-  --story-font-size: 11pt;
-  --story-color: #000000;
+  --excel-active-cell: #107c41;
+
+  /* VS Code Colors */
+  --vsc-bg: #1e1e1e;
+  --vsc-sidebar-bg: #252526;
+  --vsc-act-bg: #333333;
+  --vsc-header: #3c3c3c;
+  --vsc-tab-active: #1e1e1e;
+  --vsc-tab-inactive: #2d2d2d;
+  --vsc-status: #007acc;
+  --vsc-border: #333333;
+  --vsc-text: #cccccc;
 }
 
 * {
@@ -27,21 +46,296 @@
   user-select: none;
 }
 
-body.excel-theme {
-  font-family: var(--excel-font);
-  font-size: 12px;
-  color: #323130;
-  background-color: #ffffff;
+body {
   height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-size: 12px;
 }
 
 /* --------------------------------------------------
-   1. TITLE BAR
+   THEME TOGGLING DISPLAY RULES
    -------------------------------------------------- */
+body.theme-googlesheets .gsheet-only { display: flex !important; }
+body.theme-googlesheets .excel-only,
+body.theme-googlesheets .vscode-only { display: none !important; }
+body.theme-googlesheets .gsheet-excel-only { display: flex !important; }
+
+body.theme-excel .excel-only { display: flex !important; }
+body.theme-excel .gsheet-only,
+body.theme-excel .vscode-only { display: none !important; }
+body.theme-excel .gsheet-excel-only { display: flex !important; }
+
+body.theme-vscode .vscode-only { display: flex !important; }
+body.theme-vscode .gsheet-only,
+body.theme-vscode .excel-only,
+body.theme-vscode .gsheet-excel-only { display: none !important; }
+
+.theme-header-container {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+
+/* ==================================================
+   THEME 1: GOOGLE SHEETS
+   ================================================== */
+body.theme-googlesheets {
+  font-family: var(--font-gsheet);
+  background-color: #ffffff;
+  color: #202124;
+}
+
+.gsheet-top-bar {
+  background-color: #ffffff;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 4px 14px;
+  border-bottom: 1px solid #f1f3f4;
+}
+.gsheet-top-left { display: flex; align-items: center; gap: 12px; }
+.gsheet-logo-btn { display: flex; align-items: center; cursor: pointer; }
+.gsheet-title-and-menu { display: flex; flex-direction: column; gap: 2px; }
+.gsheet-title-row { display: flex; align-items: center; gap: 8px; }
+
+.gsheet-doc-title {
+  font-size: 18px;
+  color: #1f1f1f;
+  font-weight: 400;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.gsheet-doc-title:hover { outline: 1px solid #dadce0; }
+.gsheet-doc-icons { display: flex; align-items: center; gap: 4px; }
+.gsheet-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 50%;
+}
+.gsheet-icon-btn:hover { background-color: #f1f3f4; }
+.gsheet-cloud-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #5f6368;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.gsheet-menu-bar { display: flex; align-items: center; gap: 2px; margin-left: 2px; }
+.gsheet-menu-item {
+  background: transparent;
+  border: none;
+  padding: 2px 7px;
+  font-size: 14px;
+  color: #202124;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-gsheet);
+}
+.gsheet-menu-item:hover { background-color: #f1f3f4; }
+
+.gsheet-top-right { display: flex; align-items: center; gap: 8px; }
+
+.theme-switch-pill {
+  background-color: #edf2fa;
+  color: #041e49;
+  border: 1px solid #d3e3fd;
+  border-radius: 18px;
+  padding: 6px 12px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.15s;
+}
+.theme-switch-pill:hover { background-color: #d3e3fd; }
+
+.boss-key-btn {
+  background-color: #d93025;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 18px;
+  font-weight: 600;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  transition: 0.15s;
+}
+.boss-key-btn:hover { background-color: #b31412; }
+.boss-badge { background: rgba(0,0,0,0.25); padding: 1px 5px; border-radius: 10px; font-size: 10px; }
+
+.gsheet-circle-btn {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444746;
+  font-size: 15px;
+}
+.gsheet-circle-btn:hover { background-color: #f1f3f4; }
+
+.gsheet-share-btn {
+  background-color: #c2e7ff;
+  color: #001d35;
+  border: none;
+  border-radius: 20px;
+  height: 36px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.gsheet-share-btn:hover { background-color: #b3ddfc; }
+
+.gsheet-avatar {
+  background-color: #0F9D58;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13px;
+  margin-left: 4px;
+}
+
+/* Google Sheets Toolbar */
+.gsheet-toolbar {
+  background-color: var(--gs-toolbar-bg);
+  height: 38px;
+  border-radius: 20px;
+  margin: 0 14px 4px 14px;
+  padding: 2px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.gsheet-tools-group, .gsheet-stealth-group { display: flex; align-items: center; gap: 2px; }
+.gs-tool-btn {
+  background: transparent;
+  border: none;
+  height: 28px;
+  width: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444746;
+  font-size: 13px;
+}
+.gs-tool-btn:hover { background-color: rgba(68, 71, 70, 0.08); }
+.gs-tool-btn.active-toggle { background-color: #d3e3fd; color: #041e49; }
+.gs-tool-divider { width: 1px; height: 18px; background-color: #c4c7c5; margin: 0 5px; }
+
+.gs-select {
+  background: transparent;
+  border: none;
+  height: 28px;
+  padding: 0 6px;
+  font-size: 12px;
+  color: #444746;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: var(--font-gsheet);
+  outline: none;
+}
+.gs-select:hover { background-color: rgba(68, 71, 70, 0.08); }
+.gs-font-select { width: 90px; }
+.gs-size-select { width: 44px; }
+.gs-zoom-select { width: 62px; }
+
+.gs-stealth-pill-btn {
+  background: white;
+  border: 1px solid #c4c7c5;
+  border-radius: 14px;
+  height: 26px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 11px;
+  color: #0F9D58;
+}
+.gs-stealth-pill-btn:hover { background-color: #e6f4ea; }
+.gs-file-name {
+  font-size: 10px;
+  color: #5f6368;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gs-page-controls, .gs-autoscroll-controls { display: flex; align-items: center; gap: 3px; }
+.gs-mini-btn {
+  background: white;
+  border: 1px solid #c4c7c5;
+  border-radius: 3px;
+  height: 24px;
+  padding: 0 8px;
+  font-size: 11px;
+  cursor: pointer;
+  color: #444746;
+}
+.gs-mini-btn:hover { background-color: #f1f3f4; }
+.gs-mini-btn.gs-play-btn { font-weight: 600; color: #0F9D58; border-color: #0F9D58; }
+.gs-mini-btn.gs-play-btn.playing { color: #d93025; border-color: #d93025; }
+.gs-page-text { font-size: 11px; font-weight: 600; color: #1f1f1f; min-width: 50px; text-align: center; }
+#gs-input-jump {
+  width: 44px;
+  height: 24px;
+  border: 1px solid #c4c7c5;
+  border-radius: 3px;
+  font-size: 11px;
+  text-align: center;
+  outline: none;
+}
+.gs-dim-control { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #5f6368; }
+.gs-dim-control input { width: 65px; }
+
+
+/* ==================================================
+   THEME 2: MICROSOFT EXCEL 365
+   ================================================== */
+body.theme-excel {
+  font-family: var(--font-excel);
+  background-color: #ffffff;
+  color: #323130;
+}
+
 .excel-title-bar {
   background-color: var(--excel-green);
   color: #ffffff;
@@ -53,193 +347,21 @@ body.excel-theme {
   flex-shrink: 0;
   font-size: 12px;
 }
+.excel-title-bar .left-section { display: flex; align-items: center; gap: 10px; }
+.quick-access { display: flex; align-items: center; gap: 2px; }
+.qa-btn { background: transparent; border: none; color: white; padding: 4px 6px; border-radius: 2px; cursor: pointer; }
+.autosave-container { display: flex; align-items: center; gap: 6px; font-size: 11px; border-left: 1px solid rgba(255, 255, 255, 0.3); padding-left: 8px; }
+.document-name { font-weight: 600; font-size: 12px; margin-left: 10px; white-space: nowrap; }
+.center-search { flex: 0 1 420px; margin: 0 16px; }
+.search-box { background-color: rgba(255, 255, 255, 0.9); border-radius: 4px; height: 26px; display: flex; align-items: center; padding: 0 10px; gap: 8px; }
+.search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 12px; }
+.right-window-controls { display: flex; align-items: center; gap: 8px; }
+.user-profile { display: flex; align-items: center; gap: 6px; font-size: 11px; padding: 0 8px; }
+.user-avatar { background-color: #004b1c; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 10px; }
+.win-btn { background: transparent; border: none; color: white; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.win-btn:hover { background-color: rgba(255, 255, 255, 0.15); }
+.win-close:hover { background-color: #c42b1c; }
 
-.left-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.app-icon {
-  display: flex;
-  align-items: center;
-  margin-right: 2px;
-}
-
-.quick-access {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.qa-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  padding: 4px 6px;
-  border-radius: 2px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-.qa-btn:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-.autosave-container {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  margin-left: 6px;
-  padding-left: 8px;
-  border-left: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Toggle Switch */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 28px;
-  height: 14px;
-}
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #2b884d;
-  transition: .2s;
-  border-radius: 14px;
-}
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 10px;
-  width: 10px;
-  left: 2px;
-  bottom: 2px;
-  background-color: white;
-  transition: .2s;
-  border-radius: 50%;
-}
-input:checked + .slider {
-  background-color: #ffffff;
-}
-input:checked + .slider:before {
-  transform: translateX(14px);
-  background-color: var(--excel-green);
-}
-
-.document-name {
-  font-weight: 600;
-  font-size: 12px;
-  margin-left: 10px;
-  letter-spacing: 0.2px;
-  white-space: nowrap;
-}
-
-/* Center Search */
-.center-search {
-  flex: 0 1 420px;
-  margin: 0 16px;
-}
-.search-box {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 4px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-  gap: 8px;
-}
-.search-box input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
-  font-size: 12px;
-  color: #333;
-}
-
-/* Right Controls */
-.right-window-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.boss-key-btn {
-  background-color: #d83b01;
-  color: white;
-  border: none;
-  padding: 4px 10px;
-  border-radius: 3px;
-  font-weight: 600;
-  font-size: 11px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  transition: 0.15s;
-}
-.boss-key-btn:hover {
-  background-color: #a80000;
-}
-.boss-badge {
-  background: rgba(0,0,0,0.3);
-  padding: 1px 4px;
-  border-radius: 2px;
-  font-size: 10px;
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  padding: 0 8px;
-}
-.user-avatar {
-  background-color: #004b1c;
-  color: white;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 10px;
-}
-
-.win-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-.win-btn:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-.win-close:hover {
-  background-color: #c42b1c;
-}
-
-/* --------------------------------------------------
-   2. RIBBON TABS
-   -------------------------------------------------- */
 .excel-ribbon-tabs {
   background-color: #ffffff;
   display: flex;
@@ -250,47 +372,10 @@ input:checked + .slider:before {
   gap: 4px;
   flex-shrink: 0;
 }
+.excel-ribbon-tabs .tab-item { background: transparent; border: none; padding: 6px 14px; font-size: 12px; color: #323130; cursor: pointer; border-bottom: 3px solid transparent; }
+.excel-ribbon-tabs .tab-item.active { color: var(--excel-green); font-weight: 600; border-bottom: 3px solid var(--excel-green); }
+.excel-ribbon-tabs .file-tab { background-color: var(--excel-green); color: white; border-radius: 2px 2px 0 0; font-weight: 600; }
 
-.tab-item {
-  background: transparent;
-  border: none;
-  padding: 6px 14px;
-  font-size: 12px;
-  color: #323130;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.1s;
-}
-.tab-item:hover {
-  color: var(--excel-green);
-}
-.tab-item.active {
-  color: var(--excel-green);
-  font-weight: 600;
-  border-bottom: 3px solid var(--excel-green);
-}
-.tab-item.file-tab {
-  background-color: var(--excel-green);
-  color: white;
-  border-radius: 2px 2px 0 0;
-  font-weight: 600;
-}
-.tab-item.file-tab:hover {
-  background-color: var(--excel-green-dark);
-}
-.tab-item.stealth-highlight {
-  background-color: #eff6fc;
-  color: #0078d4;
-  border-radius: 3px 3px 0 0;
-  font-weight: 600;
-}
-.tab-item.stealth-highlight:hover {
-  background-color: #deecf9;
-}
-
-/* --------------------------------------------------
-   3. RIBBON BODY / TOOLBAR
-   -------------------------------------------------- */
 .excel-ribbon-body {
   background-color: var(--excel-ribbon-bg);
   border-bottom: 1px solid var(--excel-border);
@@ -299,165 +384,353 @@ input:checked + .slider:before {
   gap: 16px;
   flex-shrink: 0;
   height: 86px;
-  box-sizing: border-box;
+}
+.ribbon-group { display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--excel-border); padding-right: 14px; height: 100%; }
+.ribbon-group:last-child { border-right: none; }
+.ribbon-subgroup { display: flex; gap: 6px; }
+.ribbon-subgroup.font-subgroup, .ribbon-subgroup.alignment-subgroup { flex-direction: column; gap: 4px; }
+.row-sub { display: flex; align-items: center; gap: 4px; }
+.group-label { font-size: 10px; color: #605e5c; text-align: center; margin-top: 4px; }
+.ribbon-select { height: 24px; border: 1px solid var(--excel-border); background: white; padding: 0 4px; font-size: 11px; border-radius: 2px; outline: none; cursor: pointer; }
+.tool-btn { background: white; border: 1px solid var(--excel-border); border-radius: 2px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; }
+.tool-btn:hover { background-color: #edebe9; }
+.tool-btn.active-toggle { width: auto; padding: 0 8px; font-size: 11px; }
+
+.stealth-tools-group .ribbon-subgroup { gap: 14px; align-items: center; }
+.stealth-opt { display: flex; flex-direction: column; gap: 2px; }
+.stealth-opt label { font-size: 10px; color: #605e5c; font-weight: 500; }
+.page-controls, .auto-scroll-controls { display: flex; align-items: center; gap: 4px; }
+.mini-btn { background: white; border: 1px solid var(--excel-border); border-radius: 2px; height: 22px; padding: 0 6px; font-size: 11px; cursor: pointer; }
+.mini-btn.play-btn { font-weight: 600; color: var(--excel-green); border-color: var(--excel-green); }
+.mini-btn.play-btn.playing { color: #d83b01; border-color: #d83b01; }
+.page-text { font-size: 11px; font-weight: 600; color: #323130; min-width: 50px; text-align: center; }
+.open-pdf-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; background: white; border: 1px dashed var(--excel-green); padding: 4px 10px; border-radius: 3px; cursor: pointer; font-weight: 600; font-size: 11px; color: var(--excel-green); }
+.sub-caption { font-size: 9px; color: #666; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
+
+
+/* ==================================================
+   THEME 3: TRUE VISUAL STUDIO CODE IDE
+   ================================================== */
+body.theme-vscode {
+  font-family: var(--font-vscode);
+  background-color: var(--vsc-bg);
+  color: var(--vsc-text);
 }
 
-.ribbon-group {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid var(--excel-border);
-  padding-right: 14px;
-  height: 100%;
-}
-.ribbon-group:last-child {
-  border-right: none;
-}
-
-.ribbon-subgroup {
-  display: flex;
-  gap: 6px;
-}
-.ribbon-subgroup.font-subgroup,
-.ribbon-subgroup.alignment-subgroup {
-  flex-direction: column;
-  gap: 4px;
-}
-
-.row-sub {
+.vscode-title-bar {
+  background-color: var(--vsc-header);
+  color: #cccccc;
+  height: 32px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--vsc-border);
 }
+.vscode-title-left { display: flex; align-items: center; gap: 12px; }
+.vscode-menu-bar { display: flex; gap: 10px; font-size: 12px; color: #cccccc; }
+.vscode-menu-bar span { cursor: pointer; padding: 2px 4px; }
+.vscode-menu-bar span:hover { background: #505050; border-radius: 3px; }
+.vscode-title-center { color: #999999; font-size: 12px; }
+.vscode-title-right { display: flex; align-items: center; gap: 8px; }
 
-.group-label {
-  font-size: 10px;
-  color: #605e5c;
-  text-align: center;
-  margin-top: 4px;
+.vscode-tabs-bar {
+  background-color: var(--vsc-tab-inactive);
+  display: flex;
+  align-items: center;
+  height: 35px;
+  border-bottom: 1px solid var(--vsc-border);
 }
-
-.ribbon-select {
-  height: 24px;
-  border: 1px solid var(--excel-border);
-  background: white;
-  padding: 0 4px;
-  font-size: 11px;
-  border-radius: 2px;
-  outline: none;
+.vscode-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  height: 100%;
+  font-size: 12px;
+  color: #969696;
+  background-color: var(--vsc-tab-inactive);
+  border-right: 1px solid var(--vsc-border);
   cursor: pointer;
 }
-.ribbon-select.font-name {
-  width: 105px;
+.vscode-tab.active {
+  background-color: var(--vsc-bg);
+  color: #ffffff;
+  border-top: 2px solid #007acc;
 }
-.ribbon-select.font-size {
-  width: 48px;
+.vscode-tab .tab-close { font-size: 14px; margin-left: 6px; }
+
+.vscode-stealth-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  padding-right: 12px;
+}
+.vscode-pill-btn {
+  background-color: #0e639c;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.vsc-btn {
+  background: #3c3c3c;
+  border: 1px solid #555;
+  color: #eee;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.vsc-btn:hover { background: #505050; }
+.vscode-file-text { font-size: 11px; color: #888; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Real VS Code Layout Container */
+.vscode-workspace {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+  background-color: var(--vsc-bg);
 }
 
-.tool-btn {
-  background: white;
-  border: 1px solid var(--excel-border);
-  border-radius: 2px;
-  width: 24px;
-  height: 24px;
+/* Activity Bar (Left 48px) */
+.vsc-activity-bar {
+  width: 48px;
+  background-color: var(--vsc-act-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 16px;
+  flex-shrink: 0;
+  border-right: 1px solid #252526;
+}
+.vsc-act-icon {
+  font-size: 18px;
+  color: #858585;
+  cursor: pointer;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  width: 100%;
+}
+.vsc-act-icon:hover { color: #ffffff; }
+.vsc-act-icon.active {
+  color: #ffffff;
+  border-left: 2px solid #ffffff;
+}
+.vsc-act-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Sidebar Explorer (Left 210px) */
+.vsc-sidebar {
+  width: 210px;
+  background-color: var(--vsc-sidebar-bg);
+  border-right: 1px solid #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.vsc-sidebar-title {
+  padding: 10px 14px 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #bbbbbb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  letter-spacing: 0.5px;
+}
+.vsc-folder-header {
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cccccc;
+}
+.vsc-tree-section {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+}
+.vsc-tree-item {
+  padding: 4px 14px;
   font-size: 12px;
+  color: #cccccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
-.tool-btn:hover {
-  background-color: #edebe9;
+.vsc-tree-item:hover { background-color: #2a2d2e; }
+.vsc-tree-item.active { background-color: #37373d; color: #ffffff; }
+.vsc-tree-file { padding-left: 28px; }
+
+/* Editor Area */
+.vsc-editor-wrapper {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--vsc-bg);
 }
-.tool-btn.active-toggle {
-  width: auto;
+
+.vsc-breadcrumbs {
+  height: 24px;
+  background-color: var(--vsc-bg);
+  border-bottom: 1px solid #252526;
+  padding: 3px 16px;
+  font-size: 11px;
+  color: #a9a9a9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  flex-shrink: 0;
+}
+.vsc-func-sym { color: #dcdcaa; font-weight: bold; }
+
+/* Code area with gutter */
+.vsc-code-editor {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  overflow: auto;
+  background-color: var(--vsc-bg);
+  font-family: var(--font-vscode);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.vsc-editor-gutter {
+  width: 50px;
+  background-color: var(--vsc-bg);
+  color: #858585;
+  text-align: right;
+  padding: 10px 14px 10px 0;
+  user-select: none;
+  flex-shrink: 0;
+  border-right: 1px solid #2b2b2b;
+}
+.vsc-gutter-num {
+  height: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.vsc-editor-lines {
+  flex: 1;
+  padding: 10px 18px;
+  user-select: text;
+  background-color: var(--vsc-bg);
+}
+
+.vsc-code-line {
+  height: 21px;
+  display: flex;
+  align-items: center;
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 0 4px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.vsc-code-line:hover { background-color: #262626; }
+.vsc-code-line.active-line {
+  background-color: #282828;
+  outline: 1px solid #3c3c3c;
+}
+
+/* Syntax Coloring */
+.kw { color: #569cd6; font-weight: 500; }
+.kw-flow { color: #c586c0; font-weight: 500; }
+.fn { color: #dcdcaa; }
+.cls { color: #4ec9b0; }
+.cm { color: #6a9955; font-style: italic; }
+.str { color: #ce9178; }
+.var { color: #9cdcfe; }
+.num { color: #b5cea8; }
+
+/* VS Code Terminal Panel */
+.vsc-terminal-panel {
+  height: 130px;
+  border-top: 1px solid #333333;
+  background-color: var(--vsc-bg);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+.vsc-terminal-header {
+  height: 28px;
+  border-bottom: 1px solid #2d2d2d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  font-size: 11px;
+  color: #858585;
+}
+.vsc-term-tabs {
+  display: flex;
+  gap: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.vsc-term-tabs span { cursor: pointer; }
+.vsc-term-tabs span.active { color: #ffffff; border-bottom: 1px solid #ffffff; padding-bottom: 2px; font-weight: 600; }
+.vsc-term-actions { display: flex; gap: 10px; cursor: pointer; }
+
+.vsc-terminal-body {
+  flex: 1;
+  padding: 6px 16px;
+  font-family: var(--font-vscode);
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-y: auto;
+  color: #cccccc;
+}
+.term-line.prompt { color: #4ec9b0; }
+.term-line.prompt .cmd { color: #dcdcaa; }
+.term-line.info { color: #858585; }
+.term-line.success { color: #6a9955; }
+.term-line .url { color: #569cd6; text-decoration: underline; }
+
+/* VS Code Status Bar Content */
+.vscode-statusbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 24px;
+  background-color: var(--vsc-status);
+  color: #ffffff;
   padding: 0 8px;
   font-size: 11px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+.vsc-stat-left, .vsc-stat-right { display: flex; align-items: center; gap: 12px; }
+.vsc-stat-item { cursor: pointer; display: flex; align-items: center; gap: 4px; }
+.vsc-stat-item.remote { background: #16825d; padding: 2px 8px; border-radius: 2px; }
 
-/* Stealth tools within Ribbon */
-.stealth-tools-group .ribbon-subgroup {
-  gap: 14px;
-  align-items: center;
-}
-.stealth-opt {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.stealth-opt label {
-  font-size: 10px;
-  color: #605e5c;
-  font-weight: 500;
-}
-.page-controls, .auto-scroll-controls {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.mini-btn {
-  background: white;
-  border: 1px solid var(--excel-border);
-  border-radius: 2px;
-  height: 22px;
-  padding: 0 6px;
-  font-size: 11px;
-  cursor: pointer;
-}
-.mini-btn:hover {
-  background-color: #e1dfdd;
-}
-.mini-btn.play-btn {
-  font-weight: 600;
-  color: var(--excel-green);
-  border-color: var(--excel-green);
-}
-.mini-btn.play-btn.playing {
-  color: #d83b01;
-  border-color: #d83b01;
-}
-.page-text {
-  font-size: 11px;
-  font-weight: 600;
-  color: #323130;
-  min-width: 50px;
-  text-align: center;
-}
 
-.open-pdf-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  background: white;
-  border: 1px dashed var(--excel-green);
-  padding: 4px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 11px;
-  color: var(--excel-green-dark);
-}
-.open-pdf-btn:hover {
-  background-color: #eff6fc;
-}
-.sub-caption {
-  font-size: 9px;
-  color: #666;
-  max-width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: center;
-  margin-top: 2px;
-}
-
-/* --------------------------------------------------
-   4. FORMULA BAR
-   -------------------------------------------------- */
+/* ==================================================
+   SHARED: FORMULA BAR (GSHEET & EXCEL ONLY)
+   ================================================== */
 .excel-formula-bar-container {
   height: 28px;
-  border-bottom: 1px solid var(--excel-border);
+  border-bottom: 1px solid #e0e0e0;
   background-color: #ffffff;
   display: flex;
   align-items: center;
@@ -471,18 +744,17 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid var(--excel-border);
+  border-right: 1px solid #e0e0e0;
   font-weight: 600;
   color: #323130;
   background: #fbfbfb;
 }
-
 .formula-actions {
   display: flex;
   align-items: center;
   gap: 3px;
   padding: 0 6px;
-  border-right: 1px solid var(--excel-border);
+  border-right: 1px solid #e0e0e0;
   height: 100%;
 }
 .formula-btn {
@@ -494,16 +766,12 @@ input:checked + .slider:before {
   padding: 2px 4px;
 }
 .fx-symbol {
-  font-size: 12px;
-  color: #605e5c;
+  font-size: 13px;
+  color: #5f6368;
   font-weight: bold;
   padding-left: 2px;
 }
-
-.formula-input-wrapper {
-  flex: 1;
-  height: 100%;
-}
+.formula-input-wrapper { flex: 1; height: 100%; }
 .formula-input {
   width: 100%;
   height: 100%;
@@ -511,35 +779,30 @@ input:checked + .slider:before {
   outline: none;
   padding: 0 10px;
   font-size: 12px;
-  font-family: var(--excel-font);
+  font-family: inherit;
   color: #201f1e;
   background: transparent;
   text-overflow: ellipsis;
 }
 
-/* Notification banner */
+/* Status banner */
 .status-banner {
-  background-color: #e7f2eb;
-  color: var(--excel-green-dark);
-  padding: 4px 12px;
-  font-size: 11px;
-  border-bottom: 1px solid #c3decb;
+  background-color: #e6f4ea;
+  color: #137333;
+  padding: 5px 14px;
+  font-size: 12px;
+  border-bottom: 1px solid #ceead6;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
 }
-.banner-close {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  color: #555;
-}
+.banner-close { background: transparent; border: none; cursor: pointer; font-weight: bold; font-size: 13px; color: inherit; }
 
-/* --------------------------------------------------
-   5. WORKSPACE & TABLES
-   -------------------------------------------------- */
+
+/* ==================================================
+   WORKSPACE: SPREADSHEET (GSHEET & EXCEL)
+   ================================================== */
 .excel-workspace {
   flex: 1 1 0%;
   min-height: 0;
@@ -556,16 +819,8 @@ input:checked + .slider:before {
   width: 100%;
   overflow: hidden;
 }
-.sheet-content.active {
-  display: block;
-}
-
-.table-container {
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  position: relative;
-}
+.sheet-content.active { display: block; }
+.table-container { height: 100%; width: 100%; overflow: auto; position: relative; }
 
 .excel-grid-table {
   border-collapse: collapse;
@@ -575,12 +830,11 @@ input:checked + .slider:before {
   background-color: white;
 }
 
-/* Grid Headers */
 .excel-grid-table th {
-  background-color: #f3f2f1;
-  border: 1px solid var(--excel-border);
-  color: #605e5c;
-  font-weight: 600;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  color: #5f6368;
+  font-weight: 500;
   font-size: 11px;
   height: 24px;
   text-align: center;
@@ -589,74 +843,68 @@ input:checked + .slider:before {
   top: 0;
   z-index: 2;
 }
-.corner-header {
-  width: 45px;
-  background-color: #e1dfdd;
-  cursor: pointer;
+body.theme-excel .excel-grid-table th {
+  background-color: #f3f2f1;
+  border-color: #e1dfdd;
+  font-weight: 600;
 }
-.col-header {
-  height: 22px;
-  background-color: #f8f9fa;
-}
+
+.corner-header { width: 45px; background-color: #f1f3f4; }
 .row-header {
   width: 45px;
   background-color: #f8f9fa;
-  border: 1px solid var(--excel-border);
-  color: #605e5c;
+  border: 1px solid #e0e0e0;
+  color: #5f6368;
   text-align: center;
   font-size: 11px;
   font-weight: 500;
 }
-
 .header-titles-row th {
-  background-color: #e7f2eb;
-  color: var(--excel-green-dark);
+  background-color: #edf2fa;
+  color: #041e49;
   font-weight: 600;
   height: 26px;
-  border: 1px solid #c3decb;
+  border: 1px solid #d3e3fd;
   position: sticky;
   top: 24px;
   z-index: 2;
 }
+body.theme-excel .header-titles-row th {
+  background-color: #e7f2eb;
+  color: var(--excel-green-dark);
+  border-color: #c3decb;
+}
 
-/* Grid Cells */
 .excel-grid-table td {
-  border: 1px solid var(--excel-cell-border);
+  border: 1px solid #e0e0e0;
   padding: 5px 8px;
   font-size: 11px;
   line-height: 1.5;
-  color: #201f1e;
+  color: #202124;
   vertical-align: top;
   word-break: break-word;
   white-space: normal;
   user-select: text;
 }
-
-/* The Stealth Story Cell in Column D */
 .story-cell {
   font-family: var(--story-font-family);
   font-size: var(--story-font-size);
   color: var(--story-color);
   line-height: 1.6;
-  letter-spacing: 0.1px;
   cursor: pointer;
   background-color: #ffffff;
 }
 
-/* Selected row / Active cell highlighting */
-tr.selected-story-row td {
-  background-color: #e8f4ec !important;
-}
-tr.selected-story-row .row-header {
-  background-color: #d1ebd8;
-  color: var(--excel-green-dark);
-  font-weight: bold;
-}
+tr.selected-story-row td { background-color: #e8f0fe !important; }
+body.theme-excel tr.selected-story-row td { background-color: #e8f4ec !important; }
+
 .story-cell.cell-focused {
-  outline: 2px solid var(--excel-green);
+  outline: 2px solid var(--gs-blue);
   outline-offset: -2px;
   position: relative;
 }
+body.theme-excel .story-cell.cell-focused { outline-color: var(--excel-green); }
+
 .story-cell.cell-focused::after {
   content: "";
   position: absolute;
@@ -664,65 +912,32 @@ tr.selected-story-row .row-header {
   bottom: -1px;
   width: 6px;
   height: 6px;
-  background-color: var(--excel-green);
+  background-color: var(--gs-blue);
 }
+body.theme-excel .story-cell.cell-focused::after { background-color: var(--excel-green); }
 
-/* Dummy Table Styles */
-.dummy-financial-table td {
-  text-align: right;
-  font-family: 'Segoe UI', Arial, sans-serif;
-}
-.dummy-financial-table td:nth-child(2) {
-  text-align: center;
-}
-.dummy-financial-table td:nth-child(3) {
-  text-align: left;
-}
-.bold-text {
-  font-weight: 600;
-}
-.positive {
-  color: #107c41;
-  font-weight: 600;
-}
-.negative {
-  color: #a80000;
-}
-.highlight-yellow {
-  background-color: #fff9e6;
-}
-.highlight-green {
-  background-color: #e7f2eb;
-}
+.dummy-financial-table td { text-align: right; }
+.dummy-financial-table td:nth-child(2) { text-align: center; }
+.dummy-financial-table td:nth-child(3) { text-align: left; }
+.bold-text { font-weight: 600; }
+.positive { color: #0F9D58; font-weight: 600; }
+.negative { color: #d93025; }
+.highlight-yellow { background-color: #fff9e6; }
+.highlight-green { background-color: #e6f4ea; }
 
-/* Status Badges */
-.badge-status {
-  display: inline-block;
-  padding: 1px 6px;
-  border-radius: 2px;
-  font-size: 10px;
-  font-weight: 500;
-}
-.badge-status.verified {
-  background-color: #dff6dd;
-  color: #107c41;
-}
-.badge-status.review {
-  background-color: #fff4ce;
-  color: #795b00;
-}
-.badge-status.audit {
-  background-color: #f3f2f1;
-  color: #605e5c;
-}
+.badge-status { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 500; }
+.badge-status.verified { background-color: #e6f4ea; color: #137333; }
+.badge-status.review { background-color: #fef7e0; color: #b06000; }
+.badge-status.audit { background-color: #f1f3f4; color: #5f6368; }
 
-/* --------------------------------------------------
-   6. BOTTOM SHEET TABS & STATUS BAR
-   -------------------------------------------------- */
+
+/* ==================================================
+   BOTTOM SHEETS BAR (GSHEET & EXCEL)
+   ================================================== */
 .excel-sheets-bar {
-  height: 32px;
-  background-color: #f3f2f1;
-  border-top: 1px solid var(--excel-border);
+  height: 36px;
+  background-color: #f8fafd;
+  border-top: 1px solid #e0e0e0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -730,282 +945,161 @@ tr.selected-story-row .row-header {
   flex-shrink: 0;
   font-size: 11px;
 }
-
-.sheet-navigation-arrows {
-  display: flex;
-  gap: 2px;
-  margin-right: 6px;
+body.theme-excel .excel-sheets-bar {
+  height: 32px;
+  background-color: #f3f2f1;
+  border-top-color: var(--excel-border);
 }
-.sheet-nav-btn {
+body.theme-vscode .excel-sheets-bar {
+  height: 24px;
+  background-color: var(--vsc-status);
+  padding: 0 4px;
+  border-top: none;
+}
+
+.gs-bottom-left { display: flex; align-items: center; gap: 4px; margin-right: 8px; }
+.gs-plus-sheet-btn, .gs-all-sheets-btn {
   background: transparent;
   border: none;
-  font-size: 12px;
-  color: #605e5c;
+  font-size: 16px;
+  color: #444746;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
   cursor: pointer;
-  padding: 2px 4px;
-}
-.sheet-nav-btn:hover {
-  background-color: #e1dfdd;
-}
-
-.sheet-tabs-list {
   display: flex;
-  align-items: flex-end;
-  height: 100%;
-  gap: 3px;
+  align-items: center;
+  justify-content: center;
 }
+.gs-plus-sheet-btn:hover, .gs-all-sheets-btn:hover { background-color: #e0e5eb; }
 
+.sheet-tabs-list { display: flex; align-items: center; height: 100%; gap: 4px; }
 .sheet-tab {
-  background: #f8f9fa;
-  border: 1px solid var(--excel-border);
-  border-bottom: none;
-  height: 26px;
-  padding: 0 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  height: 28px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-size: 11px;
-  color: #323130;
-  border-radius: 3px 3px 0 0;
+  font-size: 12px;
+  color: #444746;
+  border-radius: 6px 6px 0 0;
   transition: 0.1s;
 }
-.sheet-tab:hover {
-  background-color: #ffffff;
-}
+.sheet-tab:hover { background-color: #e8ecf1; }
 .sheet-tab.active {
   background-color: #ffffff;
   font-weight: 600;
+  color: #0F9D58;
+  border-color: #e0e0e0;
+  border-bottom: 2px solid #0F9D58;
+}
+body.theme-excel .sheet-tab {
+  border-radius: 2px 2px 0 0;
+  height: 26px;
+  border-color: #e1dfdd;
+  border-bottom: none;
+  background: #f8f9fa;
+}
+body.theme-excel .sheet-tab.active {
+  background: #ffffff;
   color: var(--excel-green);
   border-bottom: 2px solid var(--excel-green);
 }
 
-.new-sheet-btn {
+.excel-status-bar { display: flex; align-items: center; gap: 12px; color: #5f6368; font-size: 11px; }
+.status-item.ready { font-weight: 600; color: #0F9D58; }
+body.theme-excel .status-item.ready { color: var(--excel-green-dark); }
+.formula-calc { background-color: #e8eaed; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+.gs-explore-btn {
   background: transparent;
-  border: none;
-  font-size: 16px;
-  color: #605e5c;
-  width: 24px;
-  height: 24px;
+  border: 1px solid #dadce0;
+  border-radius: 14px;
+  padding: 2px 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.new-sheet-btn:hover {
-  background-color: #e1dfdd;
-  border-radius: 50%;
-}
-
-.excel-status-bar {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  color: #605e5c;
   font-size: 11px;
-}
-.status-item.ready {
-  color: var(--excel-green-dark);
+  color: #1a73e8;
   font-weight: 600;
 }
-.formula-calc {
-  background-color: #e1dfdd;
-  padding: 2px 6px;
-  border-radius: 2px;
-  font-weight: 500;
-}
-.zoom-controls {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.zoom-btn {
-  background: transparent;
-  border: none;
-  font-size: 14px;
-  color: #605e5c;
-  cursor: pointer;
-}
-.zoom-slider-track {
-  width: 60px;
-  height: 4px;
-  background-color: #c8c6c4;
-  border-radius: 2px;
-  position: relative;
-}
-.zoom-slider-thumb {
-  width: 8px;
-  height: 8px;
-  background-color: #605e5c;
-  border-radius: 50%;
-  position: absolute;
-  top: -2px;
-  left: 50%;
-}
+.gs-explore-btn:hover { background-color: #f1f3f4; }
 
-/* --------------------------------------------------
-   7. MODAL & OVERLAYS
-   -------------------------------------------------- */
+
+/* ==================================================
+   THEME PICKER MODAL
+   ================================================== */
+.theme-picker-content { width: 740px; max-width: 95vw; }
+.theme-selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 8px; }
+.theme-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  background: #fbfbfb;
+  position: relative;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.theme-card:hover { border-color: #1a73e8; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.theme-card.active { border-color: #0F9D58; background-color: #f4fbf7; box-shadow: 0 0 0 1px #0F9D58; }
+.theme-card-badge { position: absolute; top: -9px; right: 10px; background-color: #0F9D58; color: white; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 10px; }
+
+.theme-preview-img { height: 95px; border-radius: 4px; overflow: hidden; border: 1px solid #e0e0e0; margin-bottom: 10px; display: flex; flex-direction: column; font-size: 10px; }
+.prev-top-bar { height: 22px; padding: 0 6px; display: flex; align-items: center; justify-content: space-between; }
+.prev-grid { flex: 1; display: flex; flex-direction: column; padding: 2px; gap: 2px; }
+.prev-row { display: flex; gap: 4px; font-size: 8px; color: #666; padding: 2px 4px; }
+.prev-row.header { font-weight: bold; }
+.theme-card h4 { font-size: 13px; margin-bottom: 4px; color: #1f1f1f; }
+.theme-card p { font-size: 11px; color: #5f6368; line-height: 1.35; }
+
+
+/* ==================================================
+   SHARED MODALS & OVERLAYS
+   ================================================== */
 .stealth-modal-overlay {
   display: none;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
   justify-content: center;
   align-items: center;
 }
-.stealth-modal-overlay.show {
-  display: flex;
-}
-
+.stealth-modal-overlay.show { display: flex; }
 .stealth-modal-content {
   background: white;
   width: 580px;
   max-width: 95vw;
-  border-radius: 6px;
+  border-radius: 8px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-top: 4px solid var(--excel-green);
 }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid #e0e0e0; }
+.modal-header h3 { font-size: 15px; color: #1f1f1f; }
+.modal-close-btn { background: transparent; border: none; font-size: 16px; color: #5f6368; cursor: pointer; }
 
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-bottom: 1px solid #e1dfdd;
-}
-.modal-header h3 {
-  font-size: 15px;
-  color: #201f1e;
-}
-.modal-close-btn {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  color: #605e5c;
-  cursor: pointer;
-}
+.modal-body { padding: 18px 20px; overflow-y: auto; max-height: 70vh; display: flex; flex-direction: column; gap: 16px; }
+.settings-group h4 { font-size: 13px; color: #0F9D58; margin-bottom: 6px; }
+.guide-text { font-size: 12px; color: #5f6368; margin-bottom: 8px; line-height: 1.4; }
 
-.modal-body {
-  padding: 18px 20px;
-  overflow-y: auto;
-  max-height: 70vh;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+.file-drop-area { border: 2px dashed #a8dab5; background-color: #f7faf8; border-radius: 6px; padding: 22px; text-align: center; cursor: pointer; position: relative; }
+.file-drop-area:hover, .file-drop-area.dragover { border-color: #0F9D58; background-color: #edf7f0; }
+.file-drop-area input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.browse-link { color: #0F9D58; font-weight: 600; text-decoration: underline; }
 
-.settings-group h4 {
-  font-size: 13px;
-  color: var(--excel-green-dark);
-  margin-bottom: 6px;
-}
-.guide-text {
-  font-size: 12px;
-  color: #605e5c;
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
+.hotkey-list { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+kbd { background-color: #edebe9; border: 1px solid #c8c6c4; border-radius: 3px; padding: 2px 6px; font-family: monospace; font-weight: 600; }
 
-.file-drop-area {
-  border: 2px dashed #b3d7bf;
-  background-color: #f7faf8;
-  border-radius: 6px;
-  padding: 22px;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.2s;
-  position: relative;
-}
-.file-drop-area:hover, .file-drop-area.dragover {
-  border-color: var(--excel-green);
-  background-color: #eff7f2;
-}
-.file-drop-area input {
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-.browse-link {
-  color: var(--excel-green);
-  font-weight: 600;
-  text-decoration: underline;
-}
+.modal-footer { padding: 12px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: flex-end; background: #f8fafd; }
+.primary-btn { background-color: #0F9D58; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+.primary-btn:hover { background-color: #0c8046; }
 
-.hotkey-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12px;
-  color: #323130;
-}
-kbd {
-  background-color: #edebe9;
-  border: 1px solid #c8c6c4;
-  border-radius: 3px;
-  padding: 2px 6px;
-  font-family: monospace;
-  font-weight: 600;
-  color: #201f1e;
-}
-
-.mode-cards {
-  display: flex;
-  gap: 10px;
-}
-.mode-card {
-  flex: 1;
-  border: 1px solid #e1dfdd;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  background: #fbfbfb;
-  transition: 0.15s;
-}
-.mode-card:hover {
-  border-color: var(--excel-green-light);
-}
-.mode-card.active {
-  border-color: var(--excel-green);
-  background-color: #f2f9f4;
-}
-.mode-card h5 {
-  font-size: 12px;
-  color: var(--excel-green-dark);
-  margin-bottom: 4px;
-}
-.mode-card p {
-  font-size: 11px;
-  color: #605e5c;
-  line-height: 1.35;
-}
-
-.modal-footer {
-  padding: 12px 20px;
-  border-top: 1px solid #e1dfdd;
-  display: flex;
-  justify-content: flex-end;
-  background: #f8f9fa;
-}
-.primary-btn {
-  background-color: var(--excel-green);
-  color: white;
-  border: none;
-  padding: 8px 18px;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.primary-btn:hover {
-  background-color: var(--excel-green-dark);
-}
-
-/* Loading Spinner */
 .loading-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -1015,24 +1109,730 @@ kbd {
   justify-content: center;
   align-items: center;
 }
-.loading-box {
-  background: white;
-  padding: 24px 32px;
-  border-radius: 6px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+.loading-box { background: white; padding: 24px 32px; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.spinner { width: 32px; height: 32px; border: 3px solid #e0e0e0; border-top-color: #0F9D58; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Seamless Page Flip Toast */
+.page-flip-toast {
+  position: fixed;
+  bottom: 45px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(30, 30, 30, 0.92);
+  color: #ffffff;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.page-flip-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==================================================
+   CONTINUOUS / INFINITE READING STYLES
+   ================================================== */
+tr.section-break-row td {
+  background-color: #f1f3f4 !important;
+  color: #5f6368 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 4px 12px !important;
+  border-top: 1px dashed #c0c4c9 !important;
+  border-bottom: 1px dashed #c0c4c9 !important;
+  user-select: none;
+  letter-spacing: 0.3px;
+}
+body.theme-excel tr.section-break-row td {
+  background-color: #edebe9 !important;
+  color: #323130 !important;
+  border-top: 1px dashed #a19f9d !important;
+  border-bottom: 1px dashed #a19f9d !important;
+}
+.section-break-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-break-badge {
+  background-color: #0F9D58;
+  color: #ffffff;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+}
+body.theme-googlesheets .section-break-badge {
+  background-color: #0F9D58;
+}
+body.theme-excel .section-break-badge {
+  background-color: #107c41;
+}
+
+.vsc-section-divider {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 4px;
+  user-select: none;
+  color: #6a9955;
+  font-style: italic;
+  font-size: 11px;
+  border-top: 1px dashed #383838;
+  border-bottom: 1px dashed #383838;
+  margin: 6px 0;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* ==================================================
+   DUOLINGO DESIGN SYSTEM (HOMEPAGE & DONATE PORTAL)
+   Style: Gamification, friendly, approachable, cartoon-like, rounded, playful
+   Colors: Duolingo Green (#58CC02), Feather Blue (#1CB0F6), Owl Orange (#FF9600)
+   ================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap');
+
+:root {
+  --duo-green: #58CC02;
+  --duo-green-shadow: #46A302;
+  --duo-green-light: #F7FFF0;
+  --duo-blue: #1CB0F6;
+  --duo-blue-shadow: #1899D6;
+  --duo-blue-light: #F0F9FF;
+  --duo-orange: #FF9600;
+  --duo-orange-shadow: #CC7900;
+  --duo-orange-light: #FFF9F0;
+  --duo-red: #FF4B4B;
+  --duo-red-shadow: #EA2B2B;
+  --duo-yellow: #FFC800;
+  --duo-yellow-shadow: #E5A500;
+  --duo-gray-bg: #F7F7F7;
+  --duo-border: #E5E5E5;
+  --duo-border-dark: #CECECE;
+  --duo-text-dark: #3C3C3C;
+  --duo-text-muted: #777777;
+  --duo-font: 'Nunito', 'Segoe UI Rounded', 'Arial Rounded MT Bold', -apple-system, sans-serif;
+}
+
+/* Animations */
+@keyframes duo-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
+}
+@keyframes duo-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes flame-wiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.18) rotate(6deg); }
+}
+@keyframes duo-bounce {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+/* Portal Overlay */
+.landing-portal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 99999;
+  background-color: var(--duo-gray-bg);
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(88, 204, 2, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(28, 176, 246, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 150, 0, 0.05) 0%, transparent 50%);
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 28px 16px 50px 16px;
+  font-family: var(--duo-font);
+  color: var(--duo-text-dark);
+}
+
+.landing-portal-overlay.hidden {
+  display: none !important;
+}
+
+.portal-container {
+  max-width: 1040px;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+/* Duolingo Top Gamification Bar */
+.duo-top-navbar {
+  background: #ffffff;
+  border: 2px solid var(--duo-border);
+  border-bottom: 4px solid var(--duo-border);
+  border-radius: 20px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.duo-mascot-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.duo-owl-mascot {
+  animation: duo-float 3.2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.duo-brand-titles h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--duo-green);
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+.duo-brand-titles p {
+  margin: 2px 0 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--duo-text-muted);
+}
+
+/* Gamified Stats Badges */
+.duo-gamify-pills {
+  display: flex;
   align-items: center;
   gap: 12px;
 }
-.spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid #e1dfdd;
-  border-top-color: var(--excel-green);
+
+.duo-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 13px;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.duo-pill.streak-pill {
+  background: var(--duo-orange-light);
+  border-color: #FFE0B2;
+  color: var(--duo-orange-shadow);
+}
+.duo-pill.streak-pill .flame-icon {
+  display: inline-block;
+  animation: flame-wiggle 1.8s infinite ease-in-out;
+}
+
+.duo-pill.xp-pill {
+  background: var(--duo-blue-light);
+  border-color: #BAE6FD;
+  color: var(--duo-blue-shadow);
+}
+
+.duo-pill.safe-pill {
+  background: var(--duo-green-light);
+  border-color: #BBF7D0;
+  color: var(--duo-green-shadow);
+}
+
+/* Duo Mascot Speech Bubble */
+.duo-speech-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.duo-speech-bubble {
+  flex: 1;
+  background: #ffffff;
+  border: 2px solid var(--duo-border);
+  border-bottom: 4px solid var(--duo-border);
+  border-radius: 18px;
+  padding: 12px 20px;
+  position: relative;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--duo-text-dark);
+  line-height: 1.45;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.duo-speech-bubble::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  top: -10px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-top: 2px solid var(--duo-border);
+  border-left: 2px solid var(--duo-border);
+  transform: rotate(45deg);
+}
+
+/* 2-Column Main Grid */
+.duo-main-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 880px) {
+  .duo-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Duolingo Chunky Cards */
+.duo-card {
+  background: #ffffff;
+  border: 2px solid var(--duo-border);
+  border-bottom: 5px solid var(--duo-border);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease;
+}
+
+.duo-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.duo-card-icon {
+  font-size: 24px;
+}
+
+.duo-card-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--duo-text-dark);
+  letter-spacing: -0.3px;
+  text-transform: uppercase;
+}
+
+.duo-card-desc {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--duo-text-muted);
+  margin-bottom: 18px;
+  line-height: 1.45;
+}
+
+/* Duolingo Theme Mission Cards */
+.duo-theme-missions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.duo-mission-item {
+  background: #ffffff;
+  border: 2px solid var(--duo-border);
+  border-bottom: 4px solid var(--duo-border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  user-select: none;
+}
+
+.duo-mission-item:hover {
+  background: #fafafa;
+  border-color: #d1d5db;
+  transform: translateY(-2px);
+  border-bottom-width: 5px;
+}
+
+.duo-mission-item:active {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+
+.duo-mission-item.selected {
+  border-color: var(--duo-green);
+  border-bottom: 5px solid var(--duo-green-shadow);
+  background: var(--duo-green-light);
+}
+
+.duo-mission-item[data-theme="theme-vscode"].selected {
+  border-color: var(--duo-blue);
+  border-bottom: 5px solid var(--duo-blue-shadow);
+  background: var(--duo-blue-light);
+}
+
+.duo-mission-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid rgba(0,0,0,0.12);
+  flex-shrink: 0;
+}
+.duo-mission-icon-box.gsheet { background: #E8F5E9; color: var(--duo-green); }
+.duo-mission-icon-box.excel { background: #E8F5E9; color: #107c41; }
+.duo-mission-icon-box.vscode { background: #1E1E1E; color: #38BDF8; }
+
+.duo-mission-info {
+  flex: 1;
+}
+
+.duo-mission-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.duo-mission-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--duo-text-dark);
+}
+
+.duo-badge-pill {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.duo-badge-pill.green { background: #DCFCE7; color: #15803D; }
+.duo-badge-pill.blue { background: #E0F2FE; color: #0369A1; }
+
+.duo-mission-desc {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--duo-text-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.duo-mission-check {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  border: 2px solid var(--duo-border);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 13px;
+  font-weight: 900;
+  transition: all 0.15s ease;
 }
-@keyframes spin {
-  to { transform: rotate(360deg); }
+
+.duo-mission-item.selected .duo-mission-check {
+  border-color: var(--duo-green);
+  background: var(--duo-green);
 }
+.duo-mission-item[data-theme="theme-vscode"].selected .duo-mission-check {
+  border-color: var(--duo-blue);
+  background: var(--duo-blue);
+}
+
+/* File Upload Quest Row */
+.duo-upload-quest {
+  background: #fafafa;
+  border: 2px dashed var(--duo-border-dark);
+  border-radius: 16px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.duo-upload-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.duo-upload-emoji { font-size: 26px; }
+.duo-upload-name { font-size: 13px; font-weight: 800; color: var(--duo-text-dark); display: block; }
+.duo-upload-hint { font-size: 11px; font-weight: 600; color: var(--duo-text-muted); }
+
+/* Chunky Duolingo 3D Buttons */
+.duo-btn-3d {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--duo-font);
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-radius: 16px;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  transition: all 0.1s ease;
+}
+
+.duo-btn-3d:active {
+  transform: translateY(4px) !important;
+  border-bottom-width: 0px !important;
+  margin-bottom: 4px;
+}
+
+.duo-btn-primary {
+  background-color: var(--duo-green);
+  color: #ffffff;
+  border-bottom: 4px solid var(--duo-green-shadow);
+  font-size: 16px;
+  padding: 14px 20px;
+  width: 100%;
+}
+.duo-btn-primary:hover {
+  background-color: #61E002;
+}
+
+.duo-btn-orange {
+  background-color: var(--duo-orange);
+  color: #ffffff;
+  border-bottom: 4px solid var(--duo-orange-shadow);
+  font-size: 14px;
+  padding: 12px 18px;
+  width: 100%;
+}
+.duo-btn-orange:hover {
+  background-color: #FFA51F;
+}
+
+.duo-btn-blue-outline {
+  background-color: #ffffff;
+  color: var(--duo-blue);
+  border: 2px solid var(--duo-blue);
+  border-bottom: 4px solid var(--duo-blue-shadow);
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: 12px;
+}
+.duo-btn-blue-outline:hover {
+  background-color: var(--duo-blue-light);
+}
+
+.duo-btn-close {
+  background-color: #ffffff;
+  color: var(--duo-text-muted);
+  border: 2px solid var(--duo-border);
+  border-bottom: 3px solid var(--duo-border);
+  font-size: 12px;
+  padding: 8px 16px;
+  border-radius: 14px;
+}
+.duo-btn-close:hover {
+  background-color: #f1f5f9;
+  color: var(--duo-text-dark);
+}
+
+.duo-chk-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--duo-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+.duo-chk-label input {
+  accent-color: var(--duo-green);
+  width: 16px;
+  height: 16px;
+}
+
+/* Donate & Author Quest Card */
+.duo-author-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--duo-yellow-light, #FFFBEB);
+  border: 2px solid #FDE68A;
+  border-bottom: 4px solid #FCD34D;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+
+.duo-author-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--duo-orange) 0%, #EA580C 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 2px 8px rgba(255, 150, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.duo-author-text .name {
+  font-size: 15px;
+  font-weight: 900;
+  color: #78350F;
+}
+.duo-author-text .badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #92400E;
+}
+
+.duo-speech-donate {
+  background: #ffffff;
+  border: 2px solid var(--duo-border);
+  border-bottom: 3px solid var(--duo-border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--duo-text-dark);
+  line-height: 1.45;
+  margin-bottom: 16px;
+}
+
+.duo-qr-frame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid var(--duo-border);
+  border-bottom: 4px solid var(--duo-border);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.duo-qr-img {
+  max-width: 230px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid var(--duo-border);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.duo-bank-info {
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fafafa;
+  border: 2px solid var(--duo-border);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.duo-bank-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.duo-bank-label {
+  color: var(--duo-text-muted);
+}
+
+.duo-bank-val {
+  color: var(--duo-text-dark);
+  font-weight: 800;
+}
+.duo-bank-val.stk-highlight {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--duo-green);
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+.duo-footer-note {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--duo-text-muted);
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Duolingo Pill Button in Themes Header */
+.portal-nav-btn {
+  background-color: #ffffff;
+  color: var(--duo-green);
+  border: 2px solid var(--duo-green);
+  border-bottom: 3px solid var(--duo-green-shadow);
+  border-radius: 14px;
+  padding: 5px 12px;
+  font-family: var(--duo-font);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.1s ease;
+  user-select: none;
+}
+.portal-nav-btn:hover {
+  background-color: var(--duo-green-light);
+  transform: translateY(-1px);
+}
+.portal-nav-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
+body.theme-googlesheets .portal-nav-btn {
+  border-color: #0F9D58;
+  color: #0F9D58;
+}
+body.theme-excel .portal-nav-btn {
+  border-color: #107c41;
+  color: #107c41;
+}
+body.theme-vscode .portal-nav-btn {
+  background: #252526;
+  border-color: #007acc;
+  border-bottom-color: #005a9e;
+  color: #38bdf8;
+}
+body.theme-vscode .portal-nav-btn:hover {
+  background: #2d2d30;
+}
+

@@ -3,186 +3,391 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bao_Cao_Kiem_Toan_Q3_2026.xlsx - Excel</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23107c41'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>X</text></svg>">
+  <title>Báo cáo số liệu & Tiến độ Q3 - Google Trang tính</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link id="app-favicon" rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>">
   <link rel="stylesheet" href="style.css">
-  <!-- PDF.js library -->
   <script src="static/pdf.min.js"></script>
 </head>
-<body class="excel-theme">
-  <!-- Title Bar -->
-  <header class="excel-title-bar">
-    <div class="left-section">
-      <span class="app-icon">
-        <svg width="18" height="18" viewBox="0 0 32 32">
-          <rect width="32" height="32" rx="3" fill="#107c41"/>
-          <text x="16" y="23" font-size="20" font-family="Segoe UI,Arial" font-weight="bold" fill="white" text-anchor="middle">X</text>
-        </svg>
-      </span>
-      <div class="quick-access">
-        <button class="qa-btn" title="Lưu (Ctrl+S)">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4.414A1 1 0 0 0 14.707 3.707l-2.414-2.414A1 1 0 0 0 11.586 1H2zm1 1h8v3H3V2zm0 5h10v6H3V7zm2 1v4h6V8H5z"/></svg>
-        </button>
-        <button class="qa-btn" id="btn-quick-undo" title="Hoàn tác">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 0 0-4.546 2.914.5.5 0 0 1-.908-.418A6 6 0 1 1 2 8H.5a.5.5 0 0 1-.354-.854l2.5-2.5a.5.5 0 0 1 .708 0l2.5 2.5A.5.5 0 0 1 5.5 8H3a5 5 0 1 0 5-5z"/></svg>
-        </button>
-      </div>
-      <div class="autosave-container">
-        <span>AutoSave</span>
-        <label class="switch">
-          <input type="checkbox" checked disabled>
-          <span class="slider round"></span>
-        </label>
-      </div>
-      <div class="document-name" id="doc-title">Bao_Cao_Kiem_Toan_Q3_2026.xlsx - Excel</div>
-    </div>
+<body class="theme-googlesheets">
 
-    <!-- Center Search Bar (Real Office 365 style) -->
-    <div class="center-search">
-      <div class="search-box">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="#666"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
-        <input type="text" placeholder="Tìm kiếm trong tài liệu..." id="input-search-text" />
-      </div>
-    </div>
+  <!-- =========================================================
+       THEME 1: GOOGLE SHEETS HEADER & TOOLBAR
+       ========================================================= -->
+  <div class="theme-header-container gsheet-only">
+    <header class="gsheet-top-bar">
+      <div class="gsheet-top-left">
+        <a href="javascript:void(0)" class="gsheet-logo-btn" title="Trang chủ Google Trang tính">
+          <svg width="28" height="36" viewBox="0 0 24 32">
+            <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
+            <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
+            <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
+          </svg>
+        </a>
 
-    <div class="right-window-controls">
-      <!-- Boss Key emergency button -->
-      <button class="boss-key-btn" id="btn-boss-key" title="Phím khẩn cấp (Nhấn ESC)">
-        <span class="boss-badge">ESC</span> 🚨 Sếp tới!
-      </button>
-      <div class="user-profile">
-        <span class="user-avatar">JD</span>
-        <span class="user-name">Nguyen Van A (Auditor)</span>
-      </div>
-      <button class="win-btn win-min">―</button>
-      <button class="win-btn win-max">▢</button>
-      <button class="win-btn win-close">✕</button>
-    </div>
-  </header>
-
-  <!-- Ribbon Tabs Bar -->
-  <nav class="excel-ribbon-tabs">
-    <button class="tab-item file-tab" id="tab-file-menu">Tệp</button>
-    <button class="tab-item active" data-ribbon="home">Trang đầu</button>
-    <button class="tab-item" data-ribbon="insert">Chèn</button>
-    <button class="tab-item" data-ribbon="formulas">Công thức</button>
-    <button class="tab-item" data-ribbon="data">Dữ liệu</button>
-    <button class="tab-item" data-ribbon="view">Xem</button>
-    <button class="tab-item stealth-highlight" id="tab-stealth-settings" title="Cài đặt đọc truyện">⚙️ Hướng dẫn & Cài đặt</button>
-  </nav>
-
-  <!-- Ribbon Toolbar Container -->
-  <div class="excel-ribbon-body" id="ribbon-body">
-    <!-- Home Ribbon Group -->
-    <div class="ribbon-group">
-      <div class="ribbon-subgroup font-subgroup">
-        <div class="row-sub">
-          <select id="select-font-family" class="ribbon-select font-name" title="Phông chữ">
-            <option value="Calibri" selected>Calibri</option>
-            <option value="Aptos">Aptos</option>
-            <option value="Segoe UI">Segoe UI</option>
-            <option value="Arial">Arial</option>
-            <option value="Times New Roman">Times New Roman</option>
-          </select>
-          <select id="select-font-size" class="ribbon-select font-size" title="Cỡ chữ">
-            <option value="10">10</option>
-            <option value="11" selected>11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-          </select>
-        </div>
-        <div class="row-sub buttons-sub">
-          <button class="tool-btn bold-btn" id="btn-font-bold" title="Đậm (Ctrl+B)"><b>B</b></button>
-          <button class="tool-btn italic-btn" id="btn-font-italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
-          <button class="tool-btn underline-btn" title="Gạch chân"><u>U</u></button>
-          <button class="tool-btn color-btn" id="btn-font-color" title="Màu chữ">
-            <span style="border-bottom: 3px solid #000;">A</span>
-          </button>
-          <button class="tool-btn bg-color-btn" title="Màu nền">
-            <span style="border-bottom: 3px solid #ffff00;">🎨</span>
-          </button>
-        </div>
-      </div>
-      <span class="group-label">Phông chữ</span>
-    </div>
-
-    <div class="ribbon-group">
-      <div class="ribbon-subgroup alignment-subgroup">
-        <div class="row-sub">
-          <button class="tool-btn" id="btn-align-left" title="Căn trái">⬅</button>
-          <button class="tool-btn" id="btn-align-center" title="Căn giữa">⬌</button>
-          <button class="tool-btn" id="btn-align-right" title="Căn phải">➡</button>
-        </div>
-        <div class="row-sub">
-          <button class="tool-btn active-toggle" id="btn-wrap-text" title="Ngắt dòng tự động (Wrap Text)">Wrap Text</button>
-        </div>
-      </div>
-      <span class="group-label">Căn chỉnh</span>
-    </div>
-
-    <!-- Stealth Controls inside Ribbon (disguised as Data Analytics Tools) -->
-    <div class="ribbon-group stealth-tools-group">
-      <div class="ribbon-subgroup flex-row">
-        <!-- Reading Mode -->
-        <div class="stealth-opt">
-          <label>Chế độ đọc:</label>
-          <select id="select-reading-mode" class="ribbon-select">
-            <option value="grid">Bảng Kiểm Toán (Cột D)</option>
-            <option value="formula">Thanh Công Thức (Ninja Mode 🥷)</option>
-          </select>
-        </div>
-
-        <!-- Page Jump & Story progress -->
-        <div class="stealth-opt">
-          <label>Trang PDF:</label>
-          <div class="page-controls">
-            <button class="mini-btn" id="btn-prev-page" title="Trang trước (PageUp)">◀</button>
-            <span id="page-indicator" class="page-text">1 / 1</span>
-            <button class="mini-btn" id="btn-next-page" title="Trang sau (PageDown)">▶</button>
-            <input type="number" id="input-jump-page" min="1" value="1" style="width: 48px; height: 22px; font-size: 11px; text-align: center;" title="Nhập số trang và nhấn Enter">
+        <div class="gsheet-title-and-menu">
+          <div class="gsheet-title-row">
+            <span class="gsheet-doc-title" id="gsheet-doc-title">Báo cáo số liệu & Tiến độ Q3</span>
+            <div class="gsheet-doc-icons">
+              <button class="gsheet-icon-btn star-btn" title="Gắn dấu sao">☆</button>
+              <button class="gsheet-icon-btn folder-btn" title="Di chuyển">📁</button>
+              <span class="gsheet-cloud-status" title="Đã lưu vào Drive">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="#5f6368"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l5.09-5.09 1.41 1.41L10 17z"/></svg>
+                <span class="cloud-text">Đã lưu vào Drive</span>
+              </span>
+            </div>
           </div>
-        </div>
 
-        <!-- Auto Advance (Tự nhảy dòng) -->
-        <div class="stealth-opt">
-          <label>Tự động cuộn:</label>
-          <div class="auto-scroll-controls">
-            <button class="mini-btn play-btn" id="btn-toggle-autoscroll" title="Bắt đầu/Dừng tự cuộn">▶ Bật</button>
-            <select id="select-autoscroll-speed" class="ribbon-select mini-select" title="Tốc độ">
-              <option value="3000">3 giây</option>
-              <option value="5000" selected>5 giây</option>
-              <option value="8000">8 giây</option>
-              <option value="12000">12 giây</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Stealth Text Dimming -->
-        <div class="stealth-opt">
-          <label>Độ mờ chữ:</label>
-          <input type="range" id="range-text-dim" min="30" max="100" value="100" title="Chỉnh độ mờ để người nhìn nghiêng không thấy" style="width: 75px;">
+          <nav class="gsheet-menu-bar">
+            <button class="gsheet-menu-item">Tệp</button>
+            <button class="gsheet-menu-item">Chỉnh sửa</button>
+            <button class="gsheet-menu-item">Xem</button>
+            <button class="gsheet-menu-item">Chèn</button>
+            <button class="gsheet-menu-item">Định dạng</button>
+            <button class="gsheet-menu-item">Dữ liệu</button>
+            <button class="gsheet-menu-item">Công cụ</button>
+            <button class="gsheet-menu-item">Tiện ích mở rộng</button>
+            <button class="gsheet-menu-item">Trợ giúp</button>
+          </nav>
         </div>
       </div>
-      <span class="group-label">Tiện ích Phân Tích (Reader Control)</span>
-    </div>
 
-    <!-- Quick Load / Open PDF Button -->
-    <div class="ribbon-group">
-      <div class="ribbon-subgroup flex-column center">
-        <label for="file-pdf-input" class="open-pdf-btn" title="Nạp file PDF truyện từ máy tính">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#107c41"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      <div class="gsheet-top-right">
+        <button class="portal-nav-btn" id="btn-open-portal-gsheet" title="Trang chủ & Ủng hộ tác giả">
+          🏠 Trang Chủ & Donate
+        </button>
+        <button class="theme-switch-pill" id="btn-open-theme-modal" title="Đổi giao diện ngụy trang">
+          🎨 Đổi Giao Diện
+        </button>
+
+        <button class="boss-key-btn" id="btn-boss-key-gsheet" title="Phím khẩn cấp (Nhấn ESC)">
+          <span class="boss-badge">ESC</span> 🚨 Sếp tới!
+        </button>
+
+        <button class="gsheet-circle-btn" title="Mở lịch sử chỉnh sửa">🕒</button>
+        <button class="gsheet-circle-btn" title="Mở lịch sử nhận xét">💬</button>
+        <button class="gsheet-circle-btn" title="Tham gia cuộc gọi Meet">📹</button>
+
+        <button class="gsheet-share-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#001d35"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+          <span>Chia sẻ</span>
+        </button>
+
+        <div class="gsheet-avatar" title="Tài khoản Google: Nguyen Van A">JD</div>
+      </div>
+    </header>
+
+    <div class="gsheet-toolbar">
+      <div class="gsheet-tools-group">
+        <button class="gs-tool-btn" id="gs-btn-undo" title="Hoàn tác (Ctrl+Z)">↩</button>
+        <button class="gs-tool-btn" id="gs-btn-redo" title="Làm lại (Ctrl+Y)">↪</button>
+        <button class="gs-tool-btn" title="In (Ctrl+P)">🖨</button>
+        <button class="gs-tool-btn" title="Định dạng sơn">🖌</button>
+        <span class="gs-tool-divider"></span>
+        <select class="gs-select gs-zoom-select" title="Thu phóng">
+          <option>100%</option>
+          <option>75%</option>
+          <option>90%</option>
+          <option>125%</option>
+        </select>
+        <span class="gs-tool-divider"></span>
+        <button class="gs-tool-btn" title="Định dạng tiền tệ">$</button>
+        <button class="gs-tool-btn" title="Định dạng phần trăm">%</button>
+        <button class="gs-tool-btn" title="Giảm số chữ số thập phân">.0</button>
+        <button class="gs-tool-btn" title="Tăng số chữ số thập phân">.00</button>
+        <span class="gs-tool-divider"></span>
+        <select id="gs-select-font-family" class="gs-select gs-font-select" title="Phông chữ">
+          <option value="Arial" selected>Arial</option>
+          <option value="Roboto">Roboto</option>
+          <option value="Calibri">Calibri</option>
+          <option value="Segoe UI">Segoe UI</option>
+        </select>
+        <select id="gs-select-font-size" class="gs-select gs-size-select" title="Cỡ chữ">
+          <option value="9">9</option>
+          <option value="10" selected>10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+        <span class="gs-tool-divider"></span>
+        <button class="gs-tool-btn" id="gs-btn-bold" title="Đậm (Ctrl+B)"><b>B</b></button>
+        <button class="gs-tool-btn" id="gs-btn-italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
+        <button class="gs-tool-btn" id="gs-btn-strikethrough" title="Gạch ngang"><s>S</s></button>
+        <button class="gs-tool-btn color-btn" id="gs-btn-color" title="Màu văn bản">
+          <span style="border-bottom: 3px solid #202124;">A</span>
+        </button>
+        <button class="gs-tool-btn" title="Màu tô">🎨</button>
+        <button class="gs-tool-btn" title="Đường viền">⊞</button>
+        <span class="gs-tool-divider"></span>
+        <button class="gs-tool-btn" id="gs-btn-wrap" title="Ngắt dòng">↩</button>
+      </div>
+
+      <div class="gsheet-stealth-group">
+        <label for="file-pdf-input" class="gs-stealth-pill-btn" title="Nạp file PDF truyện từ máy tính">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#0F9D58"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
           <span>Nạp File PDF</span>
         </label>
-        <input type="file" id="file-pdf-input" accept="application/pdf" style="display: none;">
-        <span class="sub-caption" id="pdf-file-name">Chưa chọn file</span>
+        <span class="gs-file-name" id="gs-file-name-label">Chưa chọn</span>
+
+        <span class="gs-tool-divider"></span>
+
+        <select id="gs-select-mode" class="gs-select" title="Chế độ đọc">
+          <option value="grid">Bảng Tiến Độ (Cột D)</option>
+          <option value="formula">Thanh Công Thức (Ninja 🥷)</option>
+        </select>
+
+        <div class="gs-page-controls">
+          <button class="gs-mini-btn" id="gs-btn-prev" title="Trang trước (PageUp)">◀</button>
+          <span id="gs-page-indicator" class="gs-page-text">1 / 1</span>
+          <button class="gs-mini-btn" id="gs-btn-next" title="Trang sau (PageDown)">▶</button>
+          <input type="number" id="gs-input-jump" min="1" value="1" title="Nhập số trang và nhấn Enter">
+        </div>
+
+        <span class="gs-tool-divider"></span>
+
+        <div class="gs-autoscroll-controls">
+          <button class="gs-mini-btn gs-play-btn" id="gs-btn-autoscroll" title="Bắt đầu/Dừng tự cuộn">▶ Tự cuộn</button>
+          <select id="gs-select-speed" class="gs-select gs-speed-select">
+            <option value="3000">3s</option>
+            <option value="5000" selected>5s</option>
+            <option value="8000">8s</option>
+            <option value="12000">12s</option>
+          </select>
+        </div>
+
+        <div class="gs-dim-control" title="Chỉnh độ mờ chữ">
+          <span>Độ mờ:</span>
+          <input type="range" id="gs-range-dim" min="30" max="100" value="100">
+        </div>
       </div>
-      <span class="group-label">Dữ liệu nguồn</span>
     </div>
   </div>
 
-  <!-- Formula Bar Area -->
-  <div class="excel-formula-bar-container">
+
+  <!-- =========================================================
+       THEME 2: MICROSOFT EXCEL 365 HEADER & RIBBON
+       ========================================================= -->
+  <div class="theme-header-container excel-only">
+    <header class="excel-title-bar">
+      <div class="left-section">
+        <span class="app-icon">
+          <svg width="18" height="18" viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="3" fill="#107c41"/>
+            <text x="16" y="23" font-size="20" font-family="Segoe UI,Arial" font-weight="bold" fill="white" text-anchor="middle">X</text>
+          </svg>
+        </span>
+        <div class="quick-access">
+          <button class="qa-btn" title="Lưu (Ctrl+S)">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4.414A1 1 0 0 0 14.707 3.707l-2.414-2.414A1 1 0 0 0 11.586 1H2zm1 1h8v3H3V2zm0 5h10v6H3V7zm2 1v4h6V8H5z"/></svg>
+          </button>
+          <button class="qa-btn" id="excel-btn-undo" title="Hoàn tác">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 0 0-4.546 2.914.5.5 0 0 1-.908-.418A6 6 0 1 1 2 8H.5a.5.5 0 0 1-.354-.854l2.5-2.5a.5.5 0 0 1 .708 0l2.5 2.5A.5.5 0 0 1 5.5 8H3a5 5 0 1 0 5-5z"/></svg>
+          </button>
+        </div>
+        <div class="autosave-container">
+          <span>AutoSave</span>
+          <label class="switch">
+            <input type="checkbox" checked disabled>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="document-name" id="excel-doc-title">Bao_Cao_Kiem_Toan_Q3_2026.xlsx - Excel</div>
+      </div>
+
+      <div class="center-search">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="#666"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+          <input type="text" placeholder="Tìm kiếm trong tài liệu..." />
+        </div>
+      </div>
+
+      <div class="right-window-controls">
+        <button class="portal-nav-btn" id="btn-open-portal-excel" title="Trang chủ & Ủng hộ tác giả">🏠 Trang Chủ & Donate</button>
+        <button class="theme-switch-pill excel-theme-btn" id="btn-open-theme-modal-excel">🎨 Đổi Giao Diện</button>
+        <button class="boss-key-btn" id="btn-boss-key-excel" title="Phím khẩn cấp (Nhấn ESC)">
+          <span class="boss-badge">ESC</span> 🚨 Sếp tới!
+        </button>
+        <div class="user-profile">
+          <span class="user-avatar">JD</span>
+          <span class="user-name">Nguyen Van A (Auditor)</span>
+        </div>
+        <button class="win-btn">―</button>
+        <button class="win-btn">▢</button>
+        <button class="win-btn win-close">✕</button>
+      </div>
+    </header>
+
+    <nav class="excel-ribbon-tabs">
+      <button class="tab-item file-tab">Tệp</button>
+      <button class="tab-item active">Trang đầu</button>
+      <button class="tab-item">Chèn</button>
+      <button class="tab-item">Công thức</button>
+      <button class="tab-item">Dữ liệu</button>
+      <button class="tab-item">Xem</button>
+      <button class="tab-item stealth-highlight" id="tab-stealth-settings-excel">⚙️ Cài đặt</button>
+    </nav>
+
+    <div class="excel-ribbon-body">
+      <div class="ribbon-group">
+        <div class="ribbon-subgroup font-subgroup">
+          <div class="row-sub">
+            <select id="excel-select-font-family" class="ribbon-select font-name">
+              <option value="Calibri" selected>Calibri</option>
+              <option value="Aptos">Aptos</option>
+              <option value="Segoe UI">Segoe UI</option>
+              <option value="Arial">Arial</option>
+            </select>
+            <select id="excel-select-font-size" class="ribbon-select font-size">
+              <option value="10">10</option>
+              <option value="11" selected>11</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+            </select>
+          </div>
+          <div class="row-sub buttons-sub">
+            <button class="tool-btn" id="excel-btn-bold"><b>B</b></button>
+            <button class="tool-btn" id="excel-btn-italic"><i>I</i></button>
+            <button class="tool-btn"><u>U</u></button>
+            <button class="tool-btn color-btn"><span style="border-bottom: 3px solid #000;">A</span></button>
+            <button class="tool-btn">🎨</button>
+          </div>
+        </div>
+        <span class="group-label">Phông chữ</span>
+      </div>
+
+      <div class="ribbon-group">
+        <div class="ribbon-subgroup alignment-subgroup">
+          <div class="row-sub">
+            <button class="tool-btn">⬅</button>
+            <button class="tool-btn">⬌</button>
+            <button class="tool-btn">➡</button>
+          </div>
+          <div class="row-sub">
+            <button class="tool-btn active-toggle" id="excel-btn-wrap">Wrap Text</button>
+          </div>
+        </div>
+        <span class="group-label">Căn chỉnh</span>
+      </div>
+
+      <div class="ribbon-group stealth-tools-group">
+        <div class="ribbon-subgroup flex-row">
+          <div class="stealth-opt">
+            <label>Chế độ đọc:</label>
+            <select id="excel-select-mode" class="ribbon-select">
+              <option value="grid">Bảng Kiểm Toán (Cột D)</option>
+              <option value="formula">Thanh Công Thức (Ninja 🥷)</option>
+            </select>
+          </div>
+          <div class="stealth-opt">
+            <label>Trang PDF:</label>
+            <div class="page-controls">
+              <button class="mini-btn" id="excel-btn-prev">◀</button>
+              <span id="excel-page-indicator" class="page-text">1 / 1</span>
+              <button class="mini-btn" id="excel-btn-next">▶</button>
+              <input type="number" id="excel-input-jump" min="1" value="1" style="width: 48px; height: 22px; font-size: 11px; text-align: center;">
+            </div>
+          </div>
+          <div class="stealth-opt">
+            <label>Tự động cuộn:</label>
+            <div class="auto-scroll-controls">
+              <button class="mini-btn play-btn" id="excel-btn-autoscroll">▶ Bật</button>
+              <select id="excel-select-speed" class="ribbon-select mini-select">
+                <option value="3000">3s</option>
+                <option value="5000" selected>5s</option>
+                <option value="8000">8s</option>
+                <option value="12000">12s</option>
+              </select>
+            </div>
+          </div>
+          <div class="stealth-opt">
+            <label>Độ mờ chữ:</label>
+            <input type="range" id="excel-range-dim" min="30" max="100" value="100" style="width: 75px;">
+          </div>
+        </div>
+        <span class="group-label">Tiện ích Phân Tích (Reader Control)</span>
+      </div>
+
+      <div class="ribbon-group">
+        <div class="ribbon-subgroup flex-column center">
+          <label for="file-pdf-input" class="open-pdf-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#107c41"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <span>Nạp File PDF</span>
+          </label>
+          <span class="sub-caption" id="excel-file-name-label">Chưa chọn</span>
+        </div>
+        <span class="group-label">Dữ liệu nguồn</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       THEME 3: VISUAL STUDIO CODE (TRUE IDE WORKSPACE)
+       ========================================================= -->
+  <div class="theme-header-container vscode-only">
+    <!-- Top Bar -->
+    <header class="vscode-title-bar">
+      <div class="vscode-title-left">
+        <span class="vscode-icon">
+          <svg width="16" height="16" viewBox="0 0 100 100"><path fill="#007ACC" d="M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z"/><path fill="#1F9CF0" d="M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z"/></svg>
+        </span>
+        <div class="vscode-menu-bar">
+          <span>File</span><span>Edit</span><span>Selection</span><span>View</span><span>Go</span><span>Run</span><span>Terminal</span><span>Help</span>
+        </div>
+      </div>
+      <div class="vscode-title-center">
+        <span id="vsc-title-doc">novel_stream_processor.py - dev_workspace - Visual Studio Code</span>
+      </div>
+      <div class="vscode-title-right">
+        <button class="portal-nav-btn" id="btn-open-portal-vscode" title="Trang chủ & Ủng hộ tác giả">🏠 Trang Chủ & Donate</button>
+        <button class="theme-switch-pill vscode-theme-btn" id="btn-open-theme-modal-vscode">🎨 Đổi Giao Diện</button>
+        <button class="boss-key-btn" id="btn-boss-key-vscode"><span class="boss-badge">ESC</span> 🚨 Sếp tới!</button>
+        <button class="win-btn">―</button>
+        <button class="win-btn">▢</button>
+        <button class="win-btn win-close">✕</button>
+      </div>
+    </header>
+
+    <!-- Editor Tab strip -->
+    <div class="vscode-tabs-bar">
+      <div class="vscode-tab active" id="vsc-tab-main">
+        <span class="py-icon">🐍</span>
+        <span id="vsc-tab-filename">novel_stream_processor.py</span>
+        <span class="tab-close">×</span>
+      </div>
+      <div class="vscode-tab" id="vsc-tab-config">
+        <span class="json-icon">{ }</span>
+        <span>pipeline_config.json</span>
+      </div>
+      <div class="vscode-tab" id="vsc-tab-db">
+        <span class="sql-icon">🗄️</span>
+        <span>schema.sql</span>
+      </div>
+
+      <!-- Quick Stealth Toolbar in VS Code Header -->
+      <div class="vscode-stealth-toolbar">
+        <label for="file-pdf-input" class="vscode-pill-btn">📂 Nạp PDF</label>
+        <span id="vscode-file-name-label" class="vscode-file-text">Chưa chọn</span>
+        <div class="vscode-page-ctrl">
+          <button class="vsc-btn" id="vsc-btn-prev">◀</button>
+          <span id="vsc-page-indicator">1/1</span>
+          <button class="vsc-btn" id="vsc-btn-next">▶</button>
+        </div>
+        <button class="vsc-btn" id="vsc-btn-autoscroll">▶ Tự cuộn</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Hidden file input shared across all themes -->
+  <input type="file" id="file-pdf-input" accept="application/pdf" style="display: none;">
+
+
+  <!-- =========================================================
+       FORMULA BAR (ONLY FOR GOOGLE SHEETS & EXCEL)
+       ========================================================= -->
+  <div class="excel-formula-bar-container gsheet-excel-only" id="main-formula-bar">
     <div class="name-box" id="active-cell-address" title="Tọa độ ô">D1</div>
     <div class="formula-actions">
       <button class="formula-btn" title="Hủy">✕</button>
@@ -190,7 +395,7 @@
       <span class="fx-symbol" title="Hàm số"><i>fx</i></span>
     </div>
     <div class="formula-input-wrapper">
-      <input type="text" id="formula-input" class="formula-input" placeholder="=VLOOKUP(Audit_Key, Financial_Data, 4, FALSE)" readonly />
+      <input type="text" id="formula-input" class="formula-input" placeholder="=VLOOKUP(Data_Key, Financial_Data, 4, FALSE)" readonly />
     </div>
   </div>
 
@@ -200,9 +405,12 @@
     <button class="banner-close" onclick="document.getElementById('status-banner').style.display='none'">✕</button>
   </div>
 
-  <!-- Main Spreadsheet Workspace -->
-  <main class="excel-workspace">
-    <!-- Active Sheet 1: The Disguised Story Reader Grid -->
+
+  <!-- =========================================================
+       WORKSPACE A: SPREADSHEET (FOR GOOGLE SHEETS & EXCEL)
+       ========================================================= -->
+  <main class="excel-workspace gsheet-excel-only" id="spreadsheet-workspace">
+    <!-- Story Sheet Grid -->
     <div class="sheet-content active" id="view-sheet-story">
       <div class="table-container" id="grid-scroll-container">
         <table class="excel-grid-table" id="excel-table">
@@ -219,23 +427,23 @@
             </tr>
             <tr class="header-titles-row">
               <th class="row-header">1</th>
-              <th class="data-col-title">Audit_ID</th>
-              <th class="data-col-title">Module / Category</th>
+              <th class="data-col-title">Task_ID</th>
+              <th class="data-col-title">Category / Module</th>
               <th class="data-col-title">Timestamp</th>
-              <th class="data-col-title story-header-label">Audit Log Finding & Notes (Story Text)</th>
+              <th class="data-col-title story-header-label" id="story-header-title">Log Description & Execution Details</th>
               <th class="data-col-title">Status</th>
-              <th class="data-col-title">Variance (%)</th>
-              <th class="data-col-title">Auditor</th>
+              <th class="data-col-title">Metrics</th>
+              <th class="data-col-title">Assignee</th>
             </tr>
           </thead>
           <tbody id="story-tbody">
-            <!-- Story rows will be injected dynamically here -->
+            <!-- Dynamic rows rendered here -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- Dummy Sheet 2: Realistic Financial Report (Used for Boss Key & fake sheets) -->
+    <!-- Dummy Financial Report Sheet (Boss Key) -->
     <div class="sheet-content" id="view-sheet-financial">
       <div class="table-container">
         <table class="excel-grid-table dummy-financial-table">
@@ -282,7 +490,7 @@
       </div>
     </div>
 
-    <!-- Dummy Sheet 3: Balance Sheet -->
+    <!-- Dummy Balance Sheet -->
     <div class="sheet-content" id="view-sheet-balance">
       <div class="table-container">
         <table class="excel-grid-table dummy-financial-table">
@@ -318,59 +526,245 @@
     </div>
   </main>
 
-  <!-- Bottom Sheet Tabs Bar -->
-  <footer class="excel-sheets-bar">
-    <div class="sheet-navigation-arrows">
-      <button class="sheet-nav-btn" title="Cuộn tab trái">◂</button>
-      <button class="sheet-nav-btn" title="Cuộn tab phải">▸</button>
+
+  <!-- =========================================================
+       WORKSPACE B: TRUE VISUAL STUDIO CODE IDE WORKSPACE
+       ========================================================= -->
+  <main class="vscode-workspace vscode-only" id="vscode-ide-workspace">
+    <!-- 1. Left Activity Bar -->
+    <div class="vsc-activity-bar">
+      <div class="vsc-act-icon active" title="Explorer (Ctrl+Shift+E)">📁</div>
+      <div class="vsc-act-icon" title="Search (Ctrl+Shift+F)">🔍</div>
+      <div class="vsc-act-icon" title="Source Control (Ctrl+Shift+G)">🌿</div>
+      <div class="vsc-act-icon" title="Run and Debug (Ctrl+Shift+D)">🐞</div>
+      <div class="vsc-act-icon" title="Extensions (Ctrl+Shift+X)">🧩</div>
+      <div class="vsc-act-bottom">
+        <div class="vsc-act-icon" title="Accounts">👤</div>
+        <div class="vsc-act-icon" title="Settings">⚙️</div>
+      </div>
     </div>
-    <div class="sheet-tabs-list">
-      <!-- Sheet tab 1: Story Reader -->
+
+    <!-- 2. Left Sidebar Explorer -->
+    <div class="vsc-sidebar">
+      <div class="vsc-sidebar-title">
+        <span>EXPLORER</span>
+        <span>•••</span>
+      </div>
+      <div class="vsc-tree-section">
+        <div class="vsc-folder-header">▼ <b>PROJECT_BACKEND</b></div>
+        <div class="vsc-tree-item">▶ 📂 .venv</div>
+        <div class="vsc-tree-item">▶ 📂 controllers</div>
+        <div class="vsc-tree-item">▼ 📂 services</div>
+        <div class="vsc-tree-item vsc-tree-file active">
+          <span class="file-icon-py">🐍</span> novel_stream_processor.py
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-py">🐍</span> utils.py
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-json">{ }</span> pipeline_config.json
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-txt">📄</span> requirements.txt
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-git">🐙</span> .gitignore
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Code Editor & Terminal Panel -->
+    <div class="vsc-editor-wrapper">
+      <!-- Breadcrumb bar -->
+      <div class="vsc-breadcrumbs">
+        <span>services</span> &gt; <span>novel_stream_processor.py</span> &gt; <span class="vsc-func-sym">ƒ</span> <span id="vsc-func-name">execute_corpus_stream()</span>
+      </div>
+
+      <!-- Real Code Editor View (Novel is disguised as Python code & docstrings) -->
+      <div class="vsc-code-editor" id="vsc-code-scroll-container">
+        <div class="vsc-editor-gutter" id="vsc-line-numbers">
+          <!-- Line numbers dynamically populated -->
+        </div>
+        <div class="vsc-editor-lines" id="vsc-code-lines">
+          <!-- Python lines with syntax coloring dynamically populated -->
+        </div>
+      </div>
+
+      <!-- 4. Integrated Terminal at Bottom -->
+      <div class="vsc-terminal-panel">
+        <div class="vsc-terminal-header">
+          <div class="vsc-term-tabs">
+            <span>PROBLEMS 0</span>
+            <span>OUTPUT</span>
+            <span>DEBUG CONSOLE</span>
+            <span class="active">TERMINAL</span>
+          </div>
+          <div class="vsc-term-actions">
+            <span>+</span>
+            <span>🗑️</span>
+            <span>▲</span>
+            <span>✕</span>
+          </div>
+        </div>
+        <div class="vsc-terminal-body">
+          <div class="term-line prompt">PS D:\phong\python\backend&gt; <span class="cmd">python -m uvicorn main:app --reload --port 8000</span></div>
+          <div class="term-line info">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Started server process [23941]</div>
+          <div class="term-line info">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Waiting for application startup.</div>
+          <div class="term-line success">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Application startup complete.</div>
+          <div class="term-line normal">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Uvicorn running on <span class="url">http://127.0.0.1:8000</span> (Press CTRL+C to quit)</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- =========================================================
+       BOTTOM FOOTER (SHEETS BAR FOR EXCEL/GSHEET OR STATUS BAR FOR VSCODE)
+       ========================================================= -->
+  <footer class="excel-sheets-bar" id="main-sheets-bar">
+    <!-- Google Sheets Left Icons -->
+    <div class="gs-bottom-left gsheet-only">
+      <button class="gs-plus-sheet-btn" title="Thêm trang tính">+</button>
+      <button class="gs-all-sheets-btn" title="Tất cả trang tính">☰</button>
+    </div>
+
+    <!-- Sheet Tabs List (For Google Sheets and Excel) -->
+    <div class="sheet-tabs-list gsheet-excel-only">
       <button class="sheet-tab active" data-target="view-sheet-story" id="tab-story-sheet">
-        <span class="tab-label">Audit_Finding_Q3</span>
+        <span class="tab-label" id="tab-story-label">Trang tính1</span>
       </button>
-      <!-- Sheet tab 2: Real financial dummy sheet -->
       <button class="sheet-tab" data-target="view-sheet-financial" id="tab-financial-sheet">
-        <span class="tab-label">Doanh_Thu_Tong_Hop</span>
+        <span class="tab-label">Doanh_Thu_Q3</span>
       </button>
-      <!-- Sheet tab 3: Balance dummy sheet -->
       <button class="sheet-tab" data-target="view-sheet-balance">
         <span class="tab-label">Can_Doi_Ke_Toan</span>
       </button>
-      <button class="new-sheet-btn" title="Thêm trang tính mới">+</button>
     </div>
 
-    <!-- Status Bar (Right side in Excel) -->
-    <div class="excel-status-bar">
-      <span class="status-item ready">Ready</span>
+    <!-- Status Bar (Right side in Excel/Google Sheets) -->
+    <div class="excel-status-bar gsheet-excel-only">
+      <span class="status-item ready" id="status-ready-label">Sẵn sàng</span>
       <span class="status-item formula-calc" id="status-reading-info">Dòng: 1 | Đã đọc: 0%</span>
       <span class="status-item sum-item">Average: 24,190.50</span>
       <span class="status-item count-item">Count: 420</span>
       <span class="status-item">Sum: 10,160,010</span>
-      <div class="zoom-controls">
-        <span class="zoom-level">100%</span>
-        <button class="zoom-btn">−</button>
-        <div class="zoom-slider-track">
-          <div class="zoom-slider-thumb"></div>
-        </div>
-        <button class="zoom-btn">+</button>
+      
+      <button class="gs-explore-btn gsheet-only" title="Khám phá">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a73e8"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+        <span>Khám phá</span>
+      </button>
+    </div>
+
+    <!-- VS Code Bottom Status Bar -->
+    <div class="vscode-statusbar-content vscode-only">
+      <div class="vsc-stat-left">
+        <span class="vsc-stat-item remote">>< WSL: Ubuntu</span>
+        <span class="vsc-stat-item branch">🌿 main*</span>
+        <span class="vsc-stat-item">⊗ 0  ⚠ 0</span>
+        <span class="vsc-stat-item" id="vsc-status-progress">Page 1/1</span>
+      </div>
+      <div class="vsc-stat-right">
+        <span class="vsc-stat-item" id="vsc-status-ln">Ln 14, Col 28</span>
+        <span class="vsc-stat-item">Spaces: 4</span>
+        <span class="vsc-stat-item">UTF-8</span>
+        <span class="vsc-stat-item">LF</span>
+        <span class="vsc-stat-item">Python 3.13.7 64-bit</span>
+        <span class="vsc-stat-item">Prettier</span>
       </div>
     </div>
   </footer>
 
-  <!-- Stealth Settings / File Upload Modal (Secret Modal) -->
+
+  <!-- =========================================================
+       MODAL 1: THEME PICKER MODAL (CHỌN GIAO DIỆN)
+       ========================================================= -->
+  <div class="stealth-modal-overlay" id="theme-modal">
+    <div class="stealth-modal-content theme-picker-content">
+      <div class="modal-header">
+        <h3>🎨 Chọn Giao Diện Ngụy Trang Làm Việc</h3>
+        <button class="modal-close-btn" id="btn-close-theme-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p class="guide-text">Chọn phong cách ngụy trang phù hợp nhất với vị trí công việc của bạn:</p>
+
+        <div class="theme-selection-grid">
+          <!-- Option 1: Google Sheets -->
+          <div class="theme-card active" data-theme="theme-googlesheets">
+            <div class="theme-card-badge">Khuyên Dùng ⭐</div>
+            <div class="theme-preview-img gsheet-preview">
+              <div class="prev-top-bar" style="background:#fff; border-bottom:1px solid #e0e0e0;">
+                <span style="color:#0F9D58; font-weight:bold; font-size:12px;">📊 Google Sheets</span>
+                <span style="background:#c2e7ff; color:#001d35; border-radius:10px; padding:2px 8px; font-size:9px; font-weight:600;">Chia sẻ</span>
+              </div>
+              <div class="prev-grid" style="background:#f8fafd;">
+                <div class="prev-row header" style="background:#f8f9fa;"><span>A</span><span>B</span><span>C</span><span>D (Truyện)</span></div>
+                <div class="prev-row"><span>TSK-1</span><span>DATA</span><span>09:15</span><span style="color:#202124;">Chương 1...</span></div>
+                <div class="prev-row"><span>TSK-2</span><span>SYS</span><span>09:18</span><span style="color:#202124;">Ishigami rời...</span></div>
+              </div>
+            </div>
+            <h4>Google Sheets (Online)</h4>
+            <p>Bảng tính Google Drive trên nền web. Trông 100% tự nhiên vì mở trực tiếp trên Chrome/Edge!</p>
+          </div>
+
+          <!-- Option 2: Microsoft Excel 365 -->
+          <div class="theme-card" data-theme="theme-excel">
+            <div class="theme-preview-img excel-preview">
+              <div class="prev-top-bar" style="background:#107c41; color:white;">
+                <span style="font-weight:bold; font-size:11px;">📗 Excel 365 (Bao_Cao.xlsx)</span>
+              </div>
+              <div class="prev-grid">
+                <div class="prev-row header" style="background:#e7f2eb; color:#107c41;"><span>A</span><span>B</span><span>C</span><span>D (Truyện)</span></div>
+                <div class="prev-row"><span>AUD-1</span><span>CORE</span><span>09:15</span><span>Nội dung truyện...</span></div>
+                <div class="prev-row"><span>AUD-2</span><span>AUTH</span><span>09:18</span><span>Đoạn tiếp theo...</span></div>
+              </div>
+            </div>
+            <h4>Microsoft Excel 365</h4>
+            <p>Bảng tính văn phòng Office Desktop với thanh Ribbon xanh lá kinh điển.</p>
+          </div>
+
+          <!-- Option 3: VS Code IDE -->
+          <div class="theme-card" data-theme="theme-vscode">
+            <div class="theme-card-badge" style="background:#007acc;">Dành cho IT 💻</div>
+            <div class="theme-preview-img vscode-preview">
+              <div class="prev-top-bar" style="background:#3c3c3c; color:#d4d4d4;">
+                <span style="color:#007acc; font-weight:bold; font-size:11px;">💻 VS Code (Dark IDE)</span>
+              </div>
+              <div class="prev-grid" style="background:#1e1e1e; color:#9cdcfe; font-family:monospace; font-size:9px;">
+                <div class="prev-row" style="color:#6a9955;"># Chapter 1: Ishigami...</div>
+                <div class="prev-row"><span style="color:#569cd6;">def</span> <span style="color:#dcdcaa;">process_stream</span>():</div>
+                <div class="prev-row" style="color:#ce9178;">&nbsp;&nbsp;return "Troi van con se lanh..."</div>
+              </div>
+            </div>
+            <h4>Visual Studio Code (IDE Thật)</h4>
+            <p>Trình soạn code Dark Theme với cây thư mục files, số dòng, tô màu cú pháp Python và Terminal bên dưới!</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="portal-nav-btn" id="btn-modal-to-portal" style="border-radius: 6px; padding: 7px 14px;">
+          ☕ Thông tin tác giả & Donate
+        </button>
+        <button class="primary-btn" id="btn-confirm-theme">Áp Dụng Giao Diện Này</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================
+       MODAL 2: STEALTH SETTINGS & HELP
+       ========================================================= -->
   <div class="stealth-modal-overlay" id="stealth-modal">
     <div class="stealth-modal-content">
       <div class="modal-header">
-        <h3>⚙️ Cài Đặt Đọc Truyện Ngụy Trang Excel</h3>
+        <h3>⚙️ Cài Đặt Bộ Đọc Truyện</h3>
         <button class="modal-close-btn" id="btn-close-modal">✕</button>
       </div>
       <div class="modal-body">
         <div class="settings-group">
-          <h4>1. Nạp File PDF Truyện</h4>
-          <p class="guide-text">Chọn file PDF tiểu thuyết / truyện chữ của bạn từ máy tính. Hỗ trợ đọc cả trang đầu (bìa/mục lục) lẫn các chương truyện chính.</p>
+          <h4>1. Nạp File PDF Tiểu Thuyết</h4>
+          <p class="guide-text">Chọn file PDF của bạn. Hệ thống hỗ trợ sách dài hàng trăm trang, xử lý trong 1 giây!</p>
           <div class="file-drop-area" id="modal-drop-area">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="#107c41"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#0F9D58"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
             <p>Kéo & thả file PDF vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
             <input type="file" id="modal-file-pdf" accept="application/pdf">
           </div>
@@ -379,39 +773,16 @@
         <div class="settings-group">
           <h4>2. Phím Tắt Khẩn Cấp (Boss Key)</h4>
           <ul class="hotkey-list">
-            <li><kbd>ESC</kbd> : Chuyển ngay lập tức sang bảng số liệu tài chính Doanh Thu (bấm lại để đọc tiếp).</li>
-            <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Sang dòng/câu truyện tiếp theo.</li>
+            <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang bảng số liệu tài chính doanh thu hoặc code backend thuật toán (bấm lại để đọc tiếp).</li>
+            <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Chuyển sang câu/dòng tiếp theo.</li>
             <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
             <li><kbd>PageDown</kbd> / <kbd>PageUp</kbd> : Sang trang PDF tiếp / trang trước.</li>
             <li><kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).</li>
           </ul>
         </div>
-
-        <div class="settings-group">
-          <h4>3. Chế Độ Đọc Siêu Tàng Hình</h4>
-          <div class="mode-cards">
-            <div class="mode-card active" data-mode="grid">
-              <h5>Bảng Kiểm Toán (Cột D)</h5>
-              <p>Mỗi câu/đoạn truyện là 1 dòng trong cột "Audit Log Finding". Trông giống hệt nhật ký ghi chú hệ thống.</p>
-            </div>
-            <div class="mode-card" data-mode="formula">
-              <h5>Thanh Công Thức (Ninja)</h5>
-              <p>Bảng hiển thị số liệu 100%, câu truyện CHỈ xuất hiện trên thanh công thức <code>fx</code> ở đỉnh màn hình.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h4>4. Tùy Chỉnh Chia Dòng</h4>
-          <label>Độ dài mỗi hàng trong bảng:</label>
-          <select id="select-chunk-size" class="ribbon-select">
-            <option value="sentence">Tách theo từng câu ngắn (dễ liếc đọc nhanh)</option>
-            <option value="paragraph" selected>Tách theo từng đoạn văn (đọc liền mạch)</option>
-          </select>
-        </div>
       </div>
       <div class="modal-footer">
-        <button class="primary-btn" id="btn-save-settings">Đã Xong & Bắt Đầu Đọc</button>
+        <button class="primary-btn" id="btn-save-settings">Đóng</button>
       </div>
     </div>
   </div>
@@ -423,6 +794,234 @@
       <p id="loading-status-text">Đang trích xuất nội dung từ PDF...</p>
     </div>
   </div>
+
+  <!-- =========================================================
+       TRANG CHỦ DUOLINGO STYLE: GAMIFIED MASCOT, THEMES & DONATE
+       ========================================================= -->
+  <div id="landing-portal" class="landing-portal-overlay">
+    <div class="portal-container">
+      
+      <!-- Duolingo Top Gamification Navbar -->
+      <div class="duo-top-navbar">
+        <div class="duo-mascot-brand">
+          <!-- Duo Owl Mascot SVG with Spy Magnifying Glass -->
+          <svg width="56" height="56" viewBox="0 0 100 100" class="duo-owl-mascot">
+            <!-- Ears -->
+            <polygon points="20,24 30,12 36,24" fill="#58CC02"/>
+            <polygon points="80,24 70,12 64,24" fill="#58CC02"/>
+            <!-- Body -->
+            <ellipse cx="50" cy="54" rx="42" ry="40" fill="#58CC02"/>
+            <!-- Belly -->
+            <ellipse cx="50" cy="62" rx="30" ry="26" fill="#78D824"/>
+            <!-- Belly Feathers -->
+            <path d="M42 56 Q50 62 58 56" stroke="#46A302" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <path d="M38 66 Q50 74 62 66" stroke="#46A302" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <!-- Wings -->
+            <ellipse cx="14" cy="56" rx="8" ry="18" fill="#46A302" transform="rotate(-15 14 56)"/>
+            <ellipse cx="86" cy="56" rx="8" ry="18" fill="#46A302" transform="rotate(15 86 56)"/>
+            <!-- Eyes -->
+            <ellipse cx="34" cy="38" rx="16" ry="17" fill="#FFFFFF"/>
+            <circle cx="37" cy="38" r="9" fill="#4B4B4B"/>
+            <circle cx="40" cy="34" r="3.5" fill="#FFFFFF"/>
+            <ellipse cx="66" cy="38" rx="16" ry="17" fill="#FFFFFF"/>
+            <circle cx="63" cy="38" r="9" fill="#4B4B4B"/>
+            <circle cx="66" cy="34" r="3.5" fill="#FFFFFF"/>
+            <!-- Beak -->
+            <polygon points="44,45 56,45 50,56" fill="#FF9600"/>
+            <!-- Feet -->
+            <ellipse cx="38" cy="94" rx="9" ry="5" fill="#FF9600"/>
+            <ellipse cx="62" cy="94" rx="9" ry="5" fill="#FF9600"/>
+            <!-- Spy Magnifying Glass -->
+            <circle cx="78" cy="48" r="10" fill="none" stroke="#FFC800" stroke-width="3.5"/>
+            <line x1="85" y1="55" x2="94" y2="68" stroke="#CC7900" stroke-width="4" stroke-linecap="round"/>
+            <ellipse cx="78" cy="48" rx="8" ry="8" fill="#1CB0F6" opacity="0.35"/>
+          </svg>
+
+          <div class="duo-brand-titles">
+            <h1>Stealth Novel Reader</h1>
+            <p>Đọc truyện ngụy trang công sở • Level up mỗi ngày! 🦉</p>
+          </div>
+        </div>
+
+        <!-- Gamification Stats (Streak, XP, Safe Heart) -->
+        <div class="duo-gamify-pills">
+          <div class="duo-pill streak-pill" title="Chuỗi ngày đọc lén liên tiếp">
+            <span class="pill-emoji flame-icon">🔥</span>
+            <span>7 NGÀY</span>
+          </div>
+          <div class="duo-pill xp-pill" title="Kinh nghiệm tích lũy">
+            <span class="pill-emoji">💎</span>
+            <span>480 KN</span>
+          </div>
+          <div class="duo-pill safe-pill" title="Tỷ lệ an toàn trước sếp">
+            <span class="pill-emoji">🛡️</span>
+            <span>100% AN TOÀN</span>
+          </div>
+          <button class="duo-btn-3d duo-btn-close" id="btn-portal-close" style="display: none;">
+            <span>✕ Tiếp tục đọc</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mascot Cheerful Speech Bubble -->
+      <div class="duo-speech-row">
+        <div class="duo-speech-bubble">
+          👋 Chào bạn! Cú Duo ngụy trang đây! Hôm nay bạn muốn chọn danh tính công sở nào để đọc truyện mà sếp không phát hiện?
+        </div>
+      </div>
+
+      <!-- Main 2-Column Grid -->
+      <div class="duo-main-grid">
+        
+        <!-- Cột 1: Chọn giao diện đọc truyện (Nhiệm vụ hàng ngày) -->
+        <div class="duo-card">
+          <div class="duo-card-header">
+            <span class="duo-card-icon">🎯</span>
+            <span class="duo-card-title">1. Chọn Bản Đồ Ngụy Trang</span>
+          </div>
+          <p class="duo-card-desc">
+            Chọn bộ đồng phục công sở hoàn hảo nhất với công việc của bạn:
+          </p>
+
+          <div class="duo-theme-missions" id="portal-theme-list">
+            <!-- Mission 1: Google Sheets -->
+            <div class="duo-mission-item selected" data-theme="theme-googlesheets">
+              <div class="duo-mission-icon-box gsheet">
+                <svg width="24" height="28" viewBox="0 0 24 32">
+                  <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
+                  <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
+                  <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
+                </svg>
+              </div>
+              <div class="duo-mission-info">
+                <div class="duo-mission-top">
+                  <span class="duo-mission-title">Google Sheets (Trang Tính)</span>
+                  <span class="duo-badge-pill green">Web Ninja ⭐</span>
+                </div>
+                <div class="duo-mission-desc">Bảng tính log hệ thống, công thức =PROSE() ngụy trang hoàn hảo trên Chrome.</div>
+              </div>
+              <div class="duo-mission-check">✓</div>
+            </div>
+
+            <!-- Mission 2: Microsoft Excel 365 -->
+            <div class="duo-mission-item" data-theme="theme-excel">
+              <div class="duo-mission-icon-box excel">
+                <svg width="24" height="24" viewBox="0 0 32 32">
+                  <rect width="32" height="32" rx="4" fill="#107c41"/>
+                  <text x="16" y="23" font-size="20" font-family="Segoe UI,Arial" font-weight="bold" fill="white" text-anchor="middle">X</text>
+                </svg>
+              </div>
+              <div class="duo-mission-info">
+                <div class="duo-mission-top">
+                  <span class="duo-mission-title">Microsoft Excel 365</span>
+                  <span class="duo-badge-pill green">Office Pro 📗</span>
+                </div>
+                <div class="duo-mission-desc">Báo cáo kiểm toán Q3 với thanh Ribbon xanh lá kinh điển văn phòng.</div>
+              </div>
+              <div class="duo-mission-check">✓</div>
+            </div>
+
+            <!-- Mission 3: Visual Studio Code -->
+            <div class="duo-mission-item" data-theme="theme-vscode">
+              <div class="duo-mission-icon-box vscode">
+                <svg width="24" height="24" viewBox="0 0 100 100">
+                  <path fill="#007ACC" d="M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z"/>
+                  <path fill="#1F9CF0" d="M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z"/>
+                </svg>
+              </div>
+              <div class="duo-mission-info">
+                <div class="duo-mission-top">
+                  <span class="duo-mission-title">Visual Studio Code (IDE Thật)</span>
+                  <span class="duo-badge-pill blue">Hacker Dark 💻</span>
+                </div>
+                <div class="duo-mission-desc">Code Python Dark Theme, cây thư mục files, số dòng và Terminal ngầu đét.</div>
+              </div>
+              <div class="duo-mission-check">✓</div>
+            </div>
+          </div>
+
+          <!-- Nạp File PDF Quest Box -->
+          <div class="duo-upload-quest">
+            <div class="duo-upload-left">
+              <span class="duo-upload-emoji">📚</span>
+              <div>
+                <span class="duo-upload-name" id="portal-pdf-filename">Truyện mẫu: Phía sau nghi can X</span>
+                <span class="duo-upload-hint">Hoặc nạp file PDF tiểu thuyết của bạn (Hỗ trợ 500+ trang)</span>
+              </div>
+            </div>
+            <label for="portal-file-input" class="duo-btn-3d duo-btn-blue-outline" style="cursor: pointer;">
+              📂 ĐỔI SÁCH
+            </label>
+            <input type="file" id="portal-file-input" accept="application/pdf" style="display: none;">
+          </div>
+
+          <!-- Big Duolingo 3D Button -->
+          <button class="duo-btn-3d duo-btn-primary" id="btn-portal-enter">
+            <span>🚀 BẮT ĐẦU ĐỌC TRUYỆN NGAY</span>
+          </button>
+
+          <label class="duo-chk-label">
+            <input type="checkbox" id="chk-remember-direct-mode">
+            <span>Tự động vào thẳng giao diện đọc lần sau (không mở lại trang chủ)</span>
+          </label>
+        </div>
+
+        <!-- Cột 2: Thông tin tác giả & Nhiệm vụ Donate -->
+        <div class="duo-card">
+          <div class="duo-card-header">
+            <span class="duo-card-icon">🏆</span>
+            <span class="duo-card-title">2. Nhiệm Vụ: Tiếp Sức Tác Giả</span>
+          </div>
+
+          <!-- Author Info Card -->
+          <div class="duo-author-box">
+            <div class="duo-author-avatar">☕</div>
+            <div class="duo-author-text">
+              <div class="name">NGUYEN TRAN HAI PHONG</div>
+              <div class="badge">⭐ Lập Trình Viên & Tác Giả Stealth Reader</div>
+            </div>
+          </div>
+
+          <div class="duo-speech-donate">
+            🦉 <b>Lời nhắn từ Duo:</b> Tác giả đã thức khuya code tính năng cuộn mượt vô tận cho bạn đọc truyện an toàn! Hãy mời tác giả <b>1 ly cà phê nạp năng lượng</b> nhé!
+          </div>
+
+          <!-- QR Code Frame -->
+          <div class="duo-qr-frame">
+            <img src="static/donate_qr_card.png" alt="Mã QR Vietcombank NGUYEN TRAN HAI PHONG" class="duo-qr-img" id="portal-qr-img">
+            
+            <div class="duo-bank-info">
+              <div class="duo-bank-row">
+                <span class="duo-bank-label">Ngân hàng:</span>
+                <span class="duo-bank-val">Vietcombank (VCB)</span>
+              </div>
+              <div class="duo-bank-row">
+                <span class="duo-bank-label">Chủ tài khoản:</span>
+                <span class="duo-bank-val">NGUYEN TRAN HAI PHONG</span>
+              </div>
+              <div class="duo-bank-row" style="margin-top: 4px; padding-top: 6px; border-top: 1px dashed var(--duo-border);">
+                <span class="duo-bank-label">Số tài khoản:</span>
+                <span class="duo-bank-val stk-highlight" id="portal-stk-val">1015471873</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3D Chunky Orange Button -->
+          <button class="duo-btn-3d duo-btn-orange" id="btn-copy-stk">
+            <span>📋 SAO CHÉP SỐ TÀI KHOẢN</span>
+          </button>
+
+          <div class="duo-footer-note">
+            Quét được trên mọi App ngân hàng & ví điện tử (Momo, ZaloPay...)
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification for Seamless Page Navigation -->
+  <div id="page-flip-toast" class="page-flip-toast"></div>
 
   <script src="app.js"></script>
 </body>
