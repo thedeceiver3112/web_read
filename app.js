@@ -48,7 +48,12 @@ const state = {
   isBold: false,
   isItalic: false,
   textDimLevel: 100,
-  wrapText: true
+  wrapText: true,
+  
+  // Stealth disguise titles (persisted in localStorage)
+  gsheetTitle: localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3',
+  excelTitle: localStorage.getItem('stealth_title_excel') || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx',
+  vscodeTitle: localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py'
 };
 
 // Realistic mock categories & modules for corporate audit camouflage
@@ -141,6 +146,7 @@ const FAVICONS = {
 document.addEventListener('DOMContentLoaded', () => {
   loadSavedState();
   initThemeSystem();
+  initTitleEditing();
   initEventListeners();
   initSheetTabs();
   initContinuousScrollListeners();
@@ -160,6 +166,10 @@ function loadSavedState() {
   try {
     const savedTheme = localStorage.getItem('selected_theme');
     if (savedTheme) state.theme = savedTheme;
+
+    state.gsheetTitle = localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3';
+    state.excelTitle = localStorage.getItem('stealth_title_excel') || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
+    state.vscodeTitle = localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py';
 
     const saved = localStorage.getItem('excel_reader_state');
     if (saved) {
@@ -248,26 +258,25 @@ function applyTheme(themeName) {
     favicon.href = FAVICONS[themeName];
   }
 
-  const cleanName = state.pdfFileName ? state.pdfFileName.replace(/\.pdf$/i, '') : '';
   const storyLabel = document.getElementById('tab-story-label');
   const headerTitle = document.getElementById('story-header-title');
 
   if (themeName === 'theme-googlesheets') {
-    const docTitle = cleanName || 'Báo cáo số liệu & Tiến độ Q3';
+    const docTitle = state.gsheetTitle || 'Báo cáo số liệu & Phân tích KPI Q3';
     document.title = `${docTitle} - Google Trang tính`;
     const gTitle = document.getElementById('gsheet-doc-title');
     if (gTitle) gTitle.textContent = docTitle;
     if (storyLabel) storyLabel.textContent = 'Trang tính1';
     if (headerTitle) headerTitle.textContent = 'Log Description & Execution Details';
   } else if (themeName === 'theme-excel') {
-    const docTitle = cleanName ? `${cleanName}.xlsx` : 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
+    const docTitle = state.excelTitle || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
     document.title = `${docTitle} - Excel`;
     const eTitle = document.getElementById('excel-doc-title');
-    if (eTitle) eTitle.textContent = `${docTitle} - Excel`;
+    if (eTitle) eTitle.textContent = docTitle;
     if (storyLabel) storyLabel.textContent = 'Audit_Finding_Q3';
     if (headerTitle) headerTitle.textContent = 'Audit Log Finding & Notes (Story Text)';
   } else if (themeName === 'theme-vscode') {
-    const docTitle = cleanName ? `${cleanName}.py` : 'novel_stream_processor.py';
+    const docTitle = state.vscodeTitle || 'stream_pipeline_processor.py';
     document.title = `${docTitle} - dev_workspace - Visual Studio Code`;
     const vTitle = document.getElementById('vsc-title-doc');
     if (vTitle) vTitle.textContent = `${docTitle} - dev_workspace - Visual Studio Code`;
@@ -278,6 +287,79 @@ function applyTheme(themeName) {
   applyStyles();
   renderContinuousView(true);
   updatePortalThemeUI(themeName);
+}
+
+// ==========================================================
+// EDITABLE STEALTH TITLES (CLICK-TO-RENAME & TAB SYNC)
+// ==========================================================
+function initTitleEditing() {
+  const gTitle = document.getElementById('gsheet-doc-title');
+  if (gTitle) {
+    gTitle.addEventListener('blur', () => {
+      let val = gTitle.textContent.trim();
+      if (!val) val = 'Báo cáo số liệu & Phân tích KPI Q3';
+      gTitle.textContent = val;
+      state.gsheetTitle = val;
+      localStorage.setItem('stealth_title_gsheet', val);
+      if (state.theme === 'theme-googlesheets') {
+        document.title = `${val} - Google Trang tính`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên tài liệu: <b>${escapeHtml(val)}</b>`);
+    });
+    gTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        gTitle.blur();
+      }
+    });
+  }
+
+  const eTitle = document.getElementById('excel-doc-title');
+  if (eTitle) {
+    eTitle.addEventListener('blur', () => {
+      let val = eTitle.textContent.trim();
+      if (!val) val = 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
+      if (!val.toLowerCase().endsWith('.xlsx') && !val.toLowerCase().endsWith('.xls')) {
+        val += '.xlsx';
+      }
+      eTitle.textContent = val;
+      state.excelTitle = val;
+      localStorage.setItem('stealth_title_excel', val);
+      if (state.theme === 'theme-excel') {
+        document.title = `${val} - Excel`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên bảng tính: <b>${escapeHtml(val)}</b>`);
+    });
+    eTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        eTitle.blur();
+      }
+    });
+  }
+
+  const vTab = document.getElementById('vsc-tab-filename');
+  const vTitle = document.getElementById('vsc-title-doc');
+  if (vTab) {
+    vTab.addEventListener('blur', () => {
+      let val = vTab.textContent.trim();
+      if (!val) val = 'stream_pipeline_processor.py';
+      vTab.textContent = val;
+      state.vscodeTitle = val;
+      localStorage.setItem('stealth_title_vscode', val);
+      if (vTitle) vTitle.textContent = `${val} - dev_workspace - Visual Studio Code`;
+      if (state.theme === 'theme-vscode') {
+        document.title = `${val} - dev_workspace - Visual Studio Code`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên file code: <b>${escapeHtml(val)}</b>`);
+    });
+    vTab.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        vTab.blur();
+      }
+    });
+  }
 }
 
 // ==========================================================
@@ -892,13 +974,22 @@ async function processPdfFile(file) {
     return;
   }
 
-  showLoading(`Đang nạp file: ${file.name}...`);
+  showLoading('Đang đồng bộ dữ liệu vào hệ thống...');
   state.pdfFileName = file.name;
 
-  ['gs-file-name-label', 'excel-file-name-label', 'vscode-file-name-label', 'portal-pdf-filename'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = file.name;
-  });
+  // Real novel filename is ONLY displayed inside the Duolingo landing portal
+  const portalNameLabel = document.getElementById('portal-pdf-filename');
+  if (portalNameLabel) portalNameLabel.textContent = file.name;
+
+  // Workspace headers always display corporate camouflage filenames
+  const gsLabel = document.getElementById('gs-file-name-label');
+  if (gsLabel) gsLabel.textContent = 'KPI_Report_Q3_2026.pdf';
+
+  const excelLabel = document.getElementById('excel-file-name-label');
+  if (excelLabel) excelLabel.textContent = 'Financial_Ledger_Q3.pdf';
+
+  const vscodeLabel = document.getElementById('vscode-file-name-label');
+  if (vscodeLabel) vscodeLabel.textContent = 'dataset_telemetry.pdf';
 
   state.bossModeActive = false;
   switchSheet('view-sheet-story');

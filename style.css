@@ -1836,3 +1836,56 @@ body.theme-vscode .portal-nav-btn:hover {
   background: #2d2d30;
 }
 
+/* ==========================================================
+   EDITABLE STEALTH DOCUMENT TITLES (CLICK-TO-RENAME)
+   ========================================================== */
+.gsheet-doc-title[contenteditable="true"] {
+  cursor: text;
+  transition: all 0.15s ease;
+  min-width: 60px;
+}
+.gsheet-doc-title[contenteditable="true"]:hover {
+  outline: 1px solid #1a73e8;
+  background-color: rgba(26, 115, 232, 0.05);
+}
+.gsheet-doc-title[contenteditable="true"]:focus {
+  outline: 2px solid #1a73e8;
+  background-color: #ffffff;
+  color: #202124;
+}
+
+.document-name[contenteditable="true"] {
+  cursor: text;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  min-width: 60px;
+}
+.document-name[contenteditable="true"]:hover {
+  background: rgba(255, 255, 255, 0.18);
+  outline: 1px dashed rgba(255, 255, 255, 0.6);
+}
+.document-name[contenteditable="true"]:focus {
+  background: #ffffff;
+  color: #107c41;
+  outline: 2px solid #ffffff;
+}
+
+#vsc-tab-filename[contenteditable="true"] {
+  cursor: text;
+  padding: 1px 4px;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+  min-width: 50px;
+}
+#vsc-tab-filename[contenteditable="true"]:hover {
+  background: rgba(255, 255, 255, 0.12);
+  outline: 1px dashed #666;
+}
+#vsc-tab-filename[contenteditable="true"]:focus {
+  background: #1e1e1e;
+  outline: 1px solid #007acc;
+  color: #ffffff;
+}
+
+
