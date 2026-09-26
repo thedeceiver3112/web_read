@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bao_Cao_Kiem_Toan_Q3_2026.xlsx - Excel</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23107c41'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>X</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <!-- PDF.js library -->
+  <script src="static/pdf.min.js"></script>
+</head>
+<body class="excel-theme">
+  <!-- Title Bar -->
+  <header class="excel-title-bar">
+    <div class="left-section">
+      <span class="app-icon">
+        <svg width="18" height="18" viewBox="0 0 32 32">
+          <rect width="32" height="32" rx="3" fill="#107c41"/>
+          <text x="16" y="23" font-size="20" font-family="Segoe UI,Arial" font-weight="bold" fill="white" text-anchor="middle">X</text>
+        </svg>
+      </span>
+      <div class="quick-access">
+        <button class="qa-btn" title="Lưu (Ctrl+S)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4.414A1 1 0 0 0 14.707 3.707l-2.414-2.414A1 1 0 0 0 11.586 1H2zm1 1h8v3H3V2zm0 5h10v6H3V7zm2 1v4h6V8H5z"/></svg>
+        </button>
+        <button class="qa-btn" id="btn-quick-undo" title="Hoàn tác">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 0 0-4.546 2.914.5.5 0 0 1-.908-.418A6 6 0 1 1 2 8H.5a.5.5 0 0 1-.354-.854l2.5-2.5a.5.5 0 0 1 .708 0l2.5 2.5A.5.5 0 0 1 5.5 8H3a5 5 0 1 0 5-5z"/></svg>
+        </button>
+      </div>
+      <div class="autosave-container">
+        <span>AutoSave</span>
+        <label class="switch">
+          <input type="checkbox" checked disabled>
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="document-name" id="doc-title">Bao_Cao_Kiem_Toan_Q3_2026.xlsx - Excel</div>
+    </div>
+
+    <!-- Center Search Bar (Real Office 365 style) -->
+    <div class="center-search">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#666"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+        <input type="text" placeholder="Tìm kiếm trong tài liệu..." id="input-search-text" />
+      </div>
+    </div>
+
+    <div class="right-window-controls">
+      <!-- Boss Key emergency button -->
+      <button class="boss-key-btn" id="btn-boss-key" title="Phím khẩn cấp (Nhấn ESC)">
+        <span class="boss-badge">ESC</span> 🚨 Sếp tới!
+      </button>
+      <div class="user-profile">
+        <span class="user-avatar">JD</span>
+        <span class="user-name">Nguyen Van A (Auditor)</span>
+      </div>
+      <button class="win-btn win-min">―</button>
+      <button class="win-btn win-max">▢</button>
+      <button class="win-btn win-close">✕</button>
+    </div>
+  </header>
+
+  <!-- Ribbon Tabs Bar -->
+  <nav class="excel-ribbon-tabs">
+    <button class="tab-item file-tab" id="tab-file-menu">Tệp</button>
+    <button class="tab-item active" data-ribbon="home">Trang đầu</button>
+    <button class="tab-item" data-ribbon="insert">Chèn</button>
+    <button class="tab-item" data-ribbon="formulas">Công thức</button>
+    <button class="tab-item" data-ribbon="data">Dữ liệu</button>
+    <button class="tab-item" data-ribbon="view">Xem</button>
+    <button class="tab-item stealth-highlight" id="tab-stealth-settings" title="Cài đặt đọc truyện">⚙️ Hướng dẫn & Cài đặt</button>
+  </nav>
+
+  <!-- Ribbon Toolbar Container -->
+  <div class="excel-ribbon-body" id="ribbon-body">
+    <!-- Home Ribbon Group -->
+    <div class="ribbon-group">
+      <div class="ribbon-subgroup font-subgroup">
+        <div class="row-sub">
+          <select id="select-font-family" class="ribbon-select font-name" title="Phông chữ">
+            <option value="Calibri" selected>Calibri</option>
+            <option value="Aptos">Aptos</option>
+            <option value="Segoe UI">Segoe UI</option>
+            <option value="Arial">Arial</option>
+            <option value="Times New Roman">Times New Roman</option>
+          </select>
+          <select id="select-font-size" class="ribbon-select font-size" title="Cỡ chữ">
+            <option value="10">10</option>
+            <option value="11" selected>11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+          </select>
+        </div>
+        <div class="row-sub buttons-sub">
+          <button class="tool-btn bold-btn" id="btn-font-bold" title="Đậm (Ctrl+B)"><b>B</b></button>
+          <button class="tool-btn italic-btn" id="btn-font-italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
+          <button class="tool-btn underline-btn" title="Gạch chân"><u>U</u></button>
+          <button class="tool-btn color-btn" id="btn-font-color" title="Màu chữ">
+            <span style="border-bottom: 3px solid #000;">A</span>
+          </button>
+          <button class="tool-btn bg-color-btn" title="Màu nền">
+            <span style="border-bottom: 3px solid #ffff00;">🎨</span>
+          </button>
+        </div>
+      </div>
+      <span class="group-label">Phông chữ</span>
+    </div>
+
+    <div class="ribbon-group">
+      <div class="ribbon-subgroup alignment-subgroup">
+        <div class="row-sub">
+          <button class="tool-btn" id="btn-align-left" title="Căn trái">⬅</button>
+          <button class="tool-btn" id="btn-align-center" title="Căn giữa">⬌</button>
+          <button class="tool-btn" id="btn-align-right" title="Căn phải">➡</button>
+        </div>
+        <div class="row-sub">
+          <button class="tool-btn active-toggle" id="btn-wrap-text" title="Ngắt dòng tự động (Wrap Text)">Wrap Text</button>
+        </div>
+      </div>
+      <span class="group-label">Căn chỉnh</span>
+    </div>
+
+    <!-- Stealth Controls inside Ribbon (disguised as Data Analytics Tools) -->
+    <div class="ribbon-group stealth-tools-group">
+      <div class="ribbon-subgroup flex-row">
+        <!-- Reading Mode -->
+        <div class="stealth-opt">
+          <label>Chế độ đọc:</label>
+          <select id="select-reading-mode" class="ribbon-select">
+            <option value="grid">Bảng Kiểm Toán (Cột D)</option>
+            <option value="formula">Thanh Công Thức (Ninja Mode 🥷)</option>
+          </select>
+        </div>
+
+        <!-- Page Jump & Story progress -->
+        <div class="stealth-opt">
+          <label>Trang PDF:</label>
+          <div class="page-controls">
+            <button class="mini-btn" id="btn-prev-page" title="Trang trước (PageUp)">◀</button>
+            <span id="page-indicator" class="page-text">1 / 1</span>
+            <button class="mini-btn" id="btn-next-page" title="Trang sau (PageDown)">▶</button>
+            <input type="number" id="input-jump-page" min="1" value="1" style="width: 48px; height: 22px; font-size: 11px; text-align: center;" title="Nhập số trang và nhấn Enter">
+          </div>
+        </div>
+
+        <!-- Auto Advance (Tự nhảy dòng) -->
+        <div class="stealth-opt">
+          <label>Tự động cuộn:</label>
+          <div class="auto-scroll-controls">
+            <button class="mini-btn play-btn" id="btn-toggle-autoscroll" title="Bắt đầu/Dừng tự cuộn">▶ Bật</button>
+            <select id="select-autoscroll-speed" class="ribbon-select mini-select" title="Tốc độ">
+              <option value="3000">3 giây</option>
+              <option value="5000" selected>5 giây</option>
+              <option value="8000">8 giây</option>
+              <option value="12000">12 giây</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Stealth Text Dimming -->
+        <div class="stealth-opt">
+          <label>Độ mờ chữ:</label>
+          <input type="range" id="range-text-dim" min="30" max="100" value="100" title="Chỉnh độ mờ để người nhìn nghiêng không thấy" style="width: 75px;">
+        </div>
+      </div>
+      <span class="group-label">Tiện ích Phân Tích (Reader Control)</span>
+    </div>
+
+    <!-- Quick Load / Open PDF Button -->
+    <div class="ribbon-group">
+      <div class="ribbon-subgroup flex-column center">
+        <label for="file-pdf-input" class="open-pdf-btn" title="Nạp file PDF truyện từ máy tính">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#107c41"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <span>Nạp File PDF</span>
+        </label>
+        <input type="file" id="file-pdf-input" accept="application/pdf" style="display: none;">
+        <span class="sub-caption" id="pdf-file-name">Chưa chọn file</span>
+      </div>
+      <span class="group-label">Dữ liệu nguồn</span>
+    </div>
+  </div>
+
+  <!-- Formula Bar Area -->
+  <div class="excel-formula-bar-container">
+    <div class="name-box" id="active-cell-address" title="Tọa độ ô">D1</div>
+    <div class="formula-actions">
+      <button class="formula-btn" title="Hủy">✕</button>
+      <button class="formula-btn" title="Nhập">✓</button>
+      <span class="fx-symbol" title="Hàm số"><i>fx</i></span>
+    </div>
+    <div class="formula-input-wrapper">
+      <input type="text" id="formula-input" class="formula-input" placeholder="=VLOOKUP(Audit_Key, Financial_Data, 4, FALSE)" readonly />
+    </div>
+  </div>
+
+  <!-- Notification Banner -->
+  <div id="status-banner" class="status-banner" style="display: none;">
+    <span id="banner-text">Thông báo</span>
+    <button class="banner-close" onclick="document.getElementById('status-banner').style.display='none'">✕</button>
+  </div>
+
+  <!-- Main Spreadsheet Workspace -->
+  <main class="excel-workspace">
+    <!-- Active Sheet 1: The Disguised Story Reader Grid -->
+    <div class="sheet-content active" id="view-sheet-story">
+      <div class="table-container" id="grid-scroll-container">
+        <table class="excel-grid-table" id="excel-table">
+          <thead>
+            <tr>
+              <th class="corner-header">◢</th>
+              <th class="col-header" style="width: 85px;">A</th>
+              <th class="col-header" style="width: 140px;">B</th>
+              <th class="col-header" style="width: 160px;">C</th>
+              <th class="col-header story-col-header" style="width: auto;">D</th>
+              <th class="col-header" style="width: 105px;">E</th>
+              <th class="col-header" style="width: 105px;">F</th>
+              <th class="col-header" style="width: 125px;">G</th>
+            </tr>
+            <tr class="header-titles-row">
+              <th class="row-header">1</th>
+              <th class="data-col-title">Audit_ID</th>
+              <th class="data-col-title">Module / Category</th>
+              <th class="data-col-title">Timestamp</th>
+              <th class="data-col-title story-header-label">Audit Log Finding & Notes (Story Text)</th>
+              <th class="data-col-title">Status</th>
+              <th class="data-col-title">Variance (%)</th>
+              <th class="data-col-title">Auditor</th>
+            </tr>
+          </thead>
+          <tbody id="story-tbody">
+            <!-- Story rows will be injected dynamically here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dummy Sheet 2: Realistic Financial Report (Used for Boss Key & fake sheets) -->
+    <div class="sheet-content" id="view-sheet-financial">
+      <div class="table-container">
+        <table class="excel-grid-table dummy-financial-table">
+          <thead>
+            <tr>
+              <th class="corner-header">◢</th>
+              <th class="col-header" style="width: 60px;">A</th>
+              <th class="col-header" style="width: 240px;">B</th>
+              <th class="col-header" style="width: 140px;">C</th>
+              <th class="col-header" style="width: 140px;">D</th>
+              <th class="col-header" style="width: 140px;">E</th>
+              <th class="col-header" style="width: 140px;">F</th>
+              <th class="col-header" style="width: 140px;">G</th>
+              <th class="col-header" style="width: 120px;">H</th>
+            </tr>
+            <tr class="header-titles-row">
+              <th class="row-header">1</th>
+              <th>Mã</th>
+              <th>Khoản Mục Tài Chính</th>
+              <th>Tháng 7/2026</th>
+              <th>Tháng 8/2026</th>
+              <th>Tháng 9/2026</th>
+              <th>Lũy Kế Q3</th>
+              <th>Kế Hoạch</th>
+              <th>Tỷ Lệ (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="row-header">2</td><td>REV-01</td><td class="bold-text">DOANH THU THUẦN</td><td>14,520,000,000</td><td>15,840,000,000</td><td>17,210,000,000</td><td class="bold-text">47,570,000,000</td><td>45,000,000,000</td><td class="positive">+105.7%</td></tr>
+            <tr><td class="row-header">3</td><td>REV-02</td><td>Doanh thu Dịch vụ Phần mềm</td><td>8,210,000,000</td><td>8,950,000,000</td><td>9,840,000,000</td><td>27,000,000,000</td><td>25,500,000,000</td><td class="positive">+105.9%</td></tr>
+            <tr><td class="row-header">4</td><td>REV-03</td><td>Doanh thu Bản quyền & Giấy phép</td><td>4,150,000,000</td><td>4,620,000,000</td><td>5,110,000,000</td><td>13,880,000,000</td><td>13,000,000,000</td><td class="positive">+106.8%</td></tr>
+            <tr><td class="row-header">5</td><td>REV-04</td><td>Doanh thu Tư vấn Triển khai</td><td>2,160,000,000</td><td>2,270,000,000</td><td>2,260,000,000</td><td>6,690,000,000</td><td>6,500,000,000</td><td class="positive">+102.9%</td></tr>
+            <tr><td class="row-header">6</td><td>COG-01</td><td class="bold-text">GIÁ VỐN HÀNG BÁN (COGS)</td><td>(6,240,000,000)</td><td>(6,810,000,000)</td><td>(7,350,000,000)</td><td class="bold-text">(20,400,000,000)</td><td>(20,000,000,000)</td><td class="negative">+102.0%</td></tr>
+            <tr><td class="row-header">7</td><td>GP-01</td><td class="bold-text highlight-yellow">LỢI NHUẬN GỘP</td><td>8,280,000,000</td><td>9,030,000,000</td><td>9,860,000,000</td><td class="bold-text">27,170,000,000</td><td>25,000,000,000</td><td class="positive">+108.7%</td></tr>
+            <tr><td class="row-header">8</td><td>OPEX-01</td><td class="bold-text">CHI PHÍ HOẠT ĐỘNG</td><td>(3,450,000,000)</td><td>(3,620,000,000)</td><td>(3,890,000,000)</td><td class="bold-text">(10,960,000,000)</td><td>(11,200,000,000)</td><td class="positive">-2.1%</td></tr>
+            <tr><td class="row-header">9</td><td>OPEX-02</td><td>Chi phí Lương & Phúc lợi R&D</td><td>(2,100,000,000)</td><td>(2,150,000,000)</td><td>(2,200,000,000)</td><td>(6,450,000,000)</td><td>(6,600,000,000)</td><td class="positive">-2.3%</td></tr>
+            <tr><td class="row-header">10</td><td>OPEX-03</td><td>Chi phí Thuê Cloud & Server AWS</td><td>(850,000,000)</td><td>(920,000,000)</td><td>(1,040,000,000)</td><td>(2,810,000,000)</td><td>(2,800,000,000)</td><td class="negative">+0.4%</td></tr>
+            <tr><td class="row-header">11</td><td>OPEX-04</td><td>Chi phí Tiếp thị & Bán hàng</td><td>(500,000,000)</td><td>(550,000,000)</td><td>(650,000,000)</td><td>(1,700,000,000)</td><td>(1,800,000,000)</td><td class="positive">-5.6%</td></tr>
+            <tr><td class="row-header">12</td><td>EBIT-01</td><td class="bold-text highlight-green">LỢI NHUẬN TRƯỚC THUẾ (EBITDA)</td><td>4,830,000,000</td><td>5,410,000,000</td><td>5,970,000,000</td><td class="bold-text">16,210,000,000</td><td>13,800,000,000</td><td class="positive">+117.5%</td></tr>
+            <tr><td class="row-header">13</td><td>TAX-01</td><td>Thuế TNDN Dự tính (20%)</td><td>(966,000,000)</td><td>(1,082,000,000)</td><td>(1,194,000,000)</td><td>(3,242,000,000)</td><td>(2,760,000,000)</td><td>--</td></tr>
+            <tr><td class="row-header">14</td><td>NET-01</td><td class="bold-text highlight-green">LỢI NHUẬN RÒNG SAU THUẾ</td><td>3,864,000,000</td><td>4,328,000,000</td><td>4,776,000,000</td><td class="bold-text">12,968,000,000</td><td>11,040,000,000</td><td class="positive">+117.5%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Dummy Sheet 3: Balance Sheet -->
+    <div class="sheet-content" id="view-sheet-balance">
+      <div class="table-container">
+        <table class="excel-grid-table dummy-financial-table">
+          <thead>
+            <tr>
+              <th class="corner-header">◢</th>
+              <th class="col-header" style="width: 70px;">A</th>
+              <th class="col-header" style="width: 280px;">B</th>
+              <th class="col-header" style="width: 180px;">C</th>
+              <th class="col-header" style="width: 180px;">D</th>
+              <th class="col-header" style="width: 160px;">E</th>
+            </tr>
+            <tr class="header-titles-row">
+              <th class="row-header">1</th>
+              <th>Mã Số</th>
+              <th>Chỉ Tiêu Bảng Cân Đối Kế Toán</th>
+              <th>Số Đầu Năm</th>
+              <th>Số Cuối Kỳ Q3</th>
+              <th>Biến Động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="row-header">2</td><td>100</td><td class="bold-text">TỔNG TÀI SẢN NGẮN HẠN</td><td>68,450,000,000</td><td>92,130,000,000</td><td class="positive">+34.6%</td></tr>
+            <tr><td class="row-header">3</td><td>110</td><td>Tiền và các khoản tương đương tiền</td><td>18,200,000,000</td><td>32,450,000,000</td><td class="positive">+78.3%</td></tr>
+            <tr><td class="row-header">4</td><td>120</td><td>Đầu tư tài chính ngắn hạn</td><td>25,000,000,000</td><td>30,000,000,000</td><td class="positive">+20.0%</td></tr>
+            <tr><td class="row-header">5</td><td>130</td><td>Các khoản phải thu ngắn hạn</td><td>19,500,000,000</td><td>23,800,000,000</td><td class="positive">+22.1%</td></tr>
+            <tr><td class="row-header">6</td><td>200</td><td class="bold-text">TỔNG TÀI SẢN DÀI HẠN</td><td>42,100,000,000</td><td>45,600,000,000</td><td class="positive">+8.3%</td></tr>
+            <tr><td class="row-header">7</td><td>300</td><td class="bold-text">NỢ PHẢI TRẢ</td><td>31,250,000,000</td><td>34,800,000,000</td><td class="negative">+11.4%</td></tr>
+            <tr><td class="row-header">8</td><td>400</td><td class="bold-text">VỐN CHỦ SỞ HỮU</td><td>79,300,000,000</td><td>102,930,000,000</td><td class="positive">+29.8%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Sheet Tabs Bar -->
+  <footer class="excel-sheets-bar">
+    <div class="sheet-navigation-arrows">
+      <button class="sheet-nav-btn" title="Cuộn tab trái">◂</button>
+      <button class="sheet-nav-btn" title="Cuộn tab phải">▸</button>
+    </div>
+    <div class="sheet-tabs-list">
+      <!-- Sheet tab 1: Story Reader -->
+      <button class="sheet-tab active" data-target="view-sheet-story" id="tab-story-sheet">
+        <span class="tab-label">Audit_Finding_Q3</span>
+      </button>
+      <!-- Sheet tab 2: Real financial dummy sheet -->
+      <button class="sheet-tab" data-target="view-sheet-financial" id="tab-financial-sheet">
+        <span class="tab-label">Doanh_Thu_Tong_Hop</span>
+      </button>
+      <!-- Sheet tab 3: Balance dummy sheet -->
+      <button class="sheet-tab" data-target="view-sheet-balance">
+        <span class="tab-label">Can_Doi_Ke_Toan</span>
+      </button>
+      <button class="new-sheet-btn" title="Thêm trang tính mới">+</button>
+    </div>
+
+    <!-- Status Bar (Right side in Excel) -->
+    <div class="excel-status-bar">
+      <span class="status-item ready">Ready</span>
+      <span class="status-item formula-calc" id="status-reading-info">Dòng: 1 | Đã đọc: 0%</span>
+      <span class="status-item sum-item">Average: 24,190.50</span>
+      <span class="status-item count-item">Count: 420</span>
+      <span class="status-item">Sum: 10,160,010</span>
+      <div class="zoom-controls">
+        <span class="zoom-level">100%</span>
+        <button class="zoom-btn">−</button>
+        <div class="zoom-slider-track">
+          <div class="zoom-slider-thumb"></div>
+        </div>
+        <button class="zoom-btn">+</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Stealth Settings / File Upload Modal (Secret Modal) -->
+  <div class="stealth-modal-overlay" id="stealth-modal">
+    <div class="stealth-modal-content">
+      <div class="modal-header">
+        <h3>⚙️ Cài Đặt Đọc Truyện Ngụy Trang Excel</h3>
+        <button class="modal-close-btn" id="btn-close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-group">
+          <h4>1. Nạp File PDF Truyện</h4>
+          <p class="guide-text">Chọn file PDF tiểu thuyết / truyện chữ của bạn từ máy tính. Hỗ trợ đọc cả trang đầu (bìa/mục lục) lẫn các chương truyện chính.</p>
+          <div class="file-drop-area" id="modal-drop-area">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#107c41"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <p>Kéo & thả file PDF vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
+            <input type="file" id="modal-file-pdf" accept="application/pdf">
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h4>2. Phím Tắt Khẩn Cấp (Boss Key)</h4>
+          <ul class="hotkey-list">
+            <li><kbd>ESC</kbd> : Chuyển ngay lập tức sang bảng số liệu tài chính Doanh Thu (bấm lại để đọc tiếp).</li>
+            <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Sang dòng/câu truyện tiếp theo.</li>
+            <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
+            <li><kbd>PageDown</kbd> / <kbd>PageUp</kbd> : Sang trang PDF tiếp / trang trước.</li>
+            <li><kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).</li>
+          </ul>
+        </div>
+
+        <div class="settings-group">
+          <h4>3. Chế Độ Đọc Siêu Tàng Hình</h4>
+          <div class="mode-cards">
+            <div class="mode-card active" data-mode="grid">
+              <h5>Bảng Kiểm Toán (Cột D)</h5>
+              <p>Mỗi câu/đoạn truyện là 1 dòng trong cột "Audit Log Finding". Trông giống hệt nhật ký ghi chú hệ thống.</p>
+            </div>
+            <div class="mode-card" data-mode="formula">
+              <h5>Thanh Công Thức (Ninja)</h5>
+              <p>Bảng hiển thị số liệu 100%, câu truyện CHỈ xuất hiện trên thanh công thức <code>fx</code> ở đỉnh màn hình.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h4>4. Tùy Chỉnh Chia Dòng</h4>
+          <label>Độ dài mỗi hàng trong bảng:</label>
+          <select id="select-chunk-size" class="ribbon-select">
+            <option value="sentence">Tách theo từng câu ngắn (dễ liếc đọc nhanh)</option>
+            <option value="paragraph" selected>Tách theo từng đoạn văn (đọc liền mạch)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" id="btn-save-settings">Đã Xong & Bắt Đầu Đọc</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-spinner" style="display: none;">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p id="loading-status-text">Đang trích xuất nội dung từ PDF...</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
