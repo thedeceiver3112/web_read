@@ -1,1198 +1,2259 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script src="version-check.js?v=1" data-app-version="20261002-12"></script>
-  <title>Báo cáo số liệu & Phân tích KPI Q3 - Google Trang tính</title>
-  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>">
-  <link rel="stylesheet" href="style.css?v=20261002-12">
-  <script src="static/pdf.min.js"></script>
-  <script src="static/jszip.min.js?v=20261002-1"></script>
-</head>
-<body class="theme-googlesheets">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script src="version-check.js?v=1" data-app-version="20261002-12"></script>
+    <title>Báo cáo số liệu & Phân tích KPI Q3 - Google Trang tính</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      id="app-favicon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>"
+    />
+    <link rel="stylesheet" href="style.css?v=20261002-12" />
+    <script src="static/pdf.min.js"></script>
+    <script src="static/jszip.min.js?v=20261002-1"></script>
+  </head>
+  <body class="theme-googlesheets">
+    <div class="theme-header-container gsheet-only">
+      <header class="gsheet-top-bar">
+        <div class="gsheet-top-left">
+          <a
+            href="javascript:void(0)"
+            class="gsheet-logo-btn"
+            title="Trang chủ Google Trang tính"
+          >
+            <svg width="28" height="36" viewBox="0 0 24 32">
+              <path
+                fill="#0F9D58"
+                d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"
+              />
+              <path fill="#87CEAB" d="M15 0v9h9L15 0z" />
+              <path
+                fill="#ffffff"
+                d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"
+              />
+            </svg>
+          </a>
 
-  <div class="theme-header-container gsheet-only">
-    <header class="gsheet-top-bar">
-      <div class="gsheet-top-left">
-        <a href="javascript:void(0)" class="gsheet-logo-btn" title="Trang chủ Google Trang tính">
-          <svg width="28" height="36" viewBox="0 0 24 32">
-            <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-            <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
-            <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
-          </svg>
-        </a>
-
-        <div class="gsheet-title-and-menu">
-          <div class="gsheet-title-row">
-            <span class="gsheet-doc-title" id="gsheet-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên tài liệu ngụy trang">Báo cáo số liệu & Phân tích KPI Q3</span>
-            <div class="gsheet-doc-icons">
-              <button class="gsheet-icon-btn star-btn" title="Gắn dấu sao">☆</button>
-              <button class="gsheet-icon-btn folder-btn" title="Di chuyển">📁</button>
-              <span class="gsheet-cloud-status" title="Đã lưu vào Drive">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="#5f6368"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l5.09-5.09 1.41 1.41L10 17z"/></svg>
-                <span class="cloud-text">Đã lưu vào Drive</span>
-              </span>
+          <div class="gsheet-title-and-menu">
+            <div class="gsheet-title-row">
+              <span
+                class="gsheet-doc-title"
+                id="gsheet-doc-title"
+                contenteditable="true"
+                spellcheck="false"
+                title="Nhấp để đổi tên tài liệu ngụy trang"
+                >Báo cáo số liệu & Phân tích KPI Q3</span
+              >
+              <div class="gsheet-doc-icons">
+                <button class="gsheet-icon-btn star-btn" title="Gắn dấu sao">
+                  ☆
+                </button>
+                <button class="gsheet-icon-btn folder-btn" title="Di chuyển">
+                  📁
+                </button>
+                <span class="gsheet-cloud-status" title="Đã lưu vào Drive">
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="#5f6368"
+                  >
+                    <path
+                      d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l5.09-5.09 1.41 1.41L10 17z"
+                    />
+                  </svg>
+                  <span class="cloud-text">Đã lưu vào Drive</span>
+                </span>
+              </div>
             </div>
+
+            <nav class="gsheet-menu-bar">
+              <button class="gsheet-menu-item">Tệp</button>
+              <button class="gsheet-menu-item">Chỉnh sửa</button>
+              <button class="gsheet-menu-item">Xem</button>
+              <button class="gsheet-menu-item">Chèn</button>
+              <button class="gsheet-menu-item">Định dạng</button>
+              <button class="gsheet-menu-item">Dữ liệu</button>
+              <button class="gsheet-menu-item">Công cụ</button>
+              <button class="gsheet-menu-item">Tiện ích mở rộng</button>
+              <button class="gsheet-menu-item">Trợ giúp</button>
+            </nav>
+          </div>
+        </div>
+
+        <div class="gsheet-top-right">
+          <div class="stealth-reading-ctrls gsheet-reading-nav">
+            <button
+              class="portal-nav-btn"
+              id="btn-open-portal-gsheet"
+              title="Trang chủ & Ủng hộ tác giả"
+            >
+              Trang chủ & Donate
+            </button>
+            <button
+              class="theme-switch-pill"
+              id="btn-open-theme-modal"
+              title="Đổi giao diện ngụy trang"
+            >
+              Đổi giao diện
+            </button>
+            <button
+              class="boss-key-btn"
+              id="btn-boss-key-gsheet"
+              title="Xem báo cáo nhanh (Nhấn ESC)"
+            >
+              <span class="boss-badge">ESC</span> Báo cáo nhanh
+            </button>
+            <button
+              class="stealth-toggle-btn"
+              title="Ẩn các nút điều khiển đọc (Phím tắt: H)"
+            >
+              👁 Ẩn nút (H)
+            </button>
           </div>
 
-          <nav class="gsheet-menu-bar">
-            <button class="gsheet-menu-item">Tệp</button>
-            <button class="gsheet-menu-item">Chỉnh sửa</button>
-            <button class="gsheet-menu-item">Xem</button>
-            <button class="gsheet-menu-item">Chèn</button>
-            <button class="gsheet-menu-item">Định dạng</button>
-            <button class="gsheet-menu-item">Dữ liệu</button>
-            <button class="gsheet-menu-item">Công cụ</button>
-            <button class="gsheet-menu-item">Tiện ích mở rộng</button>
-            <button class="gsheet-menu-item">Trợ giúp</button>
-          </nav>
+          <button class="gsheet-circle-btn" title="Mở lịch sử chỉnh sửa">
+            🕒
+          </button>
+          <button class="gsheet-circle-btn" title="Mở lịch sử nhận xét">
+            💬
+          </button>
+          <button class="gsheet-circle-btn" title="Tham gia cuộc gọi Meet">
+            📹
+          </button>
+
+          <button class="gsheet-share-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#001d35">
+              <path
+                d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+              />
+            </svg>
+            <span>Chia sẻ</span>
+          </button>
+
+          <div class="gsheet-avatar" title="Tài khoản Google: Nguyen Van A">
+            JD
+          </div>
         </div>
-      </div>
+      </header>
 
-      <div class="gsheet-top-right">
-        <div class="stealth-reading-ctrls gsheet-reading-nav">
-          <button class="portal-nav-btn" id="btn-open-portal-gsheet" title="Trang chủ & Ủng hộ tác giả">
-            Trang chủ & Donate
+      <div class="gsheet-toolbar">
+        <div class="gsheet-tools-group">
+          <button
+            class="gs-tool-btn"
+            id="gs-btn-undo"
+            title="Hoàn tác (Ctrl+Z)"
+          >
+            ↩
           </button>
-          <button class="theme-switch-pill" id="btn-open-theme-modal" title="Đổi giao diện ngụy trang">
-            Đổi giao diện
+          <button class="gs-tool-btn" id="gs-btn-redo" title="Làm lại (Ctrl+Y)">
+            ↪
           </button>
-          <button class="boss-key-btn" id="btn-boss-key-gsheet" title="Xem báo cáo nhanh (Nhấn ESC)">
-            <span class="boss-badge">ESC</span> Báo cáo nhanh
-          </button>
-          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">
-            👁 Ẩn nút (H)
-          </button>
-        </div>
-
-        <button class="gsheet-circle-btn" title="Mở lịch sử chỉnh sửa">🕒</button>
-        <button class="gsheet-circle-btn" title="Mở lịch sử nhận xét">💬</button>
-        <button class="gsheet-circle-btn" title="Tham gia cuộc gọi Meet">📹</button>
-
-        <button class="gsheet-share-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#001d35"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-          <span>Chia sẻ</span>
-        </button>
-
-        <div class="gsheet-avatar" title="Tài khoản Google: Nguyen Van A">JD</div>
-      </div>
-    </header>
-
-    <div class="gsheet-toolbar">
-      <div class="gsheet-tools-group">
-        <button class="gs-tool-btn" id="gs-btn-undo" title="Hoàn tác (Ctrl+Z)">↩</button>
-        <button class="gs-tool-btn" id="gs-btn-redo" title="Làm lại (Ctrl+Y)">↪</button>
-        <button class="gs-tool-btn" title="In (Ctrl+P)">🖨</button>
-        <button class="gs-tool-btn" title="Định dạng sơn">🖌</button>
-        <span class="gs-tool-divider"></span>
-        <select class="gs-select gs-zoom-select" title="Thu phóng">
-          <option>100%</option>
-          <option>75%</option>
-          <option>90%</option>
-          <option>125%</option>
-        </select>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" title="Định dạng tiền tệ">$</button>
-        <button class="gs-tool-btn" title="Định dạng phần trăm">%</button>
-        <button class="gs-tool-btn" title="Giảm số chữ số thập phân">.0</button>
-        <button class="gs-tool-btn" title="Tăng số chữ số thập phân">.00</button>
-        <span class="gs-tool-divider"></span>
-        <select id="gs-select-font-family" class="gs-select gs-font-select" title="Phông chữ">
-          <option value="Arial" selected>Arial</option>
-          <option value="Roboto">Roboto</option>
-          <option value="Calibri">Calibri</option>
-          <option value="Segoe UI">Segoe UI</option>
-        </select>
-        <button class="gs-tool-btn gd-font-step-btn" id="gs-btn-font-dec" title="Giảm cỡ chữ (phím [)">−</button>
-        <select id="gs-select-font-size" class="gs-select gs-size-select" title="Cỡ chữ (8pt - 24pt)">
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10" selected>10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-          <option value="13">13</option>
-          <option value="14">14</option>
-          <option value="15">15</option>
-          <option value="16">16</option>
-          <option value="18">18</option>
-          <option value="20">20</option>
-          <option value="24">24</option>
-        </select>
-        <button class="gs-tool-btn gd-font-step-btn" id="gs-btn-font-inc" title="Tăng cỡ chữ (phím ])">+</button>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-bold" title="Đậm (Ctrl+B)"><b>B</b></button>
-        <button class="gs-tool-btn" id="gs-btn-italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
-        <button class="gs-tool-btn" id="gs-btn-strikethrough" title="Gạch ngang"><s>S</s></button>
-        <button class="gs-tool-btn color-btn" id="gs-btn-color" title="Màu văn bản">
-          <span style="border-bottom: 3px solid #202124;">A</span>
-        </button>
-        <button class="gs-tool-btn" title="Màu tô">🎨</button>
-        <button class="gs-tool-btn" title="Đường viền">⊞</button>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-wrap" title="Ngắt dòng">↩</button>
-      </div>
-
-      <div class="gsheet-stealth-group stealth-reading-ctrls">
-        <label for="file-pdf-input" class="gs-stealth-pill-btn" title="Nạp file PDF, TXT hoặc EPUB từ máy tính">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="#0F9D58"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-          <span>Nạp tài liệu</span>
-        </label>
-        <span class="gs-file-name" id="gs-file-name-label">KPI_Report_Q3_2026.pdf</span>
-
-        <span class="gs-tool-divider"></span>
-
-        <div class="gs-page-controls">
-          <button class="gs-mini-btn" id="gs-btn-prev" title="Trang trước (PageUp)">◀</button>
-          <span id="gs-page-indicator" class="gs-page-text">1 / 1</span>
-          <button class="gs-mini-btn" id="gs-btn-next" title="Trang sau (PageDown)">▶</button>
-          <input type="number" id="gs-input-jump" min="1" value="1" title="Nhập số trang và nhấn Enter">
-        </div>
-
-        <span class="gs-tool-divider"></span>
-
-        <div class="gs-autoscroll-controls">
-          <button class="gs-mini-btn gs-play-btn" id="gs-btn-autoscroll" title="Bắt đầu/Dừng tự cuộn">▶ Tự cuộn</button>
-          <select id="gs-select-speed" class="gs-select gs-speed-select">
-            <option value="3000">3s</option>
-            <option value="5000" selected>5s</option>
-            <option value="8000">8s</option>
-            <option value="12000">12s</option>
+          <button class="gs-tool-btn" title="In (Ctrl+P)">🖨</button>
+          <button class="gs-tool-btn" title="Định dạng sơn">🖌</button>
+          <span class="gs-tool-divider"></span>
+          <select class="gs-select gs-zoom-select" title="Thu phóng">
+            <option>100%</option>
+            <option>75%</option>
+            <option>90%</option>
+            <option>125%</option>
           </select>
+          <span class="gs-tool-divider"></span>
+          <button class="gs-tool-btn" title="Định dạng tiền tệ">$</button>
+          <button class="gs-tool-btn" title="Định dạng phần trăm">%</button>
+          <button class="gs-tool-btn" title="Giảm số chữ số thập phân">
+            .0
+          </button>
+          <button class="gs-tool-btn" title="Tăng số chữ số thập phân">
+            .00
+          </button>
+          <span class="gs-tool-divider"></span>
+          <select
+            id="gs-select-font-family"
+            class="gs-select gs-font-select"
+            title="Phông chữ"
+          >
+            <option value="Arial" selected>Arial</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Calibri">Calibri</option>
+            <option value="Segoe UI">Segoe UI</option>
+          </select>
+          <button
+            class="gs-tool-btn gd-font-step-btn"
+            id="gs-btn-font-dec"
+            title="Giảm cỡ chữ (phím [)"
+          >
+            −
+          </button>
+          <select
+            id="gs-select-font-size"
+            class="gs-select gs-size-select"
+            title="Cỡ chữ (8pt - 24pt)"
+          >
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10" selected>10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+            <option value="20">20</option>
+            <option value="24">24</option>
+          </select>
+          <button
+            class="gs-tool-btn gd-font-step-btn"
+            id="gs-btn-font-inc"
+            title="Tăng cỡ chữ (phím ])"
+          >
+            +
+          </button>
+          <span class="gs-tool-divider"></span>
+          <button class="gs-tool-btn" id="gs-btn-bold" title="Đậm (Ctrl+B)">
+            <b>B</b>
+          </button>
+          <button
+            class="gs-tool-btn"
+            id="gs-btn-italic"
+            title="Nghiêng (Ctrl+I)"
+          >
+            <i>I</i>
+          </button>
+          <button
+            class="gs-tool-btn"
+            id="gs-btn-strikethrough"
+            title="Gạch ngang"
+          >
+            <s>S</s>
+          </button>
+          <button
+            class="gs-tool-btn color-btn"
+            id="gs-btn-color"
+            title="Màu văn bản"
+          >
+            <span style="border-bottom: 3px solid #202124">A</span>
+          </button>
+          <button class="gs-tool-btn" title="Màu tô">🎨</button>
+          <button class="gs-tool-btn" title="Đường viền">⊞</button>
+          <span class="gs-tool-divider"></span>
+          <button class="gs-tool-btn" id="gs-btn-wrap" title="Ngắt dòng">
+            ↩
+          </button>
         </div>
 
-        <div class="gs-dim-control" title="Chỉnh độ mờ chữ">
-          <span>Độ mờ:</span>
-          <input type="range" id="gs-range-dim" min="30" max="100" value="100">
+        <div class="gsheet-stealth-group stealth-reading-ctrls">
+          <label
+            for="file-pdf-input"
+            class="gs-stealth-pill-btn"
+            title="Nạp file PDF, TXT hoặc EPUB từ máy tính"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="#0F9D58">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+            </svg>
+            <span>Nạp tài liệu</span>
+          </label>
+          <span class="gs-file-name" id="gs-file-name-label"
+            >KPI_Report_Q3_2026.pdf</span
+          >
+
+          <span class="gs-tool-divider"></span>
+
+          <div class="gs-page-controls">
+            <button
+              class="gs-mini-btn"
+              id="gs-btn-prev"
+              title="Trang trước (PageUp)"
+            >
+              ◀
+            </button>
+            <span id="gs-page-indicator" class="gs-page-text">1 / 1</span>
+            <button
+              class="gs-mini-btn"
+              id="gs-btn-next"
+              title="Trang sau (PageDown)"
+            >
+              ▶
+            </button>
+            <input
+              type="number"
+              id="gs-input-jump"
+              min="1"
+              value="1"
+              title="Nhập số trang và nhấn Enter"
+            />
+          </div>
+
+          <span class="gs-tool-divider"></span>
+
+          <div class="gs-autoscroll-controls">
+            <button
+              class="gs-mini-btn gs-play-btn"
+              id="gs-btn-autoscroll"
+              title="Bắt đầu/Dừng tự cuộn"
+            >
+              ▶ Tự cuộn
+            </button>
+            <select id="gs-select-speed" class="gs-select gs-speed-select">
+              <option value="3000">3s</option>
+              <option value="5000" selected>5s</option>
+              <option value="8000">8s</option>
+              <option value="12000">12s</option>
+            </select>
+          </div>
+
+          <div class="gs-dim-control" title="Chỉnh độ mờ chữ">
+            <span>Độ mờ:</span>
+            <input
+              type="range"
+              id="gs-range-dim"
+              min="30"
+              max="100"
+              value="100"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
+    <input
+      type="file"
+      id="file-pdf-input"
+      accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip"
+      style="display: none"
+    />
 
-
-
-
-
-  <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
-
-  <div class="excel-formula-bar-container gsheet-excel-only" id="main-formula-bar">
-    <div class="name-box" id="active-cell-address" title="Tọa độ ô">D1</div>
-    <div class="formula-actions">
-      <button class="formula-btn" title="Hủy">✕</button>
-      <button class="formula-btn" title="Nhập">✓</button>
-      <span class="fx-symbol" title="Hàm số"><i>fx</i></span>
-    </div>
-    <div class="formula-input-wrapper">
-      <input type="text" id="formula-input" class="formula-input" placeholder="=VLOOKUP(Data_Key, Financial_Data, 4, FALSE)" readonly />
-    </div>
-  </div>
-
-  <!-- Notification Banner -->
-  <div id="status-banner" class="status-banner" style="display: none;">
-    <span id="banner-text">Thông báo</span>
-    <button class="banner-close" onclick="document.getElementById('status-banner').style.display='none'">✕</button>
-  </div>
-
-
-
-
-<main class="excel-workspace gsheet-excel-only" id="spreadsheet-workspace">
-    <!-- Story Sheet Grid -->
-    <div class="sheet-content active" id="view-sheet-story">
-      <div class="table-container" id="grid-scroll-container">
-        <table class="excel-grid-table" id="excel-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 85px;">A</th>
-              <th class="col-header" style="width: 140px;">B</th>
-              <th class="col-header" style="width: 160px;">C</th>
-              <th class="col-header story-col-header" style="width: auto;">D</th>
-              <th class="col-header" style="width: 105px;">E</th>
-              <th class="col-header" style="width: 105px;">F</th>
-              <th class="col-header" style="width: 125px;">G</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th class="data-col-title">Task_ID</th>
-              <th class="data-col-title">Category / Module</th>
-              <th class="data-col-title">Timestamp</th>
-              <th class="data-col-title story-header-label" id="story-header-title">Log Description & Execution Details</th>
-              <th class="data-col-title">Status</th>
-              <th class="data-col-title">Metrics</th>
-              <th class="data-col-title">Assignee</th>
-            </tr>
-          </thead>
-          <tbody id="story-tbody">
-            <!-- Dynamic rows rendered here -->
-          </tbody>
-        </table>
+    <div
+      class="excel-formula-bar-container gsheet-excel-only"
+      id="main-formula-bar"
+    >
+      <div class="name-box" id="active-cell-address" title="Tọa độ ô">D1</div>
+      <div class="formula-actions">
+        <button class="formula-btn" title="Hủy">✕</button>
+        <button class="formula-btn" title="Nhập">✓</button>
+        <span class="fx-symbol" title="Hàm số"><i>fx</i></span>
+      </div>
+      <div class="formula-input-wrapper">
+        <input
+          type="text"
+          id="formula-input"
+          class="formula-input"
+          placeholder="=VLOOKUP(Data_Key, Financial_Data, 4, FALSE)"
+          readonly
+        />
       </div>
     </div>
 
-    <!-- Dummy Financial Report Sheet (Boss Key) -->
-    <div class="sheet-content" id="view-sheet-financial">
-      <div class="table-container">
-        <table class="excel-grid-table dummy-financial-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 60px;">A</th>
-              <th class="col-header" style="width: 240px;">B</th>
-              <th class="col-header" style="width: 140px;">C</th>
-              <th class="col-header" style="width: 140px;">D</th>
-              <th class="col-header" style="width: 140px;">E</th>
-              <th class="col-header" style="width: 140px;">F</th>
-              <th class="col-header" style="width: 140px;">G</th>
-              <th class="col-header" style="width: 120px;">H</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th>Mã</th>
-              <th>Khoản Mục Tài Chính</th>
-              <th>Tháng 7/2026</th>
-              <th>Tháng 8/2026</th>
-              <th>Tháng 9/2026</th>
-              <th>Lũy Kế Q3</th>
-              <th>Kế Hoạch</th>
-              <th>Tỷ Lệ (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="row-header">2</td><td>REV-01</td><td class="bold-text">DOANH THU THUẦN</td><td>14,520,000,000</td><td>15,840,000,000</td><td>17,210,000,000</td><td class="bold-text">47,570,000,000</td><td>45,000,000,000</td><td class="positive">+105.7%</td></tr>
-            <tr><td class="row-header">3</td><td>REV-02</td><td>Doanh thu Dịch vụ Phần mềm</td><td>8,210,000,000</td><td>8,950,000,000</td><td>9,840,000,000</td><td>27,000,000,000</td><td>25,500,000,000</td><td class="positive">+105.9%</td></tr>
-            <tr><td class="row-header">4</td><td>REV-03</td><td>Doanh thu Bản quyền & Giấy phép</td><td>4,150,000,000</td><td>4,620,000,000</td><td>5,110,000,000</td><td>13,880,000,000</td><td>13,000,000,000</td><td class="positive">+106.8%</td></tr>
-            <tr><td class="row-header">5</td><td>REV-04</td><td>Doanh thu Tư vấn Triển khai</td><td>2,160,000,000</td><td>2,270,000,000</td><td>2,260,000,000</td><td>6,690,000,000</td><td>6,500,000,000</td><td class="positive">+102.9%</td></tr>
-            <tr><td class="row-header">6</td><td>COG-01</td><td class="bold-text">GIÁ VỐN HÀNG BÁN (COGS)</td><td>(6,240,000,000)</td><td>(6,810,000,000)</td><td>(7,350,000,000)</td><td class="bold-text">(20,400,000,000)</td><td>(20,000,000,000)</td><td class="negative">+102.0%</td></tr>
-            <tr><td class="row-header">7</td><td>GP-01</td><td class="bold-text highlight-yellow">LỢI NHUẬN GỘP</td><td>8,280,000,000</td><td>9,030,000,000</td><td>9,860,000,000</td><td class="bold-text">27,170,000,000</td><td>25,000,000,000</td><td class="positive">+108.7%</td></tr>
-            <tr><td class="row-header">8</td><td>OPEX-01</td><td class="bold-text">CHI PHÍ HOẠT ĐỘNG</td><td>(3,450,000,000)</td><td>(3,620,000,000)</td><td>(3,890,000,000)</td><td class="bold-text">(10,960,000,000)</td><td>(11,200,000,000)</td><td class="positive">-2.1%</td></tr>
-            <tr><td class="row-header">9</td><td>OPEX-02</td><td>Chi phí Lương & Phúc lợi R&D</td><td>(2,100,000,000)</td><td>(2,150,000,000)</td><td>(2,200,000,000)</td><td>(6,450,000,000)</td><td>(6,600,000,000)</td><td class="positive">-2.3%</td></tr>
-            <tr><td class="row-header">10</td><td>OPEX-03</td><td>Chi phí Thuê Cloud & Server AWS</td><td>(850,000,000)</td><td>(920,000,000)</td><td>(1,040,000,000)</td><td>(2,810,000,000)</td><td>(2,800,000,000)</td><td class="negative">+0.4%</td></tr>
-            <tr><td class="row-header">11</td><td>OPEX-04</td><td>Chi phí Tiếp thị & Bán hàng</td><td>(500,000,000)</td><td>(550,000,000)</td><td>(650,000,000)</td><td>(1,700,000,000)</td><td>(1,800,000,000)</td><td class="positive">-5.6%</td></tr>
-            <tr><td class="row-header">12</td><td>EBIT-01</td><td class="bold-text highlight-green">LỢI NHUẬN TRƯỚC THUẾ (EBITDA)</td><td>4,830,000,000</td><td>5,410,000,000</td><td>5,970,000,000</td><td class="bold-text">16,210,000,000</td><td>13,800,000,000</td><td class="positive">+117.5%</td></tr>
-            <tr><td class="row-header">13</td><td>TAX-01</td><td>Thuế TNDN Dự tính (20%)</td><td>(966,000,000)</td><td>(1,082,000,000)</td><td>(1,194,000,000)</td><td>(3,242,000,000)</td><td>(2,760,000,000)</td><td>--</td></tr>
-            <tr><td class="row-header">14</td><td>NET-01</td><td class="bold-text highlight-green">LỢI NHUẬN RÒNG SAU THUẾ</td><td>3,864,000,000</td><td>4,328,000,000</td><td>4,776,000,000</td><td class="bold-text">12,968,000,000</td><td>11,040,000,000</td><td class="positive">+117.5%</td></tr>
-          </tbody>
-        </table>
+    <!-- Notification Banner -->
+    <div id="status-banner" class="status-banner" style="display: none">
+      <span id="banner-text">Thông báo</span>
+      <button
+        class="banner-close"
+        onclick="
+          document.getElementById('status-banner').style.display = 'none'
+        "
+      >
+        ✕
+      </button>
+    </div>
+
+    <main class="excel-workspace gsheet-excel-only" id="spreadsheet-workspace">
+      <!-- Story Sheet Grid -->
+      <div class="sheet-content active" id="view-sheet-story">
+        <div class="table-container" id="grid-scroll-container">
+          <table class="excel-grid-table" id="excel-table">
+            <thead>
+              <tr>
+                <th class="corner-header">◢</th>
+                <th class="col-header" style="width: 85px">A</th>
+                <th class="col-header" style="width: 140px">B</th>
+                <th class="col-header" style="width: 160px">C</th>
+                <th class="col-header story-col-header" style="width: auto">
+                  D
+                </th>
+                <th class="col-header" style="width: 105px">E</th>
+                <th class="col-header" style="width: 105px">F</th>
+                <th class="col-header" style="width: 125px">G</th>
+              </tr>
+              <tr class="header-titles-row">
+                <th class="row-header">1</th>
+                <th class="data-col-title">Task_ID</th>
+                <th class="data-col-title">Category / Module</th>
+                <th class="data-col-title">Timestamp</th>
+                <th
+                  class="data-col-title story-header-label stealth-editable"
+                  id="story-header-title"
+                  contenteditable="true"
+                  spellcheck="false"
+                  title="Nhấp để sửa tiêu đề cột D"
+                  data-stealth-key="stealth_header_title_gsheet"
+                >
+                  Log Description &amp; Execution Details
+                </th>
+                <th class="data-col-title">Status</th>
+                <th class="data-col-title">Metrics</th>
+                <th class="data-col-title">Assignee</th>
+              </tr>
+            </thead>
+            <tbody id="story-tbody">
+              <!-- Dynamic rows rendered here -->
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
 
-    <!-- Dummy Balance Sheet -->
-    <div class="sheet-content" id="view-sheet-balance">
-      <div class="table-container">
-        <table class="excel-grid-table dummy-financial-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 70px;">A</th>
-              <th class="col-header" style="width: 280px;">B</th>
-              <th class="col-header" style="width: 180px;">C</th>
-              <th class="col-header" style="width: 180px;">D</th>
-              <th class="col-header" style="width: 160px;">E</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th>Mã Số</th>
-              <th>Chỉ Tiêu Bảng Cân Đối Kế Toán</th>
-              <th>Số Đầu Năm</th>
-              <th>Số Cuối Kỳ Q3</th>
-              <th>Biến Động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="row-header">2</td><td>100</td><td class="bold-text">TỔNG TÀI SẢN NGẮN HẠN</td><td>68,450,000,000</td><td>92,130,000,000</td><td class="positive">+34.6%</td></tr>
-            <tr><td class="row-header">3</td><td>110</td><td>Tiền và các khoản tương đương tiền</td><td>18,200,000,000</td><td>32,450,000,000</td><td class="positive">+78.3%</td></tr>
-            <tr><td class="row-header">4</td><td>120</td><td>Đầu tư tài chính ngắn hạn</td><td>25,000,000,000</td><td>30,000,000,000</td><td class="positive">+20.0%</td></tr>
-            <tr><td class="row-header">5</td><td>130</td><td>Các khoản phải thu ngắn hạn</td><td>19,500,000,000</td><td>23,800,000,000</td><td class="positive">+22.1%</td></tr>
-            <tr><td class="row-header">6</td><td>200</td><td class="bold-text">TỔNG TÀI SẢN DÀI HẠN</td><td>42,100,000,000</td><td>45,600,000,000</td><td class="positive">+8.3%</td></tr>
-            <tr><td class="row-header">7</td><td>300</td><td class="bold-text">NỢ PHẢI TRẢ</td><td>31,250,000,000</td><td>34,800,000,000</td><td class="negative">+11.4%</td></tr>
-            <tr><td class="row-header">8</td><td>400</td><td class="bold-text">VỐN CHỦ SỞ HỮU</td><td>79,300,000,000</td><td>102,930,000,000</td><td class="positive">+29.8%</td></tr>
-          </tbody>
-        </table>
+      <!-- Dummy Financial Report Sheet (Boss Key) -->
+      <div class="sheet-content" id="view-sheet-financial">
+        <div class="table-container">
+          <table class="excel-grid-table dummy-financial-table">
+            <thead>
+              <tr>
+                <th class="corner-header">◢</th>
+                <th class="col-header" style="width: 60px">A</th>
+                <th class="col-header" style="width: 240px">B</th>
+                <th class="col-header" style="width: 140px">C</th>
+                <th class="col-header" style="width: 140px">D</th>
+                <th class="col-header" style="width: 140px">E</th>
+                <th class="col-header" style="width: 140px">F</th>
+                <th class="col-header" style="width: 140px">G</th>
+                <th class="col-header" style="width: 120px">H</th>
+              </tr>
+              <tr class="header-titles-row">
+                <th class="row-header">1</th>
+                <th>Mã</th>
+                <th>Khoản Mục Tài Chính</th>
+                <th>Tháng 7/2026</th>
+                <th>Tháng 8/2026</th>
+                <th>Tháng 9/2026</th>
+                <th>Lũy Kế Q3</th>
+                <th>Kế Hoạch</th>
+                <th>Tỷ Lệ (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-header">2</td>
+                <td>REV-01</td>
+                <td class="bold-text">DOANH THU THUẦN</td>
+                <td>14,520,000,000</td>
+                <td>15,840,000,000</td>
+                <td>17,210,000,000</td>
+                <td class="bold-text">47,570,000,000</td>
+                <td>45,000,000,000</td>
+                <td class="positive">+105.7%</td>
+              </tr>
+              <tr>
+                <td class="row-header">3</td>
+                <td>REV-02</td>
+                <td>Doanh thu Dịch vụ Phần mềm</td>
+                <td>8,210,000,000</td>
+                <td>8,950,000,000</td>
+                <td>9,840,000,000</td>
+                <td>27,000,000,000</td>
+                <td>25,500,000,000</td>
+                <td class="positive">+105.9%</td>
+              </tr>
+              <tr>
+                <td class="row-header">4</td>
+                <td>REV-03</td>
+                <td>Doanh thu Bản quyền & Giấy phép</td>
+                <td>4,150,000,000</td>
+                <td>4,620,000,000</td>
+                <td>5,110,000,000</td>
+                <td>13,880,000,000</td>
+                <td>13,000,000,000</td>
+                <td class="positive">+106.8%</td>
+              </tr>
+              <tr>
+                <td class="row-header">5</td>
+                <td>REV-04</td>
+                <td>Doanh thu Tư vấn Triển khai</td>
+                <td>2,160,000,000</td>
+                <td>2,270,000,000</td>
+                <td>2,260,000,000</td>
+                <td>6,690,000,000</td>
+                <td>6,500,000,000</td>
+                <td class="positive">+102.9%</td>
+              </tr>
+              <tr>
+                <td class="row-header">6</td>
+                <td>COG-01</td>
+                <td class="bold-text">GIÁ VỐN HÀNG BÁN (COGS)</td>
+                <td>(6,240,000,000)</td>
+                <td>(6,810,000,000)</td>
+                <td>(7,350,000,000)</td>
+                <td class="bold-text">(20,400,000,000)</td>
+                <td>(20,000,000,000)</td>
+                <td class="negative">+102.0%</td>
+              </tr>
+              <tr>
+                <td class="row-header">7</td>
+                <td>GP-01</td>
+                <td class="bold-text highlight-yellow">LỢI NHUẬN GỘP</td>
+                <td>8,280,000,000</td>
+                <td>9,030,000,000</td>
+                <td>9,860,000,000</td>
+                <td class="bold-text">27,170,000,000</td>
+                <td>25,000,000,000</td>
+                <td class="positive">+108.7%</td>
+              </tr>
+              <tr>
+                <td class="row-header">8</td>
+                <td>OPEX-01</td>
+                <td class="bold-text">CHI PHÍ HOẠT ĐỘNG</td>
+                <td>(3,450,000,000)</td>
+                <td>(3,620,000,000)</td>
+                <td>(3,890,000,000)</td>
+                <td class="bold-text">(10,960,000,000)</td>
+                <td>(11,200,000,000)</td>
+                <td class="positive">-2.1%</td>
+              </tr>
+              <tr>
+                <td class="row-header">9</td>
+                <td>OPEX-02</td>
+                <td>Chi phí Lương & Phúc lợi R&D</td>
+                <td>(2,100,000,000)</td>
+                <td>(2,150,000,000)</td>
+                <td>(2,200,000,000)</td>
+                <td>(6,450,000,000)</td>
+                <td>(6,600,000,000)</td>
+                <td class="positive">-2.3%</td>
+              </tr>
+              <tr>
+                <td class="row-header">10</td>
+                <td>OPEX-03</td>
+                <td>Chi phí Thuê Cloud & Server AWS</td>
+                <td>(850,000,000)</td>
+                <td>(920,000,000)</td>
+                <td>(1,040,000,000)</td>
+                <td>(2,810,000,000)</td>
+                <td>(2,800,000,000)</td>
+                <td class="negative">+0.4%</td>
+              </tr>
+              <tr>
+                <td class="row-header">11</td>
+                <td>OPEX-04</td>
+                <td>Chi phí Tiếp thị & Bán hàng</td>
+                <td>(500,000,000)</td>
+                <td>(550,000,000)</td>
+                <td>(650,000,000)</td>
+                <td>(1,700,000,000)</td>
+                <td>(1,800,000,000)</td>
+                <td class="positive">-5.6%</td>
+              </tr>
+              <tr>
+                <td class="row-header">12</td>
+                <td>EBIT-01</td>
+                <td class="bold-text highlight-green">
+                  LỢI NHUẬN TRƯỚC THUẾ (EBITDA)
+                </td>
+                <td>4,830,000,000</td>
+                <td>5,410,000,000</td>
+                <td>5,970,000,000</td>
+                <td class="bold-text">16,210,000,000</td>
+                <td>13,800,000,000</td>
+                <td class="positive">+117.5%</td>
+              </tr>
+              <tr>
+                <td class="row-header">13</td>
+                <td>TAX-01</td>
+                <td>Thuế TNDN Dự tính (20%)</td>
+                <td>(966,000,000)</td>
+                <td>(1,082,000,000)</td>
+                <td>(1,194,000,000)</td>
+                <td>(3,242,000,000)</td>
+                <td>(2,760,000,000)</td>
+                <td>--</td>
+              </tr>
+              <tr>
+                <td class="row-header">14</td>
+                <td>NET-01</td>
+                <td class="bold-text highlight-green">
+                  LỢI NHUẬN RÒNG SAU THUẾ
+                </td>
+                <td>3,864,000,000</td>
+                <td>4,328,000,000</td>
+                <td>4,776,000,000</td>
+                <td class="bold-text">12,968,000,000</td>
+                <td>11,040,000,000</td>
+                <td class="positive">+117.5%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </main>
 
+      <!-- Dummy Balance Sheet -->
+      <div class="sheet-content" id="view-sheet-balance">
+        <div class="table-container">
+          <table class="excel-grid-table dummy-financial-table">
+            <thead>
+              <tr>
+                <th class="corner-header">◢</th>
+                <th class="col-header" style="width: 70px">A</th>
+                <th class="col-header" style="width: 280px">B</th>
+                <th class="col-header" style="width: 180px">C</th>
+                <th class="col-header" style="width: 180px">D</th>
+                <th class="col-header" style="width: 160px">E</th>
+              </tr>
+              <tr class="header-titles-row">
+                <th class="row-header">1</th>
+                <th>Mã Số</th>
+                <th>Chỉ Tiêu Bảng Cân Đối Kế Toán</th>
+                <th>Số Đầu Năm</th>
+                <th>Số Cuối Kỳ Q3</th>
+                <th>Biến Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-header">2</td>
+                <td>100</td>
+                <td class="bold-text">TỔNG TÀI SẢN NGẮN HẠN</td>
+                <td>68,450,000,000</td>
+                <td>92,130,000,000</td>
+                <td class="positive">+34.6%</td>
+              </tr>
+              <tr>
+                <td class="row-header">3</td>
+                <td>110</td>
+                <td>Tiền và các khoản tương đương tiền</td>
+                <td>18,200,000,000</td>
+                <td>32,450,000,000</td>
+                <td class="positive">+78.3%</td>
+              </tr>
+              <tr>
+                <td class="row-header">4</td>
+                <td>120</td>
+                <td>Đầu tư tài chính ngắn hạn</td>
+                <td>25,000,000,000</td>
+                <td>30,000,000,000</td>
+                <td class="positive">+20.0%</td>
+              </tr>
+              <tr>
+                <td class="row-header">5</td>
+                <td>130</td>
+                <td>Các khoản phải thu ngắn hạn</td>
+                <td>19,500,000,000</td>
+                <td>23,800,000,000</td>
+                <td class="positive">+22.1%</td>
+              </tr>
+              <tr>
+                <td class="row-header">6</td>
+                <td>200</td>
+                <td class="bold-text">TỔNG TÀI SẢN DÀI HẠN</td>
+                <td>42,100,000,000</td>
+                <td>45,600,000,000</td>
+                <td class="positive">+8.3%</td>
+              </tr>
+              <tr>
+                <td class="row-header">7</td>
+                <td>300</td>
+                <td class="bold-text">NỢ PHẢI TRẢ</td>
+                <td>31,250,000,000</td>
+                <td>34,800,000,000</td>
+                <td class="negative">+11.4%</td>
+              </tr>
+              <tr>
+                <td class="row-header">8</td>
+                <td>400</td>
+                <td class="bold-text">VỐN CHỦ SỞ HỮU</td>
+                <td>79,300,000,000</td>
+                <td>102,930,000,000</td>
+                <td class="positive">+29.8%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
 
+    <footer class="excel-sheets-bar" id="main-sheets-bar">
+      <div class="gs-bottom-left gsheet-only">
+        <button class="gs-plus-sheet-btn" title="Thêm trang tính">+</button>
+        <button class="gs-all-sheets-btn" title="Tất cả trang tính">☰</button>
+      </div>
+      <div class="sheet-tabs-list gsheet-excel-only">
+        <button
+          class="sheet-tab active"
+          data-target="view-sheet-story"
+          id="tab-story-sheet"
+        >
+          <span
+            class="tab-label stealth-editable"
+            id="tab-story-label"
+            contenteditable="true"
+            spellcheck="false"
+            title="Nhấp đúp hoặc nhấp để đổi tên sheet"
+            data-stealth-key="stealth_sheet_gsheet_0"
+            >Trang tính1</span
+          >
+        </button>
+        <button
+          class="sheet-tab"
+          data-target="view-sheet-financial"
+          id="tab-financial-sheet"
+        >
+          <span
+            class="tab-label stealth-editable"
+            id="tab-financial-label"
+            contenteditable="true"
+            spellcheck="false"
+            title="Nhấp đúp hoặc nhấp để đổi tên sheet"
+            data-stealth-key="stealth_sheet_gsheet_1"
+            >Doanh_Thu_Q3</span
+          >
+        </button>
+        <button class="sheet-tab" data-target="view-sheet-balance">
+          <span
+            class="tab-label stealth-editable"
+            id="tab-balance-label"
+            contenteditable="true"
+            spellcheck="false"
+            title="Nhấp đúp hoặc nhấp để đổi tên sheet"
+            data-stealth-key="stealth_sheet_gsheet_2"
+            >Can_Doi_Ke_Toan</span
+          >
+        </button>
+      </div>
+      <div class="excel-status-bar gsheet-excel-only">
+        <span class="status-item ready" id="status-ready-label">Sẵn sàng</span>
+        <span class="status-item formula-calc" id="status-reading-info"
+          >Dòng: 1 | Đã đọc: 0%</span
+        >
+        <span class="status-item sum-item">Average: 24,190.50</span>
+        <span class="status-item count-item">Count: 420</span>
+        <span class="status-item">Sum: 10,160,010</span>
+        <button class="gs-explore-btn gsheet-only" title="Khám phá">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a73e8">
+            <path
+              d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"
+            />
+          </svg>
+          <span>Khám phá</span>
+        </button>
+      </div>
+    </footer>
 
-
-
-
-  <footer class="excel-sheets-bar" id="main-sheets-bar">
-    <div class="gs-bottom-left gsheet-only">
-      <button class="gs-plus-sheet-btn" title="Thêm trang tính">+</button>
-      <button class="gs-all-sheets-btn" title="Tất cả trang tính">☰</button>
-    </div>
-    <div class="sheet-tabs-list gsheet-excel-only">
-      <button class="sheet-tab active" data-target="view-sheet-story" id="tab-story-sheet">
-        <span class="tab-label" id="tab-story-label">Trang tính1</span>
-      </button>
-      <button class="sheet-tab" data-target="view-sheet-financial" id="tab-financial-sheet">
-        <span class="tab-label">Doanh_Thu_Q3</span>
-      </button>
-      <button class="sheet-tab" data-target="view-sheet-balance">
-        <span class="tab-label">Can_Doi_Ke_Toan</span>
-      </button>
-    </div>
-    <div class="excel-status-bar gsheet-excel-only">
-      <span class="status-item ready" id="status-ready-label">Sẵn sàng</span>
-      <span class="status-item formula-calc" id="status-reading-info">Dòng: 1 | Đã đọc: 0%</span>
-      <span class="status-item sum-item">Average: 24,190.50</span>
-      <span class="status-item count-item">Count: 420</span>
-      <span class="status-item">Sum: 10,160,010</span>
-      <button class="gs-explore-btn gsheet-only" title="Khám phá">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a73e8"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-        <span>Khám phá</span>
-      </button>
-    </div>
-  </footer>
-
-
-
-
-<!-- =========================================================
+    <!-- =========================================================
        MODAL 1: THEME PICKER MODAL (CHỌN GIAO DIỆN)
        ========================================================= -->
-  <div class="stealth-modal-overlay" id="theme-modal">
-    <div class="stealth-modal-content theme-picker-content">
-      <div class="modal-header">
-        <h3>🎨 Chọn Giao Diện Ngụy Trang Làm Việc</h3>
-        <button class="modal-close-btn" id="btn-close-theme-modal">✕</button>
-      </div>
-      <div class="modal-body">
-        <p class="guide-text">Chọn phong cách ngụy trang phù hợp nhất với vị trí công việc của bạn:</p>
+    <div class="stealth-modal-overlay" id="theme-modal">
+      <div class="stealth-modal-content theme-picker-content">
+        <div class="modal-header">
+          <h3>🎨 Chọn Giao Diện Ngụy Trang Làm Việc</h3>
+          <button class="modal-close-btn" id="btn-close-theme-modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="guide-text">
+            Chọn phong cách ngụy trang phù hợp nhất với vị trí công việc của
+            bạn:
+          </p>
 
-        <div class="theme-selection-grid">
-          <!-- Option 1: Google Sheets -->
-          <div class="theme-card active" data-theme="theme-googlesheets">
-            <div class="theme-card-badge">Khuyên Dùng ⭐</div>
-            <div class="theme-preview-img gsheet-preview">
-              <div class="prev-top-bar" style="background:#fff; border-bottom:1px solid #e0e0e0;">
-                <span style="color:#0F9D58; font-weight:bold; font-size:12px;">📊 Google Sheets</span>
-                <span style="background:#c2e7ff; color:#001d35; border-radius:10px; padding:2px 8px; font-size:9px; font-weight:600;">Chia sẻ</span>
-              </div>
-              <div class="prev-grid" style="background:#f8fafd;">
-                <div class="prev-row header" style="background:#f8f9fa;"><span>A</span><span>B</span><span>C</span><span>D (Truyện)</span></div>
-                <div class="prev-row"><span>TSK-1</span><span>DATA</span><span>09:15</span><span style="color:#202124;">Chương 1...</span></div>
-                <div class="prev-row"><span>TSK-2</span><span>SYS</span><span>09:18</span><span style="color:#202124;">Ishigami rời...</span></div>
-              </div>
-            </div>
-            <h4>Google Sheets (Online)</h4>
-            <p>Bảng tính Google Drive trên nền web. Trông 100% tự nhiên vì mở trực tiếp trên Chrome/Edge!</p>
-          </div>
-
-          <!-- Option 2: Google Docs -->
-          <div class="theme-card" data-theme="theme-googledocs">
-            <div class="theme-card-badge" style="background:#1a73e8; color:white;">Văn Phòng 📝</div>
-            <div class="theme-preview-img gdocs-preview">
-              <div class="prev-top-bar" style="background:#ffffff; border-bottom:1px solid #e0e0e0;">
-                <span style="color:#1a73e8; font-weight:bold; font-size:11px;">📄 Google Docs (Tài liệu)</span>
-                <span style="background:#c2e7ff; color:#001d35; border-radius:10px; padding:2px 8px; font-size:9px; font-weight:600;">Chia sẻ</span>
-              </div>
-              <div class="prev-grid" style="background:#f9fbfd; padding:6px; display:flex; justify-content:center;">
-                <div style="background:white; width:90%; height:100%; box-shadow:0 1px 2px rgba(0,0,0,0.1); padding:4px 6px; font-size:8px; color:#202124;">
-                  <b style="color:#1a73e8; font-size:9px;">BÁO CÁO KẾ HOẠCH Q3</b>
-                  <p style="margin-top:2px; color:#3c4043;">Đoạn trích tiểu thuyết trình bày tự nhiên như văn bản tài liệu Word...</p>
+          <div class="theme-selection-grid">
+            <!-- Option 1: Google Sheets -->
+            <div class="theme-card active" data-theme="theme-googlesheets">
+              <div class="theme-card-badge">Khuyên Dùng ⭐</div>
+              <div class="theme-preview-img gsheet-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #fff; border-bottom: 1px solid #e0e0e0"
+                >
+                  <span
+                    style="color: #0f9d58; font-weight: bold; font-size: 12px"
+                    >📊 Google Sheets</span
+                  >
+                  <span
+                    style="
+                      background: #c2e7ff;
+                      color: #001d35;
+                      border-radius: 10px;
+                      padding: 2px 8px;
+                      font-size: 9px;
+                      font-weight: 600;
+                    "
+                    >Chia sẻ</span
+                  >
+                </div>
+                <div class="prev-grid" style="background: #f8fafd">
+                  <div class="prev-row header" style="background: #f8f9fa">
+                    <span>A</span><span>B</span><span>C</span
+                    ><span>D (Truyện)</span>
+                  </div>
+                  <div class="prev-row">
+                    <span>TSK-1</span><span>DATA</span><span>09:15</span
+                    ><span style="color: #202124">Chương 1...</span>
+                  </div>
+                  <div class="prev-row">
+                    <span>TSK-2</span><span>SYS</span><span>09:18</span
+                    ><span style="color: #202124">Ishigami rời...</span>
+                  </div>
                 </div>
               </div>
+              <h4>Google Sheets (Online)</h4>
+              <p>
+                Bảng tính Google Drive trên nền web. Trông 100% tự nhiên vì mở
+                trực tiếp trên Chrome/Edge!
+              </p>
             </div>
-            <h4>Google Docs (Trực Tuyến)</h4>
-            <p>Trình soạn thảo văn bản Google Drive, hoàn hảo để đọc truyện ngụy trang tài liệu công việc.</p>
-          </div>
 
-          <!-- Option 3: Microsoft Excel 365 -->
-          <div class="theme-card" data-theme="theme-excel">
-            <div class="theme-preview-img excel-preview">
-              <div class="prev-top-bar" style="background:#107c41; color:white;">
-                <span style="font-weight:bold; font-size:11px;">📗 Excel 365 (Bao_Cao.xlsx)</span>
+            <!-- Option 2: Google Docs -->
+            <div class="theme-card" data-theme="theme-googledocs">
+              <div
+                class="theme-card-badge"
+                style="background: #1a73e8; color: white"
+              >
+                Văn Phòng 
               </div>
-              <div class="prev-grid">
-                <div class="prev-row header" style="background:#e7f2eb; color:#107c41;"><span>A</span><span>B</span><span>C</span><span>D (Truyện)</span></div>
-                <div class="prev-row"><span>AUD-1</span><span>CORE</span><span>09:15</span><span>Nội dung truyện...</span></div>
-                <div class="prev-row"><span>AUD-2</span><span>AUTH</span><span>09:18</span><span>Đoạn tiếp theo...</span></div>
-              </div>
-            </div>
-            <h4>Microsoft Excel 365</h4>
-            <p>Bảng tính văn phòng Office Desktop với thanh Ribbon xanh lá kinh điển.</p>
-          </div>
-
-          <!-- Option 3: VS Code IDE -->
-          <div class="theme-card" data-theme="theme-vscode">
-            <div class="theme-card-badge" style="background:#007acc;">Dành cho IT 💻</div>
-            <div class="theme-preview-img vscode-preview">
-              <div class="prev-top-bar" style="background:#3c3c3c; color:#d4d4d4;">
-                <span style="color:#007acc; font-weight:bold; font-size:11px;">💻 VS Code (Dark IDE)</span>
-              </div>
-              <div class="prev-grid" style="background:#1e1e1e; color:#9cdcfe; font-family:monospace; font-size:9px;">
-                <div class="prev-row" style="color:#6a9955;"># Chapter 1: Ishigami...</div>
-                <div class="prev-row"><span style="color:#569cd6;">def</span> <span style="color:#dcdcaa;">process_stream</span>():</div>
-                <div class="prev-row" style="color:#ce9178;">&nbsp;&nbsp;return "Troi van con se lanh..."</div>
-              </div>
-            </div>
-            <h4>Visual Studio Code (IDE Thật)</h4>
-            <p>Trình soạn code Dark Theme với cây thư mục files, số dòng, tô màu cú pháp Python và Terminal bên dưới!</p>
-          </div>
-
-          <!-- Option 4: Photoshop 2026 -->
-          <div class="theme-card" data-theme="theme-photoshop">
-            <div class="theme-card-badge" style="background:#001e36; color:#31a8ff;">Designer 🎨</div>
-            <div class="theme-preview-img ps-preview">
-              <div class="prev-top-bar" style="background:#282828; color:#eee;">
-                <span style="color:#31a8ff; font-weight:bold; font-size:11px;">Ps Adobe Photoshop 2026</span>
-              </div>
-              <div class="prev-grid" style="background:#1e1e1e; padding:8px; display:flex; flex-direction:column; gap:4px;">
-                <div style="background:#ffffff; color:#111; padding:4px 6px; border-radius:2px; font-size:8px;">[Artboard 1 - Typography] Đoạn trích bản thảo...</div>
-              </div>
-            </div>
-            <h4>Adobe Photoshop 2026</h4>
-            <p>Màn hình thiết kế Artboard 300 DPI với bộ công cụ đồ họa, bảng Layers và Character specs.</p>
-          </div>
-
-          <!-- Option 5: Blender 4.2 -->
-          <div class="theme-card" data-theme="theme-blender">
-            <div class="theme-card-badge" style="background:#ea7600;">3D Artist 🧊</div>
-            <div class="theme-preview-img blender-preview">
-              <div class="prev-top-bar" style="background:#303030; color:#ddd;">
-                <span style="color:#ea7600; font-weight:bold; font-size:11px;">Blender 4.2 (Scripting)</span>
-              </div>
-              <div class="prev-grid" style="background:#232323; color:#ccc; font-family:monospace; font-size:8px; padding:6px;">
-                <div style="color:#e5c07b;">bpy.data.texts["Novel"]</div>
-                <div style="color:#98c379;">lines[0] = "Trích đoạn truyện..."</div>
-              </div>
-            </div>
-            <h4>Blender 4.2 (3D Animation)</h4>
-            <p>Phần mềm dựng hình 3D với Cycles Engine, Outliner phân cấp và khung Python console chuyên nghiệp.</p>
-          </div>
-
-          <!-- Option 6: LinkedIn Feed -->
-          <div class="theme-card" data-theme="theme-linkedin">
-            <div class="theme-card-badge" style="background:#0a66c2;">Công Sở 👔</div>
-            <div class="theme-preview-img linkedin-preview">
-              <div class="prev-top-bar" style="background:#ffffff; border-bottom:1px solid #e0e0e0;">
-                <span style="color:#0a66c2; font-weight:bold; font-size:11px;">in LinkedIn Feed</span>
-              </div>
-              <div class="prev-grid" style="background:#f3f2ef; padding:6px; font-size:8px;">
-                <div style="background:white; border-radius:4px; padding:4px; border:1px solid #e0e0e0;">
-                  <b style="color:#0a66c2;">Senior Architect • 1st</b>
-                  <div style="color:#333; margin-top:2px;">Nội dung tiểu thuyết chia sẻ như bài post viral...</div>
+              <div class="theme-preview-img gdocs-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #ffffff; border-bottom: 1px solid #e0e0e0"
+                >
+                  <span
+                    style="color: #1a73e8; font-weight: bold; font-size: 11px"
+                    >📄 Google Docs (Tài liệu)</span
+                  >
+                  <span
+                    style="
+                      background: #c2e7ff;
+                      color: #001d35;
+                      border-radius: 10px;
+                      padding: 2px 8px;
+                      font-size: 9px;
+                      font-weight: 600;
+                    "
+                    >Chia sẻ</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="
+                    background: #f9fbfd;
+                    padding: 6px;
+                    display: flex;
+                    justify-content: center;
+                  "
+                >
+                  <div
+                    style="
+                      background: white;
+                      width: 90%;
+                      height: 100%;
+                      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+                      padding: 4px 6px;
+                      font-size: 8px;
+                      color: #202124;
+                    "
+                  >
+                    <b style="color: #1a73e8; font-size: 9px"
+                      >BÁO CÁO KẾ HOẠCH Q3</b
+                    >
+                    <p style="margin-top: 2px; color: #3c4043">
+                      Đoạn trích tiểu thuyết trình bày tự nhiên như văn bản tài
+                      liệu Word...
+                    </p>
+                  </div>
                 </div>
               </div>
+              <h4>Google Docs (Trực Tuyến)</h4>
+              <p>
+                Trình soạn thảo văn bản Google Drive, hoàn hảo để đọc truyện
+                ngụy trang tài liệu công việc.
+              </p>
             </div>
-            <h4>LinkedIn Feed (Mạng Xã Hội)</h4>
-            <p>Trang tin tức nghề nghiệp LinkedIn, tiểu thuyết được chia sẻ như các bài viết phân tích chuyên môn.</p>
-          </div>
 
-          <!-- Option 7: Autodesk AutoCAD -->
-          <div class="theme-card" data-theme="theme-autocad">
-            <div class="theme-card-badge" style="background:#c41527;">Kỹ Sư 📐</div>
-            <div class="theme-preview-img autocad-preview">
-              <div class="prev-top-bar" style="background:#2d333b; color:#fff;">
-                <span style="color:#c41527; font-weight:bold; font-size:11px;">A AutoCAD 2026</span>
-              </div>
-              <div class="prev-grid" style="background:#212830; color:#00ffff; font-family:monospace; font-size:8px; padding:6px;">
-                <div style="color:#ffff00;">NOTE 01.01: MTEXT SPEC</div>
-                <div style="color:#fff;">Nội dung truyện trình bày dạng thuyết minh bản vẽ...</div>
-              </div>
-            </div>
-            <h4>Autodesk AutoCAD 2026</h4>
-            <p>Bản vẽ kỹ thuật kiến trúc với thanh Ribbon công cụ CAD, tọa độ UCS và bảng ghi chú MTEXT.</p>
-          </div>
-
-          <!-- Option 9: Zalo PC -->
-          <div class="theme-card" data-theme="theme-zalo">
-            <div class="theme-card-badge" style="background:#0068ff; color:white;">Nhắn Tin 💬</div>
-            <div class="theme-preview-img zalo-preview">
-              <div class="prev-top-bar" style="background:#0068ff; color:#fff;">
-                <span style="font-weight:bold; font-size:11px;">💬 Zalo PC (Team Sync)</span>
-              </div>
-              <div class="prev-grid" style="background:#eef0f3; padding:6px; font-size:8px;">
-                <div style="background:white; border-radius:4px; padding:4px; border:1px solid #e2e8f0;">
-                  <b style="color:#0068ff;">Phong (Tech Lead):</b>
-                  <div style="color:#333; margin-top:2px;">Nội dung tiểu thuyết chia sẻ như tin nhắn chat nhóm...</div>
+            <!-- Option 3: Microsoft Excel 365 -->
+            <div class="theme-card" data-theme="theme-excel">
+              <div class="theme-preview-img excel-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #107c41; color: white"
+                >
+                  <span style="font-weight: bold; font-size: 11px"
+                    >📗 Excel 365 (Bao_Cao.xlsx)</span
+                  >
+                </div>
+                <div class="prev-grid">
+                  <div
+                    class="prev-row header"
+                    style="background: #e7f2eb; color: #107c41"
+                  >
+                    <span>A</span><span>B</span><span>C</span
+                    ><span>D (Truyện)</span>
+                  </div>
+                  <div class="prev-row">
+                    <span>AUD-1</span><span>CORE</span><span>09:15</span
+                    ><span>Nội dung truyện...</span>
+                  </div>
+                  <div class="prev-row">
+                    <span>AUD-2</span><span>AUTH</span><span>09:18</span
+                    ><span>Đoạn tiếp theo...</span>
+                  </div>
                 </div>
               </div>
+              <h4>Microsoft Excel 365</h4>
+              <p>
+                Bảng tính văn phòng Office Desktop với thanh Ribbon xanh lá kinh
+                điển.
+              </p>
             </div>
-            <h4>Zalo PC (Chat Nhóm)</h4>
-            <p>Ứng dụng nhắn tin Zalo văn phòng, tiểu thuyết ngụy trang tin nhắn trao đổi công việc nội bộ.</p>
-          </div>
 
-          <!-- Option 10: Figma -->
-          <div class="theme-card" data-theme="theme-figma">
-            <div class="theme-card-badge" style="background:#1e1e1e; color:#0d99ff;">UI/UX ❖</div>
-            <div class="theme-preview-img figma-preview">
-              <div class="prev-top-bar" style="background:#2c2c2c; color:#fff;">
-                <span style="color:#0d99ff; font-weight:bold; font-size:11px;">❖ Figma Design</span>
+            <!-- Option 3: VS Code IDE -->
+            <div class="theme-card" data-theme="theme-vscode">
+              <div class="theme-card-badge" style="background: #007acc">
+                Dành cho IT 💻
               </div>
-              <div class="prev-grid" style="background:#1e1e1e; padding:6px; font-size:8px;">
-                <div style="background:white; border-radius:2px; padding:4px; color:#111;">
-                  <b style="color:#0d99ff;"># Typography Spec</b>
-                  <div style="margin-top:2px;">Khung vẽ spec giao diện với luồng đọc tiểu thuyết sắc nét...</div>
+              <div class="theme-preview-img vscode-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #3c3c3c; color: #d4d4d4"
+                >
+                  <span
+                    style="color: #007acc; font-weight: bold; font-size: 11px"
+                    >💻 VS Code (Dark IDE)</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="
+                    background: #1e1e1e;
+                    color: #9cdcfe;
+                    font-family: monospace;
+                    font-size: 9px;
+                  "
+                >
+                  <div class="prev-row" style="color: #6a9955">
+                    # Chapter 1: Ishigami...
+                  </div>
+                  <div class="prev-row">
+                    <span style="color: #569cd6">def</span>
+                    <span style="color: #dcdcaa">process_stream</span>():
+                  </div>
+                  <div class="prev-row" style="color: #ce9178">
+                    &nbsp;&nbsp;return "Troi van con se lanh..."
+                  </div>
                 </div>
               </div>
+              <h4>Visual Studio Code (IDE Thật)</h4>
+              <p>
+                Trình soạn code Dark Theme với cây thư mục files, số dòng, tô
+                màu cú pháp Python và Terminal bên dưới!
+              </p>
             </div>
-            <h4>Figma (UI/UX Design)</h4>
-            <p>Giao diện thiết kế UI/UX Dark Mode, Artboard Typography Spec và hệ thống Design System.</p>
-          </div>
 
-          <!-- Option 11: Canva -->
-          <div class="theme-card" data-theme="theme-canva">
-            <div class="theme-card-badge" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8); color:white;">Slide 🎨</div>
-            <div class="theme-preview-img canva-preview">
-              <div class="prev-top-bar" style="background:linear-gradient(90deg,#00c4cc,#7d2ae8); color:#fff;">
-                <span style="font-weight:bold; font-size:11px;">Canva Presentation</span>
+            <!-- Option 4: Photoshop 2026 -->
+            <div class="theme-card" data-theme="theme-photoshop">
+              <div
+                class="theme-card-badge"
+                style="background: #001e36; color: #31a8ff"
+              >
+                Designer 🎨
               </div>
-              <div class="prev-grid" style="background:#f2f3f5; padding:6px; font-size:8px;">
-                <div style="background:white; border-radius:2px; padding:4px; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-                  <b style="color:#7d2ae8;">Slide 1: Chiến lược Q3</b>
-                  <div style="color:#333; margin-top:2px;">Bản thảo thuyết trình và ấn phẩm truyền thông hiện đại...</div>
+              <div class="theme-preview-img ps-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #282828; color: #eee"
+                >
+                  <span
+                    style="color: #31a8ff; font-weight: bold; font-size: 11px"
+                    >Ps Adobe Photoshop 2026</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="
+                    background: #1e1e1e;
+                    padding: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                  "
+                >
+                  <div
+                    style="
+                      background: #ffffff;
+                      color: #111;
+                      padding: 4px 6px;
+                      border-radius: 2px;
+                      font-size: 8px;
+                    "
+                  >
+                    [Artboard 1 - Typography] Đoạn trích bản thảo...
+                  </div>
                 </div>
               </div>
+              <h4>Adobe Photoshop 2026</h4>
+              <p>
+                Màn hình thiết kế Artboard 300 DPI với bộ công cụ đồ họa, bảng
+                Layers và Character specs.
+              </p>
             </div>
-            <h4>Canva (Thiết Kế Slide)</h4>
-            <p>Trình biên tập slide thuyết trình & ấn phẩm Canva, trẻ trung và chuẩn phong cách sáng tạo.</p>
-          </div>
 
-          <!-- Option 12: PowerPoint -->
-          <div class="theme-card" data-theme="theme-powerpoint">
-            <div class="theme-card-badge" style="background:#d24726; color:white;">Báo Cáo 📊</div>
-            <div class="theme-preview-img ppt-preview">
-              <div class="prev-top-bar" style="background:#d24726; color:#fff;">
-                <span style="font-weight:bold; font-size:11px;">P PowerPoint 365</span>
+            <!-- Option 5: Blender 4.2 -->
+            <div class="theme-card" data-theme="theme-blender">
+              <div class="theme-card-badge" style="background: #ea7600">
+                3D Artist 🧊
               </div>
-              <div class="prev-grid" style="background:#e5e7eb; padding:6px; font-size:8px;">
-                <div style="background:white; border-radius:2px; padding:4px; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-                  <b style="color:#d24726;">Báo Cáo Hoạt Động Q3</b>
-                  <div style="color:#333; margin-top:2px;">■ Trình bày dạng bullet points chuẩn bài thuyết trình...</div>
+              <div class="theme-preview-img blender-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #303030; color: #ddd"
+                >
+                  <span
+                    style="color: #ea7600; font-weight: bold; font-size: 11px"
+                    >Blender 4.2 (Scripting)</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="
+                    background: #232323;
+                    color: #ccc;
+                    font-family: monospace;
+                    font-size: 8px;
+                    padding: 6px;
+                  "
+                >
+                  <div style="color: #e5c07b">bpy.data.texts["Novel"]</div>
+                  <div style="color: #98c379">
+                    lines[0] = "Trích đoạn truyện..."
+                  </div>
                 </div>
               </div>
+              <h4>Blender 4.2 (3D Animation)</h4>
+              <p>
+                Phần mềm dựng hình 3D với Cycles Engine, Outliner phân cấp và
+                khung Python console chuyên nghiệp.
+              </p>
             </div>
-            <h4>Microsoft PowerPoint 365</h4>
-            <p>Slide báo cáo tổng kết chiến lược kinh doanh, Ribbon cam đỏ chuẩn bộ Office 365.</p>
-          </div>
 
+            <!-- Option 6: LinkedIn Feed -->
+            <div class="theme-card" data-theme="theme-linkedin">
+              <div class="theme-card-badge" style="background: #0a66c2">
+                Công Sở 👔
+              </div>
+              <div class="theme-preview-img linkedin-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #ffffff; border-bottom: 1px solid #e0e0e0"
+                >
+                  <span
+                    style="color: #0a66c2; font-weight: bold; font-size: 11px"
+                    >in LinkedIn Feed</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="background: #f3f2ef; padding: 6px; font-size: 8px"
+                >
+                  <div
+                    style="
+                      background: white;
+                      border-radius: 4px;
+                      padding: 4px;
+                      border: 1px solid #e0e0e0;
+                    "
+                  >
+                    <b style="color: #0a66c2">Senior Architect • 1st</b>
+                    <div style="color: #333; margin-top: 2px">
+                      Nội dung tiểu thuyết chia sẻ như bài post viral...
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4>LinkedIn Feed (Mạng Xã Hội)</h4>
+              <p>
+                Trang tin tức nghề nghiệp LinkedIn, tiểu thuyết được chia sẻ như
+                các bài viết phân tích chuyên môn.
+              </p>
+            </div>
+
+            <!-- Option 7: Autodesk AutoCAD -->
+            <div class="theme-card" data-theme="theme-autocad">
+              <div class="theme-card-badge" style="background: #c41527">
+                Kỹ Sư 📐
+              </div>
+              <div class="theme-preview-img autocad-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #2d333b; color: #fff"
+                >
+                  <span
+                    style="color: #c41527; font-weight: bold; font-size: 11px"
+                    >A AutoCAD 2026</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="
+                    background: #212830;
+                    color: #00ffff;
+                    font-family: monospace;
+                    font-size: 8px;
+                    padding: 6px;
+                  "
+                >
+                  <div style="color: #ffff00">NOTE 01.01: MTEXT SPEC</div>
+                  <div style="color: #fff">
+                    Nội dung truyện trình bày dạng thuyết minh bản vẽ...
+                  </div>
+                </div>
+              </div>
+              <h4>Autodesk AutoCAD 2026</h4>
+              <p>
+                Bản vẽ kỹ thuật kiến trúc với thanh Ribbon công cụ CAD, tọa độ
+                UCS và bảng ghi chú MTEXT.
+              </p>
+            </div>
+
+            <!-- Option 9: Zalo PC -->
+            <div class="theme-card" data-theme="theme-zalo">
+              <div
+                class="theme-card-badge"
+                style="background: #0068ff; color: white"
+              >
+                Nhắn Tin 💬
+              </div>
+              <div class="theme-preview-img zalo-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #0068ff; color: #fff"
+                >
+                  <span style="font-weight: bold; font-size: 11px"
+                    >💬 Zalo PC (Team Sync)</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="background: #eef0f3; padding: 6px; font-size: 8px"
+                >
+                  <div
+                    style="
+                      background: white;
+                      border-radius: 4px;
+                      padding: 4px;
+                      border: 1px solid #e2e8f0;
+                    "
+                  >
+                    <b style="color: #0068ff">Phong (Tech Lead):</b>
+                    <div style="color: #333; margin-top: 2px">
+                      Nội dung tiểu thuyết chia sẻ như tin nhắn chat nhóm...
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4>Zalo PC (Chat Nhóm)</h4>
+              <p>
+                Ứng dụng nhắn tin Zalo văn phòng, tiểu thuyết ngụy trang tin
+                nhắn trao đổi công việc nội bộ.
+              </p>
+            </div>
+
+            <!-- Option 10: Figma -->
+            <div class="theme-card" data-theme="theme-figma">
+              <div
+                class="theme-card-badge"
+                style="background: #1e1e1e; color: #0d99ff"
+              >
+                UI/UX ❖
+              </div>
+              <div class="theme-preview-img figma-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #2c2c2c; color: #fff"
+                >
+                  <span
+                    style="color: #0d99ff; font-weight: bold; font-size: 11px"
+                    >❖ Figma Design</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="background: #1e1e1e; padding: 6px; font-size: 8px"
+                >
+                  <div
+                    style="
+                      background: white;
+                      border-radius: 2px;
+                      padding: 4px;
+                      color: #111;
+                    "
+                  >
+                    <b style="color: #0d99ff"># Typography Spec</b>
+                    <div style="margin-top: 2px">
+                      Khung vẽ spec giao diện với luồng đọc tiểu thuyết sắc
+                      nét...
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4>Figma (UI/UX Design)</h4>
+              <p>
+                Giao diện thiết kế UI/UX Dark Mode, Artboard Typography Spec và
+                hệ thống Design System.
+              </p>
+            </div>
+
+            <!-- Option 11: Canva -->
+            <div class="theme-card" data-theme="theme-canva">
+              <div
+                class="theme-card-badge"
+                style="
+                  background: linear-gradient(135deg, #00c4cc, #7d2ae8);
+                  color: white;
+                "
+              >
+                Slide 🎨
+              </div>
+              <div class="theme-preview-img canva-preview">
+                <div
+                  class="prev-top-bar"
+                  style="
+                    background: linear-gradient(90deg, #00c4cc, #7d2ae8);
+                    color: #fff;
+                  "
+                >
+                  <span style="font-weight: bold; font-size: 11px"
+                    >Canva Presentation</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="background: #f2f3f5; padding: 6px; font-size: 8px"
+                >
+                  <div
+                    style="
+                      background: white;
+                      border-radius: 2px;
+                      padding: 4px;
+                      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    "
+                  >
+                    <b style="color: #7d2ae8">Slide 1: Chiến lược Q3</b>
+                    <div style="color: #333; margin-top: 2px">
+                      Bản thảo thuyết trình và ấn phẩm truyền thông hiện đại...
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4>Canva (Thiết Kế Slide)</h4>
+              <p>
+                Trình biên tập slide thuyết trình & ấn phẩm Canva, trẻ trung và
+                chuẩn phong cách sáng tạo.
+              </p>
+            </div>
+
+            <!-- Option 12: PowerPoint -->
+            <div class="theme-card" data-theme="theme-powerpoint">
+              <div
+                class="theme-card-badge"
+                style="background: #d24726; color: white"
+              >
+                Báo Cáo 📊
+              </div>
+              <div class="theme-preview-img ppt-preview">
+                <div
+                  class="prev-top-bar"
+                  style="background: #d24726; color: #fff"
+                >
+                  <span style="font-weight: bold; font-size: 11px"
+                    >P PowerPoint 365</span
+                  >
+                </div>
+                <div
+                  class="prev-grid"
+                  style="background: #e5e7eb; padding: 6px; font-size: 8px"
+                >
+                  <div
+                    style="
+                      background: white;
+                      border-radius: 2px;
+                      padding: 4px;
+                      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    "
+                  >
+                    <b style="color: #d24726">Báo Cáo Hoạt Động Q3</b>
+                    <div style="color: #333; margin-top: 2px">
+                      ■ Trình bày dạng bullet points chuẩn bài thuyết trình...
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4>Microsoft PowerPoint 365</h4>
+              <p>
+                Slide báo cáo tổng kết chiến lược kinh doanh, Ribbon cam đỏ
+                chuẩn bộ Office 365.
+              </p>
+            </div>
           </div>
-      </div>
-      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
-        <button class="portal-nav-btn" id="btn-modal-to-portal" style="border-radius: 6px; padding: 7px 14px;">
-          Thông tin tác giả & Donate
-        </button>
-        <button class="primary-btn" id="btn-confirm-theme">Áp Dụng Giao Diện Này</button>
+        </div>
+        <div
+          class="modal-footer"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <button
+            class="portal-nav-btn"
+            id="btn-modal-to-portal"
+            style="border-radius: 6px; padding: 7px 14px"
+          >
+            Thông tin tác giả & Donate
+          </button>
+          <button class="primary-btn" id="btn-confirm-theme">
+            Áp Dụng Giao Diện Này
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
-
-  <!-- =========================================================
+    <!-- =========================================================
        MODAL 2: STEALTH SETTINGS & HELP
        ========================================================= -->
-  <div class="stealth-modal-overlay" id="stealth-modal">
-    <div class="stealth-modal-content">
-      <div class="modal-header">
-        <h3>⚙️ Cài Đặt Bộ Đọc Truyện</h3>
-        <button class="modal-close-btn" id="btn-close-modal">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="settings-group">
-          <h4>1. Nạp tài liệu đọc</h4>
-          <p class="guide-text">Chọn file PDF, TXT hoặc EPUB. Nội dung được xử lý trực tiếp trên thiết bị của bạn.</p>
-          <div class="file-drop-area" id="modal-drop-area">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="#0F9D58"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-            <p>Kéo & thả file PDF, TXT, EPUB vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
-            <input type="file" id="modal-file-pdf" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip">
-          </div>
+    <div class="stealth-modal-overlay" id="stealth-modal">
+      <div class="stealth-modal-content">
+        <div class="modal-header">
+          <h3>⚙️ Cài Đặt Bộ Đọc Truyện</h3>
+          <button class="modal-close-btn" id="btn-close-modal">✕</button>
         </div>
-
-        <div class="settings-group">
-          <h4>2. Tùy Chỉnh Cỡ Chữ &amp; Hiển Thị Đọc Truyện</h4>
-          <p class="guide-text">Tăng giảm cỡ chữ và khoảng cách dòng để tối ưu trải nghiệm đọc êm mắt nhất:</p>
-          
-          <div class="font-settings-group">
-            <div class="font-settings-row">
-              <span style="font-weight: 600; width: 90px; color: #3c4043;">Cỡ chữ:</span>
-              <button class="font-step-ctrl-btn" id="modal-btn-font-dec" title="Giảm cỡ chữ (hoặc nhấn phím [)">A−</button>
-              <span class="font-size-badge" id="modal-badge-font-size">11pt</span>
-              <button class="font-step-ctrl-btn" id="modal-btn-font-inc" title="Tăng cỡ chữ (hoặc nhấn phím ])">A+</button>
-              <input type="range" id="modal-slider-font-size" class="font-slider" min="8" max="28" step="1" value="11" title="Kéo để đổi cỡ chữ nhanh">
-            </div>
-
-            <div class="font-settings-row">
-              <span style="font-weight: 600; width: 90px; color: #3c4043;">Giãn dòng:</span>
-              <select id="modal-select-line-height" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #dadce0;">
-                <option value="1.4">1.4 (Gọn gàng)</option>
-                <option value="1.6">1.6 (Tiêu chuẩn)</option>
-                <option value="1.75" selected>1.75 (Tối ưu êm mắt - Tỷ lệ vàng)</option>
-                <option value="2.0">2.0 (Thông thoáng)</option>
-              </select>
-            </div>
-
-            <div class="font-settings-row">
-              <span style="font-weight: 600; width: 90px; color: #3c4043;">Phông chữ:</span>
-              <select id="modal-select-font-family" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #dadce0;">
-                <option value="Arial" selected>Arial (Mặc định chuẩn)</option>
-                <option value="Roboto">Roboto (Google)</option>
-                <option value="Calibri">Calibri (Văn phòng)</option>
-                <option value="Segoe UI">Segoe UI (Hiện đại)</option>
-                <option value="Times New Roman">Times New Roman (Cổ điển)</option>
-                <option value="Georgia">Georgia (Truyện chữ)</option>
-              </select>
+        <div class="modal-body">
+          <div class="settings-group">
+            <h4>1. Nạp tài liệu đọc</h4>
+            <p class="guide-text">
+              Chọn file PDF, TXT hoặc EPUB. Nội dung được xử lý trực tiếp trên
+              thiết bị của bạn.
+            </p>
+            <div class="file-drop-area" id="modal-drop-area">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="#0F9D58">
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"
+                />
+              </svg>
+              <p>
+                Kéo & thả file PDF, TXT, EPUB vào đây hoặc
+                <span class="browse-link">Chọn tệp</span>
+              </p>
+              <input
+                type="file"
+                id="modal-file-pdf"
+                accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip"
+              />
             </div>
           </div>
-          <p class="guide-text" style="margin-top: 8px; font-size: 11px; color: #5f6368;">
-            💡 <b>Mẹo đọc nhanh:</b> Nhấn phím <kbd style="padding: 1px 5px; font-size: 11px;">[</kbd> để giảm cỡ chữ, phím <kbd style="padding: 1px 5px; font-size: 11px;">]</kbd> để tăng cỡ chữ trực tiếp khi đang đọc!
-          </p>
-        </div>
 
-        <div class="settings-group">
-          <h4>3. Phím Tắt Khẩn Cấp (Boss Key) &amp; Điều Khiển</h4>
-          <ul class="hotkey-list">
-            <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang bảng số liệu tài chính doanh thu hoặc code backend thuật toán (bấm lại để đọc tiếp).</li>
-            <li><kbd>[</kbd> / <kbd>]</kbd> : Giảm / tăng cỡ chữ nhanh khi đang đọc.</li>
-            <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Chuyển sang câu/dòng tiếp theo.</li>
-            <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
-            <li><kbd>PageDown</kbd> / <kbd>PageUp</kbd> : Sang phần đọc tiếp theo / phần trước.</li>
-            <li><kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).</li>
-            <li><kbd>H</kbd> : Ẩn / hiện toàn bộ thanh điều khiển đọc.</li>
-          </ul>
-        </div>
+          <div class="settings-group">
+            <h4>2. Tùy Chỉnh Cỡ Chữ &amp; Hiển Thị Đọc Truyện</h4>
+            <p class="guide-text">
+              Tăng giảm cỡ chữ và khoảng cách dòng để tối ưu trải nghiệm đọc êm
+              mắt nhất:
+            </p>
 
-        <div class="settings-group">
-          <h4>4. Đóng góp ý kiến &amp; Báo lỗi (Google Form)</h4>
-          <p class="guide-text">Bạn muốn đề xuất tính năng mới hoặc gặp lỗi trong quá trình sử dụng? Hãy gửi ý kiến cho tác giả qua biểu mẫu Google Form:</p>
-          <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
-            <button class="primary-btn" id="btn-open-feedback-settings" style="padding: 7px 16px; font-size: 12px;">
-              📝 Mở Google Form Góp Ý
-            </button>
-            <button class="portal-nav-btn" id="btn-config-feedback-url" style="padding: 7px 12px; font-size: 11px;" title="Cài đặt đường link Google Form (dành cho Admin)">
-              ⚙️ Cài đặt link
-            </button>
+            <div class="font-settings-group">
+              <div class="font-settings-row">
+                <span style="font-weight: 600; width: 90px; color: #3c4043"
+                  >Cỡ chữ:</span
+                >
+                <button
+                  class="font-step-ctrl-btn"
+                  id="modal-btn-font-dec"
+                  title="Giảm cỡ chữ (hoặc nhấn phím [)"
+                >
+                  A−
+                </button>
+                <span class="font-size-badge" id="modal-badge-font-size"
+                  >11pt</span
+                >
+                <button
+                  class="font-step-ctrl-btn"
+                  id="modal-btn-font-inc"
+                  title="Tăng cỡ chữ (hoặc nhấn phím ])"
+                >
+                  A+
+                </button>
+                <input
+                  type="range"
+                  id="modal-slider-font-size"
+                  class="font-slider"
+                  min="8"
+                  max="28"
+                  step="1"
+                  value="11"
+                  title="Kéo để đổi cỡ chữ nhanh"
+                />
+              </div>
+
+              <div class="font-settings-row">
+                <span style="font-weight: 600; width: 90px; color: #3c4043"
+                  >Giãn dòng:</span
+                >
+                <select
+                  id="modal-select-line-height"
+                  class="gd-select"
+                  style="
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    border: 1px solid #dadce0;
+                  "
+                >
+                  <option value="1.4">1.4 (Gọn gàng)</option>
+                  <option value="1.6">1.6 (Tiêu chuẩn)</option>
+                  <option value="1.75" selected>
+                    1.75 (Tối ưu êm mắt - Tỷ lệ vàng)
+                  </option>
+                  <option value="2.0">2.0 (Thông thoáng)</option>
+                </select>
+              </div>
+
+              <div class="font-settings-row">
+                <span style="font-weight: 600; width: 90px; color: #3c4043"
+                  >Phông chữ:</span
+                >
+                <select
+                  id="modal-select-font-family"
+                  class="gd-select"
+                  style="
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    border: 1px solid #dadce0;
+                  "
+                >
+                  <option value="Arial" selected>Arial (Mặc định chuẩn)</option>
+                  <option value="Roboto">Roboto (Google)</option>
+                  <option value="Calibri">Calibri (Văn phòng)</option>
+                  <option value="Segoe UI">Segoe UI (Hiện đại)</option>
+                  <option value="Times New Roman">
+                    Times New Roman (Cổ điển)
+                  </option>
+                  <option value="Georgia">Georgia (Truyện chữ)</option>
+                </select>
+              </div>
+            </div>
+            <p
+              class="guide-text"
+              style="margin-top: 8px; font-size: 11px; color: #5f6368"
+            >
+               <b>Mẹo đọc nhanh:</b> Nhấn phím
+              <kbd style="padding: 1px 5px; font-size: 11px">[</kbd> để giảm cỡ
+              chữ, phím
+              <kbd style="padding: 1px 5px; font-size: 11px">]</kbd> để tăng cỡ
+              chữ trực tiếp khi đang đọc!
+            </p>
+          </div>
+
+          <div class="settings-group">
+            <h4>3. Phím Tắt Khẩn Cấp (Boss Key) &amp; Điều Khiển</h4>
+            <ul class="hotkey-list">
+              <li>
+                <kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang bảng số
+                liệu tài chính doanh thu hoặc code backend thuật toán (bấm lại
+                để đọc tiếp).
+              </li>
+              <li>
+                <kbd>[</kbd> / <kbd>]</kbd> : Giảm / tăng cỡ chữ nhanh khi đang
+                đọc.
+              </li>
+              <li>
+                <kbd>↓</kbd> hoặc <kbd>J</kbd> : Chuyển sang câu/dòng tiếp theo.
+              </li>
+              <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
+              <li>
+                <kbd>PageDown</kbd> / <kbd>PageUp</kbd> : Sang phần đọc tiếp
+                theo / phần trước.
+              </li>
+              <li>
+                <kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).
+              </li>
+              <li><kbd>H</kbd> : Ẩn / hiện toàn bộ thanh điều khiển đọc.</li>
+            </ul>
+          </div>
+
+          <div class="settings-group">
+            <h4>4. Đóng góp ý kiến &amp; Báo lỗi (Google Form)</h4>
+            <p class="guide-text">
+              Bạn muốn đề xuất tính năng mới hoặc gặp lỗi trong quá trình sử
+              dụng? Hãy gửi ý kiến cho tác giả qua biểu mẫu Google Form:
+            </p>
+            <div
+              style="
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                margin-top: 10px;
+              "
+            >
+              <button
+                class="primary-btn"
+                id="btn-open-feedback-settings"
+                style="padding: 7px 16px; font-size: 12px"
+              >
+                 Mở Google Form Góp Ý
+              </button>
+              <button
+                class="portal-nav-btn"
+                id="btn-config-feedback-url"
+                style="padding: 7px 12px; font-size: 11px"
+                title="Cài đặt đường link Google Form (dành cho Admin)"
+              >
+                ⚙️ Cài đặt link
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="primary-btn" id="btn-save-settings">Đóng</button>
+        <div class="modal-footer">
+          <button class="primary-btn" id="btn-save-settings">Đóng</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loading-spinner" style="display: none;">
-    <div class="loading-box">
-      <div class="spinner"></div>
-      <p id="loading-status-text">Đang trích xuất nội dung tài liệu...</p>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-spinner" style="display: none">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <p id="loading-status-text">Đang trích xuất nội dung tài liệu...</p>
+      </div>
     </div>
-  </div>
 
-  <!-- =========================================================
+    <!-- =========================================================
        TRANG CHỦ: CLEAN & MODERN PORTAL, THEMES & DONATE
        ========================================================= -->
-  <div id="landing-portal" class="landing-portal-overlay">
-    <div class="portal-container">
-      
-      <!-- Top Modern Navbar -->
-      <div class="duo-top-navbar">
-        <div class="duo-mascot-brand">
-          <div class="portal-brand-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-            </svg>
-          </div>
-          <div class="duo-brand-titles">
-            <h1>Stealth Reader</h1>
-            <p>Hệ thống đọc tài liệu ngụy trang môi trường làm việc</p>
-          </div>
-        </div>
-
-        <div class="duo-top-actions">
-          <button class="duo-btn-feedback-nav" id="btn-open-feedback-nav" title="Đóng góp ý kiến &amp; Báo lỗi qua Google Form">
-            💬 Góp ý &amp; Báo lỗi
-          </button>
-          <button class="duo-btn-close" id="btn-portal-close" style="display: none;">
-            ✕ Tiếp tục đọc
-          </button>
-        </div>
-      </div>
-
-      <!-- 3-Column Desktop Grid: Left (Hướng dẫn) - Center (Function chính) - Right (Donate) -->
-      <div class="duo-main-grid">
-        
-                <!-- CỘT 1 (TAY TRÁI): CẬP NHẬT MỚI & HƯỚNG DẪN SỬ DỤNG -->
-        <div class="portal-col-left">
-          
-          <!-- Ô 1: NHẬT KÝ CẬP NHẬT MỚI -->
-          <div class="duo-card portal-card-updates">
-            <div class="duo-card-header">
-              <span class="duo-card-title">Cập nhật mới</span>
-              <span class="portal-badge-new">v2.5 Mới</span>
+    <div id="landing-portal" class="landing-portal-overlay">
+      <div class="portal-container">
+        <!-- Top Modern Navbar -->
+        <div class="duo-top-navbar">
+          <div class="duo-mascot-brand">
+            <div class="portal-brand-icon">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2563eb"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+              </svg>
             </div>
-            <p class="duo-card-desc">
-              Nhật ký tính năng &amp; cải tiến vừa phát hành:
-            </p>
-
-            <div class="portal-updates-list">
-              <!-- v2.6 -->
-              <div class="update-entry current-version">
-                <div class="update-entry-header">
-                  <div class="update-version-tag">
-                    <span class="v-num">v2.6</span>
-                    <span class="v-date">02/10/2026</span>
-                  </div>
-                  <span class="update-badge purple">Mới nhất</span>
-                </div>
-                <ul class="update-bullet-list">
-                  <li><b>Google Docs (Tài liệu):</b> Đọc truyện ngụy trang văn bản Word/Drive trang giấy A4 trắng, thước đo tỉ lệ và mục lục.</li>
-                </ul>
-              </div>
-
-              <!-- v2.5 -->
-              <div class="update-entry">
-                <div class="update-entry-header">
-                  <div class="update-version-tag">
-                    <span class="v-num">v2.5</span>
-                  </div>
-                  <span class="update-badge blue">Hệ thống</span>
-                </div>
-                <ul class="update-bullet-list">
-                  <li><b>Tách file độc lập:</b> Mỗi phong cách (Excel, Photoshop, Blender, AutoCAD...) là 1 file HTML riêng, tải siêu tốc và chống soi F12.</li>
-                </ul>
-              </div>
-
-              <!-- v2.4 -->
-              <div class="update-entry">
-                <div class="update-entry-header">
-                  <div class="update-version-tag">
-                    <span class="v-num">v2.4</span>
-                  </div>
-                  <span class="update-badge blue">Giao diện</span>
-                </div>
-                <ul class="update-bullet-list">
-                  <li><b>Autodesk AutoCAD 2026:</b> Bản vẽ nhà 3D Isometric kèm thuyết minh kỹ thuật MTEXT đọc truyện.</li>
-                </ul>
-              </div>
-
-              <!-- v2.3 -->
-              <div class="update-entry">
-                <div class="update-entry-header">
-                  <div class="update-version-tag">
-                    <span class="v-num">v2.3</span>
-                  </div>
-                  <span class="update-badge orange">Giao diện</span>
-                </div>
-                <ul class="update-bullet-list">
-                  <li><b>Blender 4.2:</b> Khung 3D Viewport xe Sci-Fi và Python scripting console.</li>
-                </ul>
-              </div>
-
-              <!-- v2.2 -->
-              <div class="update-entry">
-                <div class="update-entry-header">
-                  <div class="update-version-tag">
-                    <span class="v-num">v2.2</span>
-                  </div>
-                  <span class="update-badge cyan">Giao diện</span>
-                </div>
-                <ul class="update-bullet-list">
-                  <li><b>Photoshop 2026:</b> Dual Artboard ghim cố định Key Visual hero và bản thảo Typography.</li>
-                </ul>
-              </div>
-
-              <!-- v2.1 -->
-              <div class="update-entry">
-                <div class="update-entry-header">
-                  <div class="update-version-tag">
-                    <span class="v-num">v2.1</span>
-                  </div>
-                  <span class="update-badge green">Tính năng</span>
-                </div>
-                <ul class="update-bullet-list">
-                  <li><b>Ẩn/Hiện nút đọc (Phím H):</b> Che giấu toàn bộ thanh điều khiển tức thì khi có người tới gần.</li>
-                </ul>
-              </div>
-
-              <!-- v2.0 -->
-              <div class="update-entry">
-                <div class="update-entry-header">
-                  <div class="update-version-tag">
-                    <span class="v-num">v2.0</span>
-                  </div>
-                  <span class="update-badge gray">Cốt lõi</span>
-                </div>
-                <ul class="update-bullet-list">
-                  <li><b>Đồng bộ xuyên suốt:</b> Cache thông minh lưu tiến độ và tài liệu khi đổi app không mất trang.</li>
-                </ul>
-              </div>
-            </div>
-            <div class="portal-updates-footer">
-              <span>💡 Bạn muốn đề xuất tính năng mới?</span>
-              <button class="portal-link-feedback" id="btn-open-feedback-updates">Gửi góp ý ngay →</button>
+            <div class="duo-brand-titles">
+              <h1>Stealth Reader - Nếu trang hiển thị lỗi, các bạn vui lòng ấn Ctrl+F5. Nếu vẫn không được vui lòng report lỗi hộ mình ạ.</h1>
+              <p>Hệ thống đọc tài liệu ngụy trang môi trường làm việc</p>
             </div>
           </div>
 
-          <!-- Ô 2: HƯỚNG DẪN SỬ DỤNG & PHÍM TẮT -->
-          <div class="duo-card portal-col-guide">
-            <div class="duo-card-header">
-              <span class="duo-card-title">Hướng dẫn &amp; Phím tắt</span>
-            </div>
-            <p class="duo-card-desc">
-              Các thao tác phím tắt và mẹo ngụy trang giúp đọc an toàn tuyệt đối:
-            </p>
-
-            <div class="portal-guide-stacked">
-              <!-- Mục 1: Boss Key -->
-              <div class="portal-guide-item">
-                <div class="guide-item-header">
-                  <span class="guide-badge red">Khẩn cấp</span>
-                  <h5>Phím thoát nhanh (Boss Key)</h5>
-                </div>
-                <ul class="guide-list">
-                  <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd>: Ngay lập tức ẩn toàn bộ truyện và hiển thị bảng tài chính Q3 (hoặc code IDE). Bấm lại để tiếp tục đọc.</li>
-                  <li>Nút <b>Báo cáo nhanh (ESC)</b> ở góc phải thanh công cụ có tác dụng tương đương.</li>
-                </ul>
-              </div>
-
-              <!-- Mục 2: Điều hướng cuộn -->
-              <div class="portal-guide-item">
-                <div class="guide-item-header">
-                  <span class="guide-badge blue">Điều hướng</span>
-                  <h5>Đọc liền mạch &amp; Tự cuộn</h5>
-                </div>
-                <ul class="guide-list">
-                  <li><kbd>Lăn chuột</kbd> hoặc <kbd>↓</kbd> / <kbd>J</kbd>: Tự động cuộn liên tục qua toàn bộ các trang sách, không bị ngắt quãng.</li>
-                  <li><kbd>↑</kbd> / <kbd>K</kbd>: Lùi về các dòng hoặc đoạn trước.</li>
-                  <li><kbd>Space</kbd> (phím Cách): Bật hoặc tạm dừng chế độ tự cuộn (Auto-advance).</li>
-                </ul>
-              </div>
-
-              <!-- Mục 3: Mẹo ngụy trang -->
-              <div class="portal-guide-item">
-                <div class="guide-item-header">
-                  <span class="guide-badge green">Ngụy trang</span>
-                  <h5>Mẹo che giấu nâng cao</h5>
-                </div>
-                <ul class="guide-list">
-                  <li><b>Đổi tên tài liệu:</b> Click chuột trực tiếp vào tên file trên thanh header để đổi tên thành task công ty (tab trình duyệt sẽ đổi theo).</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- CỘT 2 (Ở GIỮA): FUNCTION CHÍNH (CHỌN GIAO DIỆN & NẠP FILE & BẮT ĐẦU ĐỌC) -->
-        <div class="duo-card portal-col-main">
-          <div class="duo-card-header">
-            <span class="duo-card-title">Chọn giao diện ngụy trang (12 Themes)</span>
-          </div>
-          <p class="duo-card-desc">
-            Chọn định dạng phù hợp với cửa sổ làm việc và tệp sách cần đọc:
-          </p>
-
-          <div class="duo-theme-missions" id="portal-theme-list">
-            <!-- Theme 1: Google Sheets -->
-            <div class="duo-mission-item selected" data-theme="theme-googlesheets">
-              <div class="duo-mission-icon-box gsheet">
-                <svg width="22" height="26" viewBox="0 0 24 32">
-                  <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-                  <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
-                  <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
-                </svg>
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">Google Sheets (Trang Tính)</span>
-                </div>
-                <div class="duo-mission-desc">Bảng tính trực tuyến trên Chrome/Edge, tự nhiên và liền mạch.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 2: Google Docs -->
-            <div class="duo-mission-item" data-theme="theme-googledocs">
-              <div class="duo-mission-icon-box gdocs" style="background:#fff; display:flex; align-items:center; justify-content:center;">
-                <svg width="22" height="26" viewBox="0 0 24 32">
-                  <path fill="#4285F4" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-                  <path fill="#A1C2FA" d="M15 0v9h9L15 0z"/>
-                  <path fill="#ffffff" d="M5 13h14v2H5zm0 4h14v2H5zm0 4h10v2H5z"/>
-                </svg>
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">Google Docs (Tài Liệu)</span>
-                </div>
-                <div class="duo-mission-desc">Tài liệu văn bản Google Drive trang A4 trắng, chuẩn văn phòng công sở.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 3: Microsoft Excel 365 -->
-            <div class="duo-mission-item" data-theme="theme-excel">
-              <div class="duo-mission-icon-box excel">
-                <svg width="22" height="22" viewBox="0 0 32 32">
-                  <rect width="32" height="32" rx="4" fill="#107c41"/>
-                  <text x="16" y="23" font-size="20" font-family="Segoe UI,Arial" font-weight="bold" fill="white" text-anchor="middle">X</text>
-                </svg>
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">Microsoft Excel 365</span>
-                </div>
-                <div class="duo-mission-desc">Báo cáo kiểm toán số liệu với giao diện thanh Ribbon xanh lá văn phòng.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 3: Visual Studio Code -->
-            <div class="duo-mission-item" data-theme="theme-vscode">
-              <div class="duo-mission-icon-box vscode">
-                <svg width="22" height="22" viewBox="0 0 100 100">
-                  <path fill="#007ACC" d="M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z"/>
-                  <path fill="#1F9CF0" d="M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z"/>
-                </svg>
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">Visual Studio Code</span>
-                </div>
-                <div class="duo-mission-desc">Môi trường lập trình viên Dark Mode với mã nguồn Python và Terminal.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 4: Photoshop 2026 -->
-            <div class="duo-mission-item" data-theme="theme-photoshop">
-              <div class="duo-mission-icon-box photoshop" style="background:#001e36; color:#31a8ff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px;">
-                Ps
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">Adobe Photoshop 2026</span>
-                </div>
-                <div class="duo-mission-desc">Bản thảo Typography & Artboard thiết kế đồ họa với bảng Layers.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 5: Blender 4.2 -->
-            <div class="duo-mission-item" data-theme="theme-blender">
-              <div class="duo-mission-icon-box blender" style="background:#222; display:flex; align-items:center; justify-content:center;">
-                <svg width="22" height="22" viewBox="0 0 32 32"><circle cx="16" cy="18" r="7" fill="#ea7600"/><circle cx="16" cy="18" r="3.5" fill="#265787"/><path d="M16 5 L16 11 M10 8 L14 13 M22 8 L18 13" stroke="#ea7600" stroke-width="2.5" stroke-linecap="round"/></svg>
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">Blender 4.2 (3D Animation)</span>
-                </div>
-                <div class="duo-mission-desc">Khung Scripting Console Python 3D, Cycles Engine và Scene Outliner.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 6: LinkedIn Feed -->
-            <div class="duo-mission-item" data-theme="theme-linkedin">
-              <div class="duo-mission-icon-box linkedin" style="background:#0a66c2; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px;">
-                in
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">LinkedIn Feed</span>
-                </div>
-                <div class="duo-mission-desc">Mạng xã hội nghề nghiệp, truyện ngụy trang như bài post chia sẻ chuyên môn.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 7: Autodesk AutoCAD 2026 -->
-            <div class="duo-mission-item" data-theme="theme-autocad">
-              <div class="duo-mission-icon-box autocad" style="background:#c41527; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px;">
-                A
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top">
-                  <span class="duo-mission-title">Autodesk AutoCAD 2026</span>
-                </div>
-                <div class="duo-mission-desc">Bản vẽ kỹ thuật kiến trúc, Ribbon CAD và bảng thuyết minh MTEXT.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 9: Zalo PC -->
-            <div class="duo-mission-item" data-theme="theme-zalo">
-              <div class="duo-mission-icon-box zalo" style="background:#0068ff; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:14px; border-radius:6px;">
-                Zalo
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top"><span class="duo-mission-title">Zalo PC (Chat Nhóm Dự Án)</span></div>
-                <div class="duo-mission-desc">Giao diện Zalo văn phòng, tiểu thuyết ngụy trang tin nhắn trao đổi công việc.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 10: Figma -->
-            <div class="duo-mission-item" data-theme="theme-figma">
-              <div class="duo-mission-icon-box figma" style="background:#1e1e1e; display:flex; align-items:center; justify-content:center; border-radius:6px;">
-                <svg width="20" height="20" viewBox="0 0 38 57" fill="none">
-                  <path d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z" fill="#1ABCFE"/>
-                  <path d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z" fill="#0ACF83"/>
-                  <path d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z" fill="#FF7262"/>
-                  <path d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z" fill="#F24E1E"/>
-                  <path d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z" fill="#A259FF"/>
-                </svg>
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top"><span class="duo-mission-title">Figma (UI/UX Design)</span></div>
-                <div class="duo-mission-desc">Giao diện thiết kế UI/UX Dark Mode, Artboard Typography Spec và Design System.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 11: Canva -->
-            <div class="duo-mission-item" data-theme="theme-canva">
-              <div class="duo-mission-icon-box canva" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8); color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px; font-style:italic; border-radius:6px;">
-                C
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top"><span class="duo-mission-title">Canva (Thiết Kế Slide)</span></div>
-                <div class="duo-mission-desc">Trình biên tập slide thuyết trình &amp; ấn phẩm Canva, hiện đại và trẻ trung.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-
-            <!-- Theme 12: PowerPoint -->
-            <div class="duo-mission-item" data-theme="theme-powerpoint">
-              <div class="duo-mission-icon-box powerpoint" style="background:#d24726; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px; border-radius:6px;">
-                P
-              </div>
-              <div class="duo-mission-info">
-                <div class="duo-mission-top"><span class="duo-mission-title">Microsoft PowerPoint 365</span></div>
-                <div class="duo-mission-desc">Slide báo cáo tổng kết chiến lược kinh doanh, Ribbon cam đỏ chuẩn Office 365.</div>
-              </div>
-              <div class="duo-mission-check">✓</div>
-            </div>
-          </div>
-
-          <!-- Nạp tài liệu (Nổi bật & Bắt buộc có truyện mới bắt đầu đọc) -->
-          <div class="duo-upload-quest" id="portal-upload-card">
-            <div class="duo-upload-badge-tag" id="portal-upload-badge">
-              <span class="badge-icon">📂</span>
-              <span class="badge-text" id="portal-upload-badge-text">BƯỚC 1: NẠP FILE TRUYỆN ĐỂ BẮT ĐẦU</span>
-            </div>
-            <div class="duo-upload-main">
-              <div class="duo-upload-left">
-                <div class="duo-upload-icon-box" id="portal-upload-icon-box">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
-                  </svg>
-                </div>
-                <div class="duo-upload-text-group">
-                  <div class="duo-upload-title-row">
-                    <span class="duo-upload-name" id="portal-pdf-filename">Chưa chọn file truyện</span>
-                    <span class="duo-upload-status-pill" id="portal-upload-status-pill">Chưa có truyện</span>
-                  </div>
-                  <span class="duo-upload-hint" id="portal-upload-hint">Bấm nút bên cạnh để tải file .PDF, .TXT hoặc .EPUB từ máy</span>
-                </div>
-              </div>
-              <label for="portal-file-input" class="portal-file-change-btn" id="portal-upload-btn-label">
-                <span class="btn-icon">📁</span>
-                <span id="portal-upload-btn-text">Tải truyện lên</span>
-              </label>
-              <input type="file" id="portal-file-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
-            </div>
-            <div class="duo-upload-alert" id="portal-upload-alert" style="display: none;">
-              ⚠️ Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc!
-            </div>
-          </div>
-
-          <!-- Enter Button -->
-          <button class="duo-btn-primary disabled-need-file" id="btn-portal-enter" title="Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc">
-            ⚠️ Cần nạp file truyện để bắt đầu đọc
-          </button>
-
-          <label class="duo-chk-label">
-            <input type="checkbox" id="chk-remember-direct-mode">
-            <span>Tự động vào thẳng giao diện đọc ở các lần sau</span>
-          </label>
-        </div>
-
-        <!-- CỘT 3 (TAY PHẢI): THÔNG TIN TÁC GIẢ & ỦNG HỘ -->
-        <div class="duo-card portal-col-donate">
-          <div class="duo-card-header">
-            <span class="duo-card-title">Tác giả & Ủng hộ</span>
-          </div>
-
-          <!-- Author Info Card -->
-          <div class="duo-author-box">
-            <div class="duo-author-text">
-              <div class="name">NGUYEN TRAN HAI PHONG</div>
-              <div class="badge">Tác giả & Nhà phát triển</div>
-            </div>
-          </div>
-
-          <div class="duo-speech-donate">
-            Nếu bạn thấy ứng dụng hữu ích cho công việc và giải trí hàng ngày, bạn có thể ủng hộ tác giả một ly cà phê nhé!
-          </div>
-
-          <!-- QR Code Frame -->
-          <div class="duo-qr-frame">
-            <img src="static/donate_qr_card.png" alt="Mã QR Vietcombank NGUYEN TRAN HAI PHONG" class="duo-qr-img" id="portal-qr-img">
-            
-            <div class="duo-bank-info">
-              <div class="duo-bank-row">
-                <span class="duo-bank-label">Ngân hàng:</span>
-                <span class="duo-bank-val">Vietcombank (VCB)</span>
-              </div>
-              <div class="duo-bank-row">
-                <span class="duo-bank-label">Chủ tài khoản:</span>
-                <span class="duo-bank-val">NGUYEN TRAN HAI PHONG</span>
-              </div>
-              <div class="duo-bank-row stk-row">
-                <span class="duo-bank-label">Số tài khoản:</span>
-                <span class="duo-bank-val stk-highlight" id="portal-stk-val">1015471873</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Copy Button -->
-          <button class="duo-btn-orange" id="btn-copy-stk">
-            Sao chép số tài khoản
-          </button>
-
-          <!-- Góp ý & Báo lỗi (Google Form) -->
-          <div class="duo-feedback-box">
-            <div class="duo-feedback-header">
-              <span class="duo-feedback-icon">💬</span>
-              <div>
-                <h5>Đóng góp ý kiến &amp; Báo lỗi</h5>
-                <p>Bạn muốn yêu cầu thêm tính năng mới hoặc báo lỗi?</p>
-              </div>
-            </div>
-            <button class="duo-btn-feedback" id="btn-open-feedback-portal">
-              📝 Mở Google Form Đóng Góp Ý Kiến
+          <div class="duo-top-actions">
+            <button
+              class="duo-btn-feedback-nav"
+              id="btn-open-feedback-nav"
+              title="Đóng góp ý kiến &amp; Báo lỗi qua Google Form"
+            >
+              💬 Góp ý &amp; Báo lỗi
+            </button>
+            <button
+              class="duo-btn-close"
+              id="btn-portal-close"
+              style="display: none"
+            >
+              ✕ Tiếp tục đọc
             </button>
           </div>
-
-
-          <div class="duo-footer-note">
-            Quét mã QR bằng ứng dụng Mobile Banking hoặc ví điện tử (Momo, ZaloPay...)
-          </div>
         </div>
 
+        <!-- 3-Column Desktop Grid: Left (Hướng dẫn) - Center (Function chính) - Right (Donate) -->
+        <div class="duo-main-grid">
+          <!-- CỘT 1 (TAY TRÁI): CẬP NHẬT MỚI & HƯỚNG DẪN SỬ DỤNG -->
+          <div class="portal-col-left">
+            <!-- Ô 1: NHẬT KÝ CẬP NHẬT MỚI -->
+            <div class="duo-card portal-card-updates">
+              <div class="duo-card-header">
+                <span class="duo-card-title">Cập nhật mới</span>
+                <span class="portal-badge-new">v2.6 Mới</span>
+              </div>
+              <p class="duo-card-desc">
+                Nhật ký tính năng &amp; cải tiến vừa phát hành:
+              </p>
+
+              <div class="portal-updates-list">
+                <!-- v2.6 -->
+                <div class="update-entry current-version">
+                  <div class="update-entry-header">
+                    <div class="update-version-tag">
+                      <span class="v-num">v2.6</span>
+                      <span class="v-date">02/10/2026</span>
+                    </div>
+                    <span class="update-badge purple">Mới nhất</span>
+                  </div>
+                  <ul class="update-bullet-list">
+                    <li>
+                      <b>UI Giao diện</b> Cập nhật thêm 6 giao diện ngụy trang mới: Canva, PowerPoint, Zalo, Figma, AutoCAD, Blender.
+                      <br>
+                      <b>Sửa lỗi font chữ:  </b>Từ giờ có thể chỉnh sửa cỡ chữ và kiểu chữ.
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+              <div class="portal-updates-footer">
+                <span> Bạn muốn đề xuất tính năng mới?</span>
+                <button
+                  class="portal-link-feedback"
+                  id="btn-open-feedback-updates"
+                >
+                  Gửi góp ý ngay →
+                </button>
+              </div>
+            </div>
+
+            <!-- Ô 2: HƯỚNG DẪN SỬ DỤNG & PHÍM TẮT -->
+            <div class="duo-card portal-col-guide">
+              <div class="duo-card-header">
+                <span class="duo-card-title">Hướng dẫn &amp; Phím tắt</span>
+              </div>
+              <p class="duo-card-desc">
+                Các thao tác phím tắt và mẹo ngụy trang giúp đọc an toàn tuyệt
+                đối:
+              </p>
+
+              <div class="portal-guide-stacked">
+                <!-- Mục 1: Boss Key -->
+                <div class="portal-guide-item">
+                  <div class="guide-item-header">
+                    <span class="guide-badge red">Khẩn cấp</span>
+                    <h5>Phím thoát nhanh (Boss Key)</h5>
+                  </div>
+                  <ul class="guide-list">
+                    <li>
+                      <kbd>ESC</kbd> hoặc <kbd>F2</kbd>: Ngay lập tức ẩn toàn bộ
+                      truyện và hiển thị bảng tài chính Q3 (hoặc code IDE). Bấm
+                      lại để tiếp tục đọc.
+                    </li>
+                    <li>
+                      Nút <b>Báo cáo nhanh (ESC)</b> ở góc phải thanh công cụ có
+                      tác dụng tương đương.
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Mục 2: Điều hướng cuộn -->
+                <div class="portal-guide-item">
+                  <div class="guide-item-header">
+                    <span class="guide-badge blue">Điều hướng</span>
+                    <h5>Đọc liền mạch &amp; Tự cuộn</h5>
+                  </div>
+                  <ul class="guide-list">
+                    <li>
+                      <kbd>Lăn chuột</kbd> hoặc <kbd>↓</kbd> / <kbd>J</kbd>: Tự
+                      động cuộn liên tục qua toàn bộ các trang sách, không bị
+                      ngắt quãng.
+                    </li>
+                    <li>
+                      <kbd>↑</kbd> / <kbd>K</kbd>: Lùi về các dòng hoặc đoạn
+                      trước.
+                    </li>
+                    <li>
+                      <kbd>Space</kbd> (phím Cách): Bật hoặc tạm dừng chế độ tự
+                      cuộn (Auto-advance).
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Mục 3: Mẹo ngụy trang -->
+                <div class="portal-guide-item">
+                  <div class="guide-item-header">
+                    <span class="guide-badge green">Ngụy trang</span>
+                    <h5>Mẹo che giấu nâng cao</h5>
+                  </div>
+                  <ul class="guide-list">
+                    <li>
+                      <b>Đổi tên tài liệu:</b> Click chuột trực tiếp vào tên
+                      file trên thanh header để đổi tên thành task công ty (tab
+                      trình duyệt sẽ đổi theo).
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CỘT 2 (Ở GIỮA): FUNCTION CHÍNH (CHỌN GIAO DIỆN & NẠP FILE & BẮT ĐẦU ĐỌC) -->
+          <div class="duo-card portal-col-main">
+            <div class="duo-card-header">
+              <span class="duo-card-title"
+                >Chọn giao diện ngụy trang (12 Themes)</span
+              >
+            </div>
+            <p class="duo-card-desc">
+              Chọn định dạng phù hợp với cửa sổ làm việc và tệp sách cần đọc:
+            </p>
+
+            <div class="duo-theme-missions" id="portal-theme-list">
+              <!-- Theme 1: Google Sheets -->
+              <div
+                class="duo-mission-item selected"
+                data-theme="theme-googlesheets"
+              >
+                <div class="duo-mission-icon-box gsheet">
+                  <svg width="22" height="26" viewBox="0 0 24 32">
+                    <path
+                      fill="#0F9D58"
+                      d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"
+                    />
+                    <path fill="#87CEAB" d="M15 0v9h9L15 0z" />
+                    <path
+                      fill="#ffffff"
+                      d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"
+                    />
+                  </svg>
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title"
+                      >Google Sheets (Trang Tính)</span
+                    >
+                  </div>
+                  <div class="duo-mission-desc">
+                    Bảng tính trực tuyến trên Chrome/Edge, tự nhiên và liền
+                    mạch.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 2: Google Docs -->
+              <div class="duo-mission-item" data-theme="theme-googledocs">
+                <div
+                  class="duo-mission-icon-box gdocs"
+                  style="
+                    background: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <svg width="22" height="26" viewBox="0 0 24 32">
+                    <path
+                      fill="#4285F4"
+                      d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"
+                    />
+                    <path fill="#A1C2FA" d="M15 0v9h9L15 0z" />
+                    <path
+                      fill="#ffffff"
+                      d="M5 13h14v2H5zm0 4h14v2H5zm0 4h10v2H5z"
+                    />
+                  </svg>
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title"
+                      >Google Docs (Tài Liệu)</span
+                    >
+                  </div>
+                  <div class="duo-mission-desc">
+                    Tài liệu văn bản Google Drive trang A4 trắng, chuẩn văn
+                    phòng công sở.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 3: Microsoft Excel 365 -->
+              <div class="duo-mission-item" data-theme="theme-excel">
+                <div class="duo-mission-icon-box excel">
+                  <svg width="22" height="22" viewBox="0 0 32 32">
+                    <rect width="32" height="32" rx="4" fill="#107c41" />
+                    <text
+                      x="16"
+                      y="23"
+                      font-size="20"
+                      font-family="Segoe UI,Arial"
+                      font-weight="bold"
+                      fill="white"
+                      text-anchor="middle"
+                    >
+                      X
+                    </text>
+                  </svg>
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title">Microsoft Excel 365</span>
+                  </div>
+                  <div class="duo-mission-desc">
+                    Báo cáo kiểm toán số liệu với giao diện thanh Ribbon xanh lá
+                    văn phòng.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 3: Visual Studio Code -->
+              <div class="duo-mission-item" data-theme="theme-vscode">
+                <div class="duo-mission-icon-box vscode">
+                  <svg width="22" height="22" viewBox="0 0 100 100">
+                    <path
+                      fill="#007ACC"
+                      d="M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z"
+                    />
+                    <path
+                      fill="#1F9CF0"
+                      d="M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z"
+                    />
+                  </svg>
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title">Visual Studio Code</span>
+                  </div>
+                  <div class="duo-mission-desc">
+                    Môi trường lập trình viên Dark Mode với mã nguồn Python và
+                    Terminal.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 4: Photoshop 2026 -->
+              <div class="duo-mission-item" data-theme="theme-photoshop">
+                <div
+                  class="duo-mission-icon-box photoshop"
+                  style="
+                    background: #001e36;
+                    color: #31a8ff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                  "
+                >
+                  Ps
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title">Adobe Photoshop 2026</span>
+                  </div>
+                  <div class="duo-mission-desc">
+                    Bản thảo Typography & Artboard thiết kế đồ họa với bảng
+                    Layers.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 5: Blender 4.2 -->
+              <div class="duo-mission-item" data-theme="theme-blender">
+                <div
+                  class="duo-mission-icon-box blender"
+                  style="
+                    background: #222;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <svg width="22" height="22" viewBox="0 0 32 32">
+                    <circle cx="16" cy="18" r="7" fill="#ea7600" />
+                    <circle cx="16" cy="18" r="3.5" fill="#265787" />
+                    <path
+                      d="M16 5 L16 11 M10 8 L14 13 M22 8 L18 13"
+                      stroke="#ea7600"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title"
+                      >Blender 4.2 (3D Animation)</span
+                    >
+                  </div>
+                  <div class="duo-mission-desc">
+                    Khung Scripting Console Python 3D, Cycles Engine và Scene
+                    Outliner.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 6: LinkedIn Feed -->
+              <div class="duo-mission-item" data-theme="theme-linkedin">
+                <div
+                  class="duo-mission-icon-box linkedin"
+                  style="
+                    background: #0a66c2;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 18px;
+                  "
+                >
+                  in
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title">LinkedIn Feed</span>
+                  </div>
+                  <div class="duo-mission-desc">
+                    Mạng xã hội nghề nghiệp, truyện ngụy trang như bài post chia
+                    sẻ chuyên môn.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 7: Autodesk AutoCAD 2026 -->
+              <div class="duo-mission-item" data-theme="theme-autocad">
+                <div
+                  class="duo-mission-icon-box autocad"
+                  style="
+                    background: #c41527;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 18px;
+                  "
+                >
+                  A
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title">Autodesk AutoCAD 2026</span>
+                  </div>
+                  <div class="duo-mission-desc">
+                    Bản vẽ kỹ thuật kiến trúc, Ribbon CAD và bảng thuyết minh
+                    MTEXT.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 9: Zalo PC -->
+              <div class="duo-mission-item" data-theme="theme-zalo">
+                <div
+                  class="duo-mission-icon-box zalo"
+                  style="
+                    background: #0068ff;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 14px;
+                    border-radius: 6px;
+                  "
+                >
+                  Zalo
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title"
+                      >Zalo PC (Chat Nhóm Dự Án)</span
+                    >
+                  </div>
+                  <div class="duo-mission-desc">
+                    Giao diện Zalo văn phòng, tiểu thuyết ngụy trang tin nhắn
+                    trao đổi công việc.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 10: Figma -->
+              <div class="duo-mission-item" data-theme="theme-figma">
+                <div
+                  class="duo-mission-icon-box figma"
+                  style="
+                    background: #1e1e1e;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 6px;
+                  "
+                >
+                  <svg width="20" height="20" viewBox="0 0 38 57" fill="none">
+                    <path
+                      d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z"
+                      fill="#1ABCFE"
+                    />
+                    <path
+                      d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z"
+                      fill="#0ACF83"
+                    />
+                    <path
+                      d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z"
+                      fill="#FF7262"
+                    />
+                    <path
+                      d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z"
+                      fill="#F24E1E"
+                    />
+                    <path
+                      d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z"
+                      fill="#A259FF"
+                    />
+                  </svg>
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title">Figma (UI/UX Design)</span>
+                  </div>
+                  <div class="duo-mission-desc">
+                    Giao diện thiết kế UI/UX Dark Mode, Artboard Typography Spec
+                    và Design System.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 11: Canva -->
+              <div class="duo-mission-item" data-theme="theme-canva">
+                <div
+                  class="duo-mission-icon-box canva"
+                  style="
+                    background: linear-gradient(135deg, #00c4cc, #7d2ae8);
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 16px;
+                    font-style: italic;
+                    border-radius: 6px;
+                  "
+                >
+                  C
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title"
+                      >Canva (Thiết Kế Slide)</span
+                    >
+                  </div>
+                  <div class="duo-mission-desc">
+                    Trình biên tập slide thuyết trình &amp; ấn phẩm Canva, hiện
+                    đại và trẻ trung.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+
+              <!-- Theme 12: PowerPoint -->
+              <div class="duo-mission-item" data-theme="theme-powerpoint">
+                <div
+                  class="duo-mission-icon-box powerpoint"
+                  style="
+                    background: #d24726;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 18px;
+                    border-radius: 6px;
+                  "
+                >
+                  P
+                </div>
+                <div class="duo-mission-info">
+                  <div class="duo-mission-top">
+                    <span class="duo-mission-title"
+                      >Microsoft PowerPoint 365</span
+                    >
+                  </div>
+                  <div class="duo-mission-desc">
+                    Slide báo cáo tổng kết chiến lược kinh doanh, Ribbon cam đỏ
+                    chuẩn Office 365.
+                  </div>
+                </div>
+                <div class="duo-mission-check">✓</div>
+              </div>
+            </div>
+
+            <!-- Nạp tài liệu (Nổi bật & Bắt buộc có truyện mới bắt đầu đọc) -->
+            <div class="duo-upload-quest" id="portal-upload-card">
+              <div class="duo-upload-badge-tag" id="portal-upload-badge">
+                <span class="badge-icon">📂</span>
+                <span class="badge-text" id="portal-upload-badge-text"
+                  >BƯỚC 1: NẠP FILE TRUYỆN ĐỂ BẮT ĐẦU</span
+                >
+              </div>
+              <div class="duo-upload-main">
+                <div class="duo-upload-left">
+                  <div class="duo-upload-icon-box" id="portal-upload-icon-box">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="duo-upload-text-group">
+                    <div class="duo-upload-title-row">
+                      <span class="duo-upload-name" id="portal-pdf-filename"
+                        >Chưa chọn file truyện</span
+                      >
+                      <span
+                        class="duo-upload-status-pill"
+                        id="portal-upload-status-pill"
+                        >Chưa có truyện</span
+                      >
+                    </div>
+                    <span class="duo-upload-hint" id="portal-upload-hint"
+                      >Bấm nút bên cạnh để tải file .PDF, .TXT hoặc .EPUB từ
+                      máy</span
+                    >
+                  </div>
+                </div>
+                <label
+                  for="portal-file-input"
+                  class="portal-file-change-btn"
+                  id="portal-upload-btn-label"
+                >
+                  <span class="btn-icon">📁</span>
+                  <span id="portal-upload-btn-text">Tải truyện lên</span>
+                </label>
+                <input
+                  type="file"
+                  id="portal-file-input"
+                  accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip"
+                  style="display: none"
+                />
+              </div>
+              <div
+                class="duo-upload-alert"
+                id="portal-upload-alert"
+                style="display: none"
+              >
+                ⚠️ Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu
+                đọc!
+              </div>
+            </div>
+
+            <!-- Enter Button -->
+            <button
+              class="duo-btn-primary disabled-need-file"
+              id="btn-portal-enter"
+              title="Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc"
+            >
+              ⚠️ Cần nạp file truyện để bắt đầu đọc
+            </button>
+
+            <label class="duo-chk-label">
+              <input type="checkbox" id="chk-remember-direct-mode" />
+              <span>Tự động vào thẳng giao diện đọc ở các lần sau</span>
+            </label>
+          </div>
+
+          <!-- CỘT 3 (TAY PHẢI): THÔNG TIN TÁC GIẢ & ỦNG HỘ -->
+          <div class="duo-card portal-col-donate">
+            <div class="duo-card-header">
+              <span class="duo-card-title">Tác giả & Ủng hộ</span>
+            </div>
+
+            <!-- Author Info Card -->
+            <div class="duo-author-box">
+              <div class="duo-author-text">
+                <div class="name">NGUYEN TRAN HAI PHONG</div>
+                <div class="badge">Tác giả & Nhà phát triển</div>
+              </div>
+            </div>
+
+            <div class="duo-speech-donate">
+              Nếu bạn thấy ứng dụng hữu ích cho công việc và giải trí hàng ngày,
+              bạn có thể ủng hộ tác giả một ly cà phê nhé!
+            </div>
+
+            <!-- QR Code Frame -->
+            <div class="duo-qr-frame">
+              <img
+                src="static/donate_qr_card.png"
+                alt="Mã QR Vietcombank NGUYEN TRAN HAI PHONG"
+                class="duo-qr-img"
+                id="portal-qr-img"
+              />
+
+              <div class="duo-bank-info">
+                <div class="duo-bank-row">
+                  <span class="duo-bank-label">Ngân hàng:</span>
+                  <span class="duo-bank-val">Vietcombank (VCB)</span>
+                </div>
+                <div class="duo-bank-row">
+                  <span class="duo-bank-label">Chủ tài khoản:</span>
+                  <span class="duo-bank-val">NGUYEN TRAN HAI PHONG</span>
+                </div>
+                <div class="duo-bank-row stk-row">
+                  <span class="duo-bank-label">Số tài khoản:</span>
+                  <span class="duo-bank-val stk-highlight" id="portal-stk-val"
+                    >1015471873</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Copy Button -->
+            <button class="duo-btn-orange" id="btn-copy-stk">
+              Sao chép số tài khoản
+            </button>
+
+            <!-- Góp ý & Báo lỗi (Google Form) -->
+            <div class="duo-feedback-box">
+              <div class="duo-feedback-header">
+                <span class="duo-feedback-icon">💬</span>
+                <div>
+                  <h5>Đóng góp ý kiến &amp; Báo lỗi</h5>
+                  <p>Bạn muốn yêu cầu thêm tính năng mới hoặc báo lỗi?</p>
+                </div>
+              </div>
+              <button class="duo-btn-feedback" id="btn-open-feedback-portal">
+                 Mở Google Form Đóng Góp Ý Kiến
+              </button>
+            </div>
+
+            <div class="duo-footer-note">
+              Quét mã QR bằng ứng dụng Mobile Banking hoặc ví điện tử (Momo,
+              ZaloPay...)
+            </div>
+          </div>
+        </div>
       </div>
-
     </div>
-  </div>
 
-  <!-- Floating Quick Controls Visibility Toggle -->
-  <button id="btn-toggle-ctrls-floating" class="floating-stealth-toggle" title="Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)">
-    <span class="stealth-toggle-icon">👁</span>
-    <span class="stealth-toggle-text">Điều khiển (H)</span>
-  </button>
+    <!-- Floating Quick Controls Visibility Toggle -->
+    <button
+      id="btn-toggle-ctrls-floating"
+      class="floating-stealth-toggle"
+      title="Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)"
+    >
+      <span class="stealth-toggle-icon">👁</span>
+      <span class="stealth-toggle-text">Điều khiển (H)</span>
+    </button>
 
-  <!-- Toast Notification for Seamless Page Navigation -->
-  <div id="page-flip-toast" class="page-flip-toast"></div>
+    <!-- Toast Notification for Seamless Page Navigation -->
+    <div id="page-flip-toast" class="page-flip-toast"></div>
 
-  <script src="app.js?v=20261002-12"></script>
-</body>
+    <script src="app.js?v=20261002-12"></script>
+  </body>
 </html>

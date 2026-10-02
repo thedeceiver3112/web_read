@@ -2106,6 +2106,57 @@ body.theme-vscode .portal-nav-btn:hover {
   color: #ffffff;
 }
 
+/* Universal Stealth Editable Elements */
+.stealth-editable,
+[data-stealth-key] {
+  cursor: text !important;
+  border-radius: 3px;
+  transition: background-color 0.15s ease, outline 0.15s ease;
+  user-select: text !important;
+}
+.stealth-editable:hover,
+[data-stealth-key]:hover {
+  outline: 1px dashed rgba(37, 99, 235, 0.45) !important;
+  background-color: rgba(37, 99, 235, 0.08) !important;
+}
+.stealth-editable:focus,
+[data-stealth-key]:focus {
+  outline: 2px solid #2563eb !important;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Dark mode theme overrides for editable elements */
+.theme-vscode .stealth-editable:focus,
+.theme-vscode [data-stealth-key]:focus,
+.theme-photoshop .stealth-editable:focus,
+.theme-photoshop [data-stealth-key]:focus,
+.theme-blender .stealth-editable:focus,
+.theme-blender [data-stealth-key]:focus,
+.theme-autocad .stealth-editable:focus,
+.theme-autocad [data-stealth-key]:focus,
+.theme-figma .stealth-editable:focus,
+.theme-figma [data-stealth-key]:focus {
+  background-color: #1e1e1e !important;
+  color: #f8fafc !important;
+  outline: 2px solid #38bdf8 !important;
+}
+
+.theme-vscode .stealth-editable:hover,
+.theme-vscode [data-stealth-key]:hover,
+.theme-photoshop .stealth-editable:hover,
+.theme-photoshop [data-stealth-key]:hover,
+.theme-blender .stealth-editable:hover,
+.theme-blender [data-stealth-key]:hover,
+.theme-autocad .stealth-editable:hover,
+.theme-autocad [data-stealth-key]:hover,
+.theme-figma .stealth-editable:hover,
+.theme-figma [data-stealth-key]:hover {
+  outline: 1px dashed rgba(56, 189, 248, 0.5) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 /* ==========================================================
    THEME 4: ADOBE PHOTOSHOP 2026 STYLES
    ========================================================== */

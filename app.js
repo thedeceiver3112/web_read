@@ -370,11 +370,11 @@ const FAVICONS = {
 // GOOGLE FORM FEEDBACK CONFIGURATION & HANDLER
 // ==========================================================
 // Dán link Google Form (forms.gle/... hoặc docs.google.com/forms/...) vào đây:
-const CONFIG_FEEDBACK_FORM_URL = 'https://forms.gle/Kx3s3xHFVBwLsZE79';
+const CONFIG_FEEDBACK_FORM_URL = 'https://forms.gle/YxPd6zRZEeyQ3z3e8';
 
 function getFeedbackFormUrl() {
   const saved = localStorage.getItem('stealth_feedback_form_url');
-  if (saved && saved !== 'https://forms.google.com') {
+  if (saved && saved !== 'https://forms.google.com' && saved !== 'https://forms.gle/Kx3s3xHFVBwLsZE79') {
     return saved;
   }
   return CONFIG_FEEDBACK_FORM_URL;
@@ -410,6 +410,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadSavedState();
   initThemeSystem();
   initTitleEditing();
+  initStealthEditableElements();
   initEventListeners();
   initSheetTabs();
   initContinuousScrollListeners();
@@ -569,8 +570,8 @@ function applyTheme(themeName) {
     document.title = `${docTitle} - Google Trang tính`;
     const gTitle = document.getElementById('gsheet-doc-title');
     if (gTitle) gTitle.textContent = docTitle;
-    if (storyLabel) storyLabel.textContent = 'Trang tính1';
-    if (headerTitle) headerTitle.textContent = 'Log Description & Execution Details';
+    if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_gsheet_0') || 'Trang tính1';
+    if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_gsheet') || 'Log Description & Execution Details';
   } else if (themeName === 'theme-googledocs') {
     const docTitle = state.gdocsTitle || 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3';
     document.title = `${docTitle} - Google Tài liệu`;
@@ -581,8 +582,8 @@ function applyTheme(themeName) {
     document.title = `${docTitle} - Excel`;
     const eTitle = document.getElementById('excel-doc-title');
     if (eTitle) eTitle.textContent = docTitle;
-    if (storyLabel) storyLabel.textContent = 'Audit_Finding_Q3';
-    if (headerTitle) headerTitle.textContent = 'Audit Log Finding & Notes (Story Text)';
+    if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_excel_0') || 'Audit_Finding_Q3';
+    if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_excel') || 'Audit Log Finding & Notes (Story Text)';
   } else if (themeName === 'theme-vscode') {
     const docTitle = state.vscodeTitle || 'stream_pipeline_processor.py';
     document.title = `${docTitle} - dev_workspace - Visual Studio Code`;
@@ -632,6 +633,7 @@ function applyTheme(themeName) {
   applyStyles();
   renderContinuousView(true);
   updatePortalThemeUI(themeName);
+  initStealthEditableElements();
 }
 
 // ==========================================================
@@ -879,6 +881,52 @@ function initTitleEditing() {
   }
 }
 
+// ==========================================================
+// UNIVERSAL STEALTH TEXT CUSTOMIZATION (ALL 12 THEMES)
+// ==========================================================
+function initStealthEditableElements() {
+  document.querySelectorAll('[data-stealth-key]').forEach(el => {
+    const key = el.getAttribute('data-stealth-key');
+    if (!key) return;
+
+    // Restore saved value from localStorage if available
+    const saved = localStorage.getItem(key);
+    if (saved && saved.trim()) {
+      el.textContent = saved;
+    }
+
+    if (el._stealthInitDone) return;
+    el._stealthInitDone = true;
+
+    // Double-click selects all text for quick inline editing
+    el.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+
+    // Save on blur
+    el.addEventListener('blur', () => {
+      const val = el.textContent.trim();
+      if (val) {
+        localStorage.setItem(key, val);
+        showPageFlipToast(`✅ Đã lưu: <b>${escapeHtml(val.length > 32 ? val.substring(0, 30) + '...' : val)}</b>`);
+      }
+    });
+
+    // Complete editing on Enter key
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        el.blur();
+      }
+    });
+  });
+}
+
 function hasLoadedDocument() {
   return Boolean(
     state.pdfFileName &&
@@ -918,13 +966,13 @@ function updatePortalUploadUI() {
   }
 
   if (hasDoc) {
-    if (badgeText) badgeText.textContent = '✅ ĐÃ NẠP TRUYỆN THÀNH CÔNG';
+    if (badgeText) badgeText.textContent = 'ĐÃ NẠP TRUYỆN THÀNH CÔNG';
     if (nameLabel) {
       nameLabel.textContent = state.pdfFileName || 'Tài liệu đã nạp';
       nameLabel.title = state.pdfFileName || '';
     }
     if (statusPill) {
-      statusPill.textContent = '✅ Sẵn sàng đọc';
+      statusPill.textContent = 'Sẵn sàng đọc';
     }
     if (hintLabel) {
       const pageInfo = state.totalPages > 1 ? ` (${state.totalPages} trang)` : '';
@@ -936,7 +984,7 @@ function updatePortalUploadUI() {
     if (enterBtn) {
       enterBtn.classList.remove('disabled-need-file');
       enterBtn.classList.add('ready');
-      enterBtn.innerHTML = `📖 Bắt Đầu Đọc Ngay`;
+      enterBtn.innerHTML = `Bắt Đầu Đọc Ngay`;
       enterBtn.title = `Bắt đầu đọc: ${state.pdfFileName}`;
     }
   } else {
@@ -3208,7 +3256,7 @@ function appendLinkedInBatch(count) {
       </div>
       <div class="ln-hashtags">#Leadership #Innovation #GrowthMindset #Literature #DeepWork</div>
       <div class="ln-reaction-bar">
-        <span>👍 ❤️ 💡 ${likes}</span>
+        <span>👍 ❤️  ${likes}</span>
         <span>${comments} bình luận • 8 lượt chia sẻ</span>
       </div>
     `;
