@@ -52,7 +52,7 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def end_headers(self):
         request_path = self.path.split("?", 1)[0].lower()
-        if request_path.endswith((".html", ".js", ".css")) or request_path in {"/", "/api/health"}:
+        if request_path.endswith((".html", ".js", ".css")) or request_path in {"/", "/api/health", "/version.json"}:
             self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
             self.send_header("Pragma", "no-cache")
             self.send_header("Expires", "0")

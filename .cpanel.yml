@@ -4,7 +4,8 @@ deployment:
     - export DEPLOYPATH=/home/nhthemcw/public_html
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/static
-    - /bin/cp index.html $DEPLOYPATH/index.html
-    - /bin/cp app.js $DEPLOYPATH/app.js
-    - /bin/cp style.css $DEPLOYPATH/style.css
+    - /bin/mkdir -p $DEPLOYPATH/css
+    - /bin/cp *.html $DEPLOYPATH/
+    - /bin/cp app.js style.css version-check.js version.json $DEPLOYPATH/
     - /bin/cp -R static/. $DEPLOYPATH/static/
+    - /bin/cp -R css/. $DEPLOYPATH/css/

@@ -153,7 +153,7 @@ def static_response(environ, start_response):
             ("Content-Type", content_type),
             ("Content-Length", str(len(data))),
             ("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-            if file_path.lower().endswith((".html", ".js", ".css"))
+            if file_path.lower().endswith((".html", ".js", ".css")) or normalized == "version.json"
             else ("Cache-Control", "public, max-age=86400"),
         ],
     )
