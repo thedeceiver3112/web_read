@@ -3,342 +3,186 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Báo cáo số liệu & Phân tích KPI Q3 - Google Trang tính</title>
-  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>">
+  <title>stream_pipeline_processor.py - dev_workspace - Visual Studio Code</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23007ACC' d='M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z'/><path fill='%231F9CF0' d='M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z'/></svg>">
   <link rel="stylesheet" href="style.css">
   <script src="static/pdf.min.js"></script>
   <script src="static/jszip.min.js?v=20261002-1"></script>
 </head>
-<body class="theme-googlesheets">
+<body class="theme-vscode">
 
-  <div class="theme-header-container gsheet-only">
-    <header class="gsheet-top-bar">
-      <div class="gsheet-top-left">
-        <a href="javascript:void(0)" class="gsheet-logo-btn" title="Trang chủ Google Trang tính">
-          <svg width="28" height="36" viewBox="0 0 24 32">
-            <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-            <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
-            <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
-          </svg>
-        </a>
-
-        <div class="gsheet-title-and-menu">
-          <div class="gsheet-title-row">
-            <span class="gsheet-doc-title" id="gsheet-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên tài liệu ngụy trang">Báo cáo số liệu & Phân tích KPI Q3</span>
-            <div class="gsheet-doc-icons">
-              <button class="gsheet-icon-btn star-btn" title="Gắn dấu sao">☆</button>
-              <button class="gsheet-icon-btn folder-btn" title="Di chuyển">📁</button>
-              <span class="gsheet-cloud-status" title="Đã lưu vào Drive">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="#5f6368"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l5.09-5.09 1.41 1.41L10 17z"/></svg>
-                <span class="cloud-text">Đã lưu vào Drive</span>
-              </span>
-            </div>
-          </div>
-
-          <nav class="gsheet-menu-bar">
-            <button class="gsheet-menu-item">Tệp</button>
-            <button class="gsheet-menu-item">Chỉnh sửa</button>
-            <button class="gsheet-menu-item">Xem</button>
-            <button class="gsheet-menu-item">Chèn</button>
-            <button class="gsheet-menu-item">Định dạng</button>
-            <button class="gsheet-menu-item">Dữ liệu</button>
-            <button class="gsheet-menu-item">Công cụ</button>
-            <button class="gsheet-menu-item">Tiện ích mở rộng</button>
-            <button class="gsheet-menu-item">Trợ giúp</button>
-          </nav>
+  <div class="theme-header-container vscode-only">
+    <!-- Top Bar -->
+    <header class="vscode-title-bar">
+      <div class="vscode-title-left">
+        <span class="vscode-icon">
+          <svg width="16" height="16" viewBox="0 0 100 100"><path fill="#007ACC" d="M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z"/><path fill="#1F9CF0" d="M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z"/></svg>
+        </span>
+        <div class="vscode-menu-bar">
+          <span>File</span><span>Edit</span><span>Selection</span><span>View</span><span>Go</span><span>Run</span><span>Terminal</span><span>Help</span>
         </div>
       </div>
-
-      <div class="gsheet-top-right">
-        <div class="stealth-reading-ctrls gsheet-reading-nav">
-          <button class="portal-nav-btn" id="btn-open-portal-gsheet" title="Trang chủ & Ủng hộ tác giả">
-            Trang chủ & Donate
-          </button>
-          <button class="theme-switch-pill" id="btn-open-theme-modal" title="Đổi giao diện ngụy trang">
-            Đổi giao diện
-          </button>
-          <button class="boss-key-btn" id="btn-boss-key-gsheet" title="Xem báo cáo nhanh (Nhấn ESC)">
-            <span class="boss-badge">ESC</span> Báo cáo nhanh
-          </button>
-          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">
-            👁 Ẩn nút (H)
-          </button>
+      <div class="vscode-title-center">
+        <span id="vsc-title-doc">stream_pipeline_processor.py - dev_workspace - Visual Studio Code</span>
+      </div>
+      <div class="vscode-title-right">
+        <div class="stealth-reading-ctrls vscode-reading-nav">
+          <button class="portal-nav-btn" id="btn-open-portal-vscode" title="Trang chủ & Ủng hộ tác giả">Trang chủ & Donate</button>
+          <button class="theme-switch-pill vscode-theme-btn" id="btn-open-theme-modal-vscode">Đổi giao diện</button>
+          <button class="boss-key-btn" id="btn-boss-key-vscode" title="Xem báo cáo nhanh (Nhấn ESC)"><span class="boss-badge">ESC</span> Báo cáo nhanh</button>
+          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">👁 Ẩn nút (H)</button>
         </div>
-
-        <button class="gsheet-circle-btn" title="Mở lịch sử chỉnh sửa">🕒</button>
-        <button class="gsheet-circle-btn" title="Mở lịch sử nhận xét">💬</button>
-        <button class="gsheet-circle-btn" title="Tham gia cuộc gọi Meet">📹</button>
-
-        <button class="gsheet-share-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#001d35"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-          <span>Chia sẻ</span>
-        </button>
-
-        <div class="gsheet-avatar" title="Tài khoản Google: Nguyen Van A">JD</div>
+        <button class="win-btn">―</button>
+        <button class="win-btn">▢</button>
+        <button class="win-btn win-close">✕</button>
       </div>
     </header>
 
-    <div class="gsheet-toolbar">
-      <div class="gsheet-tools-group">
-        <button class="gs-tool-btn" id="gs-btn-undo" title="Hoàn tác (Ctrl+Z)">↩</button>
-        <button class="gs-tool-btn" id="gs-btn-redo" title="Làm lại (Ctrl+Y)">↪</button>
-        <button class="gs-tool-btn" title="In (Ctrl+P)">🖨</button>
-        <button class="gs-tool-btn" title="Định dạng sơn">🖌</button>
-        <span class="gs-tool-divider"></span>
-        <select class="gs-select gs-zoom-select" title="Thu phóng">
-          <option>100%</option>
-          <option>75%</option>
-          <option>90%</option>
-          <option>125%</option>
-        </select>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" title="Định dạng tiền tệ">$</button>
-        <button class="gs-tool-btn" title="Định dạng phần trăm">%</button>
-        <button class="gs-tool-btn" title="Giảm số chữ số thập phân">.0</button>
-        <button class="gs-tool-btn" title="Tăng số chữ số thập phân">.00</button>
-        <span class="gs-tool-divider"></span>
-        <select id="gs-select-font-family" class="gs-select gs-font-select" title="Phông chữ">
-          <option value="Arial" selected>Arial</option>
-          <option value="Roboto">Roboto</option>
-          <option value="Calibri">Calibri</option>
-          <option value="Segoe UI">Segoe UI</option>
-        </select>
-        <select id="gs-select-font-size" class="gs-select gs-size-select" title="Cỡ chữ">
-          <option value="9">9</option>
-          <option value="10" selected>10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-        </select>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-bold" title="Đậm (Ctrl+B)"><b>B</b></button>
-        <button class="gs-tool-btn" id="gs-btn-italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
-        <button class="gs-tool-btn" id="gs-btn-strikethrough" title="Gạch ngang"><s>S</s></button>
-        <button class="gs-tool-btn color-btn" id="gs-btn-color" title="Màu văn bản">
-          <span style="border-bottom: 3px solid #202124;">A</span>
-        </button>
-        <button class="gs-tool-btn" title="Màu tô">🎨</button>
-        <button class="gs-tool-btn" title="Đường viền">⊞</button>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-wrap" title="Ngắt dòng">↩</button>
+    <!-- Editor Tab strip -->
+    <div class="vscode-tabs-bar">
+      <div class="vscode-tab active" id="vsc-tab-main">
+        <span class="py-icon">🐍</span>
+        <span id="vsc-tab-filename" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên file code ngụy trang">stream_pipeline_processor.py</span>
+        <span class="tab-close">×</span>
+      </div>
+      <div class="vscode-tab" id="vsc-tab-config">
+        <span class="json-icon">{ }</span>
+        <span>pipeline_config.json</span>
+      </div>
+      <div class="vscode-tab" id="vsc-tab-db">
+        <span class="sql-icon">🗄️</span>
+        <span>schema.sql</span>
       </div>
 
-      <div class="gsheet-stealth-group stealth-reading-ctrls">
-        <label for="file-pdf-input" class="gs-stealth-pill-btn" title="Nạp file PDF, TXT hoặc EPUB từ máy tính">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="#0F9D58"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-          <span>Nạp tài liệu</span>
-        </label>
-        <span class="gs-file-name" id="gs-file-name-label">KPI_Report_Q3_2026.pdf</span>
-
-        <span class="gs-tool-divider"></span>
-
-        <select id="gs-select-mode" class="gs-select" title="Chế độ đọc">
-          <option value="grid">Bảng Tiến Độ (Cột D)</option>
-          <option value="formula">Thanh Công Thức (Ninja 🥷)</option>
-        </select>
-
-        <div class="gs-page-controls">
-          <button class="gs-mini-btn" id="gs-btn-prev" title="Trang trước (PageUp)">◀</button>
-          <span id="gs-page-indicator" class="gs-page-text">1 / 1</span>
-          <button class="gs-mini-btn" id="gs-btn-next" title="Trang sau (PageDown)">▶</button>
-          <input type="number" id="gs-input-jump" min="1" value="1" title="Nhập số trang và nhấn Enter">
+      <!-- Quick Stealth Toolbar in VS Code Header -->
+      <div class="vscode-stealth-toolbar stealth-reading-ctrls">
+        <label for="file-pdf-input" class="vscode-pill-btn">📂 Nạp tài liệu</label>
+        <span id="vscode-file-name-label" class="vscode-file-text">dataset_telemetry.pdf</span>
+        <div class="vscode-page-ctrl">
+          <button class="vsc-btn" id="vsc-btn-prev">◀</button>
+          <span id="vsc-page-indicator">1/1</span>
+          <button class="vsc-btn" id="vsc-btn-next">▶</button>
         </div>
-
-        <span class="gs-tool-divider"></span>
-
-        <div class="gs-autoscroll-controls">
-          <button class="gs-mini-btn gs-play-btn" id="gs-btn-autoscroll" title="Bắt đầu/Dừng tự cuộn">▶ Tự cuộn</button>
-          <select id="gs-select-speed" class="gs-select gs-speed-select">
-            <option value="3000">3s</option>
-            <option value="5000" selected>5s</option>
-            <option value="8000">8s</option>
-            <option value="12000">12s</option>
-          </select>
-        </div>
-
-        <div class="gs-dim-control" title="Chỉnh độ mờ chữ">
-          <span>Độ mờ:</span>
-          <input type="range" id="gs-range-dim" min="30" max="100" value="100">
-        </div>
+        <button class="vsc-btn" id="vsc-btn-autoscroll">▶ Tự cuộn</button>
       </div>
     </div>
   </div>
 
 
+  
 
-
-
+  
 
   <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
 
-  <div class="excel-formula-bar-container gsheet-excel-only" id="main-formula-bar">
-    <div class="name-box" id="active-cell-address" title="Tọa độ ô">D1</div>
-    <div class="formula-actions">
-      <button class="formula-btn" title="Hủy">✕</button>
-      <button class="formula-btn" title="Nhập">✓</button>
-      <span class="fx-symbol" title="Hàm số"><i>fx</i></span>
-    </div>
-    <div class="formula-input-wrapper">
-      <input type="text" id="formula-input" class="formula-input" placeholder="=VLOOKUP(Data_Key, Financial_Data, 4, FALSE)" readonly />
-    </div>
-  </div>
-
-  <!-- Notification Banner -->
-  <div id="status-banner" class="status-banner" style="display: none;">
-    <span id="banner-text">Thông báo</span>
-    <button class="banner-close" onclick="document.getElementById('status-banner').style.display='none'">✕</button>
-  </div>
-
-
-
-
-<main class="excel-workspace gsheet-excel-only" id="spreadsheet-workspace">
-    <!-- Story Sheet Grid -->
-    <div class="sheet-content active" id="view-sheet-story">
-      <div class="table-container" id="grid-scroll-container">
-        <table class="excel-grid-table" id="excel-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 85px;">A</th>
-              <th class="col-header" style="width: 140px;">B</th>
-              <th class="col-header" style="width: 160px;">C</th>
-              <th class="col-header story-col-header" style="width: auto;">D</th>
-              <th class="col-header" style="width: 105px;">E</th>
-              <th class="col-header" style="width: 105px;">F</th>
-              <th class="col-header" style="width: 125px;">G</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th class="data-col-title">Task_ID</th>
-              <th class="data-col-title">Category / Module</th>
-              <th class="data-col-title">Timestamp</th>
-              <th class="data-col-title story-header-label" id="story-header-title">Log Description & Execution Details</th>
-              <th class="data-col-title">Status</th>
-              <th class="data-col-title">Metrics</th>
-              <th class="data-col-title">Assignee</th>
-            </tr>
-          </thead>
-          <tbody id="story-tbody">
-            <!-- Dynamic rows rendered here -->
-          </tbody>
-        </table>
+  <main class="vscode-workspace vscode-only" id="vscode-ide-workspace">
+    <!-- 1. Left Activity Bar -->
+    <div class="vsc-activity-bar">
+      <div class="vsc-act-icon active" title="Explorer (Ctrl+Shift+E)">📁</div>
+      <div class="vsc-act-icon" title="Search (Ctrl+Shift+F)">🔍</div>
+      <div class="vsc-act-icon" title="Source Control (Ctrl+Shift+G)">🌿</div>
+      <div class="vsc-act-icon" title="Run and Debug (Ctrl+Shift+D)">🐞</div>
+      <div class="vsc-act-icon" title="Extensions (Ctrl+Shift+X)">🧩</div>
+      <div class="vsc-act-bottom">
+        <div class="vsc-act-icon" title="Accounts">👤</div>
+        <div class="vsc-act-icon" title="Settings">⚙️</div>
       </div>
     </div>
 
-    <!-- Dummy Financial Report Sheet (Boss Key) -->
-    <div class="sheet-content" id="view-sheet-financial">
-      <div class="table-container">
-        <table class="excel-grid-table dummy-financial-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 60px;">A</th>
-              <th class="col-header" style="width: 240px;">B</th>
-              <th class="col-header" style="width: 140px;">C</th>
-              <th class="col-header" style="width: 140px;">D</th>
-              <th class="col-header" style="width: 140px;">E</th>
-              <th class="col-header" style="width: 140px;">F</th>
-              <th class="col-header" style="width: 140px;">G</th>
-              <th class="col-header" style="width: 120px;">H</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th>Mã</th>
-              <th>Khoản Mục Tài Chính</th>
-              <th>Tháng 7/2026</th>
-              <th>Tháng 8/2026</th>
-              <th>Tháng 9/2026</th>
-              <th>Lũy Kế Q3</th>
-              <th>Kế Hoạch</th>
-              <th>Tỷ Lệ (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="row-header">2</td><td>REV-01</td><td class="bold-text">DOANH THU THUẦN</td><td>14,520,000,000</td><td>15,840,000,000</td><td>17,210,000,000</td><td class="bold-text">47,570,000,000</td><td>45,000,000,000</td><td class="positive">+105.7%</td></tr>
-            <tr><td class="row-header">3</td><td>REV-02</td><td>Doanh thu Dịch vụ Phần mềm</td><td>8,210,000,000</td><td>8,950,000,000</td><td>9,840,000,000</td><td>27,000,000,000</td><td>25,500,000,000</td><td class="positive">+105.9%</td></tr>
-            <tr><td class="row-header">4</td><td>REV-03</td><td>Doanh thu Bản quyền & Giấy phép</td><td>4,150,000,000</td><td>4,620,000,000</td><td>5,110,000,000</td><td>13,880,000,000</td><td>13,000,000,000</td><td class="positive">+106.8%</td></tr>
-            <tr><td class="row-header">5</td><td>REV-04</td><td>Doanh thu Tư vấn Triển khai</td><td>2,160,000,000</td><td>2,270,000,000</td><td>2,260,000,000</td><td>6,690,000,000</td><td>6,500,000,000</td><td class="positive">+102.9%</td></tr>
-            <tr><td class="row-header">6</td><td>COG-01</td><td class="bold-text">GIÁ VỐN HÀNG BÁN (COGS)</td><td>(6,240,000,000)</td><td>(6,810,000,000)</td><td>(7,350,000,000)</td><td class="bold-text">(20,400,000,000)</td><td>(20,000,000,000)</td><td class="negative">+102.0%</td></tr>
-            <tr><td class="row-header">7</td><td>GP-01</td><td class="bold-text highlight-yellow">LỢI NHUẬN GỘP</td><td>8,280,000,000</td><td>9,030,000,000</td><td>9,860,000,000</td><td class="bold-text">27,170,000,000</td><td>25,000,000,000</td><td class="positive">+108.7%</td></tr>
-            <tr><td class="row-header">8</td><td>OPEX-01</td><td class="bold-text">CHI PHÍ HOẠT ĐỘNG</td><td>(3,450,000,000)</td><td>(3,620,000,000)</td><td>(3,890,000,000)</td><td class="bold-text">(10,960,000,000)</td><td>(11,200,000,000)</td><td class="positive">-2.1%</td></tr>
-            <tr><td class="row-header">9</td><td>OPEX-02</td><td>Chi phí Lương & Phúc lợi R&D</td><td>(2,100,000,000)</td><td>(2,150,000,000)</td><td>(2,200,000,000)</td><td>(6,450,000,000)</td><td>(6,600,000,000)</td><td class="positive">-2.3%</td></tr>
-            <tr><td class="row-header">10</td><td>OPEX-03</td><td>Chi phí Thuê Cloud & Server AWS</td><td>(850,000,000)</td><td>(920,000,000)</td><td>(1,040,000,000)</td><td>(2,810,000,000)</td><td>(2,800,000,000)</td><td class="negative">+0.4%</td></tr>
-            <tr><td class="row-header">11</td><td>OPEX-04</td><td>Chi phí Tiếp thị & Bán hàng</td><td>(500,000,000)</td><td>(550,000,000)</td><td>(650,000,000)</td><td>(1,700,000,000)</td><td>(1,800,000,000)</td><td class="positive">-5.6%</td></tr>
-            <tr><td class="row-header">12</td><td>EBIT-01</td><td class="bold-text highlight-green">LỢI NHUẬN TRƯỚC THUẾ (EBITDA)</td><td>4,830,000,000</td><td>5,410,000,000</td><td>5,970,000,000</td><td class="bold-text">16,210,000,000</td><td>13,800,000,000</td><td class="positive">+117.5%</td></tr>
-            <tr><td class="row-header">13</td><td>TAX-01</td><td>Thuế TNDN Dự tính (20%)</td><td>(966,000,000)</td><td>(1,082,000,000)</td><td>(1,194,000,000)</td><td>(3,242,000,000)</td><td>(2,760,000,000)</td><td>--</td></tr>
-            <tr><td class="row-header">14</td><td>NET-01</td><td class="bold-text highlight-green">LỢI NHUẬN RÒNG SAU THUẾ</td><td>3,864,000,000</td><td>4,328,000,000</td><td>4,776,000,000</td><td class="bold-text">12,968,000,000</td><td>11,040,000,000</td><td class="positive">+117.5%</td></tr>
-          </tbody>
-        </table>
+    <!-- 2. Left Sidebar Explorer -->
+    <div class="vsc-sidebar">
+      <div class="vsc-sidebar-title">
+        <span>EXPLORER</span>
+        <span>•••</span>
+      </div>
+      <div class="vsc-tree-section">
+        <div class="vsc-folder-header">▼ <b>PROJECT_BACKEND</b></div>
+        <div class="vsc-tree-item">▶ 📂 .venv</div>
+        <div class="vsc-tree-item">▶ 📂 controllers</div>
+        <div class="vsc-tree-item">▼ 📂 services</div>
+        <div class="vsc-tree-item vsc-tree-file active">
+          <span class="file-icon-py">🐍</span> novel_stream_processor.py
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-py">🐍</span> utils.py
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-json">{ }</span> pipeline_config.json
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-txt">📄</span> requirements.txt
+        </div>
+        <div class="vsc-tree-item vsc-tree-file">
+          <span class="file-icon-git">🐙</span> .gitignore
+        </div>
       </div>
     </div>
 
-    <!-- Dummy Balance Sheet -->
-    <div class="sheet-content" id="view-sheet-balance">
-      <div class="table-container">
-        <table class="excel-grid-table dummy-financial-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 70px;">A</th>
-              <th class="col-header" style="width: 280px;">B</th>
-              <th class="col-header" style="width: 180px;">C</th>
-              <th class="col-header" style="width: 180px;">D</th>
-              <th class="col-header" style="width: 160px;">E</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th>Mã Số</th>
-              <th>Chỉ Tiêu Bảng Cân Đối Kế Toán</th>
-              <th>Số Đầu Năm</th>
-              <th>Số Cuối Kỳ Q3</th>
-              <th>Biến Động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="row-header">2</td><td>100</td><td class="bold-text">TỔNG TÀI SẢN NGẮN HẠN</td><td>68,450,000,000</td><td>92,130,000,000</td><td class="positive">+34.6%</td></tr>
-            <tr><td class="row-header">3</td><td>110</td><td>Tiền và các khoản tương đương tiền</td><td>18,200,000,000</td><td>32,450,000,000</td><td class="positive">+78.3%</td></tr>
-            <tr><td class="row-header">4</td><td>120</td><td>Đầu tư tài chính ngắn hạn</td><td>25,000,000,000</td><td>30,000,000,000</td><td class="positive">+20.0%</td></tr>
-            <tr><td class="row-header">5</td><td>130</td><td>Các khoản phải thu ngắn hạn</td><td>19,500,000,000</td><td>23,800,000,000</td><td class="positive">+22.1%</td></tr>
-            <tr><td class="row-header">6</td><td>200</td><td class="bold-text">TỔNG TÀI SẢN DÀI HẠN</td><td>42,100,000,000</td><td>45,600,000,000</td><td class="positive">+8.3%</td></tr>
-            <tr><td class="row-header">7</td><td>300</td><td class="bold-text">NỢ PHẢI TRẢ</td><td>31,250,000,000</td><td>34,800,000,000</td><td class="negative">+11.4%</td></tr>
-            <tr><td class="row-header">8</td><td>400</td><td class="bold-text">VỐN CHỦ SỞ HỮU</td><td>79,300,000,000</td><td>102,930,000,000</td><td class="positive">+29.8%</td></tr>
-          </tbody>
-        </table>
+    <!-- 3. Code Editor & Terminal Panel -->
+    <div class="vsc-editor-wrapper">
+      <!-- Breadcrumb bar -->
+      <div class="vsc-breadcrumbs">
+        <span>services</span> &gt; <span>novel_stream_processor.py</span> &gt; <span class="vsc-func-sym">ƒ</span> <span id="vsc-func-name">execute_corpus_stream()</span>
+      </div>
+
+      <!-- Real Code Editor View (Novel is disguised as Python code & docstrings) -->
+      <div class="vsc-code-editor" id="vsc-code-scroll-container">
+        <div class="vsc-editor-gutter" id="vsc-line-numbers">
+          <!-- Line numbers dynamically populated -->
+        </div>
+        <div class="vsc-editor-lines" id="vsc-code-lines">
+          <!-- Python lines with syntax coloring dynamically populated -->
+        </div>
+      </div>
+
+      <!-- 4. Integrated Terminal at Bottom -->
+      <div class="vsc-terminal-panel">
+        <div class="vsc-terminal-header">
+          <div class="vsc-term-tabs">
+            <span>PROBLEMS 0</span>
+            <span>OUTPUT</span>
+            <span>DEBUG CONSOLE</span>
+            <span class="active">TERMINAL</span>
+          </div>
+          <div class="vsc-term-actions">
+            <span>+</span>
+            <span>🗑️</span>
+            <span>▲</span>
+            <span>✕</span>
+          </div>
+        </div>
+        <div class="vsc-terminal-body">
+          <div class="term-line prompt">PS D:\phong\python\backend&gt; <span class="cmd">python -m uvicorn main:app --reload --port 8000</span></div>
+          <div class="term-line info">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Started server process [23941]</div>
+          <div class="term-line info">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Waiting for application startup.</div>
+          <div class="term-line success">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Application startup complete.</div>
+          <div class="term-line normal">INFO: &nbsp;&nbsp;&nbsp;&nbsp;Uvicorn running on <span class="url">http://127.0.0.1:8000</span> (Press CTRL+C to quit)</div>
+        </div>
       </div>
     </div>
   </main>
 
 
+  
 
+    
 
-
-
-  <footer class="excel-sheets-bar" id="main-sheets-bar">
-    <div class="gs-bottom-left gsheet-only">
-      <button class="gs-plus-sheet-btn" title="Thêm trang tính">+</button>
-      <button class="gs-all-sheets-btn" title="Tất cả trang tính">☰</button>
-    </div>
-    <div class="sheet-tabs-list gsheet-excel-only">
-      <button class="sheet-tab active" data-target="view-sheet-story" id="tab-story-sheet">
-        <span class="tab-label" id="tab-story-label">Trang tính1</span>
-      </button>
-      <button class="sheet-tab" data-target="view-sheet-financial" id="tab-financial-sheet">
-        <span class="tab-label">Doanh_Thu_Q3</span>
-      </button>
-      <button class="sheet-tab" data-target="view-sheet-balance">
-        <span class="tab-label">Can_Doi_Ke_Toan</span>
-      </button>
-    </div>
-    <div class="excel-status-bar gsheet-excel-only">
-      <span class="status-item ready" id="status-ready-label">Sẵn sàng</span>
-      <span class="status-item formula-calc" id="status-reading-info">Dòng: 1 | Đã đọc: 0%</span>
-      <span class="status-item sum-item">Average: 24,190.50</span>
-      <span class="status-item count-item">Count: 420</span>
-      <span class="status-item">Sum: 10,160,010</span>
-      <button class="gs-explore-btn gsheet-only" title="Khám phá">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a73e8"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-        <span>Khám phá</span>
-      </button>
+  <footer class="excel-sheets-bar" id="main-sheets-bar" style="background:#007acc; border-top:none;">
+    <div class="vscode-statusbar-content vscode-only" style="display:flex; width:100%;">
+      <div class="vsc-stat-left">
+        <span class="vsc-stat-item remote">&gt;&lt; WSL: Ubuntu</span>
+        <span class="vsc-stat-item branch">🌿 main*</span>
+        <span class="vsc-stat-item">⊗ 0  ⚠ 0</span>
+        <span class="vsc-stat-item" id="vsc-status-progress">Page 1/1</span>
+      </div>
+      <div class="vsc-stat-right">
+        <span class="vsc-stat-item" id="vsc-status-ln">Ln 14, Col 28</span>
+        <span class="vsc-stat-item">Spaces: 4</span>
+        <span class="vsc-stat-item">UTF-8</span>
+        <span class="vsc-stat-item">LF</span>
+        <span class="vsc-stat-item">Python 3.13.7 64-bit</span>
+        <span class="vsc-stat-item">Prettier</span>
+      </div>
     </div>
   </footer>
 

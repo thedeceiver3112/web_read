@@ -1,7 +1,7 @@
 /**
  * Multi-Theme Stealth Reader - Core Logic
  * Supports: Google Sheets (Online), Microsoft Excel 365, and Real VS Code IDE
- * Fast PDF parsing (Python API + client-side PDF.js fallback),
+ * Fast PDF, TXT, and EPUB parsing with local-first processing,
  * Boss Key (ESC), Auto-advance, and local persistence.
  */
 
@@ -26,6 +26,9 @@ const state = {
   currentPage: 1,
   totalPages: 1,
   firstStoryPage: 1,
+  loadedPages: 0,
+  isPdfProcessing: false,
+  pdfLoadToken: 0,
   
   // Continuous stream across entire document
   allChunks: [], // Array of { text, page, indexInPage, globalIndex }
@@ -53,7 +56,11 @@ const state = {
   // Stealth disguise titles (persisted in localStorage)
   gsheetTitle: localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3',
   excelTitle: localStorage.getItem('stealth_title_excel') || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx',
-  vscodeTitle: localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py'
+  vscodeTitle: localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py',
+  photoshopTitle: localStorage.getItem('stealth_title_photoshop') || 'Brand_Campaign_KeyVisual_v2.psd',
+  blenderTitle: localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend',
+  linkedinTitle: localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn',
+  autocadTitle: localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg',
 };
 
 // Realistic mock categories & modules for corporate audit camouflage
@@ -119,31 +126,222 @@ const VSCODE_BOSS_CODE = [
   '    asyncio.run(bootstrap_cluster_nodes())'
 ];
 
-// Sample story to show on first open
+// Neutral project copy shown before a document is loaded.
 const SAMPLE_STORY_CHUNKS = [
-  "Chào mừng bạn đến với Bộ đọc truyện ngụy trang Google Sheets & Excel & VS Code!",
-  "Hệ thống giúp bạn đọc tiểu thuyết, truyện chữ cực kỳ kín đáo và an toàn trong giờ làm việc.",
-  "Để bắt đầu: Hãy bấm nút [+ Nạp File PDF] trên thanh công cụ phía trên để nạp file truyện từ máy tính của bạn.",
-  "LƯU Ý: Các file truyện PDF thường có Trang 1 là Bìa Sách, Trang 2 là Mục Lục, từ Trang 3 mới bắt đầu nội dung!",
-  "Hệ thống sẽ tự động bỏ qua bìa ảnh và mở ngay chương 1 cho bạn đọc.",
-  "🚨 PHÍM TẮT KHẨN CẤP (BOSS KEY): Bấm phím [ESC] trên bàn phím. Màn hình sẽ lập tức chuyển sang chế độ làm việc khẩn cấp (Bảng tài chính hoặc Code thuật toán)!",
-  "Bấm [ESC] thêm lần nữa để quay lại đúng dòng truyện bạn đang đọc dở.",
-  "Bạn có thể dùng phím Mũi tên Xuống [↓] hoặc phím [J] để nhảy câu tiếp theo, [↑] hoặc [K] để lùi lại.",
-  "🎨 ĐỔI GIAO DIỆN: Bấm nút 'Đổi Giao Diện' ở góc trên để đổi giữa Google Sheets, Excel 365, hoặc VS Code bất cứ lúc nào!",
-  "Chúc bạn có những giờ phút thư giãn vui vẻ và hiệu quả trong công việc!"
+  "Q3 CAMPAIGN WORKSPACE - INTERNAL REVIEW COPY",
+  "Project scope includes editorial layout, visual direction, data validation and final delivery coordination.",
+  "Current status: working files have been consolidated and the primary review round is in progress.",
+  "Design team: verify spacing, hierarchy, color consistency and output dimensions across all approved formats.",
+  "Content team: complete the final language pass and flag any copy that still requires stakeholder approval.",
+  "Development team: confirm asset paths, browser compatibility and production build checks before handoff.",
+  "Open items are tracked by section so reviewers can continue from the most recently approved checkpoint.",
+  "Use the project navigation controls to move between sections and compare the latest revisions.",
+  "All external exports must use the approved naming convention and remain inside the delivery package.",
+  "Next review: finalize outstanding notes, prepare the release candidate and archive superseded versions."
 ];
 
 // Favicons for themes
+
+// Multi-File Workspace Mapping & Navigation
+const THEME_PAGES = {
+  'theme-googlesheets': 'index.html',
+  'theme-excel': 'excel.html',
+  'theme-vscode': 'vscode.html',
+  'theme-photoshop': 'photoshop.html',
+  'theme-blender': 'blender.html',
+  'theme-linkedin': 'linkedin.html',
+  'theme-autocad': 'autocad.html'
+};
+
+const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
+const DOCUMENT_CACHE_STORE_NAME = 'documents';
+const ACTIVE_DOCUMENT_CACHE_KEY = 'active-document';
+const ACTIVE_DOCUMENT_SESSION_KEY = 'stealth_active_document_v2';
+let documentCacheWritePromise = Promise.resolve();
+
+function getThemeForCurrentPage() {
+  const path = window.location.pathname.toLowerCase();
+  if (path.endsWith('excel.html')) return 'theme-excel';
+  if (path.endsWith('vscode.html')) return 'theme-vscode';
+  if (path.endsWith('photoshop.html')) return 'theme-photoshop';
+  if (path.endsWith('blender.html')) return 'theme-blender';
+  if (path.endsWith('linkedin.html')) return 'theme-linkedin';
+  if (path.endsWith('autocad.html')) return 'theme-autocad';
+  return 'theme-googlesheets';
+}
+
+function getFileForTheme(themeName) {
+  return THEME_PAGES[themeName] || 'index.html';
+}
+
+async function navigateToThemePage(targetTheme) {
+  state.theme = targetTheme;
+  saveState();
+  const currentTheme = getThemeForCurrentPage();
+  const targetPage = getFileForTheme(targetTheme);
+  if (currentTheme !== targetTheme) {
+    await documentCacheWritePromise.catch(error => {
+      console.warn('Document cache was not ready before theme navigation:', error);
+    });
+    window.location.href = targetPage;
+  } else {
+    applyTheme(targetTheme);
+  }
+}
+
+function openDocumentCacheDatabase() {
+  return new Promise((resolve, reject) => {
+    if (!window.indexedDB) {
+      reject(new Error('Trình duyệt không hỗ trợ IndexedDB.'));
+      return;
+    }
+
+    const request = window.indexedDB.open(DOCUMENT_CACHE_DB_NAME, 1);
+    request.onupgradeneeded = () => {
+      const database = request.result;
+      if (!database.objectStoreNames.contains(DOCUMENT_CACHE_STORE_NAME)) {
+        database.createObjectStore(DOCUMENT_CACHE_STORE_NAME, { keyPath: 'id' });
+      }
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error || new Error('Không mở được bộ nhớ tài liệu.'));
+  });
+}
+
+async function writeDocumentCache(payload) {
+  const database = await openDocumentCacheDatabase();
+  try {
+    await new Promise((resolve, reject) => {
+      const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readwrite');
+      transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).put(payload);
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error || new Error('Không lưu được tài liệu.'));
+      transaction.onabort = () => reject(transaction.error || new Error('Lưu tài liệu đã bị hủy.'));
+    });
+  } finally {
+    database.close();
+  }
+}
+
+async function readDocumentCache() {
+  const database = await openDocumentCacheDatabase();
+  try {
+    return await new Promise((resolve, reject) => {
+      const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readonly');
+      const request = transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).get(ACTIVE_DOCUMENT_CACHE_KEY);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(request.error || new Error('Không đọc được tài liệu đã lưu.'));
+    });
+  } finally {
+    database.close();
+  }
+}
+
+function applyCachedDocument(cache) {
+  if (!cache || !Array.isArray(cache.chunks) || cache.chunks.length === 0) return false;
+
+  state.allChunks = cache.chunks;
+  state.pageStartIndices = cache.pageStartIndices || {};
+  state.totalPages = Math.max(1, Number(cache.totalPages) || 1);
+  state.loadedPages = state.totalPages;
+  state.isPdfProcessing = false;
+  state.pdfFileName = cache.documentName || state.pdfFileName || '';
+  state.currentGlobalIndex = Math.min(
+    Math.max(0, state.currentGlobalIndex),
+    state.allChunks.length - 1
+  );
+  state.currentPage = state.allChunks[state.currentGlobalIndex]?.page || 1;
+
+  const portalNameLabel = document.getElementById('portal-pdf-filename');
+  if (portalNameLabel && state.pdfFileName) portalNameLabel.textContent = state.pdfFileName;
+  return true;
+}
+
+function persistDocumentCache() {
+  if (!state.allChunks || state.allChunks.length === 0 || !state.pdfFileName) {
+    return Promise.resolve();
+  }
+
+  const payload = {
+    id: ACTIVE_DOCUMENT_CACHE_KEY,
+    documentName: state.pdfFileName,
+    chunks: state.allChunks,
+    pageStartIndices: state.pageStartIndices,
+    totalPages: state.totalPages,
+    savedAt: Date.now()
+  };
+
+  try {
+    sessionStorage.setItem(ACTIVE_DOCUMENT_SESSION_KEY, JSON.stringify(payload));
+    documentCacheWritePromise = Promise.resolve();
+    return documentCacheWritePromise;
+  } catch (error) {
+    sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
+    console.info('Tài liệu vượt giới hạn sessionStorage, chuyển sang IndexedDB.', error);
+  }
+
+  documentCacheWritePromise = documentCacheWritePromise
+    .catch(() => {})
+    .then(() => writeDocumentCache(payload))
+    .catch(error => {
+      console.warn('Không thể lưu tài liệu để đổi giao diện nhanh:', error);
+      throw error;
+    });
+  return documentCacheWritePromise;
+}
+
+function restoreChunksFromLegacySession() {
+  try {
+    const raw = sessionStorage.getItem('stealth_cached_chunks');
+    if (raw) {
+      return applyCachedDocument({
+        chunks: JSON.parse(raw),
+        pageStartIndices: JSON.parse(sessionStorage.getItem('stealth_cached_page_indices') || '{}'),
+        totalPages: parseInt(sessionStorage.getItem('stealth_cached_total_pages') || '1', 10),
+        documentName: sessionStorage.getItem('stealth_cached_doc_name') || ''
+      });
+    }
+  } catch (e) {
+    console.warn('Không thể đọc cache sessionStorage cũ:', e);
+  }
+  return false;
+}
+
+async function restoreDocumentCache() {
+  try {
+    const sessionCache = JSON.parse(sessionStorage.getItem(ACTIVE_DOCUMENT_SESSION_KEY) || 'null');
+    if (applyCachedDocument(sessionCache)) return true;
+  } catch (error) {
+    sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
+    console.warn('Không thể khôi phục tài liệu từ sessionStorage:', error);
+  }
+
+  try {
+    const cache = await readDocumentCache();
+    if (applyCachedDocument(cache)) return true;
+  } catch (error) {
+    console.warn('Không thể khôi phục tài liệu từ IndexedDB:', error);
+  }
+
+  const restoredLegacyCache = restoreChunksFromLegacySession();
+  if (restoredLegacyCache) persistDocumentCache().catch(() => {});
+  return restoredLegacyCache;
+}
+
 const FAVICONS = {
   'theme-googlesheets': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>",
   'theme-excel': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23107c41'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>X</text></svg>",
-  'theme-vscode': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23007ACC' d='M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z'/><path fill='%231F9CF0' d='M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z'/></svg>"
+  'theme-vscode': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23007ACC' d='M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z'/><path fill='%231F9CF0' d='M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z'/></svg>",
+  'theme-photoshop': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23001e36'/><text x='16' y='23' font-size='18' font-family='Segoe UI,sans-serif' font-weight='bold' fill='%2331a8ff' text-anchor='middle'>Ps</text></svg>",
+  'theme-blender': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23222222'/><circle cx='16' cy='18' r='7' fill='%23ea7600'/><circle cx='16' cy='18' r='3.5' fill='%23265787'/><path d='M16 5 L16 11 M10 8 L14 13 M22 8 L18 13' stroke='%23ea7600' stroke-width='2.5' stroke-linecap='round'/></svg>",
+  'theme-linkedin': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a66c2'/><text x='16' y='24' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>in</text></svg>",
+  'theme-autocad': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23c41527'/><text x='16' y='24' font-size='22' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>A</text></svg>",
 };
 
 // ==========================================================
 // INITIALIZATION
 // ==========================================================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   loadSavedState();
   initThemeSystem();
   initTitleEditing();
@@ -151,25 +349,38 @@ document.addEventListener('DOMContentLoaded', () => {
   initSheetTabs();
   initContinuousScrollListeners();
   initLandingPortal();
+  initControlsVisibilityToggle();
   
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
 
   if (state.allChunks.length === 0) {
-    initStoryFromChunks(SAMPLE_STORY_CHUNKS);
+    const restored = await restoreDocumentCache();
+    if (!restored) {
+      initStoryFromChunks(SAMPLE_STORY_CHUNKS);
+    } else {
+      renderContinuousView(true);
+    }
   } else {
     renderContinuousView(true);
   }
+
 });
 
 function loadSavedState() {
   try {
-    const savedTheme = localStorage.getItem('selected_theme');
-    if (savedTheme) state.theme = savedTheme;
+    // Every workspace now has its own HTML entry point. The page filename is
+    // authoritative; a previously saved theme must not hide the current page.
+    state.theme = getThemeForCurrentPage();
 
     state.gsheetTitle = localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3';
     state.excelTitle = localStorage.getItem('stealth_title_excel') || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
     state.vscodeTitle = localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py';
+    state.photoshopTitle = localStorage.getItem('stealth_title_photoshop') || 'Brand_Campaign_KeyVisual_v2.psd';
+    state.blenderTitle = localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend';
+    state.linkedinTitle = localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn';
+    state.autocadTitle = localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg';
+
 
     const saved = localStorage.getItem('excel_reader_state');
     if (saved) {
@@ -215,7 +426,15 @@ function saveState() {
 function initThemeSystem() {
   applyTheme(state.theme);
 
-  const openButtons = ['btn-open-theme-modal', 'btn-open-theme-modal-excel', 'btn-open-theme-modal-vscode'];
+  const openButtons = [
+    'btn-open-theme-modal',
+    'btn-open-theme-modal-excel',
+    'btn-open-theme-modal-vscode',
+    'btn-open-theme-modal-photoshop',
+    'btn-open-theme-modal-blender',
+    'btn-open-theme-modal-linkedin',
+    'btn-open-theme-modal-autocad',
+  ];
   openButtons.forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', openThemeModal);
@@ -225,15 +444,24 @@ function initThemeSystem() {
   if (closeBtn) closeBtn.addEventListener('click', closeThemeModal);
 
   const confirmBtn = document.getElementById('btn-confirm-theme');
-  if (confirmBtn) confirmBtn.addEventListener('click', closeThemeModal);
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', () => {
+      closeThemeModal();
+      navigateToThemePage(state.theme);
+    });
+  }
 
   document.querySelectorAll('.theme-card').forEach(card => {
     card.addEventListener('click', () => {
       document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
       card.classList.add('active');
       const chosenTheme = card.getAttribute('data-theme');
-      applyTheme(chosenTheme);
-      saveState();
+      state.theme = chosenTheme;
+    });
+
+    card.addEventListener('dblclick', () => {
+      const chosenTheme = card.getAttribute('data-theme');
+      navigateToThemePage(chosenTheme);
     });
   });
 }
@@ -282,6 +510,23 @@ function applyTheme(themeName) {
     if (vTitle) vTitle.textContent = `${docTitle} - dev_workspace - Visual Studio Code`;
     const tabName = document.getElementById('vsc-tab-filename');
     if (tabName) tabName.textContent = docTitle;
+  } else if (themeName === 'theme-photoshop') {
+    const docTitle = state.photoshopTitle || 'Brand_Campaign_KeyVisual_v2.psd';
+    document.title = `${docTitle} @ 66.7% (RGB/8#*) - Adobe Photoshop 2026`;
+    const psTitle = document.getElementById('ps-doc-title');
+    if (psTitle) psTitle.textContent = docTitle;
+  } else if (themeName === 'theme-blender') {
+    const docTitle = state.blenderTitle || 'cyberpunk_city_scene_v4.blend';
+    document.title = `${docTitle} - Blender 4.2.0`;
+    const bTitle = document.getElementById('blender-doc-title');
+    if (bTitle) bTitle.textContent = docTitle;
+  } else if (themeName === 'theme-linkedin') {
+    document.title = 'Feed | LinkedIn';
+  } else if (themeName === 'theme-autocad') {
+    const docTitle = state.autocadTitle || 'LAYOUT_MASTER_PLAN_Q3.dwg';
+    document.title = `${docTitle} - Autodesk AutoCAD 2026`;
+    const cadTitle = document.getElementById('autocad-doc-title');
+    if (cadTitle) cadTitle.textContent = docTitle;
   }
 
   applyStyles();
@@ -360,6 +605,72 @@ function initTitleEditing() {
       }
     });
   }
+
+  const psTitle = document.getElementById('ps-doc-title');
+  if (psTitle) {
+    psTitle.addEventListener('blur', () => {
+      let val = psTitle.textContent.trim();
+      if (!val) val = 'Brand_Campaign_KeyVisual_v2.psd';
+      if (!val.toLowerCase().endsWith('.psd')) val += '.psd';
+      psTitle.textContent = val;
+      state.photoshopTitle = val;
+      localStorage.setItem('stealth_title_photoshop', val);
+      if (state.theme === 'theme-photoshop') {
+        document.title = `${val} @ 66.7% (RGB/8#*) - Adobe Photoshop 2026`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên project Photoshop: <b>${escapeHtml(val)}</b>`);
+    });
+    psTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        psTitle.blur();
+      }
+    });
+  }
+
+  const bTitle = document.getElementById('blender-doc-title');
+  if (bTitle) {
+    bTitle.addEventListener('blur', () => {
+      let val = bTitle.textContent.trim();
+      if (!val) val = 'cyberpunk_city_scene_v4.blend';
+      if (!val.toLowerCase().endsWith('.blend')) val += '.blend';
+      bTitle.textContent = val;
+      state.blenderTitle = val;
+      localStorage.setItem('stealth_title_blender', val);
+      if (state.theme === 'theme-blender') {
+        document.title = `${val} - Blender 4.2.0`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên file Blender: <b>${escapeHtml(val)}</b>`);
+    });
+    bTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        bTitle.blur();
+      }
+    });
+  }
+
+  const cadTitle = document.getElementById('autocad-doc-title');
+  if (cadTitle) {
+    cadTitle.addEventListener('blur', () => {
+      let val = cadTitle.textContent.trim();
+      if (!val) val = 'LAYOUT_MASTER_PLAN_Q3.dwg';
+      if (!val.toLowerCase().endsWith('.dwg')) val += '.dwg';
+      cadTitle.textContent = val;
+      state.autocadTitle = val;
+      localStorage.setItem('stealth_title_autocad', val);
+      if (state.theme === 'theme-autocad') {
+        document.title = `${val} - Autodesk AutoCAD 2026`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên bản vẽ AutoCAD: <b>${escapeHtml(val)}</b>`);
+    });
+    cadTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        cadTitle.blur();
+      }
+    });
+  }
 }
 
 // ==========================================================
@@ -369,19 +680,31 @@ function initLandingPortal() {
   const portal = document.getElementById('landing-portal');
   if (!portal) return;
 
-  const skipPortal = localStorage.getItem('skip_portal') === 'true';
+  const currentTheme = getThemeForCurrentPage();
+  const isDedicatedPage = currentTheme !== 'theme-googlesheets';
+  const skipPortal = localStorage.getItem('skip_portal') === 'true' || isDedicatedPage;
   const closeBtn = document.getElementById('btn-portal-close');
   const rememberChk = document.getElementById('chk-remember-direct-mode');
 
-  if (rememberChk) rememberChk.checked = skipPortal;
+  const closePortal = () => {
+    portal.classList.add('hidden');
+    portal.setAttribute('aria-hidden', 'true');
+  };
+
+  const openPortal = (showCloseButton) => {
+    portal.classList.remove('hidden');
+    portal.setAttribute('aria-hidden', 'false');
+    if (closeBtn) closeBtn.style.display = showCloseButton ? 'flex' : 'none';
+  };
+
+  if (rememberChk) rememberChk.checked = localStorage.getItem('skip_portal') === 'true';
 
   // Initial visibility check
   if (skipPortal) {
-    portal.classList.add('hidden');
+    closePortal();
     if (closeBtn) closeBtn.style.display = 'flex';
   } else {
-    portal.classList.remove('hidden');
-    if (closeBtn) closeBtn.style.display = 'none';
+    openPortal(false);
   }
 
   // Sync theme UI
@@ -393,12 +716,11 @@ function initLandingPortal() {
       const chosenTheme = item.getAttribute('data-theme');
       state.theme = chosenTheme;
       updatePortalThemeUI(chosenTheme);
-      applyTheme(chosenTheme);
       saveState();
-      
-      // Playful micro confetti burst on selection
-      const rect = item.getBoundingClientRect();
-      launchConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2, 20);
+    });
+    item.addEventListener('dblclick', () => {
+      const chosenTheme = item.getAttribute('data-theme');
+      navigateToThemePage(chosenTheme);
     });
   });
 
@@ -411,34 +733,36 @@ function initLandingPortal() {
       } else {
         localStorage.removeItem('skip_portal');
       }
-
-      // Celebratory Confetti explosion!
-      const rect = enterBtn.getBoundingClientRect();
-      launchConfetti(rect.left + rect.width / 2, rect.top, 80);
-
-      setTimeout(() => {
-        portal.classList.add('hidden');
-        if (closeBtn) closeBtn.style.display = 'flex';
-        renderContinuousView(true);
-      }, 350);
+      // The selected workspace may already be the current page. In that case
+      // navigation only reapplies the theme, so the portal must close here.
+      closePortal();
+      navigateToThemePage(state.theme);
     });
   }
 
   // Close button (Resume reading session)
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
-      portal.classList.add('hidden');
+      closePortal();
     });
   }
 
   // Open Portal Buttons from theme headers and theme modal
-  ['btn-open-portal-gsheet', 'btn-open-portal-excel', 'btn-open-portal-vscode', 'btn-modal-to-portal'].forEach(id => {
+  [
+    'btn-open-portal-gsheet',
+    'btn-open-portal-excel',
+    'btn-open-portal-vscode',
+    'btn-open-portal-photoshop',
+    'btn-open-portal-blender',
+    'btn-open-portal-linkedin',
+    'btn-open-portal-autocad',
+    'btn-modal-to-portal'
+  ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.addEventListener('click', () => {
         closeThemeModal();
-        portal.classList.remove('hidden');
-        if (closeBtn) closeBtn.style.display = 'flex';
+        openPortal(true);
         updatePortalThemeUI(state.theme);
       });
     }
@@ -450,7 +774,7 @@ function initLandingPortal() {
     copyBtn.addEventListener('click', copyAccountNumber);
   }
 
-  // Portal PDF File Input
+  // Portal document file input
   const portalFileInput = document.getElementById('portal-file-input');
   if (portalFileInput) {
     portalFileInput.addEventListener('change', (e) => {
@@ -458,8 +782,8 @@ function initLandingPortal() {
       if (file) {
         const nameLabel = document.getElementById('portal-pdf-filename');
         if (nameLabel) nameLabel.textContent = file.name;
-        processPdfFile(file);
-        launchConfetti(window.innerWidth / 2, window.innerHeight / 2, 40);
+        processDocumentFile(file);
+        e.target.value = '';
       }
     });
   }
@@ -483,14 +807,14 @@ function copyAccountNumber() {
 
   const showFeedback = () => {
     if (copyBtn) {
-      copyBtn.innerHTML = '<span>🎉 ĐÃ SAO CHÉP STK!</span>';
+      copyBtn.textContent = 'Đã sao chép số tài khoản!';
       copyBtn.classList.add('copied');
       setTimeout(() => {
-        copyBtn.innerHTML = '<span>📋 SAO CHÉP SỐ TÀI KHOẢN</span>';
+        copyBtn.textContent = 'Sao chép số tài khoản';
         copyBtn.classList.remove('copied');
       }, 2500);
     }
-    showPageFlipToast('🎉 Đã sao chép STK: <b>1015471873</b> (Vietcombank - NGUYEN TRAN HAI PHONG)');
+    showPageFlipToast('Đã sao chép STK: <b>1015471873</b> (Vietcombank - NGUYEN TRAN HAI PHONG)');
   };
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -514,6 +838,48 @@ function fallbackCopySTK(text, onSuccess) {
     prompt('Vui lòng sao chép số tài khoản Vietcombank:', text);
   }
   document.body.removeChild(ta);
+}
+
+// ==========================================================
+// CONTROLS VISIBILITY TOGGLE (HOTKEY: H)
+// ==========================================================
+function initControlsVisibilityToggle() {
+  const isHidden = localStorage.getItem('stealth_controls_hidden') === '1';
+  if (isHidden) {
+    document.body.classList.add('controls-hidden');
+  }
+  updateControlsToggleButtons(isHidden);
+
+  const floatingBtn = document.getElementById('btn-toggle-ctrls-floating');
+  if (floatingBtn) {
+    floatingBtn.addEventListener('click', toggleControlsVisibility);
+  }
+
+  document.querySelectorAll('.stealth-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', toggleControlsVisibility);
+  });
+}
+
+function toggleControlsVisibility() {
+  const isCurrentlyHidden = document.body.classList.toggle('controls-hidden');
+  localStorage.setItem('stealth_controls_hidden', isCurrentlyHidden ? '1' : '0');
+  updateControlsToggleButtons(isCurrentlyHidden);
+  showPageFlipToast(isCurrentlyHidden ? 'Đã ẩn các nút điều khiển (Nhấn phím H để hiện lại)' : 'Đã hiện các nút điều khiển đọc');
+}
+
+function updateControlsToggleButtons(isHidden) {
+  const floatingBtn = document.getElementById('btn-toggle-ctrls-floating');
+  if (floatingBtn) {
+    floatingBtn.innerHTML = isHidden
+      ? '<span class="stealth-toggle-icon">👁</span><span class="stealth-toggle-text">Hiện điều khiển (H)</span>'
+      : '<span class="stealth-toggle-icon">👁</span><span class="stealth-toggle-text">Ẩn điều khiển (H)</span>';
+    floatingBtn.title = isHidden ? 'Nhấp để hiện các nút điều khiển đọc (Phím tắt: H)' : 'Nhấp để ẩn các nút điều khiển đọc (Phím tắt: H)';
+  }
+
+  document.querySelectorAll('.stealth-toggle-btn').forEach(btn => {
+    btn.innerHTML = isHidden ? '👁 Hiện nút (H)' : '👁 Ẩn nút (H)';
+    btn.title = isHidden ? 'Hiện các nút điều khiển đọc (Phím tắt: H)' : 'Ẩn các nút điều khiển đọc (Phím tắt: H)';
+  });
 }
 
 // ==========================================================
@@ -599,7 +965,15 @@ function launchConfetti(originX, originY, count = 60) {
 // EVENT LISTENERS & HOTKEYS
 // ==========================================================
 function initEventListeners() {
-  ['btn-boss-key-gsheet', 'btn-boss-key-excel', 'btn-boss-key-vscode'].forEach(id => {
+  [
+    'btn-boss-key-gsheet',
+    'btn-boss-key-excel',
+    'btn-boss-key-vscode',
+    'btn-boss-key-photoshop',
+    'btn-boss-key-blender',
+    'btn-boss-key-linkedin',
+    'btn-boss-key-autocad'
+  ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleBossKey);
   });
@@ -630,7 +1004,15 @@ function initEventListeners() {
       return;
     }
 
-    if (e.target.tagName === 'INPUT' && !e.target.id.includes('jump')) {
+    const activeEl = document.activeElement;
+    const tag = (activeEl?.tagName || e.target?.tagName || '').toUpperCase();
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || activeEl?.isContentEditable || e.target?.isContentEditable) {
+      if (!e.target?.id?.includes('jump')) return;
+    }
+
+    if (e.key === 'h' || e.key === 'H') {
+      e.preventDefault();
+      toggleControlsVisibility();
       return;
     }
 
@@ -659,6 +1041,16 @@ function initEventListeners() {
   if (fileInput) fileInput.addEventListener('change', handleFileSelect);
   if (modalFileInput) modalFileInput.addEventListener('change', handleFileSelect);
 
+  document.querySelectorAll('label[for]').forEach(label => {
+    const input = document.getElementById(label.htmlFor);
+    if (!input || input.type !== 'file') return;
+
+    label.addEventListener('click', event => {
+      event.preventDefault();
+      input.click();
+    });
+  });
+
   const dropArea = document.getElementById('modal-drop-area');
   if (dropArea) {
     ['dragenter', 'dragover'].forEach(name => {
@@ -677,19 +1069,29 @@ function initEventListeners() {
       e.preventDefault();
       dropArea.classList.remove('dragover');
       const files = e.dataTransfer.files;
-      if (files.length && files[0].type === 'application/pdf') {
-        processPdfFile(files[0]);
+      if (files.length && isSupportedDocument(files[0])) {
+        processDocumentFile(files[0]);
         closeModal();
+      } else if (files.length) {
+        alert('Chỉ hỗ trợ file PDF, TXT hoặc EPUB.');
       }
     });
   }
 
   // Page Controls
-  ['gs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev'].forEach(id => {
+  [
+    'gs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
+    'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
+    'autocad-btn-prev'
+  ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(-1));
   });
-  ['gs-btn-next', 'excel-btn-next', 'vsc-btn-next'].forEach(id => {
+  [
+    'gs-btn-next', 'excel-btn-next', 'vsc-btn-next',
+    'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
+    'autocad-btn-next'
+  ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(1));
   });
@@ -709,7 +1111,11 @@ function initEventListeners() {
   });
 
   // Auto Scroll
-  ['gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll'].forEach(id => {
+  [
+    'gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
+    'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
+    'autocad-btn-autoscroll'
+  ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleAutoScroll);
   });
@@ -920,22 +1326,55 @@ function switchSheet(targetId) {
   });
 }
 
+function updateBossButton(btn, bossModeActive) {
+  if (!btn) return;
+  btn.innerHTML = bossModeActive
+    ? '<span class="boss-badge">ESC</span> Quay lại'
+    : '<span class="boss-badge">ESC</span> Báo cáo nhanh';
+  btn.style.backgroundColor = bossModeActive ? '#0F9D58' : '#d93025';
+}
+
 function toggleBossKey() {
   const bossButtons = [
     document.getElementById('btn-boss-key-gsheet'),
     document.getElementById('btn-boss-key-excel'),
-    document.getElementById('btn-boss-key-vscode')
+    document.getElementById('btn-boss-key-vscode'),
+    document.getElementById('btn-boss-key-photoshop'),
+    document.getElementById('btn-boss-key-blender'),
+    document.getElementById('btn-boss-key-linkedin'),
+    document.getElementById('btn-boss-key-autocad'),
   ];
 
   if (state.bossModeActive) {
     state.bossModeActive = false;
     switchSheet(state.previousSheetId || 'view-sheet-story');
     bossButtons.forEach(btn => {
-      if (btn) {
-        btn.innerHTML = '<span class="boss-badge">ESC</span> 🚨 Sếp tới!';
-        btn.style.backgroundColor = '#d93025';
-      }
+      if (btn) updateBossButton(btn, false);
     });
+
+    // Photoshop toggle
+    const psArtboard = document.getElementById('ps-artboard-view');
+    const psBoss = document.getElementById('ps-boss-view');
+    if (psArtboard) psArtboard.style.display = 'flex';
+    if (psBoss) psBoss.style.display = 'none';
+
+    // Blender toggle
+    const bStory = document.getElementById('blender-story-view');
+    const bBoss = document.getElementById('blender-boss-view');
+    if (bStory) bStory.style.display = 'block';
+    if (bBoss) bBoss.style.display = 'none';
+
+    // LinkedIn toggle
+    const lnStory = document.getElementById('linkedin-story-stream');
+    const lnBoss = document.getElementById('linkedin-boss-view');
+    if (lnStory) lnStory.style.display = 'flex';
+    if (lnBoss) lnBoss.style.display = 'none';
+
+    // AutoCAD toggle
+    const cadStory = document.getElementById('autocad-story-view');
+    const cadBoss = document.getElementById('autocad-boss-view');
+    if (cadStory) cadStory.style.display = 'flex';
+    if (cadBoss) cadBoss.style.display = 'none';
 
     // In VS Code, re-render the novel code
     if (state.theme === 'theme-vscode') {
@@ -947,11 +1386,32 @@ function toggleBossKey() {
     stopAutoScroll();
     switchSheet('view-sheet-financial');
     bossButtons.forEach(btn => {
-      if (btn) {
-        btn.innerHTML = '<span class="boss-badge">ESC</span> 🟢 An toàn (Đọc tiếp)';
-        btn.style.backgroundColor = '#0F9D58';
-      }
+      if (btn) updateBossButton(btn, true);
     });
+
+    // Photoshop toggle
+    const psArtboard = document.getElementById('ps-artboard-view');
+    const psBoss = document.getElementById('ps-boss-view');
+    if (psArtboard) psArtboard.style.display = 'none';
+    if (psBoss) psBoss.style.display = 'block';
+
+    // Blender toggle
+    const bStory = document.getElementById('blender-story-view');
+    const bBoss = document.getElementById('blender-boss-view');
+    if (bStory) bStory.style.display = 'none';
+    if (bBoss) bBoss.style.display = 'flex';
+
+    // LinkedIn toggle
+    const lnStory = document.getElementById('linkedin-story-stream');
+    const lnBoss = document.getElementById('linkedin-boss-view');
+    if (lnStory) lnStory.style.display = 'none';
+    if (lnBoss) lnBoss.style.display = 'block';
+
+    // AutoCAD toggle
+    const cadStory = document.getElementById('autocad-story-view');
+    const cadBoss = document.getElementById('autocad-boss-view');
+    if (cadStory) cadStory.style.display = 'none';
+    if (cadBoss) cadBoss.style.display = 'block';
 
     // In VS Code, render pure algorithm code for Boss Key
     if (state.theme === 'theme-vscode') {
@@ -960,28 +1420,44 @@ function toggleBossKey() {
   }
 }
 // ==========================================================
-// DUAL PDF PARSING & CONTINUOUS STREAM INITIALIZATION
+// DOCUMENT PARSING & CONTINUOUS STREAM INITIALIZATION
 // ==========================================================
 function handleFileSelect(e) {
   const file = e.target.files[0];
   if (!file) return;
-  processPdfFile(file);
+  processDocumentFile(file);
+  e.target.value = '';
 }
 
-async function processPdfFile(file) {
-  if (!file.name.toLowerCase().endsWith('.pdf') && file.type !== 'application/pdf') {
-    alert('Vui lòng chọn file định dạng PDF');
-    return;
-  }
+const PDF_INITIAL_PAGE_COUNT = 5;
+const PDF_EXTRACTION_CONCURRENCY = 4;
+const TEXT_CHUNKS_PER_PAGE = 80;
+const MAX_DOCUMENT_SIZE = 100 * 1024 * 1024;
+const MAX_EPUB_ENTRIES = 5000;
+const MAX_EPUB_TEXT_LENGTH = 30 * 1024 * 1024;
+const MAX_EPUB_UNCOMPRESSED_SIZE = 150 * 1024 * 1024;
+let pdfBackendAvailable = null;
 
-  showLoading('Đang đồng bộ dữ liệu vào hệ thống...');
+function getDocumentExtension(file) {
+  const name = file && file.name ? file.name.toLowerCase() : '';
+  const dotIndex = name.lastIndexOf('.');
+  return dotIndex >= 0 ? name.slice(dotIndex + 1) : '';
+}
+
+function isSupportedDocument(file) {
+  return ['pdf', 'txt', 'epub'].includes(getDocumentExtension(file));
+}
+
+function prepareDocumentLoad(file) {
+  const loadToken = ++state.pdfLoadToken;
+  state.isPdfProcessing = true;
+  state.loadedPages = 0;
   state.pdfFileName = file.name;
+  showLoading('Đang đồng bộ dữ liệu vào hệ thống...');
 
-  // Real novel filename is ONLY displayed inside the Duolingo landing portal
   const portalNameLabel = document.getElementById('portal-pdf-filename');
   if (portalNameLabel) portalNameLabel.textContent = file.name;
 
-  // Workspace headers always display corporate camouflage filenames
   const gsLabel = document.getElementById('gs-file-name-label');
   if (gsLabel) gsLabel.textContent = 'KPI_Report_Q3_2026.pdf';
 
@@ -993,77 +1469,509 @@ async function processPdfFile(file) {
 
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
+  return loadToken;
+}
 
-  // Strategy 1: High-Speed Python Server API
+function validateDocumentFile(file) {
+  if (!isSupportedDocument(file)) {
+    throw new Error('Chỉ hỗ trợ file PDF, TXT hoặc EPUB.');
+  }
+  if (file.size > MAX_DOCUMENT_SIZE) {
+    throw new Error('File lớn hơn 100 MB. Hãy chọn file nhỏ hơn để tránh trình duyệt bị treo.');
+  }
+}
+
+async function processDocumentFile(file) {
   try {
-    const formData = new FormData();
-    formData.append('pdf', file, file.name);
-
-    const res = await fetch('/api/extract-pdf', {
-      method: 'POST',
-      body: formData
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      if (data.success && data.totalPages > 0) {
-        state.totalPages = data.totalPages;
-        state.firstStoryPage = data.firstStoryPage || 1;
-
-        showBanner(`✅ Đã nạp thành công toàn bộ <b>${data.totalPages}</b> trang sách! Đang đọc liền mạch không ngắt quãng.`);
-        initStoryFromPages(data.pages, data.totalPages, state.firstStoryPage);
-        hideLoading();
-        return;
-      }
-    }
-  } catch (err) {
-    console.log('Backend parser unavailable, falling back to client-side PDF.js...');
+    validateDocumentFile(file);
+  } catch (error) {
+    alert(error.message);
+    return;
   }
 
-  // Strategy 2: Client-side PDF.js Fallback
+  const extension = getDocumentExtension(file);
+  if (extension === 'pdf') return processPdfFile(file);
+  if (extension === 'txt') return processTextFile(file);
+  return processEpubFile(file);
+}
+
+function chunksToPagesData(chunks, chunksPerPage = TEXT_CHUNKS_PER_PAGE) {
+  const pagesData = {};
+  let pageNum = 1;
+
+  for (let start = 0; start < chunks.length; start += chunksPerPage) {
+    pagesData[String(pageNum++)] = chunks.slice(start, start + chunksPerPage);
+  }
+
+  return pagesData;
+}
+
+function finishTextDocument(chunks, formatLabel) {
+  if (chunks.length === 0) throw new Error(`File ${formatLabel} không có nội dung văn bản.`);
+
+  const pagesData = chunksToPagesData(chunks);
+  const totalPages = Object.keys(pagesData).length;
+  state.loadedPages = totalPages;
+  state.isPdfProcessing = false;
+  initStoryFromPages(pagesData, totalPages, 1);
+  showBanner(`Đã nạp thành công file ${formatLabel}: <b>${totalPages}</b> phần đọc.`);
+}
+
+async function processTextFile(file) {
+  const loadToken = prepareDocumentLoad(file);
+
   try {
+    showLoading('Đang đọc nội dung file TXT...');
+    const text = await file.text();
+    if (loadToken !== state.pdfLoadToken) return;
+
+    finishTextDocument(splitTextIntoChunks(text, state.chunkMode), 'TXT');
+  } catch (error) {
+    if (loadToken !== state.pdfLoadToken) return;
+    state.isPdfProcessing = false;
+    console.error('TXT parsing error:', error);
+    alert('Không thể đọc file TXT: ' + error.message);
+  } finally {
+    if (loadToken === state.pdfLoadToken) hideLoading();
+  }
+}
+
+function parseXmlDocument(xmlText, description) {
+  if (/<!DOCTYPE/i.test(xmlText)) {
+    throw new Error(`${description} chứa khai báo DOCTYPE không được hỗ trợ.`);
+  }
+
+  const documentNode = new DOMParser().parseFromString(xmlText, 'application/xml');
+  if (documentNode.getElementsByTagName('parsererror').length > 0) {
+    throw new Error(`${description} không hợp lệ.`);
+  }
+  return documentNode;
+}
+
+function epubElements(documentNode, localName) {
+  return Array.from(documentNode.getElementsByTagNameNS('*', localName));
+}
+
+function normalizeEpubPath(baseDirectory, href) {
+  let decodedHref;
+  try {
+    decodedHref = decodeURIComponent((href || '').split('#')[0].split('?')[0]);
+  } catch (error) {
+    decodedHref = (href || '').split('#')[0].split('?')[0];
+  }
+
+  const segments = `${baseDirectory}/${decodedHref}`.replace(/\\/g, '/').split('/');
+  const normalized = [];
+
+  for (const segment of segments) {
+    if (!segment || segment === '.') continue;
+    if (segment === '..') {
+      if (normalized.length === 0) throw new Error('EPUB chứa đường dẫn không an toàn.');
+      normalized.pop();
+    } else {
+      normalized.push(segment);
+    }
+  }
+
+  return normalized.join('/');
+}
+
+function extractTextFromEpubHtml(htmlText) {
+  const documentNode = new DOMParser().parseFromString(htmlText, 'text/html');
+  documentNode.querySelectorAll('script, style, noscript, template, svg').forEach(node => node.remove());
+
+  const root = documentNode.body || documentNode.documentElement;
+  const blockSelector = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, pre';
+  const blocks = Array.from(root.querySelectorAll(blockSelector))
+    .filter(node => !Array.from(node.children).some(child => child.matches(blockSelector)))
+    .map(node => node.textContent.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+
+  return blocks.length > 0 ? blocks.join('\n\n') : root.textContent.replace(/\s+/g, ' ').trim();
+}
+
+let jsZipLoadPromise = null;
+
+function ensureJsZipLoaded() {
+  if (window.JSZip) return Promise.resolve(window.JSZip);
+  if (jsZipLoadPromise) return jsZipLoadPromise;
+
+  jsZipLoadPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    const timeoutId = setTimeout(() => {
+      script.remove();
+      reject(new Error('Tải thư viện JSZip quá 10 giây. Hãy kiểm tra kết nối tới static/jszip.min.js.'));
+    }, 10000);
+
+    script.src = `static/jszip.min.js?v=20261002-1`;
+    script.async = true;
+    script.onload = () => {
+      clearTimeout(timeoutId);
+      if (window.JSZip) {
+        resolve(window.JSZip);
+      } else {
+        reject(new Error('JSZip đã tải nhưng không khởi tạo được.'));
+      }
+    };
+    script.onerror = () => {
+      clearTimeout(timeoutId);
+      reject(new Error('Không tải được static/jszip.min.js.'));
+    };
+    document.head.appendChild(script);
+  }).catch(error => {
+    jsZipLoadPromise = null;
+    throw error;
+  });
+
+  return jsZipLoadPromise;
+}
+
+async function processEpubFile(file) {
+  const loadToken = prepareDocumentLoad(file);
+  const startedAt = performance.now();
+  let currentStage = 'Đang chuẩn bị đọc EPUB';
+
+  const updateEpubStatus = (stage) => {
+    currentStage = stage;
+    const elapsedSeconds = Math.max(0, Math.floor((performance.now() - startedAt) / 1000));
+    const waitingMessage = elapsedSeconds >= 8
+      ? 'File vẫn đang được xử lý, chưa phát hiện lỗi. EPUB có chương lớn sẽ cần thêm thời gian.'
+      : 'Ứng dụng đang mở file EPUB, đây chưa phải là lỗi.';
+    showLoading(`${stage} (${elapsedSeconds}s)`, `${file.name} · ${waitingMessage}`);
+  };
+
+  const yieldToBrowser = () => new Promise(resolve => {
+    requestAnimationFrame(() => setTimeout(resolve, 0));
+  });
+
+  const statusTimer = setInterval(() => {
+    if (loadToken === state.pdfLoadToken) updateEpubStatus(currentStage);
+  }, 1000);
+
+  try {
+    updateEpubStatus('Đang nạp thư viện đọc EPUB');
+    const JSZipLibrary = await ensureJsZipLoaded();
+
+    updateEpubStatus('Đang giải nén cấu trúc EPUB');
+    await yieldToBrowser();
+    const zip = await JSZipLibrary.loadAsync(await file.arrayBuffer(), {
+      createFolders: false
+    });
+    if (loadToken !== state.pdfLoadToken) return;
+
+    const entries = Object.values(zip.files);
+    if (entries.length > MAX_EPUB_ENTRIES) {
+      throw new Error(`EPUB có quá nhiều tệp con (${entries.length}/${MAX_EPUB_ENTRIES}).`);
+    }
+
+    const knownUncompressedSize = entries.reduce((total, entry) => {
+      const size = entry._data && Number.isFinite(entry._data.uncompressedSize)
+        ? entry._data.uncompressedSize
+        : 0;
+      return total + size;
+    }, 0);
+    if (knownUncompressedSize > MAX_EPUB_UNCOMPRESSED_SIZE) {
+      throw new Error('Dung lượng EPUB sau giải nén vượt quá giới hạn 150 MB.');
+    }
+
+    const containerEntry = zip.file('META-INF/container.xml');
+    if (!containerEntry) throw new Error('Thiếu META-INF/container.xml.');
+
+    updateEpubStatus('Đang đọc thông tin sách và mục lục');
+    const containerXml = parseXmlDocument(await containerEntry.async('string'), 'container.xml');
+    const rootfile = epubElements(containerXml, 'rootfile')[0];
+    const packagePath = rootfile ? rootfile.getAttribute('full-path') : '';
+    if (!packagePath) throw new Error('Không tìm thấy package document trong EPUB.');
+
+    const normalizedPackagePath = normalizeEpubPath('', packagePath);
+    const packageEntry = zip.file(normalizedPackagePath);
+    if (!packageEntry) throw new Error('Không tìm thấy file nội dung chính của EPUB.');
+
+    const packageXml = parseXmlDocument(await packageEntry.async('string'), 'package document');
+    const packageDirectory = normalizedPackagePath.includes('/')
+      ? normalizedPackagePath.slice(0, normalizedPackagePath.lastIndexOf('/'))
+      : '';
+
+    const manifest = new Map();
+    epubElements(packageXml, 'item').forEach(item => {
+      const id = item.getAttribute('id');
+      const href = item.getAttribute('href');
+      if (id && href) manifest.set(id, normalizeEpubPath(packageDirectory, href));
+    });
+
+    const spinePaths = epubElements(packageXml, 'itemref')
+      .map(itemref => manifest.get(itemref.getAttribute('idref')))
+      .filter(Boolean);
+    if (spinePaths.length === 0) throw new Error('EPUB không có thứ tự chương đọc (spine).');
+
+    const pagesData = {};
+    let pageNum = 1;
+    let totalTextLength = 0;
+
+    for (let index = 0; index < spinePaths.length; index++) {
+      if (loadToken !== state.pdfLoadToken) return;
+
+      const chapterEntry = zip.file(spinePaths[index]);
+      if (!chapterEntry) continue;
+
+      updateEpubStatus(`Đang đọc chương ${index + 1} / ${spinePaths.length}`);
+      const chapterHtml = await chapterEntry.async('string');
+      totalTextLength += chapterHtml.length;
+      if (totalTextLength > MAX_EPUB_TEXT_LENGTH) {
+        throw new Error('Nội dung EPUB sau giải nén vượt quá giới hạn 30 MB.');
+      }
+
+      updateEpubStatus(`Đang tách văn bản chương ${index + 1} / ${spinePaths.length}`);
+      await yieldToBrowser();
+      const chapterText = extractTextFromEpubHtml(chapterHtml);
+      const chunks = splitTextIntoChunks(chapterText, state.chunkMode);
+      for (let start = 0; start < chunks.length; start += TEXT_CHUNKS_PER_PAGE) {
+        pagesData[String(pageNum++)] = chunks.slice(start, start + TEXT_CHUNKS_PER_PAGE);
+      }
+
+      await yieldToBrowser();
+    }
+
+    if (loadToken !== state.pdfLoadToken) return;
+    const totalPages = pageNum - 1;
+    if (totalPages < 1) throw new Error('EPUB không có nội dung văn bản có thể đọc.');
+
+    updateEpubStatus(`Đang dựng ${totalPages} phần đọc lên giao diện`);
+    await yieldToBrowser();
+    state.loadedPages = totalPages;
+    state.isPdfProcessing = false;
+    initStoryFromPages(pagesData, totalPages, 1);
+    const elapsedSeconds = ((performance.now() - startedAt) / 1000).toFixed(1);
+    showBanner(`Đã nạp thành công EPUB: <b>${totalPages}</b> phần đọc từ ${spinePaths.length} chương trong <b>${elapsedSeconds} giây</b>.`);
+  } catch (error) {
+    if (loadToken !== state.pdfLoadToken) return;
+    state.isPdfProcessing = false;
+    console.error('EPUB parsing error:', error);
+    alert(`Không thể đọc file EPUB tại bước "${currentStage}": ${error.message}`);
+  } finally {
+    clearInterval(statusTimer);
+    if (loadToken === state.pdfLoadToken) hideLoading();
+  }
+}
+
+async function hasPdfBackend() {
+  if (pdfBackendAvailable !== null) return pdfBackendAvailable;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 1500);
+
+  try {
+    const response = await fetch('/api/health', {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      cache: 'no-store',
+      credentials: 'same-origin',
+      signal: controller.signal
+    });
+    if (!response.ok) {
+      pdfBackendAvailable = false;
+    } else {
+      const data = await response.json();
+      pdfBackendAvailable = data.ok === true && data.pdfExtraction === true;
+    }
+  } catch (error) {
+    pdfBackendAvailable = false;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  return pdfBackendAvailable;
+}
+
+async function extractPdfPage(pdfDoc, pageNum) {
+  let page = null;
+
+  try {
+    page = await pdfDoc.getPage(pageNum);
+    const textContent = await page.getTextContent();
+    let fullText = '';
+    let lastY = null;
+
+    textContent.items.forEach(item => {
+      const currentY = item.transform ? item.transform[5] : null;
+      if (lastY !== null && currentY !== null && Math.abs(currentY - lastY) > 6) {
+        fullText += '\n';
+      }
+      fullText += `${item.str || ''} `;
+      lastY = currentY;
+    });
+
+    return {
+      pageNum,
+      chunks: splitTextIntoChunks(fullText, state.chunkMode),
+      textLength: fullText.trim().length
+    };
+  } catch (error) {
+    console.warn(`Không thể trích xuất trang ${pageNum}:`, error);
+    return { pageNum, chunks: [], textLength: 0 };
+  } finally {
+    if (page && typeof page.cleanup === 'function') page.cleanup();
+  }
+}
+
+function appendExtractedPages(pageResults) {
+  pageResults
+    .sort((a, b) => a.pageNum - b.pageNum)
+    .forEach(({ pageNum, chunks }) => {
+      if (Object.prototype.hasOwnProperty.call(state.pageStartIndices, pageNum)) return;
+
+      state.pageStartIndices[pageNum] = state.allChunks.length;
+      const pageChunks = chunks.length > 0
+        ? chunks
+        : [`[Trang ${pageNum}: Hình ảnh hoặc trang scan không chứa ký tự văn bản]`];
+
+      pageChunks.forEach((text, indexInPage) => {
+        state.allChunks.push({
+          text,
+          page: pageNum,
+          indexInPage,
+          globalIndex: state.allChunks.length
+        });
+      });
+
+      state.loadedPages = Math.max(state.loadedPages, pageNum);
+    });
+
+  updatePaginationUI();
+}
+
+function initProgressiveStory(initialPages, totalPages) {
+  state.allChunks = [];
+  state.pageStartIndices = {};
+  state.renderedCount = 0;
+  state.loadedPages = 0;
+  state.totalPages = totalPages;
+
+  appendExtractedPages(initialPages);
+
+  const firstTextPage = initialPages.find(page => page.textLength > 80);
+  const startPage = firstTextPage ? firstTextPage.pageNum : 1;
+  const startIdx = state.pageStartIndices[startPage] || 0;
+  state.firstStoryPage = startPage;
+  state.currentPage = startPage;
+  state.currentGlobalIndex = startIdx;
+
+  applyTheme(state.theme);
+  renderContinuousView(false, startIdx);
+  saveState();
+  persistDocumentCache().catch(() => {});
+}
+
+async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken) {
+  for (let batchStart = startPage; batchStart <= totalPages; batchStart += PDF_EXTRACTION_CONCURRENCY) {
+    if (loadToken !== state.pdfLoadToken) return;
+
+    const batchEnd = Math.min(batchStart + PDF_EXTRACTION_CONCURRENCY - 1, totalPages);
+    const pageNumbers = [];
+    for (let pageNum = batchStart; pageNum <= batchEnd; pageNum++) pageNumbers.push(pageNum);
+
+    const pageResults = await Promise.all(pageNumbers.map(pageNum => extractPdfPage(pdfDoc, pageNum)));
+    if (loadToken !== state.pdfLoadToken) return;
+
+    appendExtractedPages(pageResults);
+    showBanner(`Đã sẵn sàng <b>${state.loadedPages}/${totalPages}</b> trang. Bạn có thể đọc trong khi các trang còn lại đang được xử lý.`);
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
+
+  if (loadToken !== state.pdfLoadToken) return;
+  state.isPdfProcessing = false;
+  updatePaginationUI();
+  showBanner(`Đã nạp thành công toàn bộ <b>${totalPages}</b> trang sách!`);
+  saveState();
+}
+
+async function processPdfFile(file) {
+  const loadToken = prepareDocumentLoad(file);
+
+  // Only upload the PDF when a real parser endpoint is available.
+  if (await hasPdfBackend()) {
+    try {
+      const formData = new FormData();
+      formData.append('pdf', file, file.name);
+
+      const res = await fetch('/api/extract-pdf', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (loadToken !== state.pdfLoadToken) return;
+        if (data.success && data.totalPages > 0) {
+          state.totalPages = data.totalPages;
+          state.firstStoryPage = data.firstStoryPage || 1;
+          state.loadedPages = data.totalPages;
+          state.isPdfProcessing = false;
+
+          showBanner(`Đã nạp thành công toàn bộ <b>${data.totalPages}</b> trang sách!`);
+          initStoryFromPages(data.pages, data.totalPages, state.firstStoryPage);
+          hideLoading();
+          return;
+        }
+      }
+    } catch (err) {
+      console.log('Backend parser unavailable, falling back to client-side PDF.js...', err);
+    }
+  }
+
+  // Client-side fallback: render the first pages, then continue in background.
+  try {
+    if (!window.pdfjsLib) throw new Error('Thư viện PDF.js chưa sẵn sàng');
+
     const arrayBuffer = await file.arrayBuffer();
+    if (loadToken !== state.pdfLoadToken) return;
+
     const loadingTask = pdfjsLib.getDocument({
       data: arrayBuffer,
       cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-      cMapPacked: true
+      cMapPacked: true,
+      isEvalSupported: false,
+      enableScripting: false
     });
-    
+
     state.pdfDoc = await loadingTask.promise;
+    if (loadToken !== state.pdfLoadToken) return;
+
     state.totalPages = state.pdfDoc.numPages;
-    const pagesData = {};
+    if (state.totalPages < 1) throw new Error('File PDF không có trang nào');
+    const initialPageCount = Math.min(PDF_INITIAL_PAGE_COUNT, state.totalPages);
+    const initialPageNumbers = Array.from({ length: initialPageCount }, (_, index) => index + 1);
 
-    showBanner(`Đang trích xuất toàn bộ ${state.totalPages} trang để đọc liền mạch...`);
+    showLoading(`Đang trích xuất ${initialPageCount} trang đầu tiên...`);
+    const initialPages = await Promise.all(initialPageNumbers.map(pageNum => extractPdfPage(state.pdfDoc, pageNum)));
+    if (loadToken !== state.pdfLoadToken) return;
 
-    for (let p = 1; p <= state.totalPages; p++) {
-      if (p % 10 === 0 || p === state.totalPages) {
-        showLoading(`Đang trích xuất nội dung: Trang ${p} / ${state.totalPages}...`);
-      }
-      const page = await state.pdfDoc.getPage(p);
-      const textContent = await page.getTextContent();
-      
-      let fullText = '';
-      let lastY = null;
-      
-      textContent.items.forEach(item => {
-        if (lastY !== null && Math.abs(item.transform[5] - lastY) > 6) {
-          fullText += '\n';
-        }
-        fullText += item.str + ' ';
-        lastY = item.transform[5];
-      });
+    initProgressiveStory(initialPages, state.totalPages);
+    hideLoading();
 
-      const chunks = splitTextIntoChunks(fullText, state.chunkMode);
-      pagesData[String(p)] = chunks;
+    if (initialPageCount < state.totalPages) {
+      showBanner(`Đã sẵn sàng <b>${initialPageCount}/${state.totalPages}</b> trang. Các trang còn lại đang được xử lý nền.`);
+      extractRemainingPdfPages(state.pdfDoc, initialPageCount + 1, state.totalPages, loadToken)
+        .catch(error => {
+          if (loadToken !== state.pdfLoadToken) return;
+          state.isPdfProcessing = false;
+          updatePaginationUI();
+          console.error('Background PDF parsing error:', error);
+          showBanner(`Đã đọc được <b>${state.loadedPages}/${state.totalPages}</b> trang. Một số trang còn lại không thể xử lý.`);
+        });
+    } else {
+      state.isPdfProcessing = false;
+      updatePaginationUI();
+      showBanner(`Đã nạp thành công toàn bộ <b>${state.totalPages}</b> trang sách!`);
     }
-
-    showBanner(`✅ Đã nạp thành công toàn bộ <b>${state.totalPages}</b> trang sách! Đang đọc liền mạch không ngắt quãng.`);
-    initStoryFromPages(pagesData, state.totalPages, 1);
   } catch (err) {
+    if (loadToken !== state.pdfLoadToken) return;
+    state.isPdfProcessing = false;
     console.error('PDF parsing error:', err);
     alert('Không thể trích xuất file PDF: ' + err.message);
   } finally {
-    hideLoading();
+    if (loadToken === state.pdfLoadToken) hideLoading();
   }
 }
 
@@ -1115,6 +2023,9 @@ function splitTextIntoChunks(text, mode) {
 function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
   state.allChunks = [];
   state.pageStartIndices = {};
+  state.totalPages = totalPages;
+  state.loadedPages = totalPages;
+  state.isPdfProcessing = false;
   let globalIdx = 0;
 
   for (let p = 1; p <= totalPages; p++) {
@@ -1148,12 +2059,15 @@ function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
   applyTheme(state.theme);
   renderContinuousView(false, startIdx);
   saveState();
+  persistDocumentCache().catch(() => {});
 }
 
 function initStoryFromChunks(chunks) {
   state.allChunks = [];
   state.pageStartIndices = { 1: 0 };
   state.totalPages = 1;
+  state.loadedPages = 1;
+  state.isPdfProcessing = false;
   state.currentPage = 1;
   state.currentGlobalIndex = 0;
 
@@ -1183,6 +2097,18 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
     const codeContainer = document.getElementById('vsc-code-lines');
     if (lineGutter) lineGutter.innerHTML = '';
     if (codeContainer) codeContainer.innerHTML = '';
+  } else if (state.theme === 'theme-photoshop') {
+    const stream = document.getElementById('ps-story-stream');
+    if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-blender') {
+    const stream = document.getElementById('blender-story-stream');
+    if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-linkedin') {
+    const stream = document.getElementById('linkedin-story-stream');
+    if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-autocad') {
+    const stream = document.getElementById('autocad-story-stream');
+    if (stream) stream.innerHTML = '';
   } else {
     const tbody = document.getElementById('story-tbody');
     if (tbody) tbody.innerHTML = '';
@@ -1200,6 +2126,14 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
 function renderNextBatch(count = 100) {
   if (state.theme === 'theme-vscode') {
     appendVSCodeBatch(count);
+  } else if (state.theme === 'theme-photoshop') {
+    appendPhotoshopBatch(count);
+  } else if (state.theme === 'theme-blender') {
+    appendBlenderBatch(count);
+  } else if (state.theme === 'theme-linkedin') {
+    appendLinkedInBatch(count);
+  } else if (state.theme === 'theme-autocad') {
+    appendAutoCADBatch(count);
   } else {
     appendSpreadsheetBatch(count);
   }
@@ -1352,14 +2286,14 @@ function appendVSCodeBatch(count) {
     const varName = `record_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
     addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># [Trang ${chunk.page} - Dòng ${chunk.indexInPage + 1}]</span>`);
     addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">${varName}</span> = (`);
-    
+
     const storyHtml = `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"${escapeHtml(chunk.text)}"</span>`;
     addVSCLine(storyHtml, true, chunk);
     addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)`);
     addVSCLine('');
   }
 
-  if (end === state.allChunks.length) {
+  if (end === state.allChunks.length && !state.isPdfProcessing) {
     addVSCLine('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw-flow">return</span> {<span class="str">"status"</span>: <span class="str">"COMPLETED"</span>, <span class="str">"total_records"</span>: ' + state.allChunks.length + '}');
   }
 
@@ -1397,6 +2331,203 @@ function renderVSCodeBossCode() {
   });
 }
 
+// 4. Adobe Photoshop Artboard Typography Batch Renderer
+function appendPhotoshopBatch(count) {
+  const stream = document.getElementById('ps-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const p = document.createElement('div');
+    p.className = 'ps-story-paragraph';
+    p.id = `ps-story-para-${chunk.globalIndex}`;
+    p.dataset.index = chunk.globalIndex;
+    p.dataset.page = chunk.page;
+
+    p.innerHTML = `
+      <span class="ps-chunk-meta">T&nbsp;&nbsp;Editorial_Copy_${String(chunk.globalIndex + 1).padStart(4, '0')} &nbsp;•&nbsp; Artboard ${chunk.page}</span>
+      <div class="ps-chunk-body">${escapeHtml(chunk.text)}</div>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    p.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(p);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+// 5. Blender Text Editor Batch Renderer
+function appendBlenderBatch(count) {
+  const stream = document.getElementById('blender-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const line = document.createElement('div');
+    line.className = 'blender-code-line';
+    line.id = `blender-story-line-${chunk.globalIndex}`;
+    line.dataset.index = chunk.globalIndex;
+    line.dataset.page = chunk.page;
+
+    const variableName = `copy_block_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
+    line.innerHTML = `
+      <span class="b-line-number">${chunk.globalIndex + 12}</span>
+      <span class="b-code-content"><span class="b-code-var">${variableName}</span> <span class="b-code-op">=</span> <span class="b-story-text">"""${escapeHtml(chunk.text)}"""</span></span>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    line.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(line);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+// 6. LinkedIn Feed Post Batch Renderer (Grouped multi-chunk posts)
+function appendLinkedInBatch(count) {
+  const stream = document.getElementById('linkedin-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const targetEnd = Math.min(start + count, state.allChunks.length);
+  if (start >= targetEnd) return;
+
+  const fragment = document.createDocumentFragment();
+  const authors = [
+    { name: 'Nguyen Tran Hai Phong', role: 'Senior Solution Architect & Tech Lead', avatar: 'NP' },
+    { name: 'Dr. Michael Chen', role: 'Principal AI Researcher & Author', avatar: 'MC' },
+    { name: 'Sophia Duong', role: 'Director of Product Strategy | Global Tech', avatar: 'SD' },
+    { name: 'Marcus Vance', role: 'Engineering Fellow & Executive Advisor', avatar: 'MV' }
+  ];
+
+  let currentIdx = start;
+  while (currentIdx < targetEnd) {
+    // Group 4 to 5 chunks together into 1 cohesive post
+    const postChunkBatch = [];
+    const batchSize = 4;
+    const postEnd = Math.min(currentIdx + batchSize, state.allChunks.length);
+
+    for (let j = currentIdx; j < postEnd; j++) {
+      postChunkBatch.push(state.allChunks[j]);
+    }
+
+    const firstChunk = postChunkBatch[0];
+    const lastChunk = postChunkBatch[postChunkBatch.length - 1];
+    const postGlobalIndex = firstChunk.globalIndex;
+    const author = authors[postGlobalIndex % authors.length];
+    const hoursAgo = (postGlobalIndex % 8) + 1;
+    const likes = 120 + ((postGlobalIndex * 37) % 890);
+    const comments = 12 + ((postGlobalIndex * 13) % 94);
+
+    const post = document.createElement('div');
+    post.className = 'linkedin-post-card';
+    post.id = `linkedin-post-${postGlobalIndex}`;
+    post.dataset.index = postGlobalIndex;
+    post.dataset.page = firstChunk.page;
+
+    const pageSpan = firstChunk.page === lastChunk.page ? `Trang ${firstChunk.page}` : `Trang ${firstChunk.page} - ${lastChunk.page}`;
+
+    // Generate paragraphs
+    let paragraphsHtml = '';
+    postChunkBatch.forEach((chunk, pIdx) => {
+      paragraphsHtml += `
+        <div class="ln-post-paragraph" id="ln-para-${chunk.globalIndex}" data-index="${chunk.globalIndex}" data-page="${chunk.page}">
+          <span class="ln-paragraph-seq">§${chunk.globalIndex + 1}</span>
+          ${escapeHtml(chunk.text)}
+        </div>
+      `;
+    });
+
+    post.innerHTML = `
+      <div class="ln-post-author">
+        <div class="ln-avatar-mini">${author.avatar}</div>
+        <div>
+          <h5>${author.name} • 1st</h5>
+          <span>${author.role}</span>
+          <span style="font-size: 10px; color: #888;">${hoursAgo} giờ trước • 🌐 • ${pageSpan}</span>
+        </div>
+      </div>
+      <div class="ln-post-paragraphs-wrapper">
+        ${paragraphsHtml}
+      </div>
+      <div class="ln-hashtags">#Leadership #Innovation #GrowthMindset #Literature #DeepWork</div>
+      <div class="ln-reaction-bar">
+        <span>👍 ❤️ 💡 ${likes}</span>
+        <span>${comments} bình luận • 8 lượt chia sẻ</span>
+      </div>
+    `;
+
+    // Click on individual paragraphs selects that chunk
+    post.querySelectorAll('.ln-post-paragraph').forEach(para => {
+      para.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const gIdx = parseInt(para.dataset.index, 10);
+        setActiveRow(gIdx, true);
+      });
+    });
+
+    post.addEventListener('click', () => {
+      setActiveRow(firstChunk.globalIndex, true);
+    });
+
+    fragment.appendChild(post);
+    currentIdx = postEnd;
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = currentIdx;
+}
+
+// 7. AutoCAD General Notes Batch Renderer
+function appendAutoCADBatch(count) {
+  const stream = document.getElementById('autocad-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const note = document.createElement('div');
+    note.className = 'cad-note-item';
+    note.id = `autocad-note-${chunk.globalIndex}`;
+    note.dataset.index = chunk.globalIndex;
+    note.dataset.page = chunk.page;
+
+    const noteTag = `GN-${String(chunk.page).padStart(2, '0')}.${String(chunk.indexInPage + 1).padStart(2, '0')}`;
+    note.innerHTML = `
+      <span class="cad-note-tag">${noteTag}:</span>
+      <span class="cad-note-text">${escapeHtml(chunk.text)}</span>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    note.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(note);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+
 // ==========================================================
 // SELECTION, FOCUS & NAVIGATION
 // ==========================================================
@@ -1429,6 +2560,57 @@ function setActiveRow(index, scrollIntoView = true) {
       const percent = Math.round(((index + 1) / Math.max(1, state.allChunks.length)) * 100);
       vscProgress.textContent = `Page ${state.currentPage}/${state.totalPages} (${percent}%)`;
     }
+  } else if (state.theme === 'theme-photoshop') {
+    document.querySelectorAll('.ps-story-paragraph').forEach(p => p.classList.remove('active-paragraph'));
+    const activeP = document.getElementById(`ps-story-para-${index}`);
+    if (activeP) {
+      activeP.classList.add('active-paragraph');
+      if (scrollIntoView) {
+        activeP.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  } else if (state.theme === 'theme-blender') {
+    document.querySelectorAll('.blender-code-line').forEach(l => l.classList.remove('active-line'));
+    const activeL = document.getElementById(`blender-story-line-${index}`);
+    if (activeL) {
+      activeL.classList.add('active-line');
+      if (scrollIntoView) {
+        activeL.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  } else if (state.theme === 'theme-linkedin') {
+    document.querySelectorAll('.linkedin-post-card').forEach(c => c.classList.remove('active-post'));
+    document.querySelectorAll('.ln-post-paragraph').forEach(p => p.classList.remove('active-paragraph'));
+
+    const activePara = document.getElementById(`ln-para-${index}`);
+    if (activePara) {
+      activePara.classList.add('active-paragraph');
+      const parentPost = activePara.closest('.linkedin-post-card');
+      if (parentPost) {
+        parentPost.classList.add('active-post');
+      }
+      if (scrollIntoView) {
+        activePara.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } else {
+      // Fallback for legacy post if any
+      const activePost = document.getElementById(`linkedin-post-${index}`);
+      if (activePost) {
+        activePost.classList.add('active-post');
+        if (scrollIntoView) {
+          activePost.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+  } else if (state.theme === 'theme-autocad') {
+    document.querySelectorAll('.cad-note-item').forEach(n => n.classList.remove('active-note'));
+    const activeNote = document.getElementById(`autocad-note-${index}`);
+    if (activeNote) {
+      activeNote.classList.add('active-note');
+      if (scrollIntoView) {
+        activeNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   } else {
     document.querySelectorAll('#story-tbody tr').forEach(r => r.classList.remove('selected-story-row'));
     document.querySelectorAll('.story-cell').forEach(c => c.classList.remove('cell-focused'));
@@ -1456,10 +2638,9 @@ function setActiveRow(index, scrollIntoView = true) {
 
     const cellAddr = document.getElementById('active-cell-address');
     if (cellAddr) cellAddr.textContent = `D${index + 2}`;
-
-    updateReadingProgressStatus(index);
   }
 
+  updateReadingProgressStatus(index);
   saveState();
 }
 
@@ -1473,8 +2654,13 @@ function updateReadingProgressStatus(index) {
 
 function updatePaginationUI() {
   const text = `${state.currentPage} / ${state.totalPages}`;
+  const maxNavigablePage = state.isPdfProcessing ? state.loadedPages : state.totalPages;
   
-  ['gs-page-indicator', 'excel-page-indicator', 'vsc-page-indicator'].forEach(id => {
+  [
+    'gs-page-indicator', 'excel-page-indicator', 'vsc-page-indicator',
+    'ps-page-indicator', 'blender-page-indicator', 'linkedin-page-indicator',
+    'autocad-page-indicator'
+  ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
   });
@@ -1487,14 +2673,22 @@ function updatePaginationUI() {
     }
   });
 
-  ['gs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev'].forEach(id => {
+  [
+    'gs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
+    'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
+    'autocad-btn-prev'
+  ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = state.currentPage <= 1;
   });
 
-  ['gs-btn-next', 'excel-btn-next', 'vsc-btn-next'].forEach(id => {
+  [
+    'gs-btn-next', 'excel-btn-next', 'vsc-btn-next',
+    'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
+    'autocad-btn-next'
+  ].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.disabled = state.currentPage >= state.totalPages;
+    if (el) el.disabled = state.currentPage >= maxNavigablePage;
   });
 }
 
@@ -1502,7 +2696,11 @@ function goToPage(pageNum) {
   pageNum = parseInt(pageNum);
   if (isNaN(pageNum) || pageNum < 1 || pageNum > state.totalPages) return;
 
-  const targetIdx = state.pageStartIndices[pageNum] ?? 0;
+  const targetIdx = state.pageStartIndices[pageNum];
+  if (targetIdx === undefined) {
+    showPageFlipToast(`Trang ${pageNum} đang được xử lý. Thử lại sau ít giây.`);
+    return;
+  }
 
   // Make sure rows up to targetIdx are rendered
   if (targetIdx + 60 > state.renderedCount) {
@@ -1583,15 +2781,19 @@ function initContinuousScrollListeners() {
     });
   }
 
-  const gridScroll = document.getElementById('grid-scroll-container');
-  if (gridScroll) {
-    gridScroll.addEventListener('scroll', () => handleContainerScroll(gridScroll));
-  }
-
-  const vscScroll = document.getElementById('vsc-code-scroll-container');
-  if (vscScroll) {
-    vscScroll.addEventListener('scroll', () => handleContainerScroll(vscScroll));
-  }
+  const scrollContainers = [
+    document.getElementById('grid-scroll-container'),
+    document.getElementById('vsc-code-scroll-container'),
+    document.getElementById('ps-canvas-scroll-container'),
+    document.getElementById('blender-viewport-scroll-container'),
+    document.getElementById('linkedin-feed-scroll-container'),
+    document.getElementById('autocad-canvas-scroll-container'),
+  ];
+  scrollContainers.forEach(container => {
+    if (container) {
+      container.addEventListener('scroll', () => handleContainerScroll(container));
+    }
+  });
 }
 
 // ==========================================================
@@ -1608,7 +2810,11 @@ function toggleAutoScroll() {
 function startAutoScroll() {
   state.isAutoScrolling = true;
 
-  ['gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll'].forEach(id => {
+  [
+    'gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
+    'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
+    'autocad-btn-autoscroll'
+  ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.textContent = '⏸ Tạm dừng';
@@ -1624,7 +2830,11 @@ function startAutoScroll() {
 function stopAutoScroll() {
   state.isAutoScrolling = false;
 
-  ['gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll'].forEach(id => {
+  [
+    'gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
+    'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
+    'autocad-btn-autoscroll'
+  ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.textContent = '▶ Tự cuộn';
@@ -1641,11 +2851,21 @@ function stopAutoScroll() {
 // ==========================================================
 // UTILITIES
 // ==========================================================
-function showLoading(msg) {
+function showLoading(msg, detailMessage = 'Ứng dụng đang xử lý tài liệu. Vui lòng giữ trang này mở.') {
   const text = document.getElementById('loading-status-text');
   const spinner = document.getElementById('loading-spinner');
   if (text) text.textContent = msg;
-  if (spinner) spinner.style.display = 'flex';
+  if (spinner) {
+    let detail = spinner.querySelector('.loading-status-detail');
+    if (!detail) {
+      detail = document.createElement('p');
+      detail.className = 'loading-status-detail';
+      detail.setAttribute('role', 'status');
+      spinner.querySelector('.loading-box')?.appendChild(detail);
+    }
+    if (detail) detail.textContent = detailMessage;
+    spinner.style.display = 'flex';
+  }
 }
 function hideLoading() {
   const spinner = document.getElementById('loading-spinner');

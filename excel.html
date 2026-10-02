@@ -3,170 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Báo cáo số liệu & Phân tích KPI Q3 - Google Trang tính</title>
-  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>">
+  <title>Bao_Cao_Kiem_Toan_Q3_2026.xlsx - Excel</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23107c41'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>X</text></svg>">
   <link rel="stylesheet" href="style.css">
   <script src="static/pdf.min.js"></script>
   <script src="static/jszip.min.js?v=20261002-1"></script>
 </head>
-<body class="theme-googlesheets">
+<body class="theme-excel">
 
-  <div class="theme-header-container gsheet-only">
-    <header class="gsheet-top-bar">
-      <div class="gsheet-top-left">
-        <a href="javascript:void(0)" class="gsheet-logo-btn" title="Trang chủ Google Trang tính">
-          <svg width="28" height="36" viewBox="0 0 24 32">
-            <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-            <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
-            <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
+  <div class="theme-header-container excel-only">
+    <header class="excel-title-bar">
+      <div class="left-section">
+        <span class="app-icon">
+          <svg width="18" height="18" viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="3" fill="#107c41"/>
+            <text x="16" y="23" font-size="20" font-family="Segoe UI,Arial" font-weight="bold" fill="white" text-anchor="middle">X</text>
           </svg>
-        </a>
+        </span>
+        <div class="quick-access">
+          <button class="qa-btn" title="Lưu (Ctrl+S)">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4.414A1 1 0 0 0 14.707 3.707l-2.414-2.414A1 1 0 0 0 11.586 1H2zm1 1h8v3H3V2zm0 5h10v6H3V7zm2 1v4h6V8H5z"/></svg>
+          </button>
+          <button class="qa-btn" id="excel-btn-undo" title="Hoàn tác">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 3a5 5 0 0 0-4.546 2.914.5.5 0 0 1-.908-.418A6 6 0 1 1 2 8H.5a.5.5 0 0 1-.354-.854l2.5-2.5a.5.5 0 0 1 .708 0l2.5 2.5A.5.5 0 0 1 5.5 8H3a5 5 0 1 0 5-5z"/></svg>
+          </button>
+        </div>
+        <div class="autosave-container">
+          <span>AutoSave</span>
+          <label class="switch">
+            <input type="checkbox" checked disabled>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="document-name" id="excel-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên file Excel ngụy trang">Bao_Cao_Kiem_Toan_Q3_2026.xlsx</div>
+      </div>
 
-        <div class="gsheet-title-and-menu">
-          <div class="gsheet-title-row">
-            <span class="gsheet-doc-title" id="gsheet-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên tài liệu ngụy trang">Báo cáo số liệu & Phân tích KPI Q3</span>
-            <div class="gsheet-doc-icons">
-              <button class="gsheet-icon-btn star-btn" title="Gắn dấu sao">☆</button>
-              <button class="gsheet-icon-btn folder-btn" title="Di chuyển">📁</button>
-              <span class="gsheet-cloud-status" title="Đã lưu vào Drive">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="#5f6368"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l5.09-5.09 1.41 1.41L10 17z"/></svg>
-                <span class="cloud-text">Đã lưu vào Drive</span>
-              </span>
-            </div>
-          </div>
-
-          <nav class="gsheet-menu-bar">
-            <button class="gsheet-menu-item">Tệp</button>
-            <button class="gsheet-menu-item">Chỉnh sửa</button>
-            <button class="gsheet-menu-item">Xem</button>
-            <button class="gsheet-menu-item">Chèn</button>
-            <button class="gsheet-menu-item">Định dạng</button>
-            <button class="gsheet-menu-item">Dữ liệu</button>
-            <button class="gsheet-menu-item">Công cụ</button>
-            <button class="gsheet-menu-item">Tiện ích mở rộng</button>
-            <button class="gsheet-menu-item">Trợ giúp</button>
-          </nav>
+      <div class="center-search">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="#666"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+          <input type="text" placeholder="Tìm kiếm trong tài liệu..." />
         </div>
       </div>
 
-      <div class="gsheet-top-right">
-        <div class="stealth-reading-ctrls gsheet-reading-nav">
-          <button class="portal-nav-btn" id="btn-open-portal-gsheet" title="Trang chủ & Ủng hộ tác giả">
-            Trang chủ & Donate
-          </button>
-          <button class="theme-switch-pill" id="btn-open-theme-modal" title="Đổi giao diện ngụy trang">
-            Đổi giao diện
-          </button>
-          <button class="boss-key-btn" id="btn-boss-key-gsheet" title="Xem báo cáo nhanh (Nhấn ESC)">
+      <div class="right-window-controls">
+        <div class="stealth-reading-ctrls excel-reading-nav">
+          <button class="portal-nav-btn" id="btn-open-portal-excel" title="Trang chủ & Ủng hộ tác giả">Trang chủ & Donate</button>
+          <button class="theme-switch-pill excel-theme-btn" id="btn-open-theme-modal-excel">Đổi giao diện</button>
+          <button class="boss-key-btn" id="btn-boss-key-excel" title="Xem báo cáo nhanh (Nhấn ESC)">
             <span class="boss-badge">ESC</span> Báo cáo nhanh
           </button>
-          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">
-            👁 Ẩn nút (H)
-          </button>
+          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">👁 Ẩn nút (H)</button>
         </div>
-
-        <button class="gsheet-circle-btn" title="Mở lịch sử chỉnh sửa">🕒</button>
-        <button class="gsheet-circle-btn" title="Mở lịch sử nhận xét">💬</button>
-        <button class="gsheet-circle-btn" title="Tham gia cuộc gọi Meet">📹</button>
-
-        <button class="gsheet-share-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#001d35"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-          <span>Chia sẻ</span>
-        </button>
-
-        <div class="gsheet-avatar" title="Tài khoản Google: Nguyen Van A">JD</div>
+        <div class="user-profile">
+          <span class="user-avatar">JD</span>
+          <span class="user-name">Nguyen Van A (Auditor)</span>
+        </div>
+        <button class="win-btn">―</button>
+        <button class="win-btn">▢</button>
+        <button class="win-btn win-close">✕</button>
       </div>
     </header>
 
-    <div class="gsheet-toolbar">
-      <div class="gsheet-tools-group">
-        <button class="gs-tool-btn" id="gs-btn-undo" title="Hoàn tác (Ctrl+Z)">↩</button>
-        <button class="gs-tool-btn" id="gs-btn-redo" title="Làm lại (Ctrl+Y)">↪</button>
-        <button class="gs-tool-btn" title="In (Ctrl+P)">🖨</button>
-        <button class="gs-tool-btn" title="Định dạng sơn">🖌</button>
-        <span class="gs-tool-divider"></span>
-        <select class="gs-select gs-zoom-select" title="Thu phóng">
-          <option>100%</option>
-          <option>75%</option>
-          <option>90%</option>
-          <option>125%</option>
-        </select>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" title="Định dạng tiền tệ">$</button>
-        <button class="gs-tool-btn" title="Định dạng phần trăm">%</button>
-        <button class="gs-tool-btn" title="Giảm số chữ số thập phân">.0</button>
-        <button class="gs-tool-btn" title="Tăng số chữ số thập phân">.00</button>
-        <span class="gs-tool-divider"></span>
-        <select id="gs-select-font-family" class="gs-select gs-font-select" title="Phông chữ">
-          <option value="Arial" selected>Arial</option>
-          <option value="Roboto">Roboto</option>
-          <option value="Calibri">Calibri</option>
-          <option value="Segoe UI">Segoe UI</option>
-        </select>
-        <select id="gs-select-font-size" class="gs-select gs-size-select" title="Cỡ chữ">
-          <option value="9">9</option>
-          <option value="10" selected>10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-        </select>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-bold" title="Đậm (Ctrl+B)"><b>B</b></button>
-        <button class="gs-tool-btn" id="gs-btn-italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
-        <button class="gs-tool-btn" id="gs-btn-strikethrough" title="Gạch ngang"><s>S</s></button>
-        <button class="gs-tool-btn color-btn" id="gs-btn-color" title="Màu văn bản">
-          <span style="border-bottom: 3px solid #202124;">A</span>
-        </button>
-        <button class="gs-tool-btn" title="Màu tô">🎨</button>
-        <button class="gs-tool-btn" title="Đường viền">⊞</button>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-wrap" title="Ngắt dòng">↩</button>
+    <nav class="excel-ribbon-tabs">
+      <button class="tab-item file-tab">Tệp</button>
+      <button class="tab-item active">Trang đầu</button>
+      <button class="tab-item">Chèn</button>
+      <button class="tab-item">Công thức</button>
+      <button class="tab-item">Dữ liệu</button>
+      <button class="tab-item">Xem</button>
+      <button class="tab-item stealth-highlight" id="tab-stealth-settings-excel">⚙️ Cài đặt</button>
+    </nav>
+
+    <div class="excel-ribbon-body">
+      <div class="ribbon-group">
+        <div class="ribbon-subgroup font-subgroup">
+          <div class="row-sub">
+            <select id="excel-select-font-family" class="ribbon-select font-name">
+              <option value="Calibri" selected>Calibri</option>
+              <option value="Aptos">Aptos</option>
+              <option value="Segoe UI">Segoe UI</option>
+              <option value="Arial">Arial</option>
+            </select>
+            <select id="excel-select-font-size" class="ribbon-select font-size">
+              <option value="10">10</option>
+              <option value="11" selected>11</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+            </select>
+          </div>
+          <div class="row-sub buttons-sub">
+            <button class="tool-btn" id="excel-btn-bold"><b>B</b></button>
+            <button class="tool-btn" id="excel-btn-italic"><i>I</i></button>
+            <button class="tool-btn"><u>U</u></button>
+            <button class="tool-btn color-btn"><span style="border-bottom: 3px solid #000;">A</span></button>
+            <button class="tool-btn">🎨</button>
+          </div>
+        </div>
+        <span class="group-label">Phông chữ</span>
       </div>
 
-      <div class="gsheet-stealth-group stealth-reading-ctrls">
-        <label for="file-pdf-input" class="gs-stealth-pill-btn" title="Nạp file PDF, TXT hoặc EPUB từ máy tính">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="#0F9D58"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-          <span>Nạp tài liệu</span>
-        </label>
-        <span class="gs-file-name" id="gs-file-name-label">KPI_Report_Q3_2026.pdf</span>
-
-        <span class="gs-tool-divider"></span>
-
-        <select id="gs-select-mode" class="gs-select" title="Chế độ đọc">
-          <option value="grid">Bảng Tiến Độ (Cột D)</option>
-          <option value="formula">Thanh Công Thức (Ninja 🥷)</option>
-        </select>
-
-        <div class="gs-page-controls">
-          <button class="gs-mini-btn" id="gs-btn-prev" title="Trang trước (PageUp)">◀</button>
-          <span id="gs-page-indicator" class="gs-page-text">1 / 1</span>
-          <button class="gs-mini-btn" id="gs-btn-next" title="Trang sau (PageDown)">▶</button>
-          <input type="number" id="gs-input-jump" min="1" value="1" title="Nhập số trang và nhấn Enter">
+      <div class="ribbon-group">
+        <div class="ribbon-subgroup alignment-subgroup">
+          <div class="row-sub">
+            <button class="tool-btn">⬅</button>
+            <button class="tool-btn">⬌</button>
+            <button class="tool-btn">➡</button>
+          </div>
+          <div class="row-sub">
+            <button class="tool-btn active-toggle" id="excel-btn-wrap">Wrap Text</button>
+          </div>
         </div>
+        <span class="group-label">Căn chỉnh</span>
+      </div>
 
-        <span class="gs-tool-divider"></span>
-
-        <div class="gs-autoscroll-controls">
-          <button class="gs-mini-btn gs-play-btn" id="gs-btn-autoscroll" title="Bắt đầu/Dừng tự cuộn">▶ Tự cuộn</button>
-          <select id="gs-select-speed" class="gs-select gs-speed-select">
-            <option value="3000">3s</option>
-            <option value="5000" selected>5s</option>
-            <option value="8000">8s</option>
-            <option value="12000">12s</option>
-          </select>
+      <div class="ribbon-group stealth-tools-group stealth-reading-ctrls">
+        <div class="ribbon-subgroup flex-row">
+          <div class="stealth-opt">
+            <label>Chế độ đọc:</label>
+            <select id="excel-select-mode" class="ribbon-select">
+              <option value="grid">Bảng Kiểm Toán (Cột D)</option>
+              <option value="formula">Thanh Công Thức (Ninja 🥷)</option>
+            </select>
+          </div>
+          <div class="stealth-opt">
+            <label>Phần tài liệu:</label>
+            <div class="page-controls">
+              <button class="mini-btn" id="excel-btn-prev">◀</button>
+              <span id="excel-page-indicator" class="page-text">1 / 1</span>
+              <button class="mini-btn" id="excel-btn-next">▶</button>
+              <input type="number" id="excel-input-jump" min="1" value="1" style="width: 48px; height: 22px; font-size: 11px; text-align: center;">
+            </div>
+          </div>
+          <div class="stealth-opt">
+            <label>Tự động cuộn:</label>
+            <div class="auto-scroll-controls">
+              <button class="mini-btn play-btn" id="excel-btn-autoscroll">▶ Tự cuộn</button>
+              <select id="excel-select-speed" class="ribbon-select mini-select">
+                <option value="3000">3s</option>
+                <option value="5000" selected>5s</option>
+                <option value="8000">8s</option>
+                <option value="12000">12s</option>
+              </select>
+            </div>
+          </div>
+          <div class="stealth-opt">
+            <label>Độ mờ chữ:</label>
+            <input type="range" id="excel-range-dim" min="30" max="100" value="100" style="width: 75px;">
+          </div>
         </div>
+        <span class="group-label">Tiện ích Phân Tích (Reader Control)</span>
+      </div>
 
-        <div class="gs-dim-control" title="Chỉnh độ mờ chữ">
-          <span>Độ mờ:</span>
-          <input type="range" id="gs-range-dim" min="30" max="100" value="100">
+      <div class="ribbon-group stealth-reading-ctrls">
+        <div class="ribbon-subgroup flex-column center">
+          <label for="file-pdf-input" class="open-pdf-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#107c41"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <span>Nạp tài liệu</span>
+          </label>
+          <span class="sub-caption" id="excel-file-name-label">Financial_Ledger_Q3.pdf</span>
         </div>
+        <span class="group-label">Dữ liệu nguồn</span>
       </div>
     </div>
   </div>
 
 
+  
 
-
-
+  
 
   <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
 
@@ -189,7 +193,7 @@
   </div>
 
 
-
+  
 
 <main class="excel-workspace gsheet-excel-only" id="spreadsheet-workspace">
     <!-- Story Sheet Grid -->
@@ -309,18 +313,14 @@
   </main>
 
 
+  
 
-
-
+    
 
   <footer class="excel-sheets-bar" id="main-sheets-bar">
-    <div class="gs-bottom-left gsheet-only">
-      <button class="gs-plus-sheet-btn" title="Thêm trang tính">+</button>
-      <button class="gs-all-sheets-btn" title="Tất cả trang tính">☰</button>
-    </div>
     <div class="sheet-tabs-list gsheet-excel-only">
       <button class="sheet-tab active" data-target="view-sheet-story" id="tab-story-sheet">
-        <span class="tab-label" id="tab-story-label">Trang tính1</span>
+        <span class="tab-label" id="tab-story-label">Audit_Finding_Q3</span>
       </button>
       <button class="sheet-tab" data-target="view-sheet-financial" id="tab-financial-sheet">
         <span class="tab-label">Doanh_Thu_Q3</span>
@@ -335,10 +335,6 @@
       <span class="status-item sum-item">Average: 24,190.50</span>
       <span class="status-item count-item">Count: 420</span>
       <span class="status-item">Sum: 10,160,010</span>
-      <button class="gs-explore-btn gsheet-only" title="Khám phá">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a73e8"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-        <span>Khám phá</span>
-      </button>
     </div>
   </footer>
 

@@ -1,0 +1,358 @@
+/* Autodesk AutoCAD 2026 Theme Styles */
+
+/* ==========================================================
+   THEME 7: AUTODESK AUTOCAD 2026 STYLES
+   ========================================================= */
+body.theme-autocad {
+  background-color: #212830;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+.cad-title-bar {
+  background-color: #2d333b;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-bottom: 1px solid #1c2128;
+}
+.cad-title-left { display: flex; align-items: center; gap: 12px; }
+.cad-logo {
+  background-color: #c41527;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.cad-quick-access { display: flex; gap: 8px; font-size: 13px; color: #bbb; }
+.cad-title-center { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+#autocad-doc-title { color: #fff; font-weight: 600; cursor: text; padding: 1px 6px; }
+#autocad-doc-title:hover { outline: 1px solid #c41527; }
+.cad-version { color: #888; font-size: 11px; }
+.cad-title-right { display: flex; align-items: center; gap: 6px; }
+.cad-theme-btn { background: #c41527; color: #fff; border: none; }
+
+.cad-ribbon-bar {
+  background-color: #282f38;
+  border-bottom: 1px solid #1c2128;
+}
+.cad-ribbon-tabs { display: flex; gap: 4px; padding: 2px 10px 0 10px; }
+.cad-ribbon-tabs span { padding: 4px 12px; font-size: 11px; color: #aaa; cursor: pointer; border-radius: 3px 3px 0 0; }
+.cad-ribbon-tabs span.active { background: #22272e; color: #fff; font-weight: 600; }
+.cad-ribbon-panels {
+  background-color: #22272e;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 16px;
+  border-top: 1px solid #1c2128;
+}
+.cad-ribbon-group { display: flex; flex-direction: column; align-items: center; border-right: 1px solid #333; padding-right: 14px; }
+.cad-tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-size: 10px; }
+.cad-tool { background: #2d333b; padding: 2px 6px; border-radius: 2px; color: #ddd; cursor: pointer; }
+.cad-group-label { font-size: 9px; color: #777; margin-top: 3px; text-transform: uppercase; }
+.cad-layer-box { display: flex; align-items: center; gap: 6px; background: #2d333b; padding: 6px 12px; border-radius: 3px; font-size: 11px; }
+.cad-layer-color { width: 10px; height: 10px; background: #00ffff; border-radius: 2px; }
+.cad-stealth-group { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.cad-pill-btn { background: #c41527; color: #fff; padding: 3px 10px; border-radius: 3px; font-size: 11px; cursor: pointer; }
+.cad-page-ctrl { display: flex; align-items: center; gap: 4px; font-size: 11px; }
+.cad-btn { background: #373e47; color: #eee; border: 1px solid #444c56; padding: 3px 8px; border-radius: 2px; font-size: 11px; cursor: pointer; }
+
+.autocad-workspace {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #212830;
+}
+.cad-viewport-wrapper {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  position: relative;
+  padding: 30px;
+  background-color: #1e242b;
+  background-image: radial-gradient(#2d3744 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.cad-ucs-icon {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-left: 2px solid #00ff00;
+  border-bottom: 2px solid #ff0000;
+  font-size: 10px;
+  font-family: monospace;
+}
+.cad-axis-y { position: absolute; top: -14px; left: -2px; color: #00ff00; font-weight: bold; }
+.cad-axis-x { position: absolute; bottom: -14px; right: -8px; color: #ff0000; font-weight: bold; }
+
+.cad-drawing-sheet { max-width: 960px; margin: 0 auto; }
+.cad-drawing-border {
+  border: 2px solid #00ffff;
+  padding: 24px;
+  background: rgba(33, 40, 48, 0.95);
+  box-shadow: 0 0 20px rgba(0,255,255,0.1);
+}
+.cad-title-block-header {
+  border-bottom: 1.5px solid #00ffff;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  font-family: monospace;
+  font-size: 11px;
+  color: #ffff00;
+  display: flex;
+  justify-content: space-between;
+}
+.cad-notes-container { display: flex; flex-direction: column; gap: 10px; font-family: monospace; font-size: 13px; }
+.cad-note-item {
+  padding: 8px 12px;
+  background: rgba(45, 51, 59, 0.6);
+  border-left: 3px solid #ffff00;
+  line-height: 1.7;
+  cursor: pointer;
+  user-select: text;
+}
+.cad-note-item:hover { background: rgba(55, 62, 71, 0.9); }
+.cad-note-item.active-note {
+  border-left: 3px solid #00ffff;
+  background: rgba(0, 255, 255, 0.12);
+}
+.cad-note-tag { color: #00ffff; font-weight: bold; margin-right: 8px; }
+.cad-note-text { color: #ffffff; }
+
+.cad-command-line {
+  background-color: #1c2128;
+  border-top: 1px solid #30363d;
+  padding: 6px 14px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #c9d1d9;
+}
+.cad-cmd-history { color: #8b949e; font-size: 11px; margin-bottom: 2px; }
+.cad-cmd-input-row { display: flex; align-items: center; gap: 8px; }
+.cad-cmd-prompt { color: #58a6ff; font-weight: bold; }
+.cad-cmd-input { background: transparent; border: none; outline: none; color: #fff; font-family: monospace; font-size: 12px; flex: 1; }
+
+.cad-boss-view { background: #161b22; border: 2px solid #58a6ff; padding: 20px; border-radius: 4px; }
+.cad-plan-title { font-family: monospace; font-size: 13px; color: #58a6ff; margin-bottom: 12px; font-weight: bold; }
+.cad-plan-svg { width: 100%; height: 420px; background: #0d1117; }
+
+
+
+
+/* 3. AUTOCAD DUAL MODEL SPACE STYLING */
+.cad-dual-model-space {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 12px 14px;
+  gap: 14px;
+  box-sizing: border-box;
+}
+.cad-blueprint-live-pane {
+  flex: 0 0 52%;
+  display: flex;
+  flex-direction: column;
+  background: #181d22;
+  border: 1.5px solid #2d3744;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.cad-notes-live-pane {
+  flex: 1 1 48%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.cad-pane-title-tag {
+  background: #232931;
+  padding: 6px 12px;
+  font-family: monospace;
+  font-size: 11px;
+  color: #00ffff;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #2d3744;
+}
+.cad-scale-tag { color: #ffff00; font-weight: bold; }
+.cad-canvas-vector-box {
+  flex: 1;
+  position: relative;
+  background-color: #1e242b;
+  background-image: radial-gradient(#2c3746 1px, transparent 1px);
+  background-size: 24px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cad-blueprint-svg {
+  width: 96%;
+  height: 94%;
+}
+.cad-crosshair-cursor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+}
+.cad-crosshair-cursor::before {
+  content: "";
+  position: absolute;
+  top: -24px;
+  left: 0;
+  width: 1px;
+  height: 48px;
+  background: #ffffff;
+}
+.cad-crosshair-cursor::after {
+  content: "";
+  position: absolute;
+  left: -24px;
+  top: 0;
+  height: 1px;
+  width: 48px;
+  background: #ffffff;
+}
+.cad-crosshair-pickbox {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #ffffff;
+}
+.cad-notes-live-pane .cad-drawing-border {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 16px;
+}
+.cad-notes-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* 6. AUTOCAD 3D MODEL VIEWPORT & REALISTIC ASSET RENDERING */
+.cad-3d-model-viewport {
+  position: relative;
+  background-color: #1a1e24 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.cad-house-img-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cad-live-3d-model-img {
+  max-width: 96%;
+  max-height: 94%;
+  object-fit: contain;
+  filter: contrast(1.05) brightness(0.98);
+  pointer-events: none;
+}
+.cad-viewcube-overlay {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 12;
+  pointer-events: none;
+}
+.cad-viewcube-box {
+  width: 48px;
+  height: 48px;
+  background: #3a424d;
+  border: 1px solid #586575;
+  border-radius: 4px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-family: monospace;
+  font-weight: bold;
+  color: #c9d1d9;
+}
+.cad-viewcube-box span { line-height: 1.1; }
+.vc-top { color: #58a6ff; }
+.vc-front { color: #f0883e; }
+.vc-right { color: #3fb950; }
+.cad-wcs-label {
+  font-size: 9px;
+  font-family: monospace;
+  color: #8b949e;
+  margin-top: 3px;
+  font-weight: bold;
+}
+.cad-viewport-stats-tag {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  background: rgba(15, 20, 26, 0.82);
+  border: 1px solid #30363d;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-family: monospace;
+  font-size: 10px;
+  color: #8b949e;
+  line-height: 1.6;
+  z-index: 10;
+  pointer-events: none;
+}
+.cad-viewport-stats-tag b { color: #58a6ff; }
+
+/* Fullscreen Boss AutoCAD 3D Mode */
+.cad-fullscreen-3d-box {
+  position: relative;
+  background: #11151b;
+  border: 1.5px solid #30363d;
+  border-radius: 4px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 520px;
+}
+.cad-boss-full-img {
+  max-width: 100%;
+  max-height: 480px;
+  object-fit: contain;
+  border-radius: 2px;
+}
+.cad-boss-telemetry-hud {
+  width: 100%;
+  margin-top: 14px;
+  background: rgba(22, 27, 34, 0.9);
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  padding: 10px 16px;
+  font-family: monospace;
+  font-size: 11px;
+  color: #8b949e;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.cad-boss-telemetry-hud b { color: #58a6ff; }
+
+
+

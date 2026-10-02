@@ -50,6 +50,34 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         # Silent logs to keep terminal stealthy
         pass
 
+    def end_headers(self):
+        request_path = self.path.split("?", 1)[0].lower()
+        if request_path.endswith((".html", ".js", ".css")) or request_path in {"/", "/api/health"}:
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+        super().end_headers()
+
+    def handle_one_request(self):
+        try:
+            super().handle_one_request()
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError):
+            # Browsers routinely cancel in-flight static responses on refresh,
+            # navigation, or cache revalidation. The connection is already gone.
+            self.close_connection = True
+
+    def do_GET(self):
+        if self.path == '/api/health':
+            data_bytes = json.dumps({"ok": True, "pdfExtraction": True}).encode('utf-8')
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Content-Length', str(len(data_bytes)))
+            self.end_headers()
+            self.wfile.write(data_bytes)
+            return
+
+        return super().do_GET()
+
     def do_POST(self):
         if self.path == '/api/extract-pdf':
             try:
@@ -152,7 +180,7 @@ def main():
 
     webbrowser.open(url)
 
-    with socketserver.TCPServer(("", port), StealthHTTPRequestHandler) as httpd:
+    with http.server.ThreadingHTTPServer(("", port), StealthHTTPRequestHandler) as httpd:
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

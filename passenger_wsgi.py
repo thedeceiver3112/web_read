@@ -152,12 +152,18 @@ def static_response(environ, start_response):
         [
             ("Content-Type", content_type),
             ("Content-Length", str(len(data))),
+            ("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+            if file_path.lower().endswith((".html", ".js", ".css"))
+            else ("Cache-Control", "public, max-age=86400"),
         ],
     )
     return [data]
 
 
 def application(environ, start_response):
+    if environ.get("REQUEST_METHOD") == "GET" and environ.get("PATH_INFO") == "/api/health":
+        return json_response(start_response, {"ok": True, "pdfExtraction": True})
+
     if environ.get("REQUEST_METHOD") == "POST" and environ.get("PATH_INFO") == "/api/extract-pdf":
         try:
             return extract_pdf(environ, start_response)

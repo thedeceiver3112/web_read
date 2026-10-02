@@ -1,0 +1,238 @@
+/* LinkedIn Feed Theme Styles */
+
+/* ==========================================================
+   THEME 6: LINKEDIN FEED STYLES
+   ========================================================== */
+body.theme-linkedin {
+  background-color: #f3f2ef;
+  color: #191919;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.linkedin-navbar {
+  background-color: #ffffff;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  border-bottom: 1px solid #e0e0e0;
+}
+.linkedin-nav-left { display: flex; align-items: center; gap: 10px; }
+.linkedin-logo {
+  background-color: #0a66c2;
+  color: #fff;
+  font-weight: 800;
+  font-size: 20px;
+  padding: 1px 7px;
+  border-radius: 4px;
+}
+.linkedin-search-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #edf3f8;
+  padding: 6px 12px;
+  border-radius: 4px;
+  width: 240px;
+}
+.linkedin-search-box input { background: transparent; border: none; outline: none; font-size: 12px; width: 100%; color: #333; }
+.linkedin-nav-center { display: flex; gap: 24px; }
+.linkedin-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.linkedin-nav-item:hover, .linkedin-nav-item.active { color: #191919; border-bottom: 2px solid #191919; }
+.ln-icon { font-size: 16px; }
+.linkedin-nav-right { display: flex; align-items: center; gap: 8px; }
+.linkedin-nav-btn { background: #0a66c2; color: #fff; padding: 4px 10px; border-radius: 16px; font-weight: 600; font-size: 12px; cursor: pointer; }
+.linkedin-page-ctrl { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #666; }
+.ln-btn { background: #fff; border: 1px solid #ccc; padding: 3px 8px; border-radius: 12px; font-size: 11px; cursor: pointer; }
+.ln-btn:hover { background: #f0f0f0; }
+
+.linkedin-workspace {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background-color: #f3f2ef;
+}
+.linkedin-layout-container {
+  display: flex;
+  max-width: 1180px;
+  width: 100%;
+  padding: 20px 10px;
+  gap: 20px;
+  height: 100%;
+}
+.linkedin-col-left { width: 230px; flex-shrink: 0; }
+.ln-profile-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+}
+.ln-cover-banner { height: 55px; background: linear-gradient(120deg, #a0b4b7, #dbe7e4); }
+.ln-avatar-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #0a66c2;
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -30px auto 8px auto;
+  border: 2px solid #fff;
+}
+.ln-profile-details { padding: 0 12px 12px 12px; border-bottom: 1px solid #eee; }
+.ln-profile-details h4 { font-size: 14px; font-weight: 600; color: #191919; }
+.ln-profile-details p { font-size: 11px; color: #666; margin-top: 4px; }
+.ln-profile-stats { padding: 10px 14px; text-align: left; font-size: 11px; border-bottom: 1px solid #eee; }
+.stat-row { display: flex; justify-content: space-between; margin-bottom: 6px; color: #666; }
+.stat-row b { color: #0a66c2; }
+.ln-profile-footer { padding: 10px; font-size: 11px; font-weight: 600; color: #555; text-align: left; }
+
+.linkedin-col-center {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ln-start-post-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.ln-start-input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ln-avatar-mini {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0a66c2;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.ln-fake-input {
+  flex: 1;
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 12px;
+  color: #666;
+}
+.ln-post-types { display: flex; justify-content: space-around; font-size: 12px; font-weight: 600; color: #666; }
+
+.linkedin-story-stream { display: flex; flex-direction: column; gap: 12px; }
+.linkedin-post-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+  user-select: text;
+}
+.linkedin-post-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.linkedin-post-card.active-post {
+  border: 1.5px solid #0a66c2;
+  box-shadow: 0 2px 12px rgba(10, 102, 194, 0.15);
+}
+.ln-post-author { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.ln-post-author h5 { font-size: 13px; font-weight: 600; color: #191919; }
+.ln-post-author span { font-size: 11px; color: #777; display: block; }
+.ln-post-text { font-size: 14px; line-height: 1.6; color: #222; margin-bottom: 12px; }
+.ln-hashtags { font-size: 12px; color: #0a66c2; font-weight: 500; margin-bottom: 12px; }
+.ln-reaction-bar {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+  font-size: 11px;
+  color: #666;
+  font-weight: 600;
+}
+
+.linkedin-col-right { width: 280px; flex-shrink: 0; }
+.ln-news-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 14px;
+}
+.ln-news-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+.ln-news-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.ln-news-list li b { font-size: 12px; color: #191919; display: block; }
+.ln-news-list li span { font-size: 11px; color: #777; }
+
+.ln-kpi-highlight-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  background: #f7fafc;
+  padding: 16px;
+  border-radius: 6px;
+  margin-top: 12px;
+  text-align: center;
+}
+.kpi-box h3 { color: #0a66c2; font-size: 20px; font-weight: 700; }
+.kpi-box span { font-size: 11px; color: #666; }
+
+
+
+
+/* 5. LINKEDIN GROUPED PARAGRAPHS STYLING */
+.ln-post-paragraphs-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.ln-post-paragraph {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #222222;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-left 0.15s ease;
+  user-select: text;
+}
+.ln-post-paragraph:hover {
+  background-color: #f3f6f9;
+}
+.ln-post-paragraph.active-paragraph {
+  background-color: #e8f3fc;
+  border-left: 3px solid #0a66c2;
+  color: #053b70;
+  font-weight: 500;
+}
+.ln-paragraph-seq {
+  font-size: 10px;
+  font-family: monospace;
+  color: #0a66c2;
+  margin-right: 6px;
+  font-weight: bold;
+}
+
+
+

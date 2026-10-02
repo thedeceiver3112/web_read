@@ -3,347 +3,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Báo cáo số liệu & Phân tích KPI Q3 - Google Trang tính</title>
-  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>">
+  <title>LAYOUT_MASTER_PLAN_Q3.dwg - Autodesk AutoCAD 2026</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23c41527'/><text x='16' y='24' font-size='22' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>A</text></svg>">
   <link rel="stylesheet" href="style.css">
   <script src="static/pdf.min.js"></script>
   <script src="static/jszip.min.js?v=20261002-1"></script>
 </head>
-<body class="theme-googlesheets">
+<body class="theme-autocad">
 
-  <div class="theme-header-container gsheet-only">
-    <header class="gsheet-top-bar">
-      <div class="gsheet-top-left">
-        <a href="javascript:void(0)" class="gsheet-logo-btn" title="Trang chủ Google Trang tính">
-          <svg width="28" height="36" viewBox="0 0 24 32">
-            <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-            <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
-            <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
-          </svg>
-        </a>
-
-        <div class="gsheet-title-and-menu">
-          <div class="gsheet-title-row">
-            <span class="gsheet-doc-title" id="gsheet-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên tài liệu ngụy trang">Báo cáo số liệu & Phân tích KPI Q3</span>
-            <div class="gsheet-doc-icons">
-              <button class="gsheet-icon-btn star-btn" title="Gắn dấu sao">☆</button>
-              <button class="gsheet-icon-btn folder-btn" title="Di chuyển">📁</button>
-              <span class="gsheet-cloud-status" title="Đã lưu vào Drive">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="#5f6368"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l5.09-5.09 1.41 1.41L10 17z"/></svg>
-                <span class="cloud-text">Đã lưu vào Drive</span>
-              </span>
-            </div>
-          </div>
-
-          <nav class="gsheet-menu-bar">
-            <button class="gsheet-menu-item">Tệp</button>
-            <button class="gsheet-menu-item">Chỉnh sửa</button>
-            <button class="gsheet-menu-item">Xem</button>
-            <button class="gsheet-menu-item">Chèn</button>
-            <button class="gsheet-menu-item">Định dạng</button>
-            <button class="gsheet-menu-item">Dữ liệu</button>
-            <button class="gsheet-menu-item">Công cụ</button>
-            <button class="gsheet-menu-item">Tiện ích mở rộng</button>
-            <button class="gsheet-menu-item">Trợ giúp</button>
-          </nav>
+  <div class="theme-header-container autocad-only">
+    <header class="cad-title-bar">
+      <div class="cad-title-left">
+        <span class="cad-logo">A</span>
+        <div class="cad-quick-access">
+          <span title="New">□</span><span title="Save">▣</span><span title="Plot">▤</span><span title="Undo">↶</span><span title="Redo">↷</span>
         </div>
       </div>
-
-      <div class="gsheet-top-right">
-        <div class="stealth-reading-ctrls gsheet-reading-nav">
-          <button class="portal-nav-btn" id="btn-open-portal-gsheet" title="Trang chủ & Ủng hộ tác giả">
-            Trang chủ & Donate
-          </button>
-          <button class="theme-switch-pill" id="btn-open-theme-modal" title="Đổi giao diện ngụy trang">
-            Đổi giao diện
-          </button>
-          <button class="boss-key-btn" id="btn-boss-key-gsheet" title="Xem báo cáo nhanh (Nhấn ESC)">
-            <span class="boss-badge">ESC</span> Báo cáo nhanh
-          </button>
-          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">
-            👁 Ẩn nút (H)
-          </button>
+      <div class="cad-title-center">
+        <span id="autocad-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên bản vẽ AutoCAD">LAYOUT_MASTER_PLAN_Q3.dwg</span>
+        <span class="cad-version">- Autodesk AutoCAD 2026</span>
+      </div>
+      <div class="cad-title-right">
+        <div class="stealth-reading-ctrls cad-reading-nav">
+          <button class="portal-nav-btn" id="btn-open-portal-autocad" title="Trang chủ & Ủng hộ tác giả">Trang chủ & Donate</button>
+          <button class="theme-switch-pill cad-theme-btn" id="btn-open-theme-modal-autocad" title="Đổi giao diện ngụy trang">Đổi giao diện</button>
+          <button class="boss-key-btn" id="btn-boss-key-autocad" title="Xem báo cáo nhanh (Nhấn ESC)"><span class="boss-badge">ESC</span> Báo cáo nhanh</button>
+          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">👁 Ẩn nút (H)</button>
         </div>
-
-        <button class="gsheet-circle-btn" title="Mở lịch sử chỉnh sửa">🕒</button>
-        <button class="gsheet-circle-btn" title="Mở lịch sử nhận xét">💬</button>
-        <button class="gsheet-circle-btn" title="Tham gia cuộc gọi Meet">📹</button>
-
-        <button class="gsheet-share-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="#001d35"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-          <span>Chia sẻ</span>
-        </button>
-
-        <div class="gsheet-avatar" title="Tài khoản Google: Nguyen Van A">JD</div>
+        <button class="win-btn">―</button>
+        <button class="win-btn">▢</button>
+        <button class="win-btn win-close">✕</button>
       </div>
     </header>
-
-    <div class="gsheet-toolbar">
-      <div class="gsheet-tools-group">
-        <button class="gs-tool-btn" id="gs-btn-undo" title="Hoàn tác (Ctrl+Z)">↩</button>
-        <button class="gs-tool-btn" id="gs-btn-redo" title="Làm lại (Ctrl+Y)">↪</button>
-        <button class="gs-tool-btn" title="In (Ctrl+P)">🖨</button>
-        <button class="gs-tool-btn" title="Định dạng sơn">🖌</button>
-        <span class="gs-tool-divider"></span>
-        <select class="gs-select gs-zoom-select" title="Thu phóng">
-          <option>100%</option>
-          <option>75%</option>
-          <option>90%</option>
-          <option>125%</option>
-        </select>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" title="Định dạng tiền tệ">$</button>
-        <button class="gs-tool-btn" title="Định dạng phần trăm">%</button>
-        <button class="gs-tool-btn" title="Giảm số chữ số thập phân">.0</button>
-        <button class="gs-tool-btn" title="Tăng số chữ số thập phân">.00</button>
-        <span class="gs-tool-divider"></span>
-        <select id="gs-select-font-family" class="gs-select gs-font-select" title="Phông chữ">
-          <option value="Arial" selected>Arial</option>
-          <option value="Roboto">Roboto</option>
-          <option value="Calibri">Calibri</option>
-          <option value="Segoe UI">Segoe UI</option>
-        </select>
-        <select id="gs-select-font-size" class="gs-select gs-size-select" title="Cỡ chữ">
-          <option value="9">9</option>
-          <option value="10" selected>10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-        </select>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-bold" title="Đậm (Ctrl+B)"><b>B</b></button>
-        <button class="gs-tool-btn" id="gs-btn-italic" title="Nghiêng (Ctrl+I)"><i>I</i></button>
-        <button class="gs-tool-btn" id="gs-btn-strikethrough" title="Gạch ngang"><s>S</s></button>
-        <button class="gs-tool-btn color-btn" id="gs-btn-color" title="Màu văn bản">
-          <span style="border-bottom: 3px solid #202124;">A</span>
-        </button>
-        <button class="gs-tool-btn" title="Màu tô">🎨</button>
-        <button class="gs-tool-btn" title="Đường viền">⊞</button>
-        <span class="gs-tool-divider"></span>
-        <button class="gs-tool-btn" id="gs-btn-wrap" title="Ngắt dòng">↩</button>
+    <div class="cad-ribbon-bar">
+      <div class="cad-ribbon-tabs">
+        <span class="active">Home</span><span>Insert</span><span>Annotate</span><span>Parametric</span><span>View</span><span>Manage</span><span>Output</span>
       </div>
-
-      <div class="gsheet-stealth-group stealth-reading-ctrls">
-        <label for="file-pdf-input" class="gs-stealth-pill-btn" title="Nạp file PDF, TXT hoặc EPUB từ máy tính">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="#0F9D58"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-          <span>Nạp tài liệu</span>
-        </label>
-        <span class="gs-file-name" id="gs-file-name-label">KPI_Report_Q3_2026.pdf</span>
-
-        <span class="gs-tool-divider"></span>
-
-        <select id="gs-select-mode" class="gs-select" title="Chế độ đọc">
-          <option value="grid">Bảng Tiến Độ (Cột D)</option>
-          <option value="formula">Thanh Công Thức (Ninja 🥷)</option>
-        </select>
-
-        <div class="gs-page-controls">
-          <button class="gs-mini-btn" id="gs-btn-prev" title="Trang trước (PageUp)">◀</button>
-          <span id="gs-page-indicator" class="gs-page-text">1 / 1</span>
-          <button class="gs-mini-btn" id="gs-btn-next" title="Trang sau (PageDown)">▶</button>
-          <input type="number" id="gs-input-jump" min="1" value="1" title="Nhập số trang và nhấn Enter">
+      <div class="cad-ribbon-panels">
+        <div class="cad-ribbon-group">
+          <div class="cad-tools-grid">
+            <span class="cad-tool" title="Line (L)"><b>╱</b> Line</span>
+            <span class="cad-tool" title="Polyline (PL)"><b>⌁</b> Polyline</span>
+            <span class="cad-tool" title="Circle (C)"><b>○</b> Circle</span>
+            <span class="cad-tool" title="Arc (A)"><b>⌒</b> Arc</span>
+          </div>
+          <span class="cad-group-label">Draw</span>
         </div>
-
-        <span class="gs-tool-divider"></span>
-
-        <div class="gs-autoscroll-controls">
-          <button class="gs-mini-btn gs-play-btn" id="gs-btn-autoscroll" title="Bắt đầu/Dừng tự cuộn">▶ Tự cuộn</button>
-          <select id="gs-select-speed" class="gs-select gs-speed-select">
-            <option value="3000">3s</option>
-            <option value="5000" selected>5s</option>
-            <option value="8000">8s</option>
-            <option value="12000">12s</option>
-          </select>
+        <div class="cad-ribbon-group">
+          <div class="cad-tools-grid">
+            <span class="cad-tool" title="Move (M)"><b>✣</b> Move</span>
+            <span class="cad-tool" title="Copy (CO)"><b>▣</b> Copy</span>
+            <span class="cad-tool" title="Rotate (RO)"><b>↻</b> Rotate</span>
+            <span class="cad-tool" title="Trim (TR)"><b>⌇</b> Trim</span>
+          </div>
+          <span class="cad-group-label">Modify</span>
         </div>
-
-        <div class="gs-dim-control" title="Chỉnh độ mờ chữ">
-          <span>Độ mờ:</span>
-          <input type="range" id="gs-range-dim" min="30" max="100" value="100">
+        <div class="cad-ribbon-group">
+          <div class="cad-tools-grid">
+            <span class="cad-tool" title="Multiline Text (MT)"><b>A</b> Text</span>
+            <span class="cad-tool" title="Linear Dimension (DIM)"><b>↔</b> Dim</span>
+          </div>
+          <span class="cad-group-label">Annotate</span>
+        </div>
+        <div class="cad-ribbon-group">
+          <div class="cad-layer-box" title="Layer Properties">
+            <span class="cad-layer-color"></span>
+            <span>A-WALL-SPEC</span>
+            <span class="cad-layer-chevron">▼</span>
+          </div>
+          <span class="cad-group-label">Layers</span>
+        </div>
+        <div class="cad-stealth-group stealth-reading-ctrls">
+          <label for="file-pdf-input" class="cad-pill-btn" title="Nạp tài liệu PDF, TXT, EPUB">＋ Nạp file</label>
+          <div class="cad-page-ctrl">
+            <button class="cad-btn" id="autocad-btn-prev" title="Trang trước">◀</button>
+            <span id="autocad-page-indicator">1/1</span>
+            <button class="cad-btn" id="autocad-btn-next" title="Trang sau">▶</button>
+          </div>
+          <button class="cad-btn" id="autocad-btn-autoscroll" title="Tự cuộn">▶ Tự cuộn</button>
         </div>
       </div>
+    </div>
+    <div class="cad-file-tabs">
+      <span>Start</span>
+      <span class="active">LAYOUT_MASTER_PLAN_Q3.dwg ×</span>
+      <span class="cad-new-tab">＋</span>
     </div>
   </div>
 
 
+  
 
-
-
+  
 
   <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
 
-  <div class="excel-formula-bar-container gsheet-excel-only" id="main-formula-bar">
-    <div class="name-box" id="active-cell-address" title="Tọa độ ô">D1</div>
-    <div class="formula-actions">
-      <button class="formula-btn" title="Hủy">✕</button>
-      <button class="formula-btn" title="Nhập">✓</button>
-      <span class="fx-symbol" title="Hàm số"><i>fx</i></span>
-    </div>
-    <div class="formula-input-wrapper">
-      <input type="text" id="formula-input" class="formula-input" placeholder="=VLOOKUP(Data_Key, Financial_Data, 4, FALSE)" readonly />
-    </div>
-  </div>
+  <main class="autocad-workspace autocad-only" id="autocad-workspace">
+    <!-- DUAL CAD MODEL SPACE: LIVE BLUEPRINT DRAWING ON LEFT, GENERAL NOTES ON RIGHT -->
+    <div class="cad-viewport-wrapper">
 
-  <!-- Notification Banner -->
-  <div id="status-banner" class="status-banner" style="display: none;">
-    <span id="banner-text">Thông báo</span>
-    <button class="banner-close" onclick="document.getElementById('status-banner').style.display='none'">✕</button>
-  </div>
+      <!-- UCS Icon -->
+      <div class="cad-ucs-icon">
+        <span class="cad-axis-y">Y</span>
+        <span class="cad-axis-x">X</span>
+      </div>
 
+      <!-- Live Dual Model Space Drawing Area -->
+      <div class="cad-dual-model-space" id="autocad-story-view">
 
+        <!-- 1. LEFT PANE: ACTIVE ARCHITECTURAL 3D WIREFRAME MODEL (BEING EDITED) -->
+        <div class="cad-blueprint-live-pane">
+          <div class="cad-pane-title-tag">
+            <span>MODEL: [Eco_Cabin_3D_Isometric_Structure.dwg]</span>
+            <span class="cad-scale-tag">3D ISOMETRIC • UCS: WORLD</span>
+          </div>
 
+          <div class="cad-canvas-vector-box cad-3d-model-viewport">
+            <!-- CAD Crosshair Cursor Indicator -->
+            <div class="cad-crosshair-cursor" style="top: 38%; left: 42%;">
+              <div class="cad-crosshair-pickbox"></div>
+            </div>
 
-<main class="excel-workspace gsheet-excel-only" id="spreadsheet-workspace">
-    <!-- Story Sheet Grid -->
-    <div class="sheet-content active" id="view-sheet-story">
-      <div class="table-container" id="grid-scroll-container">
-        <table class="excel-grid-table" id="excel-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 85px;">A</th>
-              <th class="col-header" style="width: 140px;">B</th>
-              <th class="col-header" style="width: 160px;">C</th>
-              <th class="col-header story-col-header" style="width: auto;">D</th>
-              <th class="col-header" style="width: 105px;">E</th>
-              <th class="col-header" style="width: 105px;">F</th>
-              <th class="col-header" style="width: 125px;">G</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th class="data-col-title">Task_ID</th>
-              <th class="data-col-title">Category / Module</th>
-              <th class="data-col-title">Timestamp</th>
-              <th class="data-col-title story-header-label" id="story-header-title">Log Description & Execution Details</th>
-              <th class="data-col-title">Status</th>
-              <th class="data-col-title">Metrics</th>
-              <th class="data-col-title">Assignee</th>
-            </tr>
-          </thead>
-          <tbody id="story-tbody">
-            <!-- Dynamic rows rendered here -->
-          </tbody>
-        </table>
+            <!-- ViewCube Mini Overlay in Top Right -->
+            <div class="cad-viewcube-overlay">
+              <div class="cad-viewcube-box">
+                <span class="vc-top">TOP</span>
+                <span class="vc-front">FRONT</span>
+                <span class="vc-right">RIGHT</span>
+              </div>
+              <div class="cad-wcs-label">WCS</div>
+            </div>
+
+            <!-- Professional 3D Wireframe House Model Structure -->
+            <div class="cad-house-img-container">
+              <svg viewBox="0 0 760 520" class="cad-blueprint-svg" id="cad-fallback-3d-svg">
+                <!-- 3D Grid floor -->
+                <line x1="80" y1="440" x2="680" y2="440" stroke="#ff0055" stroke-width="1.5" />
+                <line x1="80" y1="440" x2="280" y2="280" stroke="#00ff00" stroke-width="1.5" />
+                <line x1="280" y1="280" x2="680" y2="280" stroke="#00ffff" stroke-width="1" stroke-dasharray="4,4" />
+                <!-- House wireframe outlines -->
+                <polygon points="160,420 480,420 480,260 160,260" fill="none" stroke="#00ffff" stroke-width="1.8" />
+                <polygon points="480,420 640,340 640,180 480,260" fill="none" stroke="#ffff00" stroke-width="1.8" />
+                <polygon points="160,260 320,160 480,260" fill="none" stroke="#00ff00" stroke-width="2" />
+                <polygon points="320,160 480,260 640,180 480,80" fill="rgba(0,255,255,0.05)" stroke="#00ff00" stroke-width="2" />
+                <!-- Rafters / Solar glass roof -->
+                <line x1="200" y1="235" x2="360" y2="135" stroke="#38bdf8" stroke-width="1.2" />
+                <line x1="240" y1="210" x2="400" y2="110" stroke="#38bdf8" stroke-width="1.2" />
+                <line x1="280" y1="185" x2="440" y2="85" stroke="#38bdf8" stroke-width="1.2" />
+                <!-- Foundation step outlines -->
+                <rect x="140" y="420" width="360" height="20" fill="none" stroke="#ff00ff" stroke-width="1.5" />
+                <rect x="120" y="440" width="400" height="20" fill="none" stroke="#ff00ff" stroke-width="1.5" />
+              </svg>
+            </div>
+
+            <!-- Viewport technical HUD indicator -->
+            <div class="cad-viewport-stats-tag">
+              <div>Visual Style: <b>[3D Wireframe]</b></div>
+              <div>Projection: <b>Perspective (FOV 45°)</b></div>
+              <div>Solid Objects: <b>284</b> | Mesh Facets: <b>18,420</b></div>
+              <div>Snap: <b>END, MID, INT, CEN [Active]</b></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. RIGHT PANE: GENERAL NOTES / MTEXT NOVEL STREAM -->
+        <div class="cad-notes-live-pane">
+          <div class="cad-drawing-border">
+            <div class="cad-title-block-header">
+              <div class="cad-tb-proj">DỰ ÁN: ECO CABIN 3D ARCHITECTURAL MODEL</div>
+              <div class="cad-tb-sheet">BẢN VẼ: THUYẾT MINH KỸ THUẬT &amp; DỰ TOÁN KẾT CẤU (MTEXT)</div>
+              <div class="cad-tb-scale">TỶ LỆ: 1:50 | AUTODESK AUTOCAD 2026</div>
+            </div>
+            <!-- Scroll Container for Continuous Reading Stream -->
+            <div class="cad-notes-scroll-container" id="autocad-canvas-scroll-container">
+              <div class="cad-notes-container" id="autocad-story-stream">
+                <!-- Dynamically populated novel chunks as CAD General Notes -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Boss Mode View (Full Screen Professional 3D Wireframe Model) -->
+      <div class="cad-boss-view" id="autocad-boss-view" style="display: none;">
+        <div class="cad-blueprint-plan">
+          <div class="cad-plan-title">AUTODESK AUTOCAD 2026 - MODEL: ECO_CABIN_3D_STRUCTURE.DWG [3D WIREFRAME VIEW]</div>
+          <div class="cad-fullscreen-3d-box">
+            <img src="/static/autocad_3d_house.png" alt="AutoCAD 3D Wireframe House Model" class="cad-boss-full-img" />
+            <div class="cad-boss-telemetry-hud">
+              <div>Rendering Engine: <b>Autodesk ACIS 3D Modeler v28.4</b></div>
+              <div>Layer: <b>3D_TIMBER_FRAMING | 3D_ROOF_TRUSS | 3D_GLAZING</b></div>
+              <div>Display Precision: <b>0.0000 mm | Coordinates: X: 1420.50, Y: 890.25, Z: 450.00</b></div>
+              <div>Status: <b>Model regenerations complete. Ready for Render Engine.</b></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Dummy Financial Report Sheet (Boss Key) -->
-    <div class="sheet-content" id="view-sheet-financial">
-      <div class="table-container">
-        <table class="excel-grid-table dummy-financial-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 60px;">A</th>
-              <th class="col-header" style="width: 240px;">B</th>
-              <th class="col-header" style="width: 140px;">C</th>
-              <th class="col-header" style="width: 140px;">D</th>
-              <th class="col-header" style="width: 140px;">E</th>
-              <th class="col-header" style="width: 140px;">F</th>
-              <th class="col-header" style="width: 140px;">G</th>
-              <th class="col-header" style="width: 120px;">H</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th>Mã</th>
-              <th>Khoản Mục Tài Chính</th>
-              <th>Tháng 7/2026</th>
-              <th>Tháng 8/2026</th>
-              <th>Tháng 9/2026</th>
-              <th>Lũy Kế Q3</th>
-              <th>Kế Hoạch</th>
-              <th>Tỷ Lệ (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="row-header">2</td><td>REV-01</td><td class="bold-text">DOANH THU THUẦN</td><td>14,520,000,000</td><td>15,840,000,000</td><td>17,210,000,000</td><td class="bold-text">47,570,000,000</td><td>45,000,000,000</td><td class="positive">+105.7%</td></tr>
-            <tr><td class="row-header">3</td><td>REV-02</td><td>Doanh thu Dịch vụ Phần mềm</td><td>8,210,000,000</td><td>8,950,000,000</td><td>9,840,000,000</td><td>27,000,000,000</td><td>25,500,000,000</td><td class="positive">+105.9%</td></tr>
-            <tr><td class="row-header">4</td><td>REV-03</td><td>Doanh thu Bản quyền & Giấy phép</td><td>4,150,000,000</td><td>4,620,000,000</td><td>5,110,000,000</td><td>13,880,000,000</td><td>13,000,000,000</td><td class="positive">+106.8%</td></tr>
-            <tr><td class="row-header">5</td><td>REV-04</td><td>Doanh thu Tư vấn Triển khai</td><td>2,160,000,000</td><td>2,270,000,000</td><td>2,260,000,000</td><td>6,690,000,000</td><td>6,500,000,000</td><td class="positive">+102.9%</td></tr>
-            <tr><td class="row-header">6</td><td>COG-01</td><td class="bold-text">GIÁ VỐN HÀNG BÁN (COGS)</td><td>(6,240,000,000)</td><td>(6,810,000,000)</td><td>(7,350,000,000)</td><td class="bold-text">(20,400,000,000)</td><td>(20,000,000,000)</td><td class="negative">+102.0%</td></tr>
-            <tr><td class="row-header">7</td><td>GP-01</td><td class="bold-text highlight-yellow">LỢI NHUẬN GỘP</td><td>8,280,000,000</td><td>9,030,000,000</td><td>9,860,000,000</td><td class="bold-text">27,170,000,000</td><td>25,000,000,000</td><td class="positive">+108.7%</td></tr>
-            <tr><td class="row-header">8</td><td>OPEX-01</td><td class="bold-text">CHI PHÍ HOẠT ĐỘNG</td><td>(3,450,000,000)</td><td>(3,620,000,000)</td><td>(3,890,000,000)</td><td class="bold-text">(10,960,000,000)</td><td>(11,200,000,000)</td><td class="positive">-2.1%</td></tr>
-            <tr><td class="row-header">9</td><td>OPEX-02</td><td>Chi phí Lương & Phúc lợi R&D</td><td>(2,100,000,000)</td><td>(2,150,000,000)</td><td>(2,200,000,000)</td><td>(6,450,000,000)</td><td>(6,600,000,000)</td><td class="positive">-2.3%</td></tr>
-            <tr><td class="row-header">10</td><td>OPEX-03</td><td>Chi phí Thuê Cloud & Server AWS</td><td>(850,000,000)</td><td>(920,000,000)</td><td>(1,040,000,000)</td><td>(2,810,000,000)</td><td>(2,800,000,000)</td><td class="negative">+0.4%</td></tr>
-            <tr><td class="row-header">11</td><td>OPEX-04</td><td>Chi phí Tiếp thị & Bán hàng</td><td>(500,000,000)</td><td>(550,000,000)</td><td>(650,000,000)</td><td>(1,700,000,000)</td><td>(1,800,000,000)</td><td class="positive">-5.6%</td></tr>
-            <tr><td class="row-header">12</td><td>EBIT-01</td><td class="bold-text highlight-green">LỢI NHUẬN TRƯỚC THUẾ (EBITDA)</td><td>4,830,000,000</td><td>5,410,000,000</td><td>5,970,000,000</td><td class="bold-text">16,210,000,000</td><td>13,800,000,000</td><td class="positive">+117.5%</td></tr>
-            <tr><td class="row-header">13</td><td>TAX-01</td><td>Thuế TNDN Dự tính (20%)</td><td>(966,000,000)</td><td>(1,082,000,000)</td><td>(1,194,000,000)</td><td>(3,242,000,000)</td><td>(2,760,000,000)</td><td>--</td></tr>
-            <tr><td class="row-header">14</td><td>NET-01</td><td class="bold-text highlight-green">LỢI NHUẬN RÒNG SAU THUẾ</td><td>3,864,000,000</td><td>4,328,000,000</td><td>4,776,000,000</td><td class="bold-text">12,968,000,000</td><td>11,040,000,000</td><td class="positive">+117.5%</td></tr>
-          </tbody>
-        </table>
+    <!-- AutoCAD Bottom Command Prompt -->
+    <div class="cad-command-line">
+      <div class="cad-cmd-history">Command: _REGEN &nbsp;Regenerating model.</div>
+      <div class="cad-cmd-input-row">
+        <span class="cad-cmd-prompt">Command:</span>
+        <input type="text" class="cad-cmd-input" placeholder="Type a command or press ESC for Boss Mode" readonly />
       </div>
     </div>
-
-    <!-- Dummy Balance Sheet -->
-    <div class="sheet-content" id="view-sheet-balance">
-      <div class="table-container">
-        <table class="excel-grid-table dummy-financial-table">
-          <thead>
-            <tr>
-              <th class="corner-header">◢</th>
-              <th class="col-header" style="width: 70px;">A</th>
-              <th class="col-header" style="width: 280px;">B</th>
-              <th class="col-header" style="width: 180px;">C</th>
-              <th class="col-header" style="width: 180px;">D</th>
-              <th class="col-header" style="width: 160px;">E</th>
-            </tr>
-            <tr class="header-titles-row">
-              <th class="row-header">1</th>
-              <th>Mã Số</th>
-              <th>Chỉ Tiêu Bảng Cân Đối Kế Toán</th>
-              <th>Số Đầu Năm</th>
-              <th>Số Cuối Kỳ Q3</th>
-              <th>Biến Động</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td class="row-header">2</td><td>100</td><td class="bold-text">TỔNG TÀI SẢN NGẮN HẠN</td><td>68,450,000,000</td><td>92,130,000,000</td><td class="positive">+34.6%</td></tr>
-            <tr><td class="row-header">3</td><td>110</td><td>Tiền và các khoản tương đương tiền</td><td>18,200,000,000</td><td>32,450,000,000</td><td class="positive">+78.3%</td></tr>
-            <tr><td class="row-header">4</td><td>120</td><td>Đầu tư tài chính ngắn hạn</td><td>25,000,000,000</td><td>30,000,000,000</td><td class="positive">+20.0%</td></tr>
-            <tr><td class="row-header">5</td><td>130</td><td>Các khoản phải thu ngắn hạn</td><td>19,500,000,000</td><td>23,800,000,000</td><td class="positive">+22.1%</td></tr>
-            <tr><td class="row-header">6</td><td>200</td><td class="bold-text">TỔNG TÀI SẢN DÀI HẠN</td><td>42,100,000,000</td><td>45,600,000,000</td><td class="positive">+8.3%</td></tr>
-            <tr><td class="row-header">7</td><td>300</td><td class="bold-text">NỢ PHẢI TRẢ</td><td>31,250,000,000</td><td>34,800,000,000</td><td class="negative">+11.4%</td></tr>
-            <tr><td class="row-header">8</td><td>400</td><td class="bold-text">VỐN CHỦ SỞ HỮU</td><td>79,300,000,000</td><td>102,930,000,000</td><td class="positive">+29.8%</td></tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="cad-status-strip">
+      <span class="active">MODEL</span><span>GRID</span><span>SNAP</span><span>ORTHO</span><span>POLAR</span><span>OSNAP</span>
+      <span class="cad-coordinates">X 1420.5000&nbsp;&nbsp;Y 890.2500&nbsp;&nbsp;Z 0.0000</span>
     </div>
   </main>
 
 
+  
+
+  
 
 
 
-
-  <footer class="excel-sheets-bar" id="main-sheets-bar">
-    <div class="gs-bottom-left gsheet-only">
-      <button class="gs-plus-sheet-btn" title="Thêm trang tính">+</button>
-      <button class="gs-all-sheets-btn" title="Tất cả trang tính">☰</button>
-    </div>
-    <div class="sheet-tabs-list gsheet-excel-only">
-      <button class="sheet-tab active" data-target="view-sheet-story" id="tab-story-sheet">
-        <span class="tab-label" id="tab-story-label">Trang tính1</span>
-      </button>
-      <button class="sheet-tab" data-target="view-sheet-financial" id="tab-financial-sheet">
-        <span class="tab-label">Doanh_Thu_Q3</span>
-      </button>
-      <button class="sheet-tab" data-target="view-sheet-balance">
-        <span class="tab-label">Can_Doi_Ke_Toan</span>
-      </button>
-    </div>
-    <div class="excel-status-bar gsheet-excel-only">
-      <span class="status-item ready" id="status-ready-label">Sẵn sàng</span>
-      <span class="status-item formula-calc" id="status-reading-info">Dòng: 1 | Đã đọc: 0%</span>
-      <span class="status-item sum-item">Average: 24,190.50</span>
-      <span class="status-item count-item">Count: 420</span>
-      <span class="status-item">Sum: 10,160,010</span>
-      <button class="gs-explore-btn gsheet-only" title="Khám phá">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a73e8"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-        <span>Khám phá</span>
-      </button>
-    </div>
-  </footer>
-
-
-
+  
 
 <!-- =========================================================
        MODAL 1: THEME PICKER MODAL (CHỌN GIAO DIỆN)
