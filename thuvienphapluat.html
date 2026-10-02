@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -7,412 +7,330 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <script src="version-check.js?v=1" data-app-version="20261002-12"></script>
-  <title>BẮC TRUNG NAM – Figma</title>
-  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 57'><path d='M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z' fill='%231ABCFE'/><path d='M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z' fill='%230ACF83'/><path d='M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z' fill='%23FF7262'/><path d='M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z' fill='%23F24E1E'/><path d='M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z' fill='%23A259FF'/></svg>">
+  <title>Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='15' fill='%23ffffff' stroke='%23b71c1c' stroke-width='2'/><path d='M16 6 L16 26 M8 12 L24 12 M8 12 L5 18 C5 20 11 20 11 18 Z M24 12 L21 18 C21 20 27 20 27 18 Z' stroke='%23b71c1c' stroke-width='2' fill='none'/><rect x='13' y='25' width='6' height='2' fill='%23b71c1c'/></svg>">
   <link rel="stylesheet" href="style.css?v=20261002-12">
+  <link rel="stylesheet" href="css/thuvienphapluat.css?v=20261002-13">
   <script src="static/pdf.min.js"></script>
   <script src="static/jszip.min.js?v=20261002-1"></script>
 </head>
-<body class="theme-figma">
+<body class="theme-thuvienphapluat">
 
-  <div class="figma-app-container">
-    <!-- 1. FIGMA TOP NAVIGATION BAR (Light Mode, Authentic Figma UI3) -->
-    <header class="figma-top-bar">
-      <div class="figma-top-left">
-        <div class="figma-logo-btn" title="Figma Main Menu">
-          <svg class="figma-logo-svg" viewBox="0 0 38 57" fill="none">
-            <path d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z" fill="#1ABCFE"/>
-            <path d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z" fill="#0ACF83"/>
-            <path d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z" fill="#FF7262"/>
-            <path d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z" fill="#F24E1E"/>
-            <path d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z" fill="#A259FF"/>
-          </svg>
-        </div>
-        <div class="figma-file-title-group">
-          <span id="figma-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên file thiết kế Figma">BẮC TRUNG NAM</span>
-          <span class="figma-title-caret">▾</span>
-        </div>
-        <button class="figma-icon-action-btn" title="Toggle left sidebar">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
-        </button>
-      </div>
-
-      <!-- Stealth Reading Controls in Figma Header (Lightweight pills) -->
-      <div class="figma-top-center">
-        <div class="figma-stealth-ctrls stealth-reading-ctrls">
-          <label for="file-pdf-input" class="figma-pill-btn" title="Nạp tài liệu PDF, TXT, EPUB">＋ Nạp file</label>
-
-          <div class="figma-page-ctrl">
-            <button class="figma-btn" id="figma-btn-prev" title="Trang trước">◀</button>
-            <span id="figma-page-indicator">1/1</span>
-            <button class="figma-btn" id="figma-btn-next" title="Trang sau">▶</button>
+  <div class="tvpl-app-container">
+    <div class="tvpl-page-wrapper">
+      <!-- 1. TOP HEADER: WHITE LOGO ON LEFT + ORANGE/BLUE BARS ON RIGHT -->
+      <header class="tvpl-header-top">
+        <div class="tvpl-header-brand-wrap" title="THƯ VIỆN PHÁP LUẬT - Trang Thông tin điện tử tổng hợp">
+          <div class="tvpl-emblem-badge">
+            <!-- Law Scales Emblem -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="#b71c1c" stroke-width="2">
+              <line x1="12" y1="3" x2="12" y2="21"></line>
+              <path d="M5 7h14"></path>
+              <path d="M5 7l-3 6c0 2 6 2 6 0z" fill="#ffebee"></path>
+              <path d="M19 7l-3 6c0 2 6 2 6 0z" fill="#ffebee"></path>
+              <line x1="9" y1="21" x2="15" y2="21"></line>
+            </svg>
           </div>
-
-          <div class="figma-font-ctrl" title="Cỡ chữ (hoặc phím [ và ])">
-            <button id="figma-btn-font-dec" title="Giảm cỡ chữ ( [ )">A−</button>
-            <span id="figma-font-val">11pt</span>
-            <button id="figma-btn-font-inc" title="Tăng cỡ chữ ( ] )">A+</button>
-          </div>
-
-          <button class="figma-btn" id="figma-btn-autoscroll" title="Tự cuộn">▶ Tự cuộn</button>
-          <button class="portal-nav-btn" id="btn-open-portal-figma" title="Trang chủ &amp; Donate">Trang chủ &amp; Donate</button>
-          <button class="theme-switch-pill" id="btn-open-theme-modal-figma" title="Đổi giao diện ngụy trang">Đổi giao diện</button>
-          <button class="boss-key-btn" id="btn-boss-key-figma" title="Khẩn cấp xem mockup UI (Phím ESC)"><span class="boss-badge">ESC</span> Báo cáo nhanh</button>
-          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">👁 Ẩn nút (H)</button>
-        </div>
-      </div>
-
-      <div class="figma-top-right">
-        <div class="figma-user-avatar" title="Tài khoản người dùng">
-          <span>N</span>
-          <span class="avatar-caret">▾</span>
-        </div>
-        <button class="figma-icon-action-btn" title="Audio / Huddle">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </button>
-        <button class="figma-share-btn">Share</button>
-        <div class="figma-zoom-pill" title="Mức thu phóng Canvas">
-          <span>47%</span>
-          <span class="zoom-caret">▾</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- 2. FIGMA WORKSPACE LAYOUT (3 CỘT: LAYERS | CANVAS VÔ TẬN | DESIGN INSPECT) -->
-    <div class="figma-workspace-layout">
-      <!-- Cột Trái: Pages & Layers Panel (Exact Replica from Image 1) -->
-      <aside class="figma-left-panel">
-        <!-- Pages Section -->
-        <div class="figma-pages-header">
-          <span class="figma-panel-title">Pages</span>
-          <button class="figma-panel-mini-btn" title="Tìm kiếm trang">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </button>
-        </div>
-        <div class="figma-pages-list">
-          <div class="figma-page-row active">
-            <span class="page-title-text">Page 1</span>
+          <div class="tvpl-header-text-block">
+            <div class="tvpl-brand-headline">THƯ VIỆN PHÁP LUẬT</div>
+            <div class="tvpl-sub-headline">Trang Thông tin điện tử tổng hợp</div>
+            <div class="tvpl-slogan-italic">...loại rủi ro pháp lý, nắm cơ hội làm giàu...</div>
           </div>
         </div>
 
-        <div class="figma-panel-divider"></div>
+        <div class="tvpl-header-right-col">
+          <!-- Row 1: Orange Bar -->
+          <div class="tvpl-header-orange-bar">
+            <span class="tvpl-top-nav-item">🏠</span>
+            <span class="tvpl-top-nav-item">📰 Chính sách Pháp luật mới</span>
+            <span class="tvpl-top-nav-item">⚖️ Pháp Luật</span>
+            <span class="tvpl-top-nav-item">✉️ Liên hệ</span>
+            <span class="tvpl-top-nav-item">🔔</span>
+            <div class="tvpl-lang-flags">
+              <span title="Tiếng Việt">🇻🇳</span>
+              <span title="English">🇬🇧</span>
+            </div>
+          </div>
 
-        <!-- Layers Section -->
-        <div class="figma-layers-header">
-          <span class="figma-panel-title">Layers</span>
+          <!-- Row 2: Blue Utility Bar with stealth controls -->
+          <div class="tvpl-sub-nav-bar">
+            <div class="tvpl-sub-nav-left">
+              <span class="tvpl-sub-btn">📑 Danh mục</span>
+              <span class="tvpl-sub-btn">💎 Các gói dịch vụ</span>
+              <span class="tvpl-sub-btn">🌐 Sơ đồ WebSite</span>
+              <span class="tvpl-sub-btn">ℹ️ Giới thiệu</span>
+              <span class="tvpl-sub-btn">📖 Hướng dẫn sử dụng</span>
+              <span class="tvpl-sub-btn">📡 Rss</span>
+            </div>
+
+            <!-- Stealth Reading Controls in Sub-bar -->
+            <div class="tvpl-stealth-ctrls-group stealth-reading-ctrls">
+              <label for="file-pdf-input" class="tvpl-stealth-pill-btn" title="Nạp file PDF, TXT, EPUB">＋ Nạp file</label>
+
+              <div class="tvpl-page-box">
+                <button class="tvpl-nav-step-btn" id="tvpl-btn-prev" title="Trang trước">◀</button>
+                <span id="tvpl-page-indicator" style="font-weight: bold; font-size: 11px;">1 / 1</span>
+                <button class="tvpl-nav-step-btn" id="tvpl-btn-next" title="Trang sau">▶</button>
+              </div>
+
+              <div class="tvpl-font-box" title="Cỡ chữ (hoặc phím [ và ])">
+                <button class="tvpl-nav-step-btn" id="tvpl-btn-font-dec" title="Giảm cỡ chữ ( [ )">A−</button>
+                <span id="tvpl-font-val" style="min-width: 28px; text-align: center; font-weight: bold; color: #ffeb3b;">13pt</span>
+                <button class="tvpl-nav-step-btn" id="tvpl-btn-font-inc" title="Tăng cỡ chữ ( ] )">A+</button>
+              </div>
+
+              <button class="tvpl-stealth-pill-btn" id="tvpl-btn-autoscroll" title="Tự cuộn đọc truyện" style="background: #f57c00; border-color: #e65100;">▶ Tự cuộn</button>
+              <button class="portal-nav-btn" id="btn-open-portal-thuvienphapluat" title="Trang chủ &amp; Ủng hộ tác giả" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 10.5px; padding: 2px 7px; border-radius: 3px;">Donate</button>
+              <button class="theme-switch-pill" id="btn-open-theme-modal-thuvienphapluat" title="Đổi giao diện ngụy trang" style="font-size: 10.5px; padding: 2px 7px;">Đổi theme</button>
+              <button class="boss-key-btn" id="btn-boss-key-thuvienphapluat" title="Khẩn cấp xem Nghị định gốc (Phím ESC)" style="font-size: 10.5px; padding: 2px 7px;"><span class="boss-badge">ESC</span> Nghị định gốc</button>
+              <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)" style="font-size: 10.5px; padding: 2px 7px;">👁 Ẩn nút (H)</button>
+            </div>
+          </div>
         </div>
-        <div class="figma-layers-tree">
-          <div class="figma-layer-node"><span class="figma-node-icon icon-img">🖼️</span> Image 3</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-rect">▭</span> Rectangle 1147</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-text">T</span> Anh Tuấn Huy</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-rect">▭</span> Rectangle 114</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-frame">#</span> Frame 1</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 45</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 48</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 55</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 61</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 42</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-rect">▭</span> Rectangle 1181</div>
-          <div class="figma-layer-node active"><span class="figma-node-icon icon-frame">#</span> Trang chủ</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-frame">#</span> Editorial Spec &amp; Copywriting Stream</div>
+      </header>
+
+      <!-- 2. SEARCH TABS -->
+      <div class="tvpl-search-nav-tabs">
+        <div class="tvpl-search-tab-pill active">Văn bản Pháp Luật</div>
+        <div class="tvpl-search-tab-pill">Dự thảo</div>
+        <div class="tvpl-search-tab-pill">Công văn</div>
+        <div class="tvpl-search-tab-pill">Tiêu Chuẩn Việt Nam</div>
+        <div class="tvpl-search-tab-pill">Tra cứu bản án</div>
+        <div class="tvpl-search-tab-pill">Tư vấn Pháp luật</div>
+      </div>
+
+      <!-- 3. SEARCH ROW: AUTHENTIC YELLOW SEARCH FORM & CONTACTS -->
+      <div class="tvpl-search-row">
+        <div class="tvpl-search-box-wrap">
+          <div class="tvpl-search-form-row">
+            <input type="text" class="tvpl-search-input-field" value="Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu" placeholder="Từ khoá: Số Hiệu, Tiêu đề hoặc Nội dung ngắn gọn của Văn bản...">
+            <select class="tvpl-search-type-select">
+              <option>Văn bản PL</option>
+              <option>Công văn</option>
+              <option>Dự thảo</option>
+              <option>Tiêu chuẩn VN</option>
+            </select>
+            <button class="tvpl-search-submit-btn">Tìm kiếm</button>
+          </div>
+          <div class="tvpl-search-quick-links">
+            <b>Tra cứu nhanh:</b>
+            <span>Thời điểm Áp dụng</span> |
+            <span>Tình trạng Hiệu lực</span> |
+            <span>Lĩnh vực, Ngành</span> |
+            <span>Thời gian Ban hành</span> |
+            <span>Lịch sử xem</span>
+          </div>
+        </div>
+
+        <div class="tvpl-contact-support-box">
+          <div>📞 Hỗ trợ qua Zalo: <b>0906 22 99 66</b></div>
+          <div>📞 Hotline: <b>(028) 3930 3279</b></div>
+          <div>💬 <span style="color:#b71c1c; font-weight:bold; cursor:pointer;">MỚI GÓP Ý</span></div>
+        </div>
+
+        <div style="font-size: 11px; color: #666; text-align: right;">
+          Chào bạn: <b style="color: #c0392b;">Chuyên viên Pháp chế</b>
+        </div>
+      </div>
+
+    <!-- 4. WORKSPACE 3-COLUMN LAYOUT -->
+    <div class="tvpl-workspace-3col">
+      <!-- CỘT TRÁI: TƯ VẤN PHÁP LUẬT & CÁC LIÊN KẾT NHANH -->
+      <aside class="tvpl-col-left-sidebar">
+        <div class="tvpl-left-box-header">
+          <span>TƯ VẤN PHÁP LUẬT</span>
+          <span class="tvpl-left-box-close">✕</span>
+        </div>
+        <div class="tvpl-left-list-scroll">
+          <a class="tvpl-left-article-link highlight">Hạn mức chỉ định thầu từ 09/09/2026 của gói thầu dịch...</a>
+          <a class="tvpl-left-article-link">Nâng hạn mức chỉ định thầu gói thầu dịch vụ tư vấn từ...</a>
+          <a class="tvpl-left-article-link">Giám sát hoạt động đấu thầu của người có thẩm quyền...</a>
+          <a class="tvpl-left-article-link">Điều khoản chuyển tiếp Nghị định 349/2026/NĐ-CP đối v...</a>
+          <a class="tvpl-left-article-link">Gói thầu đã phê duyệt kế hoạch lựa chọn nhà thầu th...</a>
+          <a class="tvpl-left-article-link">Hạn mức chỉ định thầu gói thầu hỗn hợp thuộc dự án...</a>
+          <a class="tvpl-left-article-link">Quy định mới xử lý tình huống trong đấu thầu qua mạng và...</a>
+          <a class="tvpl-left-article-link">Giải quyết kiến nghị trong đấu thầu theo Nghị định...</a>
+          <a class="tvpl-left-article-link">Công văn 2397/QLĐT-CS hướng dẫn đăng tải báo giá...</a>
+          <a class="tvpl-left-article-link">Văn bản hợp nhất 36/2026/VBHN-BTC qu...</a>
         </div>
       </aside>
 
-      <!-- Cột Giữa: Canvas vô tận & Artboard thiết kế du lịch + Đọc truyện -->
-      <main class="figma-canvas-viewport" id="figma-canvas-scroll-container">
-        <!-- Normal reading view -->
-        <div id="figma-story-view">
-          <div class="figma-canvas-board-layout">
-            
-            <!-- Travel Web Frame: Trang chủ (Replicating Image 1) -->
-            <div class="figma-design-frame-wrapper" id="figma-travel-website-frame">
-              <div class="figma-canvas-frame-label stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tên Artboard Frame" data-stealth-key="stealth_figma_frame_label">Trang chủ</div>
-              <div class="figma-travel-artboard">
-                <!-- BTN Top Header -->
-                <div class="btn-top-info-bar">
-                  <div class="btn-info-left">
-                    <span>✉ baotrangnguyen.travel@gmail.com</span>
-                    <span>📍 18 Phố Vọng, P. Phương Liệt, Q. Thanh Xuân, TP. Hà Nội</span>
-                  </div>
-                  <div class="btn-info-right">
-                    <span>☎ Hotline: <b>094 568 99 88</b></span>
-                  </div>
-                </div>
-
-                <div class="btn-main-nav-bar">
-                  <div class="btn-logo-area">
-                    <span class="btn-logo-badge">BTN</span>
-                    <span class="btn-logo-sub">Travel &amp; Tour</span>
-                  </div>
-                  <nav class="btn-nav-links">
-                    <a href="javascript:void(0)" class="active">Trang chủ</a>
-                    <a href="javascript:void(0)">Tour trong nước</a>
-                    <a href="javascript:void(0)">Tour quốc tế</a>
-                    <a href="javascript:void(0)">Combo du lịch</a>
-                    <a href="javascript:void(0)">Tin tức &amp; sự kiện</a>
-                  </nav>
-                </div>
-
-                <!-- Hero Banner -->
-                <div class="btn-hero-banner">
-                  <div class="btn-hero-overlay">
-                    <h2 class="btn-hero-title stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tiêu đề banner web" data-stealth-key="stealth_figma_hero_title">TÌM KIẾM TOUR DU LỊCH BẠN MONG MUỐN</h2>
-                    
-                    <!-- Search Widget -->
-                    <div class="btn-search-widget">
-                      <div class="btn-search-field">
-                        <label>Loại tour bạn muốn đi:</label>
-                        <div class="btn-field-input">Chọn loại tour ▾</div>
-                      </div>
-                      <div class="btn-search-field">
-                        <label>Ngày khởi hành:</label>
-                        <div class="btn-field-input">dd / mm / yyyy 📅</div>
-                      </div>
-                      <div class="btn-search-field">
-                        <label>Khoảng giá: <b>5,000,000đ</b></label>
-                        <input type="range" class="btn-range" min="1" max="50" value="10">
-                      </div>
-                      <button class="btn-search-submit">🔍 Tìm tour ngay</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Tour Khởi Hành Hàng Tuần Section -->
-                <div class="btn-tours-section">
-                  <div class="btn-section-header-row">
-                    <div class="btn-section-title-wrap">
-                      <h3 class="btn-section-title stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tiêu đề mục website" data-stealth-key="stealth_figma_section_title">TOUR KHỞI HÀNH HÀNG TUẦN</h3>
-                      <p class="btn-section-subtitle stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa mô tả mục website" data-stealth-key="stealth_figma_section_sub">Những điểm dừng chân lý tưởng nhất</p>
-                    </div>
-                    <div class="btn-filter-pills">
-                      <button class="btn-pill-filter active">Trong Nước</button>
-                      <button class="btn-pill-filter">Quốc Tế</button>
-                    </div>
-                  </div>
-
-                  <!-- 4 Tour Cards Grid (Replicating Image 1) -->
-                  <div class="btn-cards-grid">
-                    <!-- Card 1 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-mocchau">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Mộc Châu</div>
-                        <h4 class="btn-tour-name">TOUR DU LỊCH MỘC CHÂU - ĐIỆN BIÊN</h4>
-                        <div class="btn-tour-meta">📅 3N2Đ • Khởi hành từ Hà Nội</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-halong">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Hạ Long</div>
-                        <h4 class="btn-tour-name">TOUR DU THUYỀN VỊNH HẠ LONG 5 SAO</h4>
-                        <div class="btn-tour-meta">📅 2N1Đ • Khởi hành từ Hà Nội</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-sapa">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Sa Pa</div>
-                        <h4 class="btn-tour-name">TOUR DU LỊCH SAPA - FANSIPAN LEGEND</h4>
-                        <div class="btn-tour-meta">📅 3N2Đ • Khởi hành từ Hà Nội</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
-
-                    <!-- Card 4 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-danang">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Đà Nẵng</div>
-                        <h4 class="btn-tour-name">TOUR ĐÀ NẴNG - BÀ NÀ HILLS - HỘI AN</h4>
-                        <div class="btn-tour-meta">📅 4N3Đ • Khởi hành từ TP.HCM</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Component 45 Tour Card (Bottom-Left matching Image 1) -->
-            <div class="figma-component-wrapper">
-              <div class="figma-comp-label">❖ Component 45</div>
-              <div class="btn-tour-card comp-card">
-                <div class="btn-card-img-box img-mocchau">
-                  <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                </div>
-                <div class="btn-card-content">
-                  <div class="btn-tour-location">📍 Mộc Châu</div>
-                  <h4 class="btn-tour-name">TOUR DU LỊCH MỘC CHÂU - ĐIỆN BIÊN</h4>
-                  <div class="btn-tour-meta">📅 3N2Đ • Khởi hành từ Hà Nội</div>
-                  <div class="btn-tour-price">16,000,000 đ</div>
-                  <button class="btn-card-cta">Xem Chi Tiết</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Story Reading Frame: Editorial Spec & Content Architecture -->
-            <div class="figma-artboard-frame" id="figma-reading-artboard">
-              <div class="figma-frame-header-tag">
-                <span># Editorial Spec &amp; Copywriting Stream</span>
-                <span class="figma-auto-layout-badge">Auto layout (Vertical • 760px)</span>
-              </div>
-
-              <div class="figma-frame-title-block">
-                <h2>BẮC TRUNG NAM - TRAVEL CONTENT &amp; NOVEL STREAM SPEC</h2>
-                <div class="figma-spec-meta">Version 4.2 • Updated by Design System Core • Clean Typographic Grid • 8pt System</div>
-              </div>
-
-              <!-- Novel stream container inside Figma artboard -->
-              <div class="figma-story-stream" id="figma-story-stream">
-                <!-- Rendered by app.js -->
-              </div>
-            </div>
-
-          </div>
+      <!-- CỘT GIỮA: NỘI DUNG VĂN BẢN (CHỨA TRUYỆN ĐỌC TIỂU THUYẾT) -->
+      <main class="tvpl-col-center-viewport">
+        <!-- Tabs bar replica -->
+        <div class="tvpl-tab-bar-classic">
+          <div class="tvpl-tab-pill">Thuộc tính</div>
+          <div class="tvpl-tab-pill active">Nội dung</div>
+          <div class="tvpl-tab-pill">Tiếng Anh (English)</div>
+          <div class="tvpl-tab-pill">Văn bản gốc/PDF</div>
+          <div class="tvpl-tab-pill">Lược đồ</div>
+          <div class="tvpl-tab-pill">Liên quan hiệu lực</div>
+          <div class="tvpl-tab-pill">Liên quan nội dung</div>
+          <div class="tvpl-tab-pill">Tải về</div>
         </div>
 
-        <!-- Boss Key View (Full Mobile App UI Screen Prototype Mockup) -->
-        <div class="figma-boss-view" id="figma-boss-view" style="display: none;">
-          <div class="figma-mockup-canvas">
-            <div class="figma-phone-screen">
-              <div class="figma-phone-header">
-                <div>9:41</div>
-                <div style="font-weight: 700;">DIGITAL BANK PRO</div>
-                <div>100% 🔋</div>
+        <div class="tvpl-toc-bar">MỤC LỤC VĂN BẢN</div>
+
+        <!-- Scrollable Document Sheet containing Story Stream -->
+        <div class="tvpl-doc-scroll-pane" id="tvpl-document-scroll-container">
+          <!-- Normal Reading View -->
+          <div id="tvpl-story-view">
+            <!-- Official Vietnamese State Header -->
+            <div class="tvpl-doc-state-head">
+              <div class="tvpl-head-left">
+                <div class="org-title stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tên cơ quan" data-stealth-key="stealth_tvpl_org">CHÍNH PHỦ</div>
+                <div style="width: 80px; height: 1px; background: #333; margin: 4px auto;"></div>
+                <div class="doc-number stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa số hiệu văn bản" data-stealth-key="stealth_tvpl_num">Số: 349/2026/NĐ-CP</div>
               </div>
-              <div class="figma-balance-card">
-                <div style="font-size: 11px; opacity: 0.85;">TỔNG TÀI SẢN KHẢ DỤNG</div>
-                <div style="font-size: 24px; font-weight: 800; margin: 4px 0;">1,482,950,000 VND</div>
-                <div style="font-size: 10px; color: #a7f3d0;">+ 12.4% so với tháng trước</div>
+
+              <div class="tvpl-head-right">
+                <div class="country-title">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+                <div class="motto-title">Độc lập - Tự do - Hạnh phúc</div>
+                <div class="doc-date-str stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa ngày ban hành" data-stealth-key="stealth_tvpl_date">Hà Nội, ngày 09 tháng 9 năm 2026</div>
               </div>
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0; text-align: center; font-size: 10px;">
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">💸 Chuyển tiền</div>
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">📈 Đầu tư</div>
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">💳 Thẻ tín dụng</div>
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">🧾 Hóa đơn</div>
+            </div>
+
+            <!-- Document Title Block -->
+            <div class="tvpl-doc-main-title">
+              <div class="doc-type-label">NGHỊ ĐỊNH</div>
+              <h1 class="doc-title-editable stealth-editable" id="tvpl-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để sửa tiêu đề văn bản" data-stealth-key="stealth_tvpl_title">SỬA ĐỔI, BỔ SUNG MỘT SỐ ĐIỀU CỦA CÁC NGHỊ ĐỊNH QUY ĐỊNH CHI TIẾT MỘT SỐ ĐIỀU VÀ BIỆN PHÁP THI HÀNH LUẬT ĐẤU THẦU VỀ LỰA CHỌN NHÀ THẦU</h1>
+            </div>
+
+            <!-- Authentic Official Watermark Stamp (Dấu Mộc Thư Viện Pháp Luật) -->
+            <div class="tvpl-stamp-container">
+              <div class="tvpl-stamp-box">
+                <div class="tvpl-stamp-name">★ THƯ VIỆN PHÁP LUẬT ★</div>
+                <div class="tvpl-stamp-status">Hiệu lực: ĐÃ BIẾT</div>
+                <div class="tvpl-stamp-date">Ngày áp dụng: 09/09/2026</div>
               </div>
+            </div>
+
+            <!-- Preamble Block -->
+            <div class="tvpl-doc-preamble stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa căn cứ ban hành" data-stealth-key="stealth_tvpl_preamble" style="font-family:'Times New Roman',serif; font-size:12.5px; line-height:1.7; color:#374151; font-style:italic; margin-bottom:18px;">
+              Căn cứ Luật Tổ chức Chính phủ số 63/2025/QH15 được sửa đổi, bổ sung bởi Luật số 137/2025/QH15;<br>
+              Căn cứ Luật Tổ chức chính quyền địa phương số 77/2025/QH15;<br>
+              Căn cứ Luật Đấu thầu số 22/2023/QH15; Luật số 57/2025/QH15, Luật số 90/2025/QH15, Luật số 116/2025/QH15, Luật số 133/2025/QH15, Luật số 142/2026/QH15;<br>
+              Theo đề nghị của Bộ trưởng Bộ Tài chính;<br>
+              Chính phủ ban hành Nghị định sửa đổi, bổ sung một số điều của các Nghị định quy định chi tiết một số điều và biện pháp thi hành Luật Đấu thầu về lựa chọn nhà thầu.
+            </div>
+
+            <!-- Story Stream Container Disguised as Administrative Clauses (Điều 1, Điều 2...) -->
+            <div class="tvpl-story-stream" id="tvpl-story-stream">
+              <!-- Rendered by app.js -->
+            </div>
+          </div>
+
+          <!-- Boss Mode View (Emergency View: Authentic Decree Full Text) -->
+          <div class="tvpl-boss-view" id="tvpl-boss-view" style="display: none;">
+            <div class="tvpl-doc-state-head">
+              <div class="tvpl-head-left">
+                <div class="org-title">CHÍNH PHỦ</div>
+                <div style="width: 80px; height: 1px; background: #333; margin: 4px auto;"></div>
+                <div class="doc-number">Số: 349/2026/NĐ-CP</div>
+              </div>
+              <div class="tvpl-head-right">
+                <div class="country-title">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</div>
+                <div class="motto-title">Độc lập - Tự do - Hạnh phúc</div>
+                <div class="doc-date-str">Hà Nội, ngày 09 tháng 9 năm 2026</div>
+              </div>
+            </div>
+
+            <h2>NGHỊ ĐỊNH SỬA ĐỔI, BỔ SUNG MỘT SỐ ĐIỀU CỦA CÁC NGHỊ ĐỊNH VỀ ĐẤU THẦU VÀ LỰA CHỌN NHÀ THẦU</h2>
+
+            <div class="tvpl-boss-article">
+              <b>Điều 1. Sửa đổi, bổ sung điểm d khoản 2 Điều 18</b><br>
+              "d) Tối thiểu 01 báo giá của hàng hóa, dịch vụ; khuyến khích thu thập nhiều hơn 01 báo giá. Chủ đầu tư phải đăng tải yêu cầu báo giá trên Hệ thống mạng đấu thầu quốc gia, đơn vị quan tâm phải gửi báo giá trên Hệ thống mạng đấu thầu quốc gia trong thời hạn tối thiểu 03 ngày làm việc kể từ ngày đăng tải yêu cầu báo giá. Trường hợp có nhiều hơn 01 báo giá thì được lấy giá trung bình của các báo giá; khi xác định giá trúng thầu, trường hợp có báo giá hoặc hạng mục trong báo giá phù hợp thì được lựa chọn trúng thầu theo quy định."
+            </div>
+
+            <div class="tvpl-boss-article">
+              <b>Điều 2. Điều khoản thi hành</b><br>
+              1. Nghị định này có hiệu lực thi hành kể từ ngày ký ban hành.<br>
+              2. Các gói thầu đã phê duyệt kế hoạch lựa chọn nhà thầu trước ngày Nghị định này có hiệu lực thì tiếp tục thực hiện theo kế hoạch đã được phê duyệt.
             </div>
           </div>
         </div>
       </main>
 
-      <!-- Cột Phải: Comments & Properties Panel (Matching Image 1) -->
-      <aside class="figma-right-panel">
-        <div class="figma-inspect-tabs">
-          <div class="figma-inspect-tab active" id="figma-tab-comments">Comments</div>
-          <div class="figma-inspect-tab" id="figma-tab-props">Properties</div>
-        </div>
-
-        <!-- Comments Tab Body (Active in Image 1) -->
-        <div class="figma-comments-panel" id="figma-comments-panel">
-          <div class="figma-search-box">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8c8c8c" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search" readonly>
-            <span class="search-filter-icon">⚙️</span>
-            <span class="search-more-icon">•••</span>
+      <!-- CỘT PHẢI: LOGIN BOX, SOCIAL LOGIN, TOOLS & BANNER AI -->
+      <aside class="tvpl-col-right-sidebar">
+        <!-- 1. Login Box -->
+        <div class="tvpl-login-card">
+          <div class="tvpl-login-header">
+            <span>■ Đăng nhập</span>
           </div>
-
-          <div class="figma-empty-comments">
-            <div class="figma-comment-bubble-icon">💬</div>
-            <p class="figma-comment-hint">
-              Give feedback, ask a question, or just leave a note of appreciation. Click anywhere in the file to leave a comment.
-            </p>
+          <input type="text" class="tvpl-login-input" placeholder="Tên đăng nhập hoặc Email" value="chuyenvien_phapche@corp.vn">
+          <input type="password" class="tvpl-login-input" placeholder="Mật khẩu" value="••••••••">
+          <button class="tvpl-login-submit-btn">Đăng nhập</button>
+          <div style="display: flex; justify-content: space-between; font-size: 9.5px; color: #64748b; margin-top: 5px;">
+            <span style="cursor: pointer;">Quên mật khẩu?</span>
+            <span style="color: #e65100; cursor: pointer; font-weight: bold;">Đăng ký mới</span>
+          </div>
+          <div class="tvpl-social-login-row">
+            <button class="tvpl-social-btn"><span>G</span> Google</button>
+            <button class="tvpl-social-btn"><span>f</span> Facebook</button>
           </div>
         </div>
 
-        <!-- Properties Tab Body -->
-        <div class="figma-inspect-body" id="figma-props-panel" style="display: none;">
-          <div class="figma-inspect-section">
-            <h6>FRAME</h6>
-            <div class="figma-dim-grid">
-              <div>W: <b>1440</b></div>
-              <div>H: <b>Auto</b></div>
-              <div>X: <b>0</b></div>
-              <div>Y: <b>0</b></div>
-            </div>
+        <!-- 2. Action Icons (Lưu trữ, Ghi chú, Ý kiến...) -->
+        <div class="tvpl-tools-grid">
+          <div class="tvpl-tool-item">
+            <span class="tvpl-tool-icon" style="color: #2563eb;">💙</span>
+            <span>Lưu trữ</span>
           </div>
-          <div class="figma-inspect-section">
-            <h6>AUTO LAYOUT</h6>
-            <div style="font-size: 10px; color: #64748b; display: flex; flex-direction: column; gap: 4px;">
-              <div>Direction: <b>Vertical ↓</b></div>
-              <div>Item Spacing: <b>16px</b></div>
-              <div>Padding: <b>40px, 48px</b></div>
-            </div>
+          <div class="tvpl-tool-item">
+            <span class="tvpl-tool-icon" style="color: #ea580c;">📑</span>
+            <span>Ghi chú</span>
           </div>
-          <div class="figma-inspect-section">
-            <h6>TYPOGRAPHY SPEC</h6>
-            <div style="font-size: 10px; color: #64748b; display: flex; flex-direction: column; gap: 4px;">
-              <div>Font: <b>Inter / Segoe UI</b></div>
-              <div>Weight: <b>Regular (400)</b></div>
-              <div>Line Height: <b>175%</b></div>
-            </div>
+          <div class="tvpl-tool-item">
+            <span class="tvpl-tool-icon" style="color: #f59e0b;">💬</span>
+            <span>Ý kiến</span>
           </div>
-          <div class="figma-inspect-section">
-            <h6>FILL</h6>
-            <div style="display: flex; align-items: center; gap: 6px; font-size: 10px;">
-              <span style="width: 14px; height: 14px; background: #ffffff; border: 1px solid #d1d5db; border-radius: 2px;"></span>
-              <span>#FFFFFF • 100%</span>
-            </div>
+          <div class="tvpl-tool-item">
+            <span class="tvpl-tool-icon" style="color: #3b82f6;">f</span>
+            <span>Facebook</span>
           </div>
+          <div class="tvpl-tool-item">
+            <span class="tvpl-tool-icon" style="color: #dc2626;">✉</span>
+            <span>Email</span>
+          </div>
+          <div class="tvpl-tool-item">
+            <span class="tvpl-tool-icon" style="color: #0284c7;">in</span>
+            <span>In</span>
+          </div>
+        </div>
+
+        <!-- 3. Yellow Buttons -->
+        <button class="tvpl-action-banner-btn">Theo dõi hiệu lực VB</button>
+        <button class="tvpl-action-banner-btn">Văn bản song ngữ</button>
+
+        <!-- 4. Legal AI Ad Banner -->
+        <div class="tvpl-ad-card">
+          <div class="tvpl-ad-title">THƯ VIỆN PHÁP LUẬT</div>
+          <div class="tvpl-ad-role">GĐ Phát Triển Sản Phẩm TVPL Legal AI</div>
+          <div style="font-size: 9.5px; color: #e0e7ff;">Head of Product &amp; Engineering</div>
+          <div class="tvpl-ad-salary">120 - 220 triệu/tháng</div>
+          <div style="font-size: 24px; margin: 4px 0;">🤖 AI</div>
+          <button class="tvpl-ad-cta-btn">XEM CHI TIẾT</button>
         </div>
       </aside>
     </div>
 
-    <!-- 3. FIGMA FLOATING BOTTOM TOOLBAR (UI3 - Exact Replica from Image 1) -->
-    <div class="figma-floating-toolbar" id="figma-floating-toolbar">
-      <button class="figma-tool-pill-btn active" title="Move tool (V)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3l7 18 3-7 7-3L3 3z"/></svg>
-      </button>
-      <button class="figma-tool-pill-btn" title="Hand tool (H)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 0 1 4 4v4a8 8 0 0 1-16 0v-2"/></svg>
-      </button>
-      <button class="figma-tool-pill-btn" title="Frame tool (F)">#</button>
-      <button class="figma-tool-pill-btn" title="Rectangle (R)">▭</button>
-      <button class="figma-tool-pill-btn" title="Comment (C)">💬</button>
-      
-      <button class="figma-ask-edit-btn" title="Yêu cầu quyền chỉnh sửa">
-        Ask to edit
-      </button>
+    <!-- 5. BOTTOM STATUS BAR -->
+    <footer class="tvpl-status-bar">
+      <div>Hệ thống CSDL Thư Viện Pháp Luật • thuvienphapluat.vn</div>
+      <div style="display: flex; gap: 14px;">
+        <span>Máy chủ: TVPL-CDN-01</span>
+        <span>Phiên tra cứu: 349-2026-ND-CP</span>
+      </div>
+    </footer>
 
-      <span class="figma-tb-divider"></span>
-
-      <button class="figma-tool-pill-btn" title="Resources / Components (Shift+I)">❖</button>
-      <button class="figma-tool-pill-btn" title="Actions">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      </button>
-      <button class="figma-tool-pill-btn" title="Dev mode (Shift+D)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      </button>
-    </div>
-
-    <!-- 4. BOTTOM RIGHT HELP QUESTION MARK -->
-    <button class="figma-help-btn" title="Help &amp; Resources">?</button>
-  </div>
+    <!-- Sticky support tab as on real thuvienphapluat.vn -->
+    <div class="tvpl-sticky-help-tab">Hãy để chúng tôi hỗ trợ bạn!</div>
+  </div> <!-- /.tvpl-page-wrapper -->
+</div> <!-- /.tvpl-app-container -->
 
   <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
 
-  <!-- =========================================================
-       MODAL 1: THEME PICKER MODAL (CHỌN GIAO DIỆN)
-       ========================================================= -->
   <div class="stealth-modal-overlay" id="theme-modal">
     <div class="stealth-modal-content theme-picker-content">
       <div class="modal-header">
@@ -1275,38 +1193,8 @@
     <span class="stealth-toggle-text">Điều khiển (H)</span>
   </button>
 
-  <!-- Toast Notification for Seamless Page Navigation -->
   <div id="page-flip-toast" class="page-flip-toast"></div>
 
   <script src="app.js?v=20261002-12"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabComments = document.getElementById('figma-tab-comments');
-      const tabProps = document.getElementById('figma-tab-props');
-      const panelComments = document.getElementById('figma-comments-panel');
-      const panelProps = document.getElementById('figma-props-panel');
-      if (tabComments && tabProps && panelComments && panelProps) {
-        tabComments.addEventListener('click', () => {
-          tabComments.classList.add('active');
-          tabProps.classList.remove('active');
-          panelComments.style.display = 'block';
-          panelProps.style.display = 'none';
-        });
-        tabProps.addEventListener('click', () => {
-          tabProps.classList.add('active');
-          tabComments.classList.remove('active');
-          panelComments.style.display = 'none';
-          panelProps.style.display = 'block';
-        });
-      }
-
-      document.querySelectorAll('.figma-tool-pill-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.figma-tool-pill-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-        });
-      });
-    });
-  </script>
 </body>
 </html>

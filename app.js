@@ -66,6 +66,7 @@ const state = {
   figmaTitle: localStorage.getItem('stealth_title_figma') || 'Mobile_Banking_Design_System_v4.2',
   canvaTitle: localStorage.getItem('stealth_title_canva') || 'Báo Cáo Chiến Lược Thương Hiệu 2026',
   powerpointTitle: localStorage.getItem('stealth_title_powerpoint') || 'Q3_Business_Review_Strategic_Plan.pptx',
+  tvplTitle: localStorage.getItem('stealth_title_tvpl') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ',
 };
 
 // Realistic mock categories & modules for corporate audit camouflage
@@ -160,7 +161,8 @@ const THEME_PAGES = {
   'theme-zalo': 'zalo.html',
   'theme-figma': 'figma.html',
   'theme-canva': 'canva.html',
-  'theme-powerpoint': 'powerpoint.html'
+  'theme-powerpoint': 'powerpoint.html',
+  'theme-thuvienphapluat': 'thuvienphapluat.html'
 };
 
 const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
@@ -182,6 +184,7 @@ function getThemeForCurrentPage() {
   if (path.endsWith('figma.html')) return 'theme-figma';
   if (path.endsWith('canva.html')) return 'theme-canva';
   if (path.endsWith('powerpoint.html') || path.endsWith('ppt.html')) return 'theme-powerpoint';
+  if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   return 'theme-googlesheets';
 }
 
@@ -360,6 +363,7 @@ const FAVICONS = {
   'theme-figma': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 57'><path d='M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z' fill='%231ABCFE'/><path d='M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z' fill='%230ACF83'/><path d='M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z' fill='%23FF7262'/><path d='M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z' fill='%23F24E1E'/><path d='M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z' fill='%23A259FF'/></svg>",
   'theme-canva': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='cg' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%2300c4cc'/><stop offset='100%25' stop-color='%237d2ae8'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23cg)'/><text x='16' y='23' font-size='20' font-family='Brush Script MT, cursive, Segoe UI' font-style='italic' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>",
   'theme-powerpoint': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23d24726'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>P</text></svg>",
+  'theme-thuvienphapluat': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230c345c'/><path d='M16 6 L16 26 M8 12 L24 12 M8 12 L5 19 C5 21 11 21 11 19 Z M24 12 L21 19 C21 21 27 21 27 19 Z' stroke='%23d49200' stroke-width='2' fill='none'/><rect x='13' y='25' width='6' height='2' fill='%23d49200'/></svg>",
 };
 
 // ==========================================================
@@ -449,6 +453,7 @@ function loadSavedState() {
     state.blenderTitle = localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend';
     state.linkedinTitle = localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn';
     state.autocadTitle = localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg';
+    state.tvplTitle = localStorage.getItem('stealth_title_tvpl') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ';
 
 
     const saved = localStorage.getItem('excel_reader_state');
@@ -509,6 +514,7 @@ function initThemeSystem() {
     'btn-open-theme-modal-figma',
     'btn-open-theme-modal-canva',
     'btn-open-theme-modal-powerpoint',
+    'btn-open-theme-modal-thuvienphapluat',
   ];
   openButtons.forEach(id => {
     const btn = document.getElementById(id);
@@ -628,6 +634,11 @@ function applyTheme(themeName) {
     document.title = `${docTitle} - PowerPoint`;
     const pTitle = document.getElementById('ppt-doc-title');
     if (pTitle) pTitle.textContent = docTitle;
+  } else if (themeName === 'theme-thuvienphapluat') {
+    const docTitle = state.tvplTitle || 'SỬA ĐỔI, BỔ SUNG MỘT SỐ ĐIỀU CỦA CÁC NGHỊ ĐỊNH QUY ĐỊNH CHI TIẾT MỘT SỐ ĐIỀU VÀ BIỆN PHÁP THI HÀNH LUẬT ĐẤU THẦU VỀ LỰA CHỌN NHÀ THẦU';
+    document.title = `Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT`;
+    const tvTitle = document.getElementById('tvpl-doc-title');
+    if (tvTitle) tvTitle.textContent = docTitle;
   }
 
   applyStyles();
@@ -879,6 +890,27 @@ function initTitleEditing() {
       }
     });
   }
+
+  const tvTitle = document.getElementById('tvpl-doc-title');
+  if (tvTitle) {
+    tvTitle.addEventListener('blur', () => {
+      let val = tvTitle.textContent.trim();
+      if (!val) val = 'SỬA ĐỔI, BỔ SUNG MỘT SỐ ĐIỀU CỦA CÁC NGHỊ ĐỊNH QUY ĐỊNH CHI TIẾT MỘT SỐ ĐIỀU VÀ BIỆN PHÁP THI HÀNH LUẬT ĐẤU THẦU VỀ LỰA CHỌN NHÀ THẦU';
+      tvTitle.textContent = val;
+      state.tvplTitle = val;
+      localStorage.setItem('stealth_title_tvpl', val);
+      if (state.theme === 'theme-thuvienphapluat') {
+        document.title = `Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT`;
+      }
+      showPageFlipToast(`✅ Đã đổi tiêu đề văn bản TVPL: <b>${escapeHtml(val)}</b>`);
+    });
+    tvTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        tvTitle.blur();
+      }
+    });
+  }
 }
 
 // ==========================================================
@@ -1119,6 +1151,7 @@ function initLandingPortal() {
     'btn-open-portal-figma',
     'btn-open-portal-canva',
     'btn-open-portal-powerpoint',
+    'btn-open-portal-thuvienphapluat',
     'btn-modal-to-portal'
   ].forEach(id => {
     const btn = document.getElementById(id);
@@ -1404,12 +1437,18 @@ function launchConfetti(originX, originY, count = 60) {
 function initEventListeners() {
   [
     'btn-boss-key-gsheet',
+    'btn-boss-key-gdocs',
     'btn-boss-key-excel',
     'btn-boss-key-vscode',
     'btn-boss-key-photoshop',
     'btn-boss-key-blender',
     'btn-boss-key-linkedin',
-    'btn-boss-key-autocad'
+    'btn-boss-key-autocad',
+    'btn-boss-key-zalo',
+    'btn-boss-key-figma',
+    'btn-boss-key-canva',
+    'btn-boss-key-powerpoint',
+    'btn-boss-key-thuvienphapluat'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleBossKey);
@@ -1526,7 +1565,7 @@ function initEventListeners() {
     'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
     'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
     'autocad-btn-prev', 'zalo-btn-prev', 'figma-btn-prev',
-    'canva-btn-prev', 'ppt-btn-prev'
+    'canva-btn-prev', 'ppt-btn-prev', 'tvpl-btn-prev'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(-1));
@@ -1535,7 +1574,7 @@ function initEventListeners() {
     'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
     'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
     'autocad-btn-next', 'zalo-btn-next', 'figma-btn-next',
-    'canva-btn-next', 'ppt-btn-next'
+    'canva-btn-next', 'ppt-btn-next', 'tvpl-btn-next'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(1));
@@ -1560,7 +1599,7 @@ function initEventListeners() {
     'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
     'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
-    'canva-btn-autoscroll', 'ppt-btn-autoscroll'
+    'canva-btn-autoscroll', 'ppt-btn-autoscroll', 'tvpl-btn-autoscroll'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleAutoScroll);
@@ -1624,7 +1663,7 @@ function initEventListeners() {
     'vsc-btn-font-dec', 'ps-btn-font-dec', 'blender-btn-font-dec',
     'linkedin-btn-font-dec', 'autocad-btn-font-dec',
     'zalo-btn-font-dec', 'figma-btn-font-dec',
-    'canva-btn-font-dec', 'ppt-btn-font-dec',
+    'canva-btn-font-dec', 'ppt-btn-font-dec', 'tvpl-btn-font-dec',
     'modal-btn-font-dec', 'stealth-btn-font-dec'
   ].forEach(id => {
     const btn = document.getElementById(id);
@@ -1641,7 +1680,7 @@ function initEventListeners() {
     'vsc-btn-font-inc', 'ps-btn-font-inc', 'blender-btn-font-inc',
     'linkedin-btn-font-inc', 'autocad-btn-font-inc',
     'zalo-btn-font-inc', 'figma-btn-font-inc',
-    'canva-btn-font-inc', 'ppt-btn-font-inc',
+    'canva-btn-font-inc', 'ppt-btn-font-inc', 'tvpl-btn-font-inc',
     'modal-btn-font-inc', 'stealth-btn-font-inc'
   ].forEach(id => {
     const btn = document.getElementById(id);
@@ -1935,6 +1974,7 @@ function toggleBossKey() {
     document.getElementById('btn-boss-key-figma'),
     document.getElementById('btn-boss-key-canva'),
     document.getElementById('btn-boss-key-powerpoint'),
+    document.getElementById('btn-boss-key-thuvienphapluat'),
   ];
 
   if (state.bossModeActive) {
@@ -1997,6 +2037,12 @@ function toggleBossKey() {
     const pBoss = document.getElementById('ppt-boss-view');
     if (pStory) pStory.style.display = 'flex';
     if (pBoss) pBoss.style.display = 'none';
+
+    // Thư Viện Pháp Luật toggle
+    const tvStory = document.getElementById('tvpl-story-view');
+    const tvBoss = document.getElementById('tvpl-boss-view');
+    if (tvStory) tvStory.style.display = 'flex';
+    if (tvBoss) tvBoss.style.display = 'none';
 
     // In VS Code, re-render the novel code
     if (state.theme === 'theme-vscode') {
@@ -2064,6 +2110,12 @@ function toggleBossKey() {
     const pBoss = document.getElementById('ppt-boss-view');
     if (pStory) pStory.style.display = 'none';
     if (pBoss) pBoss.style.display = 'flex';
+
+    // Thư Viện Pháp Luật toggle
+    const tvStory = document.getElementById('tvpl-story-view');
+    const tvBoss = document.getElementById('tvpl-boss-view');
+    if (tvStory) tvStory.style.display = 'none';
+    if (tvBoss) tvBoss.style.display = 'block';
 
     // In VS Code, render pure algorithm code for Boss Key
     if (state.theme === 'theme-vscode') {
@@ -2887,6 +2939,9 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
   } else if (state.theme === 'theme-powerpoint') {
     const stream = document.getElementById('ppt-story-stream');
     if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-thuvienphapluat') {
+    const stream = document.getElementById('tvpl-story-stream');
+    if (stream) stream.innerHTML = '';
   } else {
     const tbody = document.getElementById('story-tbody');
     if (tbody) tbody.innerHTML = '';
@@ -2922,6 +2977,8 @@ function renderNextBatch(count = 100) {
     appendCanvaBatch(count);
   } else if (state.theme === 'theme-powerpoint') {
     appendPowerPointBatch(count);
+  } else if (state.theme === 'theme-thuvienphapluat') {
+    appendTVPLBatch(count);
   } else {
     appendSpreadsheetBatch(count);
   }
@@ -3508,6 +3565,41 @@ function appendPowerPointBatch(count) {
   state.renderedCount = end;
 }
 
+// 13. Thư Viện Pháp Luật (TVPL) Administrative Article & Clause Batch Renderer
+function appendTVPLBatch(count) {
+  const stream = document.getElementById('tvpl-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const item = document.createElement('div');
+    item.className = 'tvpl-clause-item';
+    item.id = `tvpl-clause-${chunk.globalIndex}`;
+    item.dataset.index = chunk.globalIndex;
+    item.dataset.page = chunk.page;
+
+    // Formatting as official decree articles: Điều 1., Điều 2., ...
+    const clauseNum = `Điều ${chunk.globalIndex + 1}.`;
+    item.innerHTML = `
+      <div class="tvpl-clause-num">${clauseNum}</div>
+      <div class="tvpl-clause-text">${escapeHtml(chunk.text)}</div>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    item.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(item);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
 
 // ==========================================================
 // SELECTION, FOCUS & NAVIGATION
@@ -3637,6 +3729,15 @@ function setActiveRow(index, scrollIntoView = true) {
         activePara.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
+  } else if (state.theme === 'theme-thuvienphapluat') {
+    document.querySelectorAll('.tvpl-clause-item').forEach(c => c.classList.remove('active-clause'));
+    const activeClause = document.getElementById(`tvpl-clause-${index}`);
+    if (activeClause) {
+      activeClause.classList.add('active-clause');
+      if (scrollIntoView) {
+        activeClause.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   } else {
     document.querySelectorAll('#story-tbody tr').forEach(r => r.classList.remove('selected-story-row'));
     document.querySelectorAll('.story-cell').forEach(c => c.classList.remove('cell-focused'));
@@ -3686,7 +3787,7 @@ function updatePaginationUI() {
     'gs-page-indicator', 'gdocs-page-indicator', 'excel-page-indicator', 'vsc-page-indicator',
     'ps-page-indicator', 'blender-page-indicator', 'linkedin-page-indicator',
     'autocad-page-indicator', 'zalo-page-indicator', 'figma-page-indicator',
-    'canva-page-indicator', 'ppt-page-indicator'
+    'canva-page-indicator', 'ppt-page-indicator', 'tvpl-page-indicator'
   ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
@@ -3704,7 +3805,7 @@ function updatePaginationUI() {
     'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
     'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
     'autocad-btn-prev', 'zalo-btn-prev', 'figma-btn-prev',
-    'canva-btn-prev', 'ppt-btn-prev'
+    'canva-btn-prev', 'ppt-btn-prev', 'tvpl-btn-prev'
   ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = state.currentPage <= 1;
@@ -3714,7 +3815,7 @@ function updatePaginationUI() {
     'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
     'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
     'autocad-btn-next', 'zalo-btn-next', 'figma-btn-next',
-    'canva-btn-next', 'ppt-btn-next'
+    'canva-btn-next', 'ppt-btn-next', 'tvpl-btn-next'
   ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = state.currentPage >= maxNavigablePage;
@@ -3822,6 +3923,7 @@ function initContinuousScrollListeners() {
     document.getElementById('figma-canvas-scroll-container'),
     document.getElementById('canva-canvas-scroll-container'),
     document.getElementById('ppt-canvas-scroll-container'),
+    document.getElementById('tvpl-document-scroll-container'),
   ];
   scrollContainers.forEach(container => {
     if (container) {
@@ -3848,7 +3950,7 @@ function startAutoScroll() {
     'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
     'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
-    'canva-btn-autoscroll', 'ppt-btn-autoscroll'
+    'canva-btn-autoscroll', 'ppt-btn-autoscroll', 'tvpl-btn-autoscroll'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
@@ -3869,7 +3971,7 @@ function stopAutoScroll() {
     'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
     'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
-    'canva-btn-autoscroll', 'ppt-btn-autoscroll'
+    'canva-btn-autoscroll', 'ppt-btn-autoscroll', 'tvpl-btn-autoscroll'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
