@@ -145,6 +145,7 @@ const SAMPLE_STORY_CHUNKS = [
 // Multi-File Workspace Mapping & Navigation
 const THEME_PAGES = {
   'theme-googlesheets': 'index.html',
+  'theme-googledocs': 'docs.html',
   'theme-excel': 'excel.html',
   'theme-vscode': 'vscode.html',
   'theme-photoshop': 'photoshop.html',
@@ -161,6 +162,7 @@ let documentCacheWritePromise = Promise.resolve();
 
 function getThemeForCurrentPage() {
   const path = window.location.pathname.toLowerCase();
+  if (path.endsWith('docs.html') || path.endsWith('googledocs.html')) return 'theme-googledocs';
   if (path.endsWith('excel.html')) return 'theme-excel';
   if (path.endsWith('vscode.html')) return 'theme-vscode';
   if (path.endsWith('photoshop.html')) return 'theme-photoshop';
@@ -330,6 +332,7 @@ async function restoreDocumentCache() {
 
 const FAVICONS = {
   'theme-googlesheets': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>",
+  'theme-googledocs': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%234285F4' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%23A1C2FA' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M5 13h14v2H5zm0 4h14v2H5zm0 4h10v2H5z'/></svg>",
   'theme-excel': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23107c41'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>X</text></svg>",
   'theme-vscode': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23007ACC' d='M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z'/><path fill='%231F9CF0' d='M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z'/></svg>",
   'theme-photoshop': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23001e36'/><text x='16' y='23' font-size='18' font-family='Segoe UI,sans-serif' font-weight='bold' fill='%2331a8ff' text-anchor='middle'>Ps</text></svg>",
@@ -341,6 +344,47 @@ const FAVICONS = {
 // ==========================================================
 // INITIALIZATION
 // ==========================================================
+
+// ==========================================================
+// GOOGLE FORM FEEDBACK CONFIGURATION & HANDLER
+// ==========================================================
+// Dán link Google Form (forms.gle/... hoặc docs.google.com/forms/...) vào đây:
+const CONFIG_FEEDBACK_FORM_URL = 'https://forms.gle/Kx3s3xHFVBwLsZE79';
+
+function getFeedbackFormUrl() {
+  const saved = localStorage.getItem('stealth_feedback_form_url');
+  if (saved && saved !== 'https://forms.google.com') {
+    return saved;
+  }
+  return CONFIG_FEEDBACK_FORM_URL;
+}
+
+function openFeedbackForm() {
+  const url = getFeedbackFormUrl();
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function configFeedbackFormUrl() {
+  const current = getFeedbackFormUrl();
+  const input = prompt('Nhập đường link Google Form để nhận ý kiến người dùng:\n(Ví dụ: https://forms.gle/XYZ... hoặc link biểu mẫu)', current);
+  if (input !== null && input.trim()) {
+    const cleanUrl = input.trim();
+    localStorage.setItem('stealth_feedback_form_url', cleanUrl);
+    showPageFlipToast(`Đã lưu link Google Form: <b>${escapeHtml(cleanUrl)}</b>`);
+  }
+}
+
+function initFeedbackListeners() {
+  document.querySelectorAll(
+    '#btn-open-feedback-nav, #btn-open-feedback-portal, #btn-open-feedback-updates, #btn-open-feedback-settings, .duo-btn-feedback-nav, .portal-link-feedback, .duo-btn-feedback'
+  ).forEach(btn => {
+    btn.addEventListener('click', openFeedbackForm);
+  });
+
+  const configBtn = document.getElementById('btn-config-feedback-url');
+  if (configBtn) configBtn.addEventListener('click', configFeedbackFormUrl);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   loadSavedState();
   initThemeSystem();
@@ -350,6 +394,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initContinuousScrollListeners();
   initLandingPortal();
   initControlsVisibilityToggle();
+  initFeedbackListeners();
   
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
@@ -374,6 +419,7 @@ function loadSavedState() {
     state.theme = getThemeForCurrentPage();
 
     state.gsheetTitle = localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3';
+    state.gdocsTitle = localStorage.getItem('stealth_title_gdocs') || 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3';
     state.excelTitle = localStorage.getItem('stealth_title_excel') || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
     state.vscodeTitle = localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py';
     state.photoshopTitle = localStorage.getItem('stealth_title_photoshop') || 'Brand_Campaign_KeyVisual_v2.psd';
@@ -496,6 +542,11 @@ function applyTheme(themeName) {
     if (gTitle) gTitle.textContent = docTitle;
     if (storyLabel) storyLabel.textContent = 'Trang tính1';
     if (headerTitle) headerTitle.textContent = 'Log Description & Execution Details';
+  } else if (themeName === 'theme-googledocs') {
+    const docTitle = state.gdocsTitle || 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3';
+    document.title = `${docTitle} - Google Tài liệu`;
+    const gdTitle = document.getElementById('gdocs-doc-title');
+    if (gdTitle) gdTitle.textContent = docTitle;
   } else if (themeName === 'theme-excel') {
     const docTitle = state.excelTitle || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
     document.title = `${docTitle} - Excel`;
@@ -555,6 +606,27 @@ function initTitleEditing() {
       if (e.key === 'Enter') {
         e.preventDefault();
         gTitle.blur();
+      }
+    });
+  }
+
+  const gdTitle = document.getElementById('gdocs-doc-title');
+  if (gdTitle) {
+    gdTitle.addEventListener('blur', () => {
+      let val = gdTitle.textContent.trim();
+      if (!val) val = 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3';
+      gdTitle.textContent = val;
+      state.gdocsTitle = val;
+      localStorage.setItem('stealth_title_gdocs', val);
+      if (state.theme === 'theme-googledocs') {
+        document.title = `${val} - Google Tài liệu`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên tài liệu: <b>${escapeHtml(val)}</b>`);
+    });
+    gdTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        gdTitle.blur();
       }
     });
   }
@@ -750,6 +822,7 @@ function initLandingPortal() {
   // Open Portal Buttons from theme headers and theme modal
   [
     'btn-open-portal-gsheet',
+    'btn-open-portal-gdocs',
     'btn-open-portal-excel',
     'btn-open-portal-vscode',
     'btn-open-portal-photoshop',
@@ -1080,7 +1153,7 @@ function initEventListeners() {
 
   // Page Controls
   [
-    'gs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
+    'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
     'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
     'autocad-btn-prev'
   ].forEach(id => {
@@ -1088,7 +1161,7 @@ function initEventListeners() {
     if (btn) btn.addEventListener('click', () => changePage(-1));
   });
   [
-    'gs-btn-next', 'excel-btn-next', 'vsc-btn-next',
+    'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
     'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
     'autocad-btn-next'
   ].forEach(id => {
@@ -1096,7 +1169,7 @@ function initEventListeners() {
     if (btn) btn.addEventListener('click', () => changePage(1));
   });
 
-  ['gs-input-jump', 'excel-input-jump'].forEach(id => {
+  ['gs-input-jump', 'gdocs-input-jump', 'excel-input-jump'].forEach(id => {
     const input = document.getElementById(id);
     if (input) {
       input.addEventListener('keydown', (e) => {
@@ -1112,7 +1185,7 @@ function initEventListeners() {
 
   // Auto Scroll
   [
-    'gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
+    'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
     'autocad-btn-autoscroll'
   ].forEach(id => {
@@ -1148,7 +1221,7 @@ function initEventListeners() {
   });
 
   // Font and Formatting
-  ['gs-select-font-family', 'excel-select-font-family'].forEach(id => {
+  ['gs-select-font-family', 'gdocs-select-font-family', 'excel-select-font-family'].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
       sel.addEventListener('change', (e) => {
@@ -1160,7 +1233,7 @@ function initEventListeners() {
     }
   });
 
-  ['gs-select-font-size', 'excel-select-font-size'].forEach(id => {
+  ['gs-select-font-size', 'gdocs-select-font-size', 'excel-select-font-size'].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
       sel.addEventListener('change', (e) => {
@@ -1172,7 +1245,7 @@ function initEventListeners() {
     }
   });
 
-  ['gs-btn-bold', 'excel-btn-bold'].forEach(id => {
+  ['gs-btn-bold', 'gdocs-btn-bold', 'excel-btn-bold'].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.addEventListener('click', () => {
@@ -1183,7 +1256,7 @@ function initEventListeners() {
     }
   });
 
-  ['gs-btn-italic', 'excel-btn-italic'].forEach(id => {
+  ['gs-btn-italic', 'gdocs-btn-italic', 'excel-btn-italic'].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.addEventListener('click', () => {
@@ -1247,11 +1320,11 @@ function syncControls() {
     const el = document.getElementById(id);
     if (el) el.value = state.readingMode;
   });
-  ['gs-select-font-family', 'excel-select-font-family'].forEach(id => {
+  ['gs-select-font-family', 'gdocs-select-font-family', 'excel-select-font-family'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = state.fontFamily;
   });
-  ['gs-select-font-size', 'excel-select-font-size'].forEach(id => {
+  ['gs-select-font-size', 'gdocs-select-font-size', 'excel-select-font-size'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = state.fontSize;
   });
@@ -1266,13 +1339,17 @@ function syncControls() {
 
   const b1 = document.getElementById('gs-btn-bold');
   const b2 = document.getElementById('excel-btn-bold');
+  const b3 = document.getElementById('gdocs-btn-bold');
   if (b1) b1.classList.toggle('active-toggle', state.isBold);
   if (b2) b2.classList.toggle('active-toggle', state.isBold);
+  if (b3) b3.classList.toggle('active-toggle', state.isBold);
 
   const i1 = document.getElementById('gs-btn-italic');
   const i2 = document.getElementById('excel-btn-italic');
+  const i3 = document.getElementById('gdocs-btn-italic');
   if (i1) i1.classList.toggle('active-toggle', state.isItalic);
   if (i2) i2.classList.toggle('active-toggle', state.isItalic);
+  if (i3) i3.classList.toggle('active-toggle', state.isItalic);
 
   const w1 = document.getElementById('gs-btn-wrap');
   const w2 = document.getElementById('excel-btn-wrap');
@@ -1302,6 +1379,13 @@ function applyStyles() {
     cell.style.fontWeight = state.isBold ? 'bold' : 'normal';
     cell.style.fontStyle = state.isItalic ? 'italic' : 'normal';
     cell.style.whiteSpace = state.wrapText ? 'normal' : 'nowrap';
+  });
+
+  document.querySelectorAll('.gdocs-story-paragraph').forEach(p => {
+    p.style.fontWeight = state.isBold ? 'bold' : 'normal';
+    p.style.fontStyle = state.isItalic ? 'italic' : 'normal';
+    if (state.fontFamily) p.style.fontFamily = state.fontFamily;
+    if (state.fontSize) p.style.fontSize = `${state.fontSize}pt`;
   });
 }
 
@@ -1337,6 +1421,7 @@ function updateBossButton(btn, bossModeActive) {
 function toggleBossKey() {
   const bossButtons = [
     document.getElementById('btn-boss-key-gsheet'),
+    document.getElementById('btn-boss-key-gdocs'),
     document.getElementById('btn-boss-key-excel'),
     document.getElementById('btn-boss-key-vscode'),
     document.getElementById('btn-boss-key-photoshop'),
@@ -1351,6 +1436,12 @@ function toggleBossKey() {
     bossButtons.forEach(btn => {
       if (btn) updateBossButton(btn, false);
     });
+
+    // Google Docs toggle
+    const gdStory = document.getElementById('gdocs-story-view');
+    const gdBoss = document.getElementById('gdocs-boss-view');
+    if (gdStory) gdStory.style.display = 'block';
+    if (gdBoss) gdBoss.style.display = 'none';
 
     // Photoshop toggle
     const psArtboard = document.getElementById('ps-artboard-view');
@@ -1388,6 +1479,12 @@ function toggleBossKey() {
     bossButtons.forEach(btn => {
       if (btn) updateBossButton(btn, true);
     });
+
+    // Google Docs toggle
+    const gdStory = document.getElementById('gdocs-story-view');
+    const gdBoss = document.getElementById('gdocs-boss-view');
+    if (gdStory) gdStory.style.display = 'none';
+    if (gdBoss) gdBoss.style.display = 'block';
 
     // Photoshop toggle
     const psArtboard = document.getElementById('ps-artboard-view');
@@ -1466,6 +1563,9 @@ function prepareDocumentLoad(file) {
 
   const vscodeLabel = document.getElementById('vscode-file-name-label');
   if (vscodeLabel) vscodeLabel.textContent = 'dataset_telemetry.pdf';
+
+  const gdocsLabel = document.getElementById('gdocs-file-name-label');
+  if (gdocsLabel) gdocsLabel.textContent = file.name;
 
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
@@ -2097,6 +2197,9 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
     const codeContainer = document.getElementById('vsc-code-lines');
     if (lineGutter) lineGutter.innerHTML = '';
     if (codeContainer) codeContainer.innerHTML = '';
+  } else if (state.theme === 'theme-googledocs') {
+    const stream = document.getElementById('gdocs-story-stream');
+    if (stream) stream.innerHTML = '';
   } else if (state.theme === 'theme-photoshop') {
     const stream = document.getElementById('ps-story-stream');
     if (stream) stream.innerHTML = '';
@@ -2126,6 +2229,8 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
 function renderNextBatch(count = 100) {
   if (state.theme === 'theme-vscode') {
     appendVSCodeBatch(count);
+  } else if (state.theme === 'theme-googledocs') {
+    appendGoogleDocsBatch(count);
   } else if (state.theme === 'theme-photoshop') {
     appendPhotoshopBatch(count);
   } else if (state.theme === 'theme-blender') {
@@ -2527,6 +2632,39 @@ function appendAutoCADBatch(count) {
   state.renderedCount = end;
 }
 
+// 8. Google Docs Manuscript Paragraph Batch Renderer
+function appendGoogleDocsBatch(count) {
+  const stream = document.getElementById('gdocs-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const p = document.createElement('p');
+    p.className = 'gdocs-story-paragraph';
+    p.id = `gdocs-story-para-${chunk.globalIndex}`;
+    p.dataset.index = chunk.globalIndex;
+    p.dataset.page = chunk.page;
+    p.textContent = chunk.text;
+    if (state.fontFamily) p.style.fontFamily = state.fontFamily;
+    if (state.fontSize) p.style.fontSize = `${state.fontSize}pt`;
+    if (state.isBold) p.style.fontWeight = 'bold';
+    if (state.isItalic) p.style.fontStyle = 'italic';
+
+    const gIdx = chunk.globalIndex;
+    p.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(p);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
 
 // ==========================================================
 // SELECTION, FOCUS & NAVIGATION
@@ -2602,6 +2740,15 @@ function setActiveRow(index, scrollIntoView = true) {
         }
       }
     }
+  } else if (state.theme === 'theme-googledocs') {
+    document.querySelectorAll('.gdocs-story-paragraph').forEach(n => n.classList.remove('active-paragraph'));
+    const activePara = document.getElementById(`gdocs-story-para-${index}`);
+    if (activePara) {
+      activePara.classList.add('active-paragraph');
+      if (scrollIntoView) {
+        activePara.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   } else if (state.theme === 'theme-autocad') {
     document.querySelectorAll('.cad-note-item').forEach(n => n.classList.remove('active-note'));
     const activeNote = document.getElementById(`autocad-note-${index}`);
@@ -2657,7 +2804,7 @@ function updatePaginationUI() {
   const maxNavigablePage = state.isPdfProcessing ? state.loadedPages : state.totalPages;
   
   [
-    'gs-page-indicator', 'excel-page-indicator', 'vsc-page-indicator',
+    'gs-page-indicator', 'gdocs-page-indicator', 'excel-page-indicator', 'vsc-page-indicator',
     'ps-page-indicator', 'blender-page-indicator', 'linkedin-page-indicator',
     'autocad-page-indicator'
   ].forEach(id => {
@@ -2665,7 +2812,7 @@ function updatePaginationUI() {
     if (el) el.textContent = text;
   });
 
-  ['gs-input-jump', 'excel-input-jump'].forEach(id => {
+  ['gs-input-jump', 'gdocs-input-jump', 'excel-input-jump'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.value = state.currentPage;
@@ -2674,7 +2821,7 @@ function updatePaginationUI() {
   });
 
   [
-    'gs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
+    'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
     'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
     'autocad-btn-prev'
   ].forEach(id => {
@@ -2683,7 +2830,7 @@ function updatePaginationUI() {
   });
 
   [
-    'gs-btn-next', 'excel-btn-next', 'vsc-btn-next',
+    'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
     'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
     'autocad-btn-next'
   ].forEach(id => {
@@ -2783,6 +2930,7 @@ function initContinuousScrollListeners() {
 
   const scrollContainers = [
     document.getElementById('grid-scroll-container'),
+    document.getElementById('gdocs-canvas-scroll-container'),
     document.getElementById('vsc-code-scroll-container'),
     document.getElementById('ps-canvas-scroll-container'),
     document.getElementById('blender-viewport-scroll-container'),
@@ -2811,7 +2959,7 @@ function startAutoScroll() {
   state.isAutoScrolling = true;
 
   [
-    'gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
+    'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
     'autocad-btn-autoscroll'
   ].forEach(id => {
@@ -2831,7 +2979,7 @@ function stopAutoScroll() {
   state.isAutoScrolling = false;
 
   [
-    'gs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
+    'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
     'autocad-btn-autoscroll'
   ].forEach(id => {

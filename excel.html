@@ -376,7 +376,26 @@
             <p>Bảng tính Google Drive trên nền web. Trông 100% tự nhiên vì mở trực tiếp trên Chrome/Edge!</p>
           </div>
 
-          <!-- Option 2: Microsoft Excel 365 -->
+          <!-- Option 2: Google Docs -->
+          <div class="theme-card" data-theme="theme-googledocs">
+            <div class="theme-card-badge" style="background:#1a73e8; color:white;">Văn Phòng 📝</div>
+            <div class="theme-preview-img gdocs-preview">
+              <div class="prev-top-bar" style="background:#ffffff; border-bottom:1px solid #e0e0e0;">
+                <span style="color:#1a73e8; font-weight:bold; font-size:11px;">📄 Google Docs (Tài liệu)</span>
+                <span style="background:#c2e7ff; color:#001d35; border-radius:10px; padding:2px 8px; font-size:9px; font-weight:600;">Chia sẻ</span>
+              </div>
+              <div class="prev-grid" style="background:#f9fbfd; padding:6px; display:flex; justify-content:center;">
+                <div style="background:white; width:90%; height:100%; box-shadow:0 1px 2px rgba(0,0,0,0.1); padding:4px 6px; font-size:8px; color:#202124;">
+                  <b style="color:#1a73e8; font-size:9px;">BÁO CÁO KẾ HOẠCH Q3</b>
+                  <p style="margin-top:2px; color:#3c4043;">Đoạn trích tiểu thuyết trình bày tự nhiên như văn bản tài liệu Word...</p>
+                </div>
+              </div>
+            </div>
+            <h4>Google Docs (Trực Tuyến)</h4>
+            <p>Trình soạn thảo văn bản Google Drive, hoàn hảo để đọc truyện ngụy trang tài liệu công việc.</p>
+          </div>
+
+          <!-- Option 3: Microsoft Excel 365 -->
           <div class="theme-card" data-theme="theme-excel">
             <div class="theme-preview-img excel-preview">
               <div class="prev-top-bar" style="background:#107c41; color:white;">
@@ -516,6 +535,19 @@
             <li><kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).</li>
           </ul>
         </div>
+
+        <div class="settings-group">
+          <h4>3. Đóng góp ý kiến &amp; Báo lỗi (Google Form)</h4>
+          <p class="guide-text">Bạn muốn đề xuất tính năng mới hoặc gặp lỗi trong quá trình sử dụng? Hãy gửi ý kiến cho tác giả qua biểu mẫu Google Form:</p>
+          <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
+            <button class="primary-btn" id="btn-open-feedback-settings" style="padding: 7px 16px; font-size: 12px;">
+              📝 Mở Google Form Góp Ý
+            </button>
+            <button class="portal-nav-btn" id="btn-config-feedback-url" style="padding: 7px 12px; font-size: 11px;" title="Cài đặt đường link Google Form (dành cho Admin)">
+              ⚙️ Cài đặt link
+            </button>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="primary-btn" id="btn-save-settings">Đóng</button>
@@ -552,61 +584,180 @@
           </div>
         </div>
 
-        <button class="duo-btn-close" id="btn-portal-close" style="display: none;">
-          ✕ Tiếp tục đọc
-        </button>
+        <div class="duo-top-actions">
+          <button class="duo-btn-feedback-nav" id="btn-open-feedback-nav" title="Đóng góp ý kiến &amp; Báo lỗi qua Google Form">
+            💬 Góp ý &amp; Báo lỗi
+          </button>
+          <button class="duo-btn-close" id="btn-portal-close" style="display: none;">
+            ✕ Tiếp tục đọc
+          </button>
+        </div>
       </div>
 
       <!-- 3-Column Desktop Grid: Left (Hướng dẫn) - Center (Function chính) - Right (Donate) -->
       <div class="duo-main-grid">
         
-        <!-- CỘT 1 (TAY TRÁI): HƯỚNG DẪN SỬ DỤNG & PHÍM TẮT -->
-        <div class="duo-card portal-col-guide">
-          <div class="duo-card-header">
-            <span class="duo-card-title">Hướng dẫn & Phím tắt</span>
+                <!-- CỘT 1 (TAY TRÁI): CẬP NHẬT MỚI & HƯỚNG DẪN SỬ DỤNG -->
+        <div class="portal-col-left">
+          
+          <!-- Ô 1: NHẬT KÝ CẬP NHẬT MỚI -->
+          <div class="duo-card portal-card-updates">
+            <div class="duo-card-header">
+              <span class="duo-card-title">Cập nhật mới</span>
+              <span class="portal-badge-new">v2.5 Mới</span>
+            </div>
+            <p class="duo-card-desc">
+              Nhật ký tính năng &amp; cải tiến vừa phát hành:
+            </p>
+
+            <div class="portal-updates-list">
+              <!-- v2.6 -->
+              <div class="update-entry current-version">
+                <div class="update-entry-header">
+                  <div class="update-version-tag">
+                    <span class="v-num">v2.6</span>
+                    <span class="v-date">02/10/2026</span>
+                  </div>
+                  <span class="update-badge purple">Mới nhất</span>
+                </div>
+                <ul class="update-bullet-list">
+                  <li><b>Google Docs (Tài liệu):</b> Đọc truyện ngụy trang văn bản Word/Drive trang giấy A4 trắng, thước đo tỉ lệ và mục lục.</li>
+                </ul>
+              </div>
+
+              <!-- v2.5 -->
+              <div class="update-entry">
+                <div class="update-entry-header">
+                  <div class="update-version-tag">
+                    <span class="v-num">v2.5</span>
+                  </div>
+                  <span class="update-badge blue">Hệ thống</span>
+                </div>
+                <ul class="update-bullet-list">
+                  <li><b>Tách file độc lập:</b> Mỗi phong cách (Excel, Photoshop, Blender, AutoCAD...) là 1 file HTML riêng, tải siêu tốc và chống soi F12.</li>
+                </ul>
+              </div>
+
+              <!-- v2.4 -->
+              <div class="update-entry">
+                <div class="update-entry-header">
+                  <div class="update-version-tag">
+                    <span class="v-num">v2.4</span>
+                  </div>
+                  <span class="update-badge blue">Giao diện</span>
+                </div>
+                <ul class="update-bullet-list">
+                  <li><b>Autodesk AutoCAD 2026:</b> Bản vẽ nhà 3D Isometric kèm thuyết minh kỹ thuật MTEXT đọc truyện.</li>
+                </ul>
+              </div>
+
+              <!-- v2.3 -->
+              <div class="update-entry">
+                <div class="update-entry-header">
+                  <div class="update-version-tag">
+                    <span class="v-num">v2.3</span>
+                  </div>
+                  <span class="update-badge orange">Giao diện</span>
+                </div>
+                <ul class="update-bullet-list">
+                  <li><b>Blender 4.2:</b> Khung 3D Viewport xe Sci-Fi và Python scripting console.</li>
+                </ul>
+              </div>
+
+              <!-- v2.2 -->
+              <div class="update-entry">
+                <div class="update-entry-header">
+                  <div class="update-version-tag">
+                    <span class="v-num">v2.2</span>
+                  </div>
+                  <span class="update-badge cyan">Giao diện</span>
+                </div>
+                <ul class="update-bullet-list">
+                  <li><b>Photoshop 2026:</b> Dual Artboard ghim cố định Key Visual hero và bản thảo Typography.</li>
+                </ul>
+              </div>
+
+              <!-- v2.1 -->
+              <div class="update-entry">
+                <div class="update-entry-header">
+                  <div class="update-version-tag">
+                    <span class="v-num">v2.1</span>
+                  </div>
+                  <span class="update-badge green">Tính năng</span>
+                </div>
+                <ul class="update-bullet-list">
+                  <li><b>Ẩn/Hiện nút đọc (Phím H):</b> Che giấu toàn bộ thanh điều khiển tức thì khi có người tới gần.</li>
+                </ul>
+              </div>
+
+              <!-- v2.0 -->
+              <div class="update-entry">
+                <div class="update-entry-header">
+                  <div class="update-version-tag">
+                    <span class="v-num">v2.0</span>
+                  </div>
+                  <span class="update-badge gray">Cốt lõi</span>
+                </div>
+                <ul class="update-bullet-list">
+                  <li><b>Đồng bộ xuyên suốt:</b> Cache thông minh lưu tiến độ và tài liệu khi đổi app không mất trang.</li>
+                </ul>
+              </div>
+            </div>
+            <div class="portal-updates-footer">
+              <span>💡 Bạn muốn đề xuất tính năng mới?</span>
+              <button class="portal-link-feedback" id="btn-open-feedback-updates">Gửi góp ý ngay →</button>
+            </div>
           </div>
-          <p class="duo-card-desc">
-            Các thao tác phím tắt và mẹo ngụy trang giúp đọc an toàn tuyệt đối:
-          </p>
 
-          <div class="portal-guide-stacked">
-            <!-- Mục 1: Boss Key -->
-            <div class="portal-guide-item">
-              <div class="guide-item-header">
-                <span class="guide-badge red">Khẩn cấp</span>
-                <h5>Phím thoát nhanh (Boss Key)</h5>
-              </div>
-              <ul class="guide-list">
-                <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd>: Ngay lập tức ẩn toàn bộ truyện và hiển thị bảng tài chính Q3 (hoặc code IDE). Bấm lại để tiếp tục đọc.</li>
-                <li>Nút <b>Báo cáo nhanh (ESC)</b> ở góc phải thanh công cụ có tác dụng tương đương.</li>
-              </ul>
+          <!-- Ô 2: HƯỚNG DẪN SỬ DỤNG & PHÍM TẮT -->
+          <div class="duo-card portal-col-guide">
+            <div class="duo-card-header">
+              <span class="duo-card-title">Hướng dẫn &amp; Phím tắt</span>
             </div>
+            <p class="duo-card-desc">
+              Các thao tác phím tắt và mẹo ngụy trang giúp đọc an toàn tuyệt đối:
+            </p>
 
-            <!-- Mục 2: Điều hướng cuộn -->
-            <div class="portal-guide-item">
-              <div class="guide-item-header">
-                <span class="guide-badge blue">Điều hướng</span>
-                <h5>Đọc liền mạch & Tự cuộn</h5>
+            <div class="portal-guide-stacked">
+              <!-- Mục 1: Boss Key -->
+              <div class="portal-guide-item">
+                <div class="guide-item-header">
+                  <span class="guide-badge red">Khẩn cấp</span>
+                  <h5>Phím thoát nhanh (Boss Key)</h5>
+                </div>
+                <ul class="guide-list">
+                  <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd>: Ngay lập tức ẩn toàn bộ truyện và hiển thị bảng tài chính Q3 (hoặc code IDE). Bấm lại để tiếp tục đọc.</li>
+                  <li>Nút <b>Báo cáo nhanh (ESC)</b> ở góc phải thanh công cụ có tác dụng tương đương.</li>
+                </ul>
               </div>
-              <ul class="guide-list">
-                <li><kbd>Lăn chuột</kbd> hoặc <kbd>↓</kbd> / <kbd>J</kbd>: Tự động cuộn liên tục qua toàn bộ các trang sách, không bị ngắt quãng.</li>
-                <li><kbd>↑</kbd> / <kbd>K</kbd>: Lùi về các dòng hoặc đoạn trước.</li>
-                <li><kbd>Space</kbd> (phím Cách): Bật hoặc tạm dừng chế độ tự cuộn (Auto-advance).</li>
-              </ul>
-            </div>
 
-            <!-- Mục 3: Mẹo ngụy trang -->
-            <div class="portal-guide-item">
-              <div class="guide-item-header">
-                <span class="guide-badge green">Ngụy trang</span>
-                <h5>Mẹo che giấu nâng cao</h5>
+              <!-- Mục 2: Điều hướng cuộn -->
+              <div class="portal-guide-item">
+                <div class="guide-item-header">
+                  <span class="guide-badge blue">Điều hướng</span>
+                  <h5>Đọc liền mạch &amp; Tự cuộn</h5>
+                </div>
+                <ul class="guide-list">
+                  <li><kbd>Lăn chuột</kbd> hoặc <kbd>↓</kbd> / <kbd>J</kbd>: Tự động cuộn liên tục qua toàn bộ các trang sách, không bị ngắt quãng.</li>
+                  <li><kbd>↑</kbd> / <kbd>K</kbd>: Lùi về các dòng hoặc đoạn trước.</li>
+                  <li><kbd>Space</kbd> (phím Cách): Bật hoặc tạm dừng chế độ tự cuộn (Auto-advance).</li>
+                </ul>
               </div>
-              <ul class="guide-list">
-                <li><b>Đổi tên tài liệu:</b> Click chuột trực tiếp vào tên file trên thanh header để đổi tên thành task công ty (tab trình duyệt sẽ đổi theo).</li>
-                <li><b>Chế độ Ninja:</b> Chọn đọc trên thanh công thức fx để chỉ hiển thị từng dòng nhỏ gọn.</li>
-              </ul>
+
+              <!-- Mục 3: Mẹo ngụy trang -->
+              <div class="portal-guide-item">
+                <div class="guide-item-header">
+                  <span class="guide-badge green">Ngụy trang</span>
+                  <h5>Mẹo che giấu nâng cao</h5>
+                </div>
+                <ul class="guide-list">
+                  <li><b>Đổi tên tài liệu:</b> Click chuột trực tiếp vào tên file trên thanh header để đổi tên thành task công ty (tab trình duyệt sẽ đổi theo).</li>
+                  <li><b>Chế độ Ninja:</b> Chọn đọc trên thanh công thức fx để chỉ hiển thị từng dòng nhỏ gọn.</li>
+                </ul>
+              </div>
             </div>
           </div>
+
         </div>
 
         <!-- CỘT 2 (Ở GIỮA): FUNCTION CHÍNH (CHỌN GIAO DIỆN & NẠP FILE & BẮT ĐẦU ĐỌC) -->
@@ -637,7 +788,25 @@
               <div class="duo-mission-check">✓</div>
             </div>
 
-            <!-- Theme 2: Microsoft Excel 365 -->
+            <!-- Theme 2: Google Docs -->
+            <div class="duo-mission-item" data-theme="theme-googledocs">
+              <div class="duo-mission-icon-box gdocs" style="background:#fff; display:flex; align-items:center; justify-content:center;">
+                <svg width="22" height="26" viewBox="0 0 24 32">
+                  <path fill="#4285F4" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
+                  <path fill="#A1C2FA" d="M15 0v9h9L15 0z"/>
+                  <path fill="#ffffff" d="M5 13h14v2H5zm0 4h14v2H5zm0 4h10v2H5z"/>
+                </svg>
+              </div>
+              <div class="duo-mission-info">
+                <div class="duo-mission-top">
+                  <span class="duo-mission-title">Google Docs (Tài Liệu)</span>
+                </div>
+                <div class="duo-mission-desc">Tài liệu văn bản Google Drive trang A4 trắng, chuẩn văn phòng công sở.</div>
+              </div>
+              <div class="duo-mission-check">✓</div>
+            </div>
+
+            <!-- Theme 3: Microsoft Excel 365 -->
             <div class="duo-mission-item" data-theme="theme-excel">
               <div class="duo-mission-icon-box excel">
                 <svg width="22" height="22" viewBox="0 0 32 32">
@@ -795,6 +964,21 @@
           <button class="duo-btn-orange" id="btn-copy-stk">
             Sao chép số tài khoản
           </button>
+
+          <!-- Góp ý & Báo lỗi (Google Form) -->
+          <div class="duo-feedback-box">
+            <div class="duo-feedback-header">
+              <span class="duo-feedback-icon">💬</span>
+              <div>
+                <h5>Đóng góp ý kiến &amp; Báo lỗi</h5>
+                <p>Bạn muốn yêu cầu thêm tính năng mới hoặc báo lỗi?</p>
+              </div>
+            </div>
+            <button class="duo-btn-feedback" id="btn-open-feedback-portal">
+              📝 Mở Google Form Đóng Góp Ý Kiến
+            </button>
+          </div>
+
 
           <div class="duo-footer-note">
             Quét mã QR bằng ứng dụng Mobile Banking hoặc ví điện tử (Momo, ZaloPay...)

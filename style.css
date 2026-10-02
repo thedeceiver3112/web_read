@@ -58,12 +58,14 @@ body {
 /* --------------------------------------------------
    THEME TOGGLING DISPLAY RULES (ALL 8 THEMES)
    -------------------------------------------------- */
-.gsheet-only, .excel-only, .vscode-only, .photoshop-only, .blender-only, .linkedin-only, .autocad-only, .gsheet-excel-only {
+.gsheet-only, .gdocs-only, .excel-only, .vscode-only, .photoshop-only, .blender-only, .linkedin-only, .autocad-only, .gsheet-excel-only {
   display: none !important;
 }
 
 body.theme-googlesheets .gsheet-only,
 body.theme-googlesheets .gsheet-excel-only { display: flex !important; }
+
+body.theme-googledocs .gdocs-only { display: flex !important; }
 
 body.theme-excel .excel-only,
 body.theme-excel .gsheet-excel-only { display: flex !important; }
@@ -3751,3 +3753,945 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
 .ln-post-paragraph { padding: 7px 0; border: 0; background: transparent; }
 .ln-post-paragraph.active-paragraph { background: #eef6fc; box-shadow: inset 2px 0 #0a66c2; }
 
+
+
+/* Left Column Layout with Updates & Guide */
+.portal-col-left {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* New Updates (Changelog) Box */
+.portal-card-updates {
+  background: var(--portal-card-bg);
+  border: 1px solid var(--portal-border);
+  border-radius: 12px;
+  padding: 18px 18px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+}
+
+.portal-badge-new {
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid #86efac;
+  letter-spacing: 0.2px;
+}
+
+.portal-updates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin-top: 6px;
+}
+
+.portal-updates-list::-webkit-scrollbar {
+  width: 5px;
+}
+.portal-updates-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.portal-updates-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.portal-updates-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.update-entry {
+  background: #f8fafc;
+  border: 1px solid var(--portal-border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  transition: all 0.15s ease;
+}
+.update-entry:hover {
+  background: #f1f5f9;
+  border-color: var(--portal-border-hover);
+}
+.update-entry.current-version {
+  background: #f0fdf4;
+  border-color: #86efac;
+  box-shadow: 0 0 0 1px rgba(134, 239, 172, 0.3);
+}
+
+.update-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.update-version-tag {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.update-version-tag .v-num {
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--portal-text-primary);
+}
+.update-version-tag .v-date {
+  font-size: 10.5px;
+  color: var(--portal-text-secondary);
+}
+
+.update-badge {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.update-badge.purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.update-badge.blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.update-badge.orange {
+  background: #ffedd5;
+  color: #c2410c;
+}
+.update-badge.cyan {
+  background: #cffafe;
+  color: #0e7490;
+}
+.update-badge.green {
+  background: #dcfce7;
+  color: #15803d;
+}
+.update-badge.gray {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.update-bullet-list {
+  margin: 0;
+  padding-left: 15px;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #334155;
+}
+.update-bullet-list li {
+  margin-bottom: 3px;
+}
+.update-bullet-list li:last-child {
+  margin-bottom: 0;
+}
+.update-bullet-list li b {
+  color: var(--portal-text-primary);
+}
+
+/* Guide scrollable container polish */
+.portal-guide-stacked {
+  max-height: 270px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.portal-guide-stacked::-webkit-scrollbar {
+  width: 5px;
+}
+.portal-guide-stacked::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+
+/* Google Form Feedback Section & Buttons */
+.duo-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.duo-btn-feedback-nav {
+  background: #ffffff;
+  color: var(--portal-primary);
+  border: 1px solid var(--portal-border);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.duo-btn-feedback-nav:hover {
+  background: var(--portal-primary-light);
+  border-color: var(--portal-primary);
+}
+
+.duo-feedback-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border: 1px dashed var(--portal-border-hover);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.duo-feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.duo-feedback-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.duo-feedback-header h5 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--portal-text-primary);
+}
+
+.duo-feedback-header p {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: var(--portal-text-secondary);
+}
+
+.duo-btn-feedback {
+  background: #ffffff;
+  color: var(--portal-primary);
+  border: 1.5px solid var(--portal-primary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.duo-btn-feedback:hover {
+  background: var(--portal-primary);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.portal-updates-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--portal-border);
+  font-size: 11px;
+  color: var(--portal-text-secondary);
+}
+
+.portal-link-feedback {
+  background: none;
+  border: none;
+  color: var(--portal-primary);
+  font-weight: 600;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.portal-link-feedback:hover {
+  text-decoration: underline;
+  background: var(--portal-primary-light);
+}
+
+/* ==================================================
+   THEME: GOOGLE DOCS (GOOGLE TÀI LIỆU)
+   ================================================== */
+body.theme-googledocs {
+  font-family: 'Google Sans', Roboto, Arial, sans-serif;
+  background-color: #f9fbfd;
+  color: #202124;
+}
+
+/* --- GOOGLE DOCS TOP BAR --- */
+.gdocs-top-bar {
+  background-color: #ffffff;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 4px 14px;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.gdocs-top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gdocs-logo-btn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.gdocs-title-and-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gdocs-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gdocs-doc-title {
+  font-size: 18px;
+  color: #1f1f1f;
+  font-weight: 400;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.gdocs-doc-title:hover {
+  outline: 1px solid #dadce0;
+}
+
+.gdocs-doc-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gdocs-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gdocs-icon-btn:hover {
+  background-color: #f1f3f4;
+}
+
+.gdocs-cloud-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.gdocs-cloud-status:hover {
+  background-color: #f1f3f4;
+}
+
+.gdocs-menu-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-left: -4px;
+}
+
+.gdocs-menu-item {
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: #202124;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gdocs-menu-item:hover {
+  background-color: #f1f3f4;
+}
+
+.gdocs-top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gdocs-reading-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gdocs-circle-btn {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444746;
+}
+
+.gdocs-circle-btn:hover {
+  background-color: #f1f3f4;
+}
+
+.gdocs-share-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #c2e7ff;
+  color: #001d35;
+  border: none;
+  height: 38px;
+  padding: 0 20px 0 16px;
+  border-radius: 19px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.15s ease;
+}
+
+.gdocs-share-btn:hover {
+  background-color: #b3d7f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.gdocs-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4285F4, #1a73e8);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* --- GOOGLE DOCS TOOLBAR --- */
+.gdocs-toolbar {
+  background-color: #edf2fa;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  margin: 4px 16px 6px 16px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.gdocs-tools-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.gdocs-tools-group::-webkit-scrollbar {
+  display: none;
+}
+
+.gd-tool-btn {
+  background: transparent;
+  border: none;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #444746;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.1s ease;
+}
+
+.gd-tool-btn:hover {
+  background-color: rgba(68, 71, 70, 0.08);
+}
+
+.gd-tool-divider {
+  width: 1px;
+  height: 18px;
+  background-color: #c4c7c5;
+  margin: 0 4px;
+}
+
+.gd-select {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 12px;
+  color: #444746;
+  cursor: pointer;
+  outline: none;
+}
+
+.gd-select:hover {
+  background-color: rgba(68, 71, 70, 0.08);
+}
+
+.gd-style-select {
+  width: 125px;
+}
+
+.gd-font-select {
+  width: 105px;
+}
+
+.gd-size-select {
+  width: 46px;
+}
+
+.gd-zoom-select {
+  width: 68px;
+}
+
+/* Reading Controls inside toolbar */
+.gdocs-stealth-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.gd-stealth-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #ffffff;
+  border: 1px solid #c4c7c5;
+  color: #1a73e8;
+  padding: 3px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.gd-stealth-pill-btn:hover {
+  background-color: #f1f3f4;
+  border-color: #1a73e8;
+}
+
+.gd-file-name {
+  font-size: 11px;
+  color: #444746;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gd-page-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 12px;
+  border: 1px solid #dadce0;
+}
+
+.gd-mini-btn {
+  background: transparent;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 4px;
+  color: #444746;
+}
+
+.gd-mini-btn:hover {
+  background-color: #f1f3f4;
+}
+
+.gd-page-text {
+  font-size: 11px;
+  color: #444746;
+  font-weight: 500;
+  min-width: 38px;
+  text-align: center;
+}
+
+#gd-input-jump {
+  width: 38px;
+  height: 20px;
+  font-size: 11px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  text-align: center;
+  outline: none;
+}
+
+/* --- GOOGLE DOCS WORKSPACE --- */
+.gdocs-workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background-color: #f9fbfd;
+  position: relative;
+}
+
+.gdocs-layout-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Left Document Outline Sidebar */
+.gdocs-outline-sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #e0e2ec;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 16px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.gdocs-outline-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #444746;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gdocs-outline-summary-card {
+  background-color: #f0f4f9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+}
+
+.gdocs-outline-summary-card h5 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a73e8;
+  margin-bottom: 4px;
+}
+
+.gdocs-outline-summary-card p {
+  font-size: 11px;
+  color: #444746;
+  line-height: 1.4;
+}
+
+.gdocs-outline-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gdocs-outline-item {
+  font-size: 12px;
+  color: #444746;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gdocs-outline-item:hover {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+}
+
+.gdocs-outline-item.active {
+  background-color: #d3e3fd;
+  color: #041e49;
+  font-weight: 600;
+}
+
+.gdocs-outline-item.level-2 {
+  padding-left: 20px;
+  font-size: 11px;
+  color: #747775;
+}
+
+/* Center Canvas & Paper Container */
+.gdocs-canvas-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: #f9fbfd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-bottom: 80px;
+}
+
+/* Google Docs Ruler */
+.gdocs-ruler-bar {
+  width: 816px;
+  height: 18px;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border: 1px solid #dadce0;
+  border-bottom: 1px solid #e8eaed;
+  margin-top: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.gdocs-ruler-ticks {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  box-sizing: border-box;
+}
+
+.gdocs-ruler-tick {
+  font-size: 9px;
+  color: #70757a;
+  position: relative;
+}
+
+.gdocs-ruler-tick::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 1px;
+  height: 4px;
+  background-color: #dadce0;
+}
+
+/* Document Paper Sheet (A4 / US Letter representation) */
+.gdocs-page-sheet {
+  width: 816px;
+  min-height: 1056px;
+  height: auto;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 1px rgba(60,64,67,.15), 0 1px 2px 0 rgba(60,64,67,.3);
+  padding: 72px 72px 90px 72px;
+  box-sizing: border-box;
+  margin-top: 14px;
+  margin-bottom: 60px;
+  color: #202124;
+  line-height: 1.65;
+  font-size: 11pt;
+  position: relative;
+}
+
+.gdocs-header-watermark {
+  font-size: 9pt;
+  color: #70757a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #e8eaed;
+  padding-bottom: 6px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gdocs-doc-heading {
+  font-size: 20pt;
+  font-weight: 700;
+  color: #1f1f1f;
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.gdocs-doc-subtitle {
+  font-size: 11pt;
+  color: #5f6368;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.gdocs-doc-divider {
+  border: none;
+  height: 1px;
+  background-color: #dadce0;
+  margin: 20px 0 28px 0;
+}
+
+/* Story Stream inside Google Docs */
+.gdocs-story-stream {
+  display: flex;
+  flex-direction: column;
+}
+
+.gdocs-story-paragraph {
+  font-size: 11pt;
+  line-height: 1.75;
+  color: #202124;
+  text-indent: 28px;
+  margin-bottom: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-left 0.15s ease;
+  text-align: justify;
+}
+
+.gdocs-story-paragraph:hover {
+  background-color: #f8fafd;
+}
+
+.gdocs-story-paragraph.active-paragraph {
+  background-color: #e8f0fe;
+  border-left: 3px solid #1a73e8;
+  padding-left: 10px;
+}
+
+/* Boss Mode View (Real High-Level Corporate Business Proposal) */
+.gdocs-boss-view {
+  display: none;
+  font-size: 11pt;
+  color: #202124;
+  line-height: 1.6;
+}
+
+.gdocs-boss-view h2 {
+  font-size: 15pt;
+  color: #1a73e8;
+  margin: 24px 0 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 4px;
+}
+
+.gdocs-boss-view h3 {
+  font-size: 12pt;
+  color: #202124;
+  margin: 16px 0 8px 0;
+}
+
+.gdocs-boss-view p {
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+.gdocs-boss-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 24px 0;
+  font-size: 10.5pt;
+}
+
+.gdocs-boss-table th {
+  background-color: #f1f3f4;
+  border: 1px solid #dadce0;
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 600;
+  color: #202124;
+}
+
+.gdocs-boss-table td {
+  border: 1px solid #dadce0;
+  padding: 8px 10px;
+}
+
+.gdocs-boss-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 9.5pt;
+  font-weight: 600;
+}
+
+.gdocs-badge-done {
+  background-color: #ceead6;
+  color: #0d652d;
+}
+
+.gdocs-badge-prog {
+  background-color: #feefc3;
+  color: #b06000;
+}
+
+.gdocs-boss-signoff {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px dashed #dadce0;
+}
+
+.gdocs-signoff-col {
+  text-align: center;
+  width: 40%;
+}
+
+.gdocs-signoff-title {
+  font-weight: 600;
+  margin-bottom: 50px;
+}
+
+.gdocs-signoff-name {
+  font-weight: 700;
+  color: #1f1f1f;
+}
