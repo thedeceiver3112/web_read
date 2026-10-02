@@ -98,10 +98,10 @@ body.theme-photoshop {
   overflow: auto;
   background-color: #282828;
   display: flex;
-  justify-content: center;
-  padding: 30px 20px;
+  padding: 10px 14px 24px;
+  box-sizing: border-box;
 }
-.ps-canvas-container { max-width: 900px; width: 100%; margin: 0 auto; }
+.ps-canvas-container { max-width: none; width: 100%; margin: 0; }
 .ps-artboard {
   background-color: #ffffff;
   color: #1a1a1a;
@@ -129,6 +129,15 @@ body.theme-photoshop {
   font-weight: 700;
 }
 .ps-spec-line { font-size: 11px; color: #777; margin-bottom: 28px; font-family: monospace; }
+.ps-artboard-sheet {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  padding: 22px 26px 36px;
+  border-radius: 2px;
+  box-shadow: 0 6px 28px rgba(0,0,0,0.45);
+  min-height: calc(100vh - 120px);
+  border: 1px solid #d0d7de;
+}
 .ps-story-stream { display: flex; flex-direction: column; gap: 14px; }
 .ps-story-paragraph {
   font-size: 15px;
@@ -198,31 +207,46 @@ body.theme-photoshop {
 /* 1. PHOTOSHOP MULTI-ARTBOARD STYLING */
 .ps-artboards-row {
   display: flex;
-  gap: 36px;
-  max-width: 1560px;
+  gap: 16px;
+  max-width: none;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   align-items: flex-start;
 }
 .ps-canvas-container {
-  max-width: 1600px;
+  max-width: none;
   width: 100%;
-}
-.ps-visual-artboard, .ps-text-artboard {
-  flex: 1 1 50%;
-  min-width: 480px;
+  margin: 0;
 }
 .ps-visual-artboard {
-  background-color: #1f2329;
-  border: 1px solid #333a42;
+  flex: 0 0 60%;
+  min-width: 0;
+  background-color: #242830;
+  border: 1px solid #363d47;
   box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-  padding: 24px;
+  padding: 12px 14px;
   position: sticky !important;
-  top: 16px !important;
+  top: 10px !important;
   align-self: flex-start !important;
-  max-height: calc(100vh - 110px) !important;
+  max-height: calc(100vh - 95px) !important;
   overflow: hidden !important;
   z-index: 10;
+}
+.ps-text-artboard {
+  flex: 1 1 40%;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  min-height: 0;
+  margin-bottom: 0;
+}
+.ps-text-artboard .ps-artboard-header {
+  padding: 4px 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #444;
+  color: #aaa;
+  font-size: 10px;
 }
 .ps-visual-artboard .ps-artboard-header {
   border-bottom: 1px solid #3a424d;

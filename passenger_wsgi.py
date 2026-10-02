@@ -12,8 +12,30 @@ import pypdf
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+import unicodedata
+
+def clean_and_repair_vietnamese_text(text):
+    if not text:
+        return ''
+    # Normalize to precomposed Unicode NFC
+    s = unicodedata.normalize('NFC', text)
+    # Fix decomposed combining diacritical marks with a space in front
+    s = re.sub(r'([a-zA-ZáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ])\s+([\u0300-\u036f\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f])', r'\1\2', s)
+    s = unicodedata.normalize('NFC', s)
+    
+    # Merge broken syllable fragments (e.g. 'c ử a' -> 'cửa', 'm ộ t' -> 'một')
+    for _ in range(5):
+        orig = s
+        s = re.sub(r'(^|[\s(„"\'\-–—])(b|c|d|đ|g|h|k|l|m|n|p|r|s|t|v|x|ch|gh|gi|kh|nh|ng|ngh|ph|qu|th|tr|B|C|D|Đ|G|H|K|L|M|N|P|R|S|T|V|X|Ch|Gh|Gi|Kh|Nh|Ng|Ngh|Ph|Qu|Th|Tr)\s+([áàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ][a-zA-Zà-ỹ]*)', r'\1\2\3', s)
+        s = re.sub(r'([aăâeêioôơuưyáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]+)\s+(c|m|n|p|t|ch|ng|nh|a|i|u|o|y)(?=[\s,.;:!?)]|$)', r'\1\2', s, flags=re.IGNORECASE)
+        if s == orig:
+            break
+    s = re.sub(r'\s+([,.;:!?])', r'\1', s)
+    s = re.sub(r' {2,}', ' ', s)
+    return s
+
 def split_text_into_chunks(text, max_len=220):
-    clean_text = text.replace("\r\n", "\n").replace("\t", " ")
+    clean_text = clean_and_repair_vietnamese_text(text).replace("\r\n", "\n").replace("\t", " ")
     clean_text = re.sub(r" +", " ", clean_text)
     paragraphs = re.split(r"\n\s*\n|\n", clean_text)
     chunks = []

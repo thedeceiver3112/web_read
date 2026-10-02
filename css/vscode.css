@@ -217,7 +217,9 @@ body.theme-vscode {
   border-right: 1px solid #2b2b2b;
 }
 .vsc-gutter-num {
-  height: 21px;
+  min-height: 21px;
+  line-height: var(--story-line-height, 1.6);
+  font-size: var(--story-font-size, 13px);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -231,7 +233,10 @@ body.theme-vscode {
 }
 
 .vsc-code-line {
-  height: 21px;
+  min-height: 21px;
+  font-size: var(--story-font-size, 13px);
+  line-height: var(--story-line-height, 1.6);
+  letter-spacing: var(--story-letter-spacing, 0.15px);
   display: flex;
   align-items: center;
   white-space: pre-wrap;

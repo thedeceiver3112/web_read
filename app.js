@@ -46,7 +46,8 @@ const state = {
   autoScrollDelay: 5000,
   bossModeActive: false,
   previousSheetId: 'view-sheet-story',
-  fontSize: 10,
+  fontSize: 11,
+  lineHeight: '1.75',
   fontFamily: 'Arial',
   isBold: false,
   isItalic: false,
@@ -61,6 +62,10 @@ const state = {
   blenderTitle: localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend',
   linkedinTitle: localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn',
   autocadTitle: localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg',
+  zaloTitle: localStorage.getItem('stealth_title_zalo') || 'Dự án Sprint Q3 - Tech Lead & Team Sync',
+  figmaTitle: localStorage.getItem('stealth_title_figma') || 'Mobile_Banking_Design_System_v4.2',
+  canvaTitle: localStorage.getItem('stealth_title_canva') || 'Báo Cáo Chiến Lược Thương Hiệu 2026',
+  powerpointTitle: localStorage.getItem('stealth_title_powerpoint') || 'Q3_Business_Review_Strategic_Plan.pptx',
 };
 
 // Realistic mock categories & modules for corporate audit camouflage
@@ -151,7 +156,11 @@ const THEME_PAGES = {
   'theme-photoshop': 'photoshop.html',
   'theme-blender': 'blender.html',
   'theme-linkedin': 'linkedin.html',
-  'theme-autocad': 'autocad.html'
+  'theme-autocad': 'autocad.html',
+  'theme-zalo': 'zalo.html',
+  'theme-figma': 'figma.html',
+  'theme-canva': 'canva.html',
+  'theme-powerpoint': 'powerpoint.html'
 };
 
 const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
@@ -169,6 +178,10 @@ function getThemeForCurrentPage() {
   if (path.endsWith('blender.html')) return 'theme-blender';
   if (path.endsWith('linkedin.html')) return 'theme-linkedin';
   if (path.endsWith('autocad.html')) return 'theme-autocad';
+  if (path.endsWith('zalo.html')) return 'theme-zalo';
+  if (path.endsWith('figma.html')) return 'theme-figma';
+  if (path.endsWith('canva.html')) return 'theme-canva';
+  if (path.endsWith('powerpoint.html') || path.endsWith('ppt.html')) return 'theme-powerpoint';
   return 'theme-googlesheets';
 }
 
@@ -242,7 +255,10 @@ async function readDocumentCache() {
 function applyCachedDocument(cache) {
   if (!cache || !Array.isArray(cache.chunks) || cache.chunks.length === 0) return false;
 
-  state.allChunks = cache.chunks;
+  state.allChunks = cache.chunks.map(chunk => ({
+    ...chunk,
+    text: cleanAndRepairVietnameseText(chunk.text || '')
+  }));
   state.pageStartIndices = cache.pageStartIndices || {};
   state.totalPages = Math.max(1, Number(cache.totalPages) || 1);
   state.loadedPages = state.totalPages;
@@ -256,6 +272,7 @@ function applyCachedDocument(cache) {
 
   const portalNameLabel = document.getElementById('portal-pdf-filename');
   if (portalNameLabel && state.pdfFileName) portalNameLabel.textContent = state.pdfFileName;
+  if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
   return true;
 }
 
@@ -339,6 +356,10 @@ const FAVICONS = {
   'theme-blender': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23222222'/><circle cx='16' cy='18' r='7' fill='%23ea7600'/><circle cx='16' cy='18' r='3.5' fill='%23265787'/><path d='M16 5 L16 11 M10 8 L14 13 M22 8 L18 13' stroke='%23ea7600' stroke-width='2.5' stroke-linecap='round'/></svg>",
   'theme-linkedin': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a66c2'/><text x='16' y='24' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>in</text></svg>",
   'theme-autocad': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23c41527'/><text x='16' y='24' font-size='22' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>A</text></svg>",
+  'theme-zalo': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230068ff'/><text x='16' y='22' font-size='14' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>Zalo</text></svg>",
+  'theme-figma': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 57'><path d='M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z' fill='%231ABCFE'/><path d='M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z' fill='%230ACF83'/><path d='M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z' fill='%23FF7262'/><path d='M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z' fill='%23F24E1E'/><path d='M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z' fill='%23A259FF'/></svg>",
+  'theme-canva': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='cg' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%2300c4cc'/><stop offset='100%25' stop-color='%237d2ae8'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23cg)'/><text x='16' y='23' font-size='20' font-family='Brush Script MT, cursive, Segoe UI' font-style='italic' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>",
+  'theme-powerpoint': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23d24726'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>P</text></svg>",
 };
 
 // ==========================================================
@@ -394,6 +415,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initContinuousScrollListeners();
   initLandingPortal();
   initControlsVisibilityToggle();
+  initVersionReloadButton();
   initFeedbackListeners();
   
   state.bossModeActive = false;
@@ -432,8 +454,9 @@ function loadSavedState() {
     if (saved) {
       const data = JSON.parse(saved);
       state.fontSize = data.fontSize || (state.theme === 'theme-googlesheets' ? 10 : 11);
+      state.lineHeight = data.lineHeight || '1.75';
       state.fontFamily = data.fontFamily || (state.theme === 'theme-googlesheets' ? 'Arial' : 'Calibri');
-      state.readingMode = data.readingMode || 'grid';
+      state.readingMode = (state.theme === 'theme-googlesheets') ? 'grid' : (data.readingMode || 'grid');
       state.autoScrollDelay = data.autoScrollDelay || 5000;
       state.textDimLevel = data.textDimLevel || 100;
       state.wrapText = data.wrapText !== undefined ? data.wrapText : true;
@@ -450,6 +473,7 @@ function saveState() {
   try {
     const data = {
       fontSize: state.fontSize,
+      lineHeight: state.lineHeight,
       fontFamily: state.fontFamily,
       readingMode: state.readingMode,
       autoScrollDelay: state.autoScrollDelay,
@@ -480,6 +504,10 @@ function initThemeSystem() {
     'btn-open-theme-modal-blender',
     'btn-open-theme-modal-linkedin',
     'btn-open-theme-modal-autocad',
+    'btn-open-theme-modal-zalo',
+    'btn-open-theme-modal-figma',
+    'btn-open-theme-modal-canva',
+    'btn-open-theme-modal-powerpoint',
   ];
   openButtons.forEach(id => {
     const btn = document.getElementById(id);
@@ -536,6 +564,7 @@ function applyTheme(themeName) {
   const headerTitle = document.getElementById('story-header-title');
 
   if (themeName === 'theme-googlesheets') {
+    state.readingMode = 'grid';
     const docTitle = state.gsheetTitle || 'Báo cáo số liệu & Phân tích KPI Q3';
     document.title = `${docTitle} - Google Trang tính`;
     const gTitle = document.getElementById('gsheet-doc-title');
@@ -578,6 +607,26 @@ function applyTheme(themeName) {
     document.title = `${docTitle} - Autodesk AutoCAD 2026`;
     const cadTitle = document.getElementById('autocad-doc-title');
     if (cadTitle) cadTitle.textContent = docTitle;
+  } else if (themeName === 'theme-zalo') {
+    const docTitle = state.zaloTitle || 'Dự án Sprint Q3 - Tech Lead & Team Sync';
+    document.title = `${docTitle} - Zalo`;
+    const zTitle = document.getElementById('zalo-doc-title');
+    if (zTitle) zTitle.textContent = docTitle;
+  } else if (themeName === 'theme-figma') {
+    const docTitle = state.figmaTitle || 'Mobile_Banking_Design_System_v4.2';
+    document.title = `${docTitle} – Figma`;
+    const fTitle = document.getElementById('figma-doc-title');
+    if (fTitle) fTitle.textContent = docTitle;
+  } else if (themeName === 'theme-canva') {
+    const docTitle = state.canvaTitle || 'Báo Cáo Chiến Lược Thương Hiệu 2026';
+    document.title = `${docTitle} - Canva`;
+    const cTitle = document.getElementById('canva-doc-title');
+    if (cTitle) cTitle.textContent = docTitle;
+  } else if (themeName === 'theme-powerpoint') {
+    const docTitle = state.powerpointTitle || 'Q3_Business_Review_Strategic_Plan.pptx';
+    document.title = `${docTitle} - PowerPoint`;
+    const pTitle = document.getElementById('ppt-doc-title');
+    if (pTitle) pTitle.textContent = docTitle;
   }
 
   applyStyles();
@@ -743,6 +792,175 @@ function initTitleEditing() {
       }
     });
   }
+
+  const zTitle = document.getElementById('zalo-doc-title');
+  if (zTitle) {
+    zTitle.addEventListener('blur', () => {
+      let val = zTitle.textContent.trim();
+      if (!val) val = 'Dự án Sprint Q3 - Tech Lead & Team Sync';
+      zTitle.textContent = val;
+      state.zaloTitle = val;
+      localStorage.setItem('stealth_title_zalo', val);
+      if (state.theme === 'theme-zalo') {
+        document.title = `${val} - Zalo`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên nhóm Zalo: <b>${escapeHtml(val)}</b>`);
+    });
+    zTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        zTitle.blur();
+      }
+    });
+  }
+
+  const fTitle = document.getElementById('figma-doc-title');
+  if (fTitle) {
+    fTitle.addEventListener('blur', () => {
+      let val = fTitle.textContent.trim();
+      if (!val) val = 'Mobile_Banking_Design_System_v4.2';
+      fTitle.textContent = val;
+      state.figmaTitle = val;
+      localStorage.setItem('stealth_title_figma', val);
+      if (state.theme === 'theme-figma') {
+        document.title = `${val} – Figma`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên file Figma: <b>${escapeHtml(val)}</b>`);
+    });
+    fTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        fTitle.blur();
+      }
+    });
+  }
+
+  const cTitle = document.getElementById('canva-doc-title');
+  if (cTitle) {
+    cTitle.addEventListener('blur', () => {
+      let val = cTitle.textContent.trim();
+      if (!val) val = 'Báo Cáo Chiến Lược Thương Hiệu 2026';
+      cTitle.textContent = val;
+      state.canvaTitle = val;
+      localStorage.setItem('stealth_title_canva', val);
+      if (state.theme === 'theme-canva') {
+        document.title = `${val} - Canva`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên thiết kế Canva: <b>${escapeHtml(val)}</b>`);
+    });
+    cTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        cTitle.blur();
+      }
+    });
+  }
+
+  const pTitle = document.getElementById('ppt-doc-title');
+  if (pTitle) {
+    pTitle.addEventListener('blur', () => {
+      let val = pTitle.textContent.trim();
+      if (!val) val = 'Q3_Business_Review_Strategic_Plan.pptx';
+      if (!val.toLowerCase().endsWith('.pptx') && !val.toLowerCase().endsWith('.ppt')) val += '.pptx';
+      pTitle.textContent = val;
+      state.powerpointTitle = val;
+      localStorage.setItem('stealth_title_powerpoint', val);
+      if (state.theme === 'theme-powerpoint') {
+        document.title = `${val} - PowerPoint`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên slide PowerPoint: <b>${escapeHtml(val)}</b>`);
+    });
+    pTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        pTitle.blur();
+      }
+    });
+  }
+}
+
+function hasLoadedDocument() {
+  return Boolean(
+    state.pdfFileName &&
+    typeof state.pdfFileName === 'string' &&
+    state.pdfFileName.trim() !== '' &&
+    state.allChunks &&
+    Array.isArray(state.allChunks) &&
+    state.allChunks.length > 0
+  );
+}
+
+function shakePortalUpload() {
+  const uploadCard = document.getElementById('portal-upload-card') || document.querySelector('.duo-upload-quest');
+  if (!uploadCard) return;
+  uploadCard.classList.remove('shake');
+  void uploadCard.offsetWidth; // trigger reflow
+  uploadCard.classList.add('shake');
+  setTimeout(() => {
+    uploadCard.classList.remove('shake');
+  }, 500);
+}
+
+function updatePortalUploadUI() {
+  const uploadCard = document.getElementById('portal-upload-card') || document.querySelector('.duo-upload-quest');
+  const badgeText = document.getElementById('portal-upload-badge-text');
+  const nameLabel = document.getElementById('portal-pdf-filename');
+  const statusPill = document.getElementById('portal-upload-status-pill');
+  const hintLabel = document.getElementById('portal-upload-hint');
+  const btnText = document.getElementById('portal-upload-btn-text');
+  const enterBtn = document.getElementById('btn-portal-enter');
+
+  const hasDoc = hasLoadedDocument();
+
+  if (uploadCard) {
+    uploadCard.classList.toggle('has-doc', hasDoc);
+    uploadCard.classList.toggle('no-doc', !hasDoc);
+  }
+
+  if (hasDoc) {
+    if (badgeText) badgeText.textContent = '✅ ĐÃ NẠP TRUYỆN THÀNH CÔNG';
+    if (nameLabel) {
+      nameLabel.textContent = state.pdfFileName || 'Tài liệu đã nạp';
+      nameLabel.title = state.pdfFileName || '';
+    }
+    if (statusPill) {
+      statusPill.textContent = '✅ Sẵn sàng đọc';
+    }
+    if (hintLabel) {
+      const pageInfo = state.totalPages > 1 ? ` (${state.totalPages} trang)` : '';
+      hintLabel.textContent = `Đã lưu trên máy${pageInfo} • Nhấn "Bắt đầu đọc" để vào giao diện`;
+    }
+    if (btnText) {
+      btnText.textContent = 'Đổi truyện khác';
+    }
+    if (enterBtn) {
+      enterBtn.classList.remove('disabled-need-file');
+      enterBtn.classList.add('ready');
+      enterBtn.innerHTML = `📖 Bắt Đầu Đọc Ngay`;
+      enterBtn.title = `Bắt đầu đọc: ${state.pdfFileName}`;
+    }
+  } else {
+    if (badgeText) badgeText.textContent = '⚠️ BƯỚC 1: NẠP FILE TRUYỆN ĐỂ BẮT ĐẦU';
+    if (nameLabel) {
+      nameLabel.textContent = 'Chưa chọn file truyện';
+      nameLabel.title = '';
+    }
+    if (statusPill) {
+      statusPill.textContent = '⚠️ Cần nạp file';
+    }
+    if (hintLabel) {
+      hintLabel.textContent = 'Hỗ trợ .PDF, .TXT, .EPUB • Đọc hoàn toàn offline trên máy tính';
+    }
+    if (btnText) {
+      btnText.textContent = 'Tải truyện lên';
+    }
+    if (enterBtn) {
+      enterBtn.classList.add('disabled-need-file');
+      enterBtn.classList.remove('ready');
+      enterBtn.innerHTML = `⚠️ Cần nạp file truyện để bắt đầu đọc`;
+      enterBtn.title = 'Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc';
+    }
+  }
 }
 
 // ==========================================================
@@ -767,6 +985,7 @@ function initLandingPortal() {
     portal.classList.remove('hidden');
     portal.setAttribute('aria-hidden', 'false');
     if (closeBtn) closeBtn.style.display = showCloseButton ? 'flex' : 'none';
+    updatePortalUploadUI();
   };
 
   if (rememberChk) rememberChk.checked = localStorage.getItem('skip_portal') === 'true';
@@ -781,6 +1000,7 @@ function initLandingPortal() {
 
   // Sync theme UI
   updatePortalThemeUI(state.theme);
+  updatePortalUploadUI();
 
   // Clicking mission items on the portal
   document.querySelectorAll('.duo-mission-item, .portal-theme-item').forEach(item => {
@@ -796,10 +1016,28 @@ function initLandingPortal() {
     });
   });
 
-  // Enter button (Start reading)
+  // Enter button (Start reading - only allows when a story document is loaded)
   const enterBtn = document.getElementById('btn-portal-enter');
+  const portalFileInput = document.getElementById('portal-file-input');
+
   if (enterBtn) {
     enterBtn.addEventListener('click', () => {
+      if (!hasLoadedDocument()) {
+        shakePortalUpload();
+        showPageFlipToast('⚠️ Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc!');
+        const uploadAlert = document.getElementById('portal-upload-alert');
+        if (uploadAlert) {
+          uploadAlert.style.display = 'flex';
+          setTimeout(() => {
+            if (uploadAlert) uploadAlert.style.display = 'none';
+          }, 4000);
+        }
+        if (portalFileInput) {
+          portalFileInput.click();
+        }
+        return;
+      }
+
       if (rememberChk && rememberChk.checked) {
         localStorage.setItem('skip_portal', 'true');
       } else {
@@ -829,6 +1067,10 @@ function initLandingPortal() {
     'btn-open-portal-blender',
     'btn-open-portal-linkedin',
     'btn-open-portal-autocad',
+    'btn-open-portal-zalo',
+    'btn-open-portal-figma',
+    'btn-open-portal-canva',
+    'btn-open-portal-powerpoint',
     'btn-modal-to-portal'
   ].forEach(id => {
     const btn = document.getElementById(id);
@@ -837,6 +1079,7 @@ function initLandingPortal() {
         closeThemeModal();
         openPortal(true);
         updatePortalThemeUI(state.theme);
+        updatePortalUploadUI();
       });
     }
   });
@@ -848,7 +1091,6 @@ function initLandingPortal() {
   }
 
   // Portal document file input
-  const portalFileInput = document.getElementById('portal-file-input');
   if (portalFileInput) {
     portalFileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
@@ -856,7 +1098,35 @@ function initLandingPortal() {
         const nameLabel = document.getElementById('portal-pdf-filename');
         if (nameLabel) nameLabel.textContent = file.name;
         processDocumentFile(file);
+        updatePortalUploadUI();
         e.target.value = '';
+      }
+    });
+  }
+
+  // Drag & drop support on the portal upload card
+  const uploadCard = document.getElementById('portal-upload-card') || document.querySelector('.duo-upload-quest');
+  if (uploadCard) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadCard.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadCard.classList.add('is-dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadCard.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        uploadCard.classList.remove('is-dragover');
+      });
+    });
+    uploadCard.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt?.files;
+      if (files && files.length > 0) {
+        processDocumentFile(files[0]);
+        updatePortalUploadUI();
       }
     });
   }
@@ -953,6 +1223,52 @@ function updateControlsToggleButtons(isHidden) {
     btn.innerHTML = isHidden ? '👁 Hiện nút (H)' : '👁 Ẩn nút (H)';
     btn.title = isHidden ? 'Hiện các nút điều khiển đọc (Phím tắt: H)' : 'Ẩn các nút điều khiển đọc (Phím tắt: H)';
   });
+}
+
+function initVersionReloadButton() {
+  if (document.getElementById('btn-force-version-reload')) return;
+
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.id = 'btn-force-version-reload';
+  button.className = 'version-reload-button';
+  button.textContent = '↻';
+  button.title = 'Tải lại phiên bản mới (tương đương Ctrl+F5)';
+  button.setAttribute('aria-label', 'Tải lại phiên bản mới');
+  button.addEventListener('click', () => forceRefreshApplication(button));
+  document.body.appendChild(button);
+}
+
+async function forceRefreshApplication(button) {
+  if (button.disabled) return;
+
+  button.disabled = true;
+  button.classList.add('is-loading');
+  button.title = 'Đang tải phiên bản mới...';
+  saveState();
+  await persistDocumentCache().catch(() => {});
+
+  let latestVersion = '';
+  try {
+    const versionUrl = new URL('version.json', document.baseURI);
+    versionUrl.searchParams.set('_', Date.now().toString());
+    const response = await fetch(versionUrl, {
+      cache: 'no-store',
+      credentials: 'same-origin',
+      headers: { 'Cache-Control': 'no-cache' }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      latestVersion = String(data.version || '').trim();
+    }
+  } catch (error) {
+    console.info('Không lấy được mã phiên bản trước khi tải lại:', error);
+  }
+
+  const refreshedUrl = new URL(window.location.href);
+  refreshedUrl.searchParams.set('__appv', latestVersion || Date.now().toString());
+  refreshedUrl.searchParams.set('__refresh', Date.now().toString());
+  window.location.replace(refreshedUrl.toString());
 }
 
 // ==========================================================
@@ -1106,6 +1422,12 @@ function initEventListeners() {
     } else if (e.key === ' ') {
       e.preventDefault();
       toggleAutoScroll();
+    } else if (e.key === '[' || e.key === '{') {
+      e.preventDefault();
+      changeFontSize(-1);
+    } else if (e.key === ']' || e.key === '}') {
+      e.preventDefault();
+      changeFontSize(1);
     }
   });
 
@@ -1155,7 +1477,8 @@ function initEventListeners() {
   [
     'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
     'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
-    'autocad-btn-prev'
+    'autocad-btn-prev', 'zalo-btn-prev', 'figma-btn-prev',
+    'canva-btn-prev', 'ppt-btn-prev'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(-1));
@@ -1163,7 +1486,8 @@ function initEventListeners() {
   [
     'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
     'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
-    'autocad-btn-next'
+    'autocad-btn-next', 'zalo-btn-next', 'figma-btn-next',
+    'canva-btn-next', 'ppt-btn-next'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(1));
@@ -1187,7 +1511,8 @@ function initEventListeners() {
   [
     'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
-    'autocad-btn-autoscroll'
+    'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
+    'canva-btn-autoscroll', 'ppt-btn-autoscroll'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleAutoScroll);
@@ -1221,7 +1546,7 @@ function initEventListeners() {
   });
 
   // Font and Formatting
-  ['gs-select-font-family', 'gdocs-select-font-family', 'excel-select-font-family'].forEach(id => {
+  ['gs-select-font-family', 'gdocs-select-font-family', 'excel-select-font-family', 'modal-select-font-family'].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
       sel.addEventListener('change', (e) => {
@@ -1233,7 +1558,7 @@ function initEventListeners() {
     }
   });
 
-  ['gs-select-font-size', 'gdocs-select-font-size', 'excel-select-font-size'].forEach(id => {
+  ['gs-select-font-size', 'gdocs-select-font-size', 'excel-select-font-size', 'ps-select-font-size'].forEach(id => {
     const sel = document.getElementById(id);
     if (sel) {
       sel.addEventListener('change', (e) => {
@@ -1241,6 +1566,59 @@ function initEventListeners() {
         syncControls();
         applyStyles();
         saveState();
+      });
+    }
+  });
+
+  // Step decrement & increment buttons for Font Size across all themes
+  [
+    'gs-btn-font-dec', 'gdocs-btn-font-dec', 'excel-btn-font-dec',
+    'vsc-btn-font-dec', 'ps-btn-font-dec', 'blender-btn-font-dec',
+    'linkedin-btn-font-dec', 'autocad-btn-font-dec',
+    'zalo-btn-font-dec', 'figma-btn-font-dec',
+    'canva-btn-font-dec', 'ppt-btn-font-dec',
+    'modal-btn-font-dec', 'stealth-btn-font-dec'
+  ].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        changeFontSize(-1);
+      });
+    }
+  });
+
+  [
+    'gs-btn-font-inc', 'gdocs-btn-font-inc', 'excel-btn-font-inc',
+    'vsc-btn-font-inc', 'ps-btn-font-inc', 'blender-btn-font-inc',
+    'linkedin-btn-font-inc', 'autocad-btn-font-inc',
+    'zalo-btn-font-inc', 'figma-btn-font-inc',
+    'canva-btn-font-inc', 'ppt-btn-font-inc',
+    'modal-btn-font-inc', 'stealth-btn-font-inc'
+  ].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        changeFontSize(1);
+      });
+    }
+  });
+
+  // Font Size Slider in Settings Modal
+  const modalFontSlider = document.getElementById('modal-slider-font-size');
+  if (modalFontSlider) {
+    modalFontSlider.addEventListener('input', (e) => {
+      setFontSize(e.target.value);
+    });
+  }
+
+  // Line Height Selects
+  ['gdocs-select-line-height', 'modal-select-line-height'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (sel) {
+      sel.addEventListener('change', (e) => {
+        setLineHeight(e.target.value);
       });
     }
   });
@@ -1308,6 +1686,30 @@ function initEventListeners() {
   }
 }
 
+function changeFontSize(delta) {
+  let newSize = (state.fontSize || 11) + delta;
+  if (newSize < 8) newSize = 8;
+  if (newSize > 28) newSize = 28;
+  setFontSize(newSize);
+  showPageFlipToast(`Cỡ chữ: <b>${newSize}pt</b>`);
+}
+
+function setFontSize(size) {
+  const num = parseInt(size, 10);
+  if (isNaN(num) || num < 6 || num > 36) return;
+  state.fontSize = num;
+  applyStyles();
+  syncControls();
+  saveState();
+}
+
+function setLineHeight(lh) {
+  state.lineHeight = String(lh || '1.75');
+  applyStyles();
+  syncControls();
+  saveState();
+}
+
 function openModal() {
   document.getElementById('stealth-modal').classList.add('show');
 }
@@ -1320,14 +1722,56 @@ function syncControls() {
     const el = document.getElementById(id);
     if (el) el.value = state.readingMode;
   });
-  ['gs-select-font-family', 'gdocs-select-font-family', 'excel-select-font-family'].forEach(id => {
+  ['gs-select-font-family', 'gdocs-select-font-family', 'excel-select-font-family', 'modal-select-font-family'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = state.fontFamily;
   });
-  ['gs-select-font-size', 'gdocs-select-font-size', 'excel-select-font-size'].forEach(id => {
+  ['gs-select-font-size', 'gdocs-select-font-size', 'excel-select-font-size', 'ps-select-font-size'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = state.fontSize;
   });
+  ['gdocs-select-line-height', 'modal-select-line-height'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = state.lineHeight || '1.75';
+  });
+
+  const modalBadge = document.getElementById('modal-badge-font-size');
+  if (modalBadge) modalBadge.textContent = `${state.fontSize}pt`;
+
+  const modalSlider = document.getElementById('modal-slider-font-size');
+  if (modalSlider) modalSlider.value = state.fontSize;
+
+  const stealthFontText = document.getElementById('stealth-quick-font-val');
+  if (stealthFontText) stealthFontText.textContent = `${state.fontSize}pt`;
+
+  // Font size badges across themes
+  const vscFontVal = document.getElementById('vsc-font-val');
+  if (vscFontVal) vscFontVal.textContent = `${state.fontSize}pt`;
+
+  const vscStatFontVal = document.getElementById('vsc-stat-font-val');
+  if (vscStatFontVal) vscStatFontVal.textContent = `Aa: ${state.fontSize}pt`;
+
+  const blenderFontVal = document.getElementById('blender-font-val');
+  if (blenderFontVal) blenderFontVal.textContent = `${state.fontSize}pt`;
+
+  const lnFontVal = document.getElementById('linkedin-font-val');
+  if (lnFontVal) lnFontVal.textContent = `${state.fontSize}pt`;
+
+  const cadFontVal = document.getElementById('autocad-font-val');
+  if (cadFontVal) cadFontVal.textContent = `${state.fontSize}pt`;
+
+  const zaloFontVal = document.getElementById('zalo-font-val');
+  if (zaloFontVal) zaloFontVal.textContent = `${state.fontSize}pt`;
+
+  const figmaFontVal = document.getElementById('figma-font-val');
+  if (figmaFontVal) figmaFontVal.textContent = `${state.fontSize}pt`;
+
+  const canvaFontVal = document.getElementById('canva-font-val');
+  if (canvaFontVal) canvaFontVal.textContent = `${state.fontSize}pt`;
+
+  const pptFontVal = document.getElementById('ppt-font-val');
+  if (pptFontVal) pptFontVal.textContent = `${state.fontSize}pt`;
+
   ['gs-select-speed', 'excel-select-speed'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = state.autoScrollDelay;
@@ -1370,6 +1814,8 @@ function applyStyles() {
   const root = document.documentElement;
   root.style.setProperty('--story-font-family', state.fontFamily);
   root.style.setProperty('--story-font-size', `${state.fontSize}pt`);
+  root.style.setProperty('--story-line-height', state.lineHeight || '1.75');
+  root.style.setProperty('--story-letter-spacing', '0.15px');
   
   const grayVal = Math.round((100 - state.textDimLevel) * 2.2);
   const color = `rgb(${grayVal}, ${grayVal}, ${grayVal})`;
@@ -1379,6 +1825,9 @@ function applyStyles() {
     cell.style.fontWeight = state.isBold ? 'bold' : 'normal';
     cell.style.fontStyle = state.isItalic ? 'italic' : 'normal';
     cell.style.whiteSpace = state.wrapText ? 'normal' : 'nowrap';
+    if (state.fontFamily) cell.style.fontFamily = state.fontFamily;
+    if (state.fontSize) cell.style.fontSize = `${state.fontSize}pt`;
+    if (state.lineHeight) cell.style.lineHeight = state.lineHeight;
   });
 
   document.querySelectorAll('.gdocs-story-paragraph').forEach(p => {
@@ -1386,6 +1835,12 @@ function applyStyles() {
     p.style.fontStyle = state.isItalic ? 'italic' : 'normal';
     if (state.fontFamily) p.style.fontFamily = state.fontFamily;
     if (state.fontSize) p.style.fontSize = `${state.fontSize}pt`;
+    if (state.lineHeight) p.style.lineHeight = state.lineHeight;
+  });
+
+  document.querySelectorAll('.ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .zalo-msg-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text').forEach(el => {
+    if (state.fontSize) el.style.fontSize = `${state.fontSize}pt`;
+    if (state.lineHeight) el.style.lineHeight = state.lineHeight;
   });
 }
 
@@ -1428,6 +1883,10 @@ function toggleBossKey() {
     document.getElementById('btn-boss-key-blender'),
     document.getElementById('btn-boss-key-linkedin'),
     document.getElementById('btn-boss-key-autocad'),
+    document.getElementById('btn-boss-key-zalo'),
+    document.getElementById('btn-boss-key-figma'),
+    document.getElementById('btn-boss-key-canva'),
+    document.getElementById('btn-boss-key-powerpoint'),
   ];
 
   if (state.bossModeActive) {
@@ -1466,6 +1925,30 @@ function toggleBossKey() {
     const cadBoss = document.getElementById('autocad-boss-view');
     if (cadStory) cadStory.style.display = 'flex';
     if (cadBoss) cadBoss.style.display = 'none';
+
+    // Zalo toggle
+    const zStory = document.getElementById('zalo-chat-view');
+    const zBoss = document.getElementById('zalo-boss-view');
+    if (zStory) zStory.style.display = 'flex';
+    if (zBoss) zBoss.style.display = 'none';
+
+    // Figma toggle
+    const fStory = document.getElementById('figma-story-view');
+    const fBoss = document.getElementById('figma-boss-view');
+    if (fStory) fStory.style.display = 'flex';
+    if (fBoss) fBoss.style.display = 'none';
+
+    // Canva toggle
+    const cStory = document.getElementById('canva-story-view');
+    const cBoss = document.getElementById('canva-boss-view');
+    if (cStory) cStory.style.display = 'flex';
+    if (cBoss) cBoss.style.display = 'none';
+
+    // PowerPoint toggle
+    const pStory = document.getElementById('ppt-story-view');
+    const pBoss = document.getElementById('ppt-boss-view');
+    if (pStory) pStory.style.display = 'flex';
+    if (pBoss) pBoss.style.display = 'none';
 
     // In VS Code, re-render the novel code
     if (state.theme === 'theme-vscode') {
@@ -1509,6 +1992,30 @@ function toggleBossKey() {
     const cadBoss = document.getElementById('autocad-boss-view');
     if (cadStory) cadStory.style.display = 'none';
     if (cadBoss) cadBoss.style.display = 'block';
+
+    // Zalo toggle
+    const zStory = document.getElementById('zalo-chat-view');
+    const zBoss = document.getElementById('zalo-boss-view');
+    if (zStory) zStory.style.display = 'none';
+    if (zBoss) zBoss.style.display = 'block';
+
+    // Figma toggle
+    const fStory = document.getElementById('figma-story-view');
+    const fBoss = document.getElementById('figma-boss-view');
+    if (fStory) fStory.style.display = 'none';
+    if (fBoss) fBoss.style.display = 'block';
+
+    // Canva toggle
+    const cStory = document.getElementById('canva-story-view');
+    const cBoss = document.getElementById('canva-boss-view');
+    if (cStory) cStory.style.display = 'none';
+    if (cBoss) cBoss.style.display = 'block';
+
+    // PowerPoint toggle
+    const pStory = document.getElementById('ppt-story-view');
+    const pBoss = document.getElementById('ppt-boss-view');
+    if (pStory) pStory.style.display = 'none';
+    if (pBoss) pBoss.style.display = 'flex';
 
     // In VS Code, render pure algorithm code for Boss Key
     if (state.theme === 'theme-vscode') {
@@ -1554,6 +2061,7 @@ function prepareDocumentLoad(file) {
 
   const portalNameLabel = document.getElementById('portal-pdf-filename');
   if (portalNameLabel) portalNameLabel.textContent = file.name;
+  if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
 
   const gsLabel = document.getElementById('gs-file-name-label');
   if (gsLabel) gsLabel.textContent = 'KPI_Report_Q3_2026.pdf';
@@ -1883,28 +2391,130 @@ async function hasPdfBackend() {
   return pdfBackendAvailable;
 }
 
+function cleanAndRepairVietnameseText(text) {
+  if (!text || typeof text !== 'string') return text;
+
+  // 1. Normalize Unicode to standard precomposed NFC
+  let s = text.normalize('NFC');
+
+  // 2. Fix decomposed combining diacritical marks with a space in front
+  // e.g., 'e ̣' -> 'ẹ', 'o ̀' -> 'ò'
+  s = s.replace(/([a-zA-ZáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ])\s+([\u0300-\u036f\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f])/g, '$1$2').normalize('NFC');
+
+  // 3. Set of syllables/characters that CANNOT be independent standalone words in Vietnamese
+  const invalidStandalones = new Set([
+    'b', 'c', 'd', 'đ', 'g', 'h', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'x',
+    'ch', 'gh', 'gi', 'kh', 'nh', 'ng', 'ngh', 'ph', 'qu', 'th', 'tr',
+    'ử', 'ộ', 'ậ', 'ủ', 'ể', 'ứ', 'ọ', 'ừa', 'ỏ', 'ố', 'ấ', 'ệu', 'ầ', 'ệ', 'ạ', 'ữa',
+    'ẳng', 'ản', 'ớ', 'ắ', 'ồi', 'ảng', 'ức', 'ực', 'ẹp', 'ợ', 'ở', 'ỡ',
+    'ẽ', 'ẻ', 'ị', 'ỉ', 'ĩ', 'ụ', 'ũ', 'ừ', 'ử', 'ữ', 'ỳ', 'ỷ', 'ỹ', 'ỵ',
+    'chuy', 'nguy', 'tho', 'truo', 'thuo', 'khuy', 'tuye', 'nhie', 'bie', 'chi'
+  ]);
+
+  const VN_VOWEL_CHAR = '[aăâeêioôơuưyáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]';
+
+  // Multi-pass merge for spaced syllables (run up to 6 passes until stable)
+  let prev = '';
+  let pass = 0;
+  while (s !== prev && pass < 6) {
+    prev = s;
+    pass++;
+
+    // A. Single consonant or initial digraph + space + accented vowel(s)
+    // Examples: 'c ử' -> 'cử', 'm ộ' -> 'mộ', 'k ể' -> 'kể', 'c ả' -> 'cả', 's ố' -> 'số', 'r ồi' -> 'rồi', 'th ứ' -> 'thứ', 'd ấ' -> 'dấ'
+    s = s.replace(/(^|[\s(„"':;–—\-])(b|c|d|đ|g|h|k|l|m|n|p|r|s|t|v|x|ch|gh|gi|kh|nh|ng|ngh|ph|qu|th|tr|B|C|D|Đ|G|H|K|L|M|N|P|R|S|T|V|X|Ch|Gh|Gi|Kh|Nh|Ng|Ngh|Ph|Qu|Th|Tr)\s+([áàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ][a-zA-Zà-ỹ]*)/gi, '$1$2$3');
+
+    // B. Word ending with vowel + space + single final letter/consonant
+    // Examples: 'cử a' -> 'cửa', 'mộ t' -> 'một', 'cậu u' -> 'cậu', 'đầ u' -> 'đầu', 'trướ c' -> 'trước', 'khỏ i' -> 'khỏi', 'Thằ ng' -> 'Thằng', 'lạ i' -> 'lại', 'lầ n' -> 'lần', 'nữ a' -> 'nữa', 'tấ m' -> 'tấm', 'bả n' -> 'bản', 'mắ t' -> 'mắt', 'lắ c' -> 'lắc', 'hậ u' -> 'hậu', 'bả ng' -> 'bảng'
+    s = s.replace(new RegExp('(' + VN_VOWEL_CHAR + '+)\\s+(c|m|n|p|t|ch|ng|nh|a|i|u|o|y)(?=[\\s,.;:!?)]|$)', 'gi'), '$1$2');
+
+    // C. Words split by prefix or invalid standalone token
+    // Examples: 'chuy ện' -> 'chuyện', 'hi ệu' -> 'hiệu', 'nguy ên' -> 'nguyên'
+    s = s.replace(/([a-zA-Zà-ỹ]+)\s+([a-zA-Zà-ỹ]+)/g, (match, w1, w2) => {
+      const l1 = w1.toLowerCase();
+      const l2 = w2.toLowerCase();
+      if (invalidStandalones.has(l1) || invalidStandalones.has(l2)) {
+        return w1 + w2;
+      }
+      return match;
+    });
+  }
+
+  // 4. Clean up spaces before punctuation marks: e.g. "bản đồ ." -> "bản đồ."
+  s = s.replace(/\s+([,.;:!?])/g, '$1');
+
+  // 5. Clean duplicate spaces
+  s = s.replace(/ {2,}/g, ' ');
+
+  return s;
+}
+
 async function extractPdfPage(pdfDoc, pageNum) {
   let page = null;
 
   try {
     page = await pdfDoc.getPage(pageNum);
-    const textContent = await page.getTextContent();
-    let fullText = '';
-    let lastY = null;
+    const textContent = await page.getTextContent({
+      normalizeWhitespace: true,
+      disableCombineTextItems: false
+    });
 
-    textContent.items.forEach(item => {
+    let fullText = '';
+    let lastX = null;
+    let lastY = null;
+    let lastWidth = 0;
+    let lastHeight = 12;
+
+    for (let i = 0; i < textContent.items.length; i++) {
+      const item = textContent.items[i];
+      const str = item.str || '';
+      if (!str && !item.hasEOL) continue;
+
+      const currentX = item.transform ? item.transform[4] : null;
       const currentY = item.transform ? item.transform[5] : null;
-      if (lastY !== null && currentY !== null && Math.abs(currentY - lastY) > 6) {
+      const currentWidth = item.width || 0;
+      const currentHeight = item.height || (item.transform ? Math.abs(item.transform[0]) : 12);
+
+      if (lastY !== null && currentY !== null) {
+        const deltaY = Math.abs(currentY - lastY);
+        if (deltaY > 5) {
+          // New line / paragraph break
+          if (!fullText.endsWith('\n')) {
+            fullText += deltaY > 18 ? '\n\n' : '\n';
+          }
+        } else if (lastX !== null && currentX !== null) {
+          // On the same horizontal line: calculate distance between previous item end and current item start
+          const endOfLast = lastX + lastWidth;
+          const gap = currentX - endOfLast;
+          // Space threshold: around 18% of character height, minimum 1.8px
+          const spaceThreshold = Math.max(1.8, (lastHeight || 12) * 0.18);
+
+          if (gap >= spaceThreshold) {
+            if (!fullText.endsWith(' ') && !str.startsWith(' ')) {
+              fullText += ' ';
+            }
+          }
+        }
+      }
+
+      fullText += str;
+
+      if (item.hasEOL && !fullText.endsWith('\n')) {
         fullText += '\n';
       }
-      fullText += `${item.str || ''} `;
+
+      lastX = currentX;
       lastY = currentY;
-    });
+      lastWidth = currentWidth;
+      lastHeight = currentHeight;
+    }
+
+    const normalizedText = cleanAndRepairVietnameseText(fullText);
 
     return {
       pageNum,
-      chunks: splitTextIntoChunks(fullText, state.chunkMode),
-      textLength: fullText.trim().length
+      chunks: splitTextIntoChunks(normalizedText, state.chunkMode),
+      textLength: normalizedText.trim().length
     };
   } catch (error) {
     console.warn(`Không thể trích xuất trang ${pageNum}:`, error);
@@ -1960,6 +2570,7 @@ function initProgressiveStory(initialPages, totalPages) {
   renderContinuousView(false, startIdx);
   saveState();
   persistDocumentCache().catch(() => {});
+  if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
 }
 
 async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken) {
@@ -2076,7 +2687,10 @@ async function processPdfFile(file) {
 }
 
 function splitTextIntoChunks(text, mode) {
-  const cleanText = text.replace(/\r\n/g, '\n').replace(/\t/g, ' ').replace(/ +/g, ' ');
+  const cleanText = cleanAndRepairVietnameseText(text || '')
+    .replace(/\r\n/g, '\n')
+    .replace(/\t/g, ' ')
+    .replace(/ +/g, ' ');
   
   if (mode === 'sentence') {
     const rawSentences = cleanText.split(/([.!?…\n]+)/);
@@ -2160,6 +2774,7 @@ function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
   renderContinuousView(false, startIdx);
   saveState();
   persistDocumentCache().catch(() => {});
+  if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
 }
 
 function initStoryFromChunks(chunks) {
@@ -2212,6 +2827,18 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
   } else if (state.theme === 'theme-autocad') {
     const stream = document.getElementById('autocad-story-stream');
     if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-zalo') {
+    const stream = document.getElementById('zalo-story-stream');
+    if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-figma') {
+    const stream = document.getElementById('figma-story-stream');
+    if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-canva') {
+    const stream = document.getElementById('canva-story-stream');
+    if (stream) stream.innerHTML = '';
+  } else if (state.theme === 'theme-powerpoint') {
+    const stream = document.getElementById('ppt-story-stream');
+    if (stream) stream.innerHTML = '';
   } else {
     const tbody = document.getElementById('story-tbody');
     if (tbody) tbody.innerHTML = '';
@@ -2239,9 +2866,18 @@ function renderNextBatch(count = 100) {
     appendLinkedInBatch(count);
   } else if (state.theme === 'theme-autocad') {
     appendAutoCADBatch(count);
+  } else if (state.theme === 'theme-zalo') {
+    appendZaloBatch(count);
+  } else if (state.theme === 'theme-figma') {
+    appendFigmaBatch(count);
+  } else if (state.theme === 'theme-canva') {
+    appendCanvaBatch(count);
+  } else if (state.theme === 'theme-powerpoint') {
+    appendPowerPointBatch(count);
   } else {
     appendSpreadsheetBatch(count);
   }
+  applyStyles();
 }
 
 // 1. Spreadsheet Renderer (Continuous Infinite Table)
@@ -2294,7 +2930,7 @@ function appendSpreadsheetBatch(count) {
     const auditor = AUDITORS[chunk.globalIndex % AUDITORS.length];
 
     let colDContent = chunk.text;
-    if (state.readingMode === 'formula') {
+    if (state.theme !== 'theme-googlesheets' && state.readingMode === 'formula') {
       colDContent = `Routine transaction ledger integrity verification #${100 + chunk.globalIndex}. Status: NOMINAL.`;
     }
 
@@ -2653,12 +3289,171 @@ function appendGoogleDocsBatch(count) {
     p.textContent = chunk.text;
     if (state.fontFamily) p.style.fontFamily = state.fontFamily;
     if (state.fontSize) p.style.fontSize = `${state.fontSize}pt`;
+    if (state.lineHeight) p.style.lineHeight = state.lineHeight;
     if (state.isBold) p.style.fontWeight = 'bold';
     if (state.isItalic) p.style.fontStyle = 'italic';
 
     const gIdx = chunk.globalIndex;
     p.addEventListener('click', () => setActiveRow(gIdx, true));
     fragment.appendChild(p);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+// 9. Zalo PC Chat Stream Batch Renderer
+function appendZaloBatch(count) {
+  const stream = document.getElementById('zalo-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+  const senders = [
+    { name: 'Phong (Tech Lead)', avatar: 'HP', bg: '#0068ff' },
+    { name: 'Nguyễn Văn Hùng (Dev Lead)', avatar: 'VH', bg: '#059669' },
+    { name: 'Lê Thuỳ Trang (PM)', avatar: 'TT', bg: '#7c3aed' },
+    { name: 'Đỗ Hoàng Nam (QA Lead)', avatar: 'HN', bg: '#d97706' }
+  ];
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const sender = senders[chunk.globalIndex % senders.length];
+    const hour = 9 + Math.floor((chunk.globalIndex * 7) / 60) % 8;
+    const min = (chunk.globalIndex * 13) % 60;
+    const timeStr = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+
+    const msgItem = document.createElement('div');
+    msgItem.className = 'zalo-msg-item';
+    msgItem.id = `zalo-msg-${chunk.globalIndex}`;
+    msgItem.dataset.index = chunk.globalIndex;
+    msgItem.dataset.page = chunk.page;
+
+    msgItem.innerHTML = `
+      <div class="zalo-msg-avatar" style="background: ${sender.bg};">${sender.avatar}</div>
+      <div class="zalo-msg-content-box">
+        <div class="zalo-msg-sender-name">
+          <span>${sender.name}</span>
+          <span class="zalo-msg-time">${timeStr} • Trang ${chunk.page}</span>
+        </div>
+        <div class="zalo-msg-bubble">
+          <div class="zalo-msg-text">${escapeHtml(chunk.text)}</div>
+          <span class="zalo-msg-meta-tag">Đoạn #${chunk.globalIndex + 1} • Đã nhận ✓✓</span>
+        </div>
+      </div>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    msgItem.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(msgItem);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+// 10. Figma UI/UX Design System Typography Batch Renderer
+function appendFigmaBatch(count) {
+  const stream = document.getElementById('figma-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const layer = document.createElement('div');
+    layer.className = 'figma-layer-item';
+    layer.id = `figma-layer-${chunk.globalIndex}`;
+    layer.dataset.index = chunk.globalIndex;
+    layer.dataset.page = chunk.page;
+
+    const layerName = `T Body_Copy_Block_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
+    layer.innerHTML = `
+      <div class="figma-layer-meta">
+        <span class="figma-meta-name">${layerName}</span>
+        <span class="figma-meta-spec">AutoLayout • Trang ${chunk.page}</span>
+      </div>
+      <div class="figma-text-layer">${escapeHtml(chunk.text)}</div>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    layer.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(layer);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+// 11. Canva Presentation Slide Text Box Batch Renderer
+function appendCanvaBatch(count) {
+  const stream = document.getElementById('canva-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const box = document.createElement('div');
+    box.className = 'canva-block-item';
+    box.id = `canva-block-${chunk.globalIndex}`;
+    box.dataset.index = chunk.globalIndex;
+    box.dataset.page = chunk.page;
+
+    box.innerHTML = `
+      <div class="canva-block-header">
+        <span class="canva-block-label">Mục ${chunk.globalIndex + 1} • Trang ${chunk.page}</span>
+      </div>
+      <div class="canva-text-box">${escapeHtml(chunk.text)}</div>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    box.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(box);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+// 12. Microsoft PowerPoint Bullet Paragraph Batch Renderer
+function appendPowerPointBatch(count) {
+  const stream = document.getElementById('ppt-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const para = document.createElement('div');
+    para.className = 'ppt-para-item';
+    para.id = `ppt-para-${chunk.globalIndex}`;
+    para.dataset.index = chunk.globalIndex;
+    para.dataset.page = chunk.page;
+
+    para.innerHTML = `
+      <span class="ppt-bullet-icon">■</span>
+      <div class="ppt-bullet-text">${escapeHtml(chunk.text)}</div>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    para.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(para);
   }
 
   stream.appendChild(fragment);
@@ -2758,6 +3553,42 @@ function setActiveRow(index, scrollIntoView = true) {
         activeNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
+  } else if (state.theme === 'theme-zalo') {
+    document.querySelectorAll('.zalo-msg-item').forEach(m => m.classList.remove('active-msg'));
+    const activeMsg = document.getElementById(`zalo-msg-${index}`);
+    if (activeMsg) {
+      activeMsg.classList.add('active-msg');
+      if (scrollIntoView) {
+        activeMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  } else if (state.theme === 'theme-figma') {
+    document.querySelectorAll('.figma-layer-item').forEach(l => l.classList.remove('active-layer'));
+    const activeLayer = document.getElementById(`figma-layer-${index}`);
+    if (activeLayer) {
+      activeLayer.classList.add('active-layer');
+      if (scrollIntoView) {
+        activeLayer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  } else if (state.theme === 'theme-canva') {
+    document.querySelectorAll('.canva-block-item').forEach(b => b.classList.remove('active-block'));
+    const activeBlock = document.getElementById(`canva-block-${index}`);
+    if (activeBlock) {
+      activeBlock.classList.add('active-block');
+      if (scrollIntoView) {
+        activeBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  } else if (state.theme === 'theme-powerpoint') {
+    document.querySelectorAll('.ppt-para-item').forEach(p => p.classList.remove('active-bullet'));
+    const activePara = document.getElementById(`ppt-para-${index}`);
+    if (activePara) {
+      activePara.classList.add('active-bullet');
+      if (scrollIntoView) {
+        activePara.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   } else {
     document.querySelectorAll('#story-tbody tr').forEach(r => r.classList.remove('selected-story-row'));
     document.querySelectorAll('.story-cell').forEach(c => c.classList.remove('cell-focused'));
@@ -2776,7 +3607,7 @@ function setActiveRow(index, scrollIntoView = true) {
     const storyText = chunk ? chunk.text : '';
     const formulaInput = document.getElementById('formula-input');
     if (formulaInput) {
-      if (state.readingMode === 'formula') {
+      if (state.theme !== 'theme-googlesheets' && state.readingMode === 'formula') {
         formulaInput.value = `=PROSE("${storyText}")`;
       } else {
         formulaInput.value = storyText;
@@ -2806,7 +3637,8 @@ function updatePaginationUI() {
   [
     'gs-page-indicator', 'gdocs-page-indicator', 'excel-page-indicator', 'vsc-page-indicator',
     'ps-page-indicator', 'blender-page-indicator', 'linkedin-page-indicator',
-    'autocad-page-indicator'
+    'autocad-page-indicator', 'zalo-page-indicator', 'figma-page-indicator',
+    'canva-page-indicator', 'ppt-page-indicator'
   ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
@@ -2823,7 +3655,8 @@ function updatePaginationUI() {
   [
     'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
     'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
-    'autocad-btn-prev'
+    'autocad-btn-prev', 'zalo-btn-prev', 'figma-btn-prev',
+    'canva-btn-prev', 'ppt-btn-prev'
   ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = state.currentPage <= 1;
@@ -2832,7 +3665,8 @@ function updatePaginationUI() {
   [
     'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
     'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
-    'autocad-btn-next'
+    'autocad-btn-next', 'zalo-btn-next', 'figma-btn-next',
+    'canva-btn-next', 'ppt-btn-next'
   ].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = state.currentPage >= maxNavigablePage;
@@ -2936,6 +3770,10 @@ function initContinuousScrollListeners() {
     document.getElementById('blender-viewport-scroll-container'),
     document.getElementById('linkedin-feed-scroll-container'),
     document.getElementById('autocad-canvas-scroll-container'),
+    document.getElementById('zalo-chat-scroll-container'),
+    document.getElementById('figma-canvas-scroll-container'),
+    document.getElementById('canva-canvas-scroll-container'),
+    document.getElementById('ppt-canvas-scroll-container'),
   ];
   scrollContainers.forEach(container => {
     if (container) {
@@ -2961,7 +3799,8 @@ function startAutoScroll() {
   [
     'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
-    'autocad-btn-autoscroll'
+    'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
+    'canva-btn-autoscroll', 'ppt-btn-autoscroll'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
@@ -2981,7 +3820,8 @@ function stopAutoScroll() {
   [
     'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
     'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
-    'autocad-btn-autoscroll'
+    'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
+    'canva-btn-autoscroll', 'ppt-btn-autoscroll'
   ].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {

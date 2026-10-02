@@ -412,12 +412,15 @@ body.theme-excel .header-titles-row th {
   user-select: text;
 }
 .story-cell {
-  font-family: var(--story-font-family);
-  font-size: var(--story-font-size);
-  color: var(--story-color);
-  line-height: 1.6;
+  font-family: var(--story-font-family, 'Arial', sans-serif);
+  font-size: var(--story-font-size, 11pt);
+  color: var(--story-color, #202124);
+  line-height: var(--story-line-height, 1.7);
+  letter-spacing: var(--story-letter-spacing, 0.15px);
   cursor: pointer;
   background-color: #ffffff;
+  padding: 6px 12px;
+  word-break: break-word;
 }
 
 tr.selected-story-row td { background-color: #e8f0fe !important; }

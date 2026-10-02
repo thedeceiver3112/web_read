@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -7,323 +7,433 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <script src="version-check.js?v=1" data-app-version="20261002-12"></script>
-  <title>Brand_Campaign_KeyVisual_v2.psd @ 66.7% (RGB/8#*) - Adobe Photoshop 2026</title>
-  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23001e36'/><text x='16' y='23' font-size='18' font-family='Segoe UI,sans-serif' font-weight='bold' fill='%2331a8ff' text-anchor='middle'>Ps</text></svg>">
+  <title>Báo Cáo Chiến Lược Thương Hiệu 2026 - Canva</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='cg' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%2300c4cc'/><stop offset='100%25' stop-color='%237d2ae8'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23cg)'/><text x='16' y='23' font-size='20' font-family='Brush Script MT, cursive, Segoe UI' font-style='italic' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>">
   <link rel="stylesheet" href="style.css?v=20261002-12">
   <script src="static/pdf.min.js"></script>
   <script src="static/jszip.min.js?v=20261002-1"></script>
 </head>
-<body class="theme-photoshop">
+<body class="theme-canva">
 
-  <div class="theme-header-container photoshop-only">
-    <header class="ps-title-bar">
-      <div class="ps-title-left">
-        <span class="ps-app-icon">Ps</span>
-        <div class="ps-menu-bar">
-          <span>File</span><span>Edit</span><span>Image</span><span>Layer</span><span>Type</span><span>Select</span><span>Filter</span><span>View</span><span>Window</span><span>Help</span>
-        </div>
+  <div class="canva-app-container">
+    <!-- 1. CANVA TOP NAVIGATION BAR -->
+    <header class="canva-top-bar">
+      <div class="canva-top-left">
+        <a class="canva-logo-btn" title="Trang chủ Canva">
+          <svg class="canva-logo-svg" viewBox="0 0 32 32">
+            <defs>
+              <linearGradient id="canva-top-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#00c4cc"/>
+                <stop offset="100%" stop-color="#7d2ae8"/>
+              </linearGradient>
+            </defs>
+            <rect width="32" height="32" rx="6" fill="url(#canva-top-grad)"/>
+            <text x="16" y="23" font-size="20" font-family="'Brush Script MT', cursive, sans-serif" font-style="italic" font-weight="bold" fill="white" text-anchor="middle">C</text>
+          </svg>
+        </a>
+        <span class="canva-nav-item">Tệp</span>
+        <span class="canva-nav-item">Đổi cỡ <span class="canva-crown-badge">👑 PRO</span></span>
+        <span class="canva-nav-item" title="Hoàn tác">↶</span>
+        <span class="canva-nav-item" title="Làm lại">↷</span>
+        <span class="canva-saved-icon" title="Tự động lưu vào đám mây">☁️ Đã lưu</span>
       </div>
-      <div class="ps-title-center">
-        <span id="ps-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên project Photoshop">Brand_Campaign_KeyVisual_v2.psd</span>
-        <span class="ps-zoom-label">@ 66.7% (RGB/8#*)</span>
+
+      <div class="canva-top-center">
+        <span id="canva-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên thiết kế">Xanh Lam Hiện Đại Kế Hoạch Báo Cáo Tổng Kết Công Ty Thuyết Trình</span>
       </div>
-      <div class="ps-title-right">
-        <div class="stealth-reading-ctrls ps-reading-nav">
-          <button class="portal-nav-btn" id="btn-open-portal-photoshop" title="Trang chủ & Ủng hộ tác giả">Trang chủ & Donate</button>
-          <button class="theme-switch-pill ps-theme-btn" id="btn-open-theme-modal-photoshop" title="Đổi giao diện ngụy trang">Đổi giao diện</button>
-          <button class="boss-key-btn" id="btn-boss-key-photoshop" title="Xem báo cáo nhanh (Nhấn ESC)"><span class="boss-badge">ESC</span> Báo cáo nhanh</button>
+
+      <div class="canva-top-right">
+        <!-- Stealth Reading Controls in Canva Header -->
+        <div class="canva-stealth-ctrls stealth-reading-ctrls">
+          <label for="file-pdf-input" class="canva-pill-btn" title="Nạp tài liệu PDF, TXT, EPUB">＋ Nạp file</label>
+
+          <div class="canva-page-ctrl">
+            <button class="canva-btn" id="canva-btn-prev" title="Trang trước">◀</button>
+            <span id="canva-page-indicator">1/1</span>
+            <button class="canva-btn" id="canva-btn-next" title="Trang sau">▶</button>
+          </div>
+
+          <div class="canva-font-ctrl" title="Cỡ chữ (hoặc phím [ và ])">
+            <button id="canva-btn-font-dec" title="Giảm cỡ chữ ( [ )">A−</button>
+            <span id="canva-font-val">11pt</span>
+            <button id="canva-btn-font-inc" title="Tăng cỡ chữ ( ] )">A+</button>
+          </div>
+
+          <button class="canva-btn" id="canva-btn-autoscroll" title="Tự cuộn">▶ Tự cuộn</button>
+          <button class="portal-nav-btn" id="btn-open-portal-canva" title="Trang chủ &amp; Ủng hộ tác giả">Trang chủ &amp; Donate</button>
+          <button class="theme-switch-pill" id="btn-open-theme-modal-canva" title="Đổi giao diện ngụy trang">Đổi giao diện</button>
+          <button class="boss-key-btn" id="btn-boss-key-canva" title="Khẩn cấp xem slide thuyết trình (Phím ESC)"><span class="boss-badge">ESC</span> Báo cáo nhanh</button>
           <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">👁 Ẩn nút (H)</button>
         </div>
-        <button class="win-btn">―</button>
-        <button class="win-btn">▢</button>
-        <button class="win-btn win-close">✕</button>
+
+        <button class="canva-share-btn">Chia sẻ</button>
       </div>
     </header>
-    <div class="ps-options-bar">
-      <div class="ps-opt-group">
-        <span class="ps-tool-icon" title="Type Tool">T</span>
-        <span class="ps-opt-btn" title="Toggle text orientation">T↕</span>
-        <select class="ps-opt-select" id="ps-font-select" title="Font Family">
-          <option>Adobe Garamond Pro</option>
-          <option>Helvetica Neue</option>
-          <option>Futura</option>
-          <option>Minion Pro</option>
-          <option>Arial</option>
-        </select>
-        <select class="ps-opt-select" title="Font Style">
-          <option>Regular</option>
-          <option>Bold</option>
-          <option>Italic</option>
-          <option>Semibold</option>
-        </select>
-        <div class="ps-font-size-ctrl" style="display:inline-flex; align-items:center; gap:2px; background:#464646; border:1px solid #2e2e2e; border-radius:2px; padding:0 3px;" title="Cỡ chữ (hoặc phím [ và ])">
-          <button class="ps-btn" id="ps-btn-font-dec" style="padding:0 4px; font-size:11px; height:18px; line-height:18px; font-weight:bold; cursor:pointer;" title="Giảm cỡ chữ ( [ )">−</button>
-          <select class="ps-opt-select" id="ps-select-font-size" style="width:58px; height:18px; padding:0 2px; font-size:11px; background:transparent; color:#fff; border:none; cursor:pointer;" title="Cỡ chữ">
-            <option value="8">8 pt</option>
-            <option value="9">9 pt</option>
-            <option value="10">10 pt</option>
-            <option value="11" selected>11 pt</option>
-            <option value="12">12 pt</option>
-            <option value="13">13 pt</option>
-            <option value="14">14 pt</option>
-            <option value="15">15 pt</option>
-            <option value="16">16 pt</option>
-            <option value="18">18 pt</option>
-            <option value="20">20 pt</option>
-            <option value="24">24 pt</option>
-          </select>
-          <button class="ps-btn" id="ps-btn-font-inc" style="padding:0 4px; font-size:11px; height:18px; line-height:18px; font-weight:bold; cursor:pointer;" title="Tăng cỡ chữ ( ] )">＋</button>
+
+    <!-- 2. CANVA WORKSPACE LAYOUT (DARK RAIL | TEMPLATE DRAWER | MAIN CANVAS) -->
+    <div class="canva-workspace-layout">
+      <!-- Cột 1: Dark Icon Rail (Thanh công cụ đen đặc trưng Canva - Ảnh 2) -->
+      <nav class="canva-dark-rail">
+        <div class="canva-rail-item active" title="Mẫu thiết kế">
+          <span class="canva-rail-icon">📑</span>
+          <span class="canva-rail-label">Mẫu</span>
         </div>
-        <span class="ps-opt-aa">aa Sharp</span>
-        <div class="ps-align-group">
-          <span class="ps-align-btn active" title="Left align">≡</span>
-          <span class="ps-align-btn" title="Center align">⩹</span>
-          <span class="ps-align-btn" title="Right align">⩺</span>
+        <div class="canva-rail-item" title="Thành phần đồ họa">
+          <span class="canva-rail-icon">🧩</span>
+          <span class="canva-rail-label">Thành phần</span>
         </div>
-        <span class="ps-color-chip" style="background:#111;" title="Text Color"></span>
-        <span class="ps-opt-btn" title="Create warped text">⌒T</span>
-        <span class="ps-opt-btn" title="Toggle Character and Paragraph Panels">🗎</span>
-      </div>
-      <div class="ps-stealth-tools stealth-reading-ctrls">
-        <label for="file-pdf-input" class="ps-pill-btn" title="Nạp tài liệu PDF, TXT, EPUB">＋ Nạp file</label>
-        <div class="ps-page-ctrl">
-          <button class="ps-btn" id="ps-btn-prev" title="Trang trước">◀</button>
-          <span id="ps-page-indicator">1/1</span>
-          <button class="ps-btn" id="ps-btn-next" title="Trang sau">▶</button>
+        <div class="canva-rail-item" title="Văn bản">
+          <span class="canva-rail-icon">🔤</span>
+          <span class="canva-rail-label">Văn bản</span>
         </div>
-        <button class="ps-btn" id="ps-btn-autoscroll" title="Tự cuộn">▶ Tự cuộn</button>
-      </div>
+        <div class="canva-rail-item" title="Thương hiệu Pro">
+          <span class="canva-badge-new">Mới</span>
+          <span class="canva-rail-icon">👑</span>
+          <span class="canva-rail-label">Thương hiệu</span>
+        </div>
+        <div class="canva-rail-item" title="Tải lên">
+          <span class="canva-rail-icon">☁️</span>
+          <span class="canva-rail-label">Tải lên</span>
+        </div>
+        <div class="canva-rail-item" title="Vẽ">
+          <span class="canva-rail-icon">✏️</span>
+          <span class="canva-rail-label">Vẽ</span>
+        </div>
+        <div class="canva-rail-item" title="Dự án">
+          <span class="canva-rail-icon">📁</span>
+          <span class="canva-rail-label">Dự án</span>
+        </div>
+        <div class="canva-rail-item" title="Ứng dụng">
+          <span class="canva-rail-icon">田</span>
+          <span class="canva-rail-label">Ứng dụng</span>
+        </div>
+      </nav>
+
+      <!-- Cột 2: Template Drawer Flyout (Ảnh 2) -->
+      <aside class="canva-template-drawer">
+        <div class="canva-drawer-top">
+          <button class="canva-drawer-back-btn" title="Quay lại">←</button>
+          <div class="canva-drawer-meta-title">Xanh Lam Hiện Đại Kế Hoạch Báo Cáo Tổng Kết Công Ty Thuyết Trình</div>
+          <div class="canva-drawer-meta-sub">Bài thuyết trình • 1920 x 1080 px</div>
+          <div class="canva-drawer-author">
+            <span class="canva-author-avatar">S</span>
+            <span>Xem thêm bởi Serulian</span>
+          </div>
+          <button class="canva-apply-all-btn">Áp dụng tất cả 10 trang</button>
+        </div>
+
+        <div class="canva-drawer-scroll-body">
+          <div class="canva-thumb-grid">
+            <!-- Slide 1 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#0f2b5c"/>
+                <rect x="0" y="45" width="160" height="45" fill="#1e3a8a"/>
+                <text x="14" y="32" font-size="11" font-weight="bold" fill="white">BÁO CÁO</text>
+                <text x="14" y="46" font-size="11" font-weight="bold" fill="white">TỔNG KẾT</text>
+                <line x1="14" y1="52" x2="80" y2="52" stroke="#38bdf8" stroke-width="2"/>
+                <text x="14" y="66" font-size="7" fill="#cbd5e1">Kế hoạch chiến lược Q3</text>
+              </svg>
+            </div>
+            <!-- Slide 2 (Active) -->
+            <div class="canva-grid-card active">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#ffffff"/>
+                <text x="10" y="16" font-size="8" font-weight="bold" fill="#1e3a8a">TÓM TẮT CHỈ SỐ MỤC TIÊU</text>
+                <line x1="10" y1="20" x2="150" y2="20" stroke="#2563eb" stroke-width="1"/>
+                <ellipse cx="80" cy="55" rx="65" ry="25" fill="none" stroke="#93c5fd" stroke-width="1.5"/>
+                <circle cx="35" cy="62" r="8" fill="#1e3a8a"/>
+                <circle cx="65" cy="58" r="8" fill="#2563eb"/>
+                <circle cx="95" cy="52" r="8" fill="#3b82f6"/>
+                <circle cx="125" cy="42" r="8" fill="#d97706"/>
+              </svg>
+            </div>
+            <!-- Slide 3 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#ffffff"/>
+                <rect x="10" y="24" width="40" height="50" rx="3" fill="#eff6ff" stroke="#bfdbfe"/>
+                <rect x="60" y="24" width="40" height="50" rx="3" fill="#eff6ff" stroke="#bfdbfe"/>
+                <rect x="110" y="24" width="40" height="50" rx="3" fill="#eff6ff" stroke="#bfdbfe"/>
+                <text x="10" y="16" font-size="7" font-weight="bold" fill="#1e40af">PHÂN TÍCH HIỆU SUẤT</text>
+              </svg>
+            </div>
+            <!-- Slide 4 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#ffffff"/>
+                <circle cx="45" cy="48" r="24" fill="none" stroke="#e2e8f0" stroke-width="8"/>
+                <circle cx="45" cy="48" r="24" fill="none" stroke="#2563eb" stroke-width="8" stroke-dasharray="100 50"/>
+                <text x="90" y="42" font-size="8" font-weight="bold" fill="#0f172a">40% Doanh số</text>
+                <text x="90" y="58" font-size="8" font-weight="bold" fill="#0f172a">20% Thị phần</text>
+              </svg>
+            </div>
+            <!-- Slide 5 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#f8fafc"/>
+                <rect x="15" y="30" width="30" height="30" rx="4" fill="#1e40af"/>
+                <line x1="45" y1="45" x2="65" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <rect x="65" y="30" width="30" height="30" rx="4" fill="#2563eb"/>
+                <line x1="95" y1="45" x2="115" y2="45" stroke="#94a3b8" stroke-width="2"/>
+                <rect x="115" y="30" width="30" height="30" rx="4" fill="#38bdf8"/>
+              </svg>
+            </div>
+            <!-- Slide 6 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#ffffff"/>
+                <rect x="15" y="24" width="60" height="18" rx="2" fill="#dbeafe"/>
+                <rect x="15" y="48" width="60" height="18" rx="2" fill="#dbeafe"/>
+                <rect x="85" y="24" width="60" height="18" rx="2" fill="#fef3c7"/>
+                <rect x="85" y="48" width="60" height="18" rx="2" fill="#fef3c7"/>
+              </svg>
+            </div>
+            <!-- Slide 7 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#ffffff"/>
+                <rect x="15" y="28" width="55" height="42" rx="3" fill="#1e3a8a"/>
+                <rect x="90" y="28" width="55" height="42" rx="3" fill="#f1f5f9" stroke="#cbd5e1"/>
+              </svg>
+            </div>
+            <!-- Slide 8 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#ffffff"/>
+                <rect x="12" y="26" width="38" height="45" rx="3" fill="#1e40af"/>
+                <rect x="60" y="26" width="38" height="45" rx="3" fill="#2563eb"/>
+                <rect x="108" y="26" width="38" height="45" rx="3" fill="#fde68a"/>
+              </svg>
+            </div>
+            <!-- Slide 9 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#ffffff"/>
+                <rect x="15" y="30" width="130" height="12" rx="2" fill="#1e3a8a"/>
+                <rect x="15" y="48" width="130" height="12" rx="2" fill="#fed7aa"/>
+              </svg>
+            </div>
+            <!-- Slide 10 -->
+            <div class="canva-grid-card">
+              <svg viewBox="0 0 160 90">
+                <rect width="160" height="90" fill="#0f2b5c"/>
+                <text x="80" y="48" font-size="10" font-weight="bold" fill="white" text-anchor="middle">Xin Trân Trọng Cảm Ơn</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="canva-palette-section">
+            <div class="canva-palette-title">Kiểu mẫu</div>
+            <div class="canva-palette-row">
+              <div class="canva-color-bars">
+                <div class="canva-color-bar" style="background: #1e3a8a;"></div>
+                <div class="canva-color-bar" style="background: #2563eb;"></div>
+                <div class="canva-color-bar" style="background: #38bdf8;"></div>
+                <div class="canva-color-bar" style="background: #d97706;"></div>
+              </div>
+              <div>
+                <div style="font-size: 11px; font-weight: 700; color: #0f172a;">PROXIMA ...</div>
+                <div style="font-size: 10px; color: #64748b;">PROXIMA NOVA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="canva-drawer-toggle-btn" title="Thu gọn bảng mẫu">&lt;</button>
+      </aside>
+
+      <!-- Cột 3: Khung vẽ Canva Slide và luồng đọc tiểu thuyết -->
+      <main class="canva-canvas-viewport" id="canva-canvas-scroll-container">
+        <!-- Normal reading view -->
+        <div id="canva-story-view">
+          <div class="canva-slide-deck-card">
+            <!-- Pinned Presentation Header & Infographic (Fixed on scroll) -->
+            <div class="canva-pinned-visual-header">
+              <!-- Slide Title Header (Khớp 100% Ảnh 2) -->
+              <div class="canva-slide-header-box">
+                <h1 class="canva-slide-main-title">TÓM TẮT CHỈ SỐ HOÀN THÀNH MỤC TIÊU</h1>
+                <div class="canva-slide-header-line"></div>
+              </div>
+
+              <!-- Infographic Timeline Orbital Section (Khớp 100% Ảnh 2) -->
+              <div class="canva-infographic-orbit-container">
+                <svg class="canva-orbit-svg" viewBox="0 0 900 220" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+                  <ellipse cx="450" cy="120" rx="420" ry="85" fill="none" stroke="url(#orbit-line-grad)" stroke-width="3" stroke-linecap="round"/>
+                  <defs>
+                    <linearGradient id="orbit-line-grad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.3"/>
+                      <stop offset="40%" stop-color="#38bdf8"/>
+                      <stop offset="80%" stop-color="#2563eb"/>
+                      <stop offset="100%" stop-color="#1e3a8a"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                <div class="canva-orbit-milestones-row">
+                  <!-- Milestone 1 -->
+                  <div class="canva-milestone-item">
+                    <div class="canva-milestone-circle c-98">98%</div>
+                    <div class="canva-milestone-desc">Tỷ lệ hoàn thành kế hoạch doanh thu năm.</div>
+                  </div>
+
+                  <!-- Milestone 2 -->
+                  <div class="canva-milestone-item">
+                    <div class="canva-milestone-circle c-85">85%</div>
+                    <div class="canva-milestone-desc">Mức độ hài lòng của khách hàng (Tăng 12%).</div>
+                  </div>
+
+                  <!-- Milestone 3 -->
+                  <div class="canva-milestone-item">
+                    <div class="canva-milestone-circle c-74">74%</div>
+                    <div class="canva-milestone-desc">Tỷ lệ giữ chân khách hàng hiện hữu.</div>
+                  </div>
+
+                  <!-- Milestone 4 -->
+                  <div class="canva-milestone-item">
+                    <div class="canva-milestone-circle c-5m">
+                      <span style="font-size: 8px; opacity: 0.9;">CÓ HƠN</span>
+                      <span>5 TRIỆU</span>
+                    </div>
+                    <div class="canva-milestone-desc">Lượt tiếp cận khách hàng tiềm năng thông qua các chiến dịch.</div>
+                  </div>
+
+                  <!-- Milestone 5 -->
+                  <div class="canva-milestone-item">
+                    <div class="canva-milestone-circle c-32">32%</div>
+                    <div class="canva-milestone-desc">Tỷ lệ khách hàng tái sử dụng dịch vụ/sản phẩm</div>
+                  </div>
+                </div>
+
+                <!-- Banner pill tóm tắt ở góc dưới -->
+                <div class="canva-slide-summary-banner">
+                  Vận hành đạt hiệu suất cao, mở rộng thành công tệp khách mới và gia tăng mạnh mẽ độ trung thành của khách hàng.
+                </div>
+              </div>
+            </div>
+
+            <!-- Novel stream container inside Canva slide -->
+            <div class="canva-story-stream" id="canva-story-stream">
+              <!-- Rendered by app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Boss Mode View (Canva Full Pristine Slide Mockup) -->
+        <div class="canva-boss-view" id="canva-boss-view" style="display: none;">
+          <div class="canva-slide-deck-card" style="min-height: 540px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+            <div class="canva-slide-header-box">
+              <h1 class="canva-slide-main-title">TÓM TẮT CHỈ SỐ HOÀN THÀNH MỤC TIÊU</h1>
+              <div class="canva-slide-header-line"></div>
+            </div>
+
+            <div class="canva-infographic-orbit-container" style="min-height: 380px; padding: 40px 30px;">
+              <svg class="canva-orbit-svg" viewBox="0 0 900 240" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+                <ellipse cx="450" cy="140" rx="420" ry="90" fill="none" stroke="url(#orbit-line-grad-boss)" stroke-width="3.5" stroke-linecap="round"/>
+                <defs>
+                  <linearGradient id="orbit-line-grad-boss" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.3"/>
+                    <stop offset="40%" stop-color="#38bdf8"/>
+                    <stop offset="80%" stop-color="#2563eb"/>
+                    <stop offset="100%" stop-color="#1e3a8a"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <div class="canva-orbit-milestones-row" style="margin-top: 40px;">
+                <div class="canva-milestone-item">
+                  <div class="canva-milestone-circle c-98" style="width: 72px; height: 72px; font-size: 18px;">98%</div>
+                  <div class="canva-milestone-desc">Tỷ lệ hoàn thành kế hoạch doanh thu năm.</div>
+                </div>
+                <div class="canva-milestone-item">
+                  <div class="canva-milestone-circle c-85" style="width: 72px; height: 72px; font-size: 18px;">85%</div>
+                  <div class="canva-milestone-desc">Mức độ hài lòng của khách hàng (Tăng 12%).</div>
+                </div>
+                <div class="canva-milestone-item">
+                  <div class="canva-milestone-circle c-74" style="width: 72px; height: 72px; font-size: 18px;">74%</div>
+                  <div class="canva-milestone-desc">Tỷ lệ giữ chân khách hàng hiện hữu.</div>
+                </div>
+                <div class="canva-milestone-item">
+                  <div class="canva-milestone-circle c-5m" style="width: 72px; height: 72px;">
+                    <span style="font-size: 9px; opacity: 0.9;">CÓ HƠN</span>
+                    <span style="font-size: 14px;">5 TRIỆU</span>
+                  </div>
+                  <div class="canva-milestone-desc">Lượt tiếp cận khách hàng tiềm năng qua chiến dịch.</div>
+                </div>
+                <div class="canva-milestone-item">
+                  <div class="canva-milestone-circle c-32" style="width: 72px; height: 72px; font-size: 18px;">32%</div>
+                  <div class="canva-milestone-desc">Tỷ lệ khách hàng tái sử dụng dịch vụ/sản phẩm</div>
+                </div>
+              </div>
+
+              <div class="canva-slide-summary-banner" style="margin-top: 50px;">
+                Vận hành đạt hiệu suất cao, mở rộng thành công tệp khách mới và gia tăng mạnh mẽ độ trung thành của khách hàng.
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
-    <div class="ps-document-tabs">
-      <span class="active">Brand_Campaign_KeyVisual_v2.psd @ 66.7% (RGB/8*)</span>
-      <span>Editorial_Copy_A4.psd @ 50%</span>
+
+    <!-- 3. CANVA FILMSTRIP THUMBNAILS (Ảnh 2) -->
+    <div class="canva-filmstrip-bar">
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">1</span>
+      </div>
+      <div class="canva-film-thumb active">
+        <span class="canva-film-thumb-num">2</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">3</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">4</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">5</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">6</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">7</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">8</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">9</span>
+      </div>
+      <div class="canva-film-thumb">
+        <span class="canva-film-thumb-num">10</span>
+      </div>
+      <button class="canva-add-slide-btn" title="Thêm trang">+</button>
     </div>
+
+    <!-- 4. CANVA BOTTOM STATUS FOOTER BAR (Ảnh 2) -->
+    <footer class="canva-bottom-bar">
+      <div class="canva-bottom-left">
+        <span style="cursor: pointer;">📝 Ghi chú</span>
+        <span style="cursor: pointer;">⏱ Đếm ngược</span>
+      </div>
+      <div class="canva-bottom-right">
+        <div class="canva-zoom-control">
+          <span>—</span>
+          <input type="range" class="canva-zoom-slider" min="20" max="200" value="61">
+          <span>+</span>
+          <span style="font-weight: 600; font-size: 11px; min-width: 32px;">61%</span>
+        </div>
+        <span style="cursor: pointer;">🗂 Trang 2 / 10</span>
+        <span style="cursor: pointer;" title="Dạng lưới">▦</span>
+        <span style="cursor: pointer;" title="Trình chiếu">▶</span>
+        <span style="cursor: pointer;" title="Toàn màn hình">⤢</span>
+      </div>
+    </footer>
   </div>
-
-
-  
-
-  
 
   <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
 
-  <main class="photoshop-workspace photoshop-only" id="photoshop-workspace">
-    <!-- Left Tools Panel -->
-    <div class="ps-tools-panel">
-      <span class="ps-t-btn" title="Move Tool (V)">✥<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Rectangular Marquee Tool (M)">⬚<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Lasso Tool (L)">⚲<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Object Selection Tool (W)">⛶<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Crop Tool (C)">⧉<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Eyedropper Tool (I)">⌖<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Spot Healing Brush Tool (J)">✚<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Brush Tool (B)">🖌<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Clone Stamp Tool (S)">⎘<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="History Brush Tool (Y)">↺<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Eraser Tool (E)">⌫<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Gradient Tool (G)">▦<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Blur Tool (R)">💧<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Dodge Tool (O)">☼<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Pen Tool (P)">✒<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn active" title="Horizontal Type Tool (T)"><b>T</b><i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Path Selection Tool (A)">➤<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Rectangle Tool (U)">▭<i class="sub-arrow"></i></span>
-      <span class="ps-t-btn" title="Hand Tool (H)">✋</span>
-      <span class="ps-t-btn" title="Zoom Tool (Z)">🔍</span>
-      <div class="ps-color-swatches">
-        <span class="ps-default-colors-btn" title="Default Colors (D)">◰</span>
-        <span class="ps-swap-colors-btn" title="Switch Colors (X)">⇄</span>
-        <div class="ps-swatch-fg" title="Foreground Color"></div>
-        <div class="ps-swatch-bg" title="Background Color"></div>
-      </div>
-    </div>
-
-    <!-- Center Canvas Scroll Area -->
-    <div class="ps-canvas-wrapper" id="ps-canvas-scroll-container">
-      <div class="ps-canvas-container">
-
-        <!-- Photoshop Multi-Artboard Layout (Active visual artwork on left, reading text on right) -->
-        <div class="ps-artboards-row" id="ps-artboard-view">
-
-          <!-- ARTBOARD 1: ACTIVE GRAPHIC RETOUCHING / KEY VISUAL COMPOSITION -->
-          <div class="ps-artboard ps-visual-artboard">
-            <div class="ps-artboard-header">
-              <span class="ps-ab-tag">ARTBOARD 1 - KEY VISUAL HERO [300 DPI - CMYK]</span>
-              <span class="ps-ab-size">1920 x 1080 px</span>
-            </div>
-            <div class="ps-visual-canvas">
-              <!-- Cyan Guide Lines -->
-              <div class="ps-guide-line-h" style="top: 25%;"></div>
-              <div class="ps-guide-line-h" style="top: 75%;"></div>
-              <div class="ps-guide-line-v" style="left: 18%;"></div>
-              <div class="ps-guide-line-v" style="left: 82%;"></div>
-
-              <!-- Graphic Composition Layers -->
-              <div class="ps-composition-body">
-                <div class="ps-comp-bg-layer"></div>
-                <div class="ps-comp-mesh-art">
-                  <svg viewBox="0 0 400 280" class="ps-comp-vector-mesh">
-                    <defs>
-                      <linearGradient id="psGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#00ffff" stop-opacity="0.8" />
-                        <stop offset="50%" stop-color="#ff007f" stop-opacity="0.6" />
-                        <stop offset="100%" stop-color="#7928ca" stop-opacity="0.9" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M 30,140 Q 100,20 200,100 T 370,140 T 200,240 T 30,140 Z" fill="url(#psGrad1)" filter="blur(1px)" />
-                    <circle cx="200" cy="140" r="70" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,4" />
-                    <circle cx="200" cy="140" r="100" fill="none" stroke="#00ffff" stroke-width="1.2" />
-                    <line x1="30" y1="140" x2="370" y2="140" stroke="rgba(255,255,255,0.4)" stroke-width="1" />
-                    <line x1="200" y1="20" x2="200" y2="260" stroke="rgba(255,255,255,0.4)" stroke-width="1" />
-                  </svg>
-                </div>
-
-                <!-- Active Selected Layer with Transform Bounding Box & 8 Handles -->
-                <div class="ps-transform-bounding-box">
-                  <div class="ps-transform-content">
-                    <span class="ps-brand-tag">SUMMER CAMPAIGN 2026</span>
-                    <h3>CREATIVE DIRECTION & BRAND ASSET GUIDELINE</h3>
-                    <p>Editorial Key Visual Retouch • Layer Mask [Gradient Map 02] • CMYK US Web Coated</p>
-                  </div>
-                  <!-- 8 Transform Handles -->
-                  <span class="ps-handle tl"></span>
-                  <span class="ps-handle tc"></span>
-                  <span class="ps-handle tr"></span>
-                  <span class="ps-handle ml"></span>
-                  <span class="ps-handle mr"></span>
-                  <span class="ps-handle bl"></span>
-                  <span class="ps-handle bc"></span>
-                  <span class="ps-handle br"></span>
-                </div>
-
-                <!-- Floating Photoshop Layer HUD -->
-                <div class="ps-hud-info">
-                  <span>W: 1920px</span>
-                  <span>H: 1080px</span>
-                  <span>Angle: 0.0°</span>
-                  <span>Blend: Screen</span>
-                  <span>Opacity: 100%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ARTBOARD 2: EDITORIAL COPYWRITING (DISGUISED NOVEL STREAM) -->
-          <div class="ps-artboard ps-text-artboard">
-            <div class="ps-artboard-header">
-              <span class="ps-ab-tag">ARTBOARD 2 - EDITORIAL COPYWRITING [TYPE TOOL ACTIVE]</span>
-              <span class="ps-ab-size">2480 x 3508 px</span>
-            </div>
-            <div class="ps-artboard-sheet">
-              <div class="ps-sheet-title-block">
-                <h2 id="ps-artboard-title">BẢN THẢO TRÌNH BÀY NỘI DUNG</h2>
-                <div class="ps-spec-line">Spec: Adobe Garamond Pro | 11.5pt | Leading 18pt | Optical Kerning | Justified</div>
-              </div>
-              <div class="ps-story-stream" id="ps-story-stream">
-                <!-- Dynamically populated novel chunks -->
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Boss Mode View (High-End Master Creative Key Visual) -->
-        <div class="ps-boss-view" id="ps-boss-view" style="display: none;">
-          <div class="ps-fake-ad-canvas">
-            <div class="ps-ad-badge">ADOBE PHOTOSHOP 2026 - MASTER KEY VISUAL [FINAL CMYK EXPORT]</div>
-            <div class="ps-ad-hero">
-              <div class="ps-shape-gradient">
-                <svg viewBox="0 0 600 240" class="ps-boss-hero-svg">
-                  <path d="M 50,120 Q 150,20 300,100 T 550,120 T 300,220 T 50,120 Z" fill="rgba(255,255,255,0.12)" stroke="#38bdf8" stroke-width="2" />
-                  <circle cx="300" cy="120" r="80" fill="none" stroke="#f43f5e" stroke-width="2.5" />
-                  <circle cx="300" cy="120" r="50" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4,4" />
-                  <text x="300" y="125" fill="#ffffff" font-family="sans-serif" font-weight="900" font-size="18" text-anchor="middle" letter-spacing="4">CREATIVE LAB</text>
-                </svg>
-              </div>
-              <h3>GLOBAL BRAND IDENTITY &amp; DESIGN SYSTEM 2026</h3>
-              <p>Senior Art Direction • Packaging &amp; Key Visual Guidelines • Adobe Systems Pro Certified</p>
-              <div class="ps-ad-metrics-bar">
-                <span>COLOR: CMYK PROFILE v2</span>
-                <span>RESOLUTION: 300 DPI</span>
-                <span>ICC: ISO Coated v2</span>
-                <span>CHANNELS: 8-BIT / CHANNEL</span>
-                <span>COLOR PROOF: WORKING CMYK</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Panels (Layers & Properties) -->
-    <div class="ps-right-sidebar">
-      <div class="ps-panel-header">
-        <span class="active">LAYERS</span>
-        <span>CHANNELS</span>
-        <span>PATHS</span>
-        <span>PROPERTIES</span>
-      </div>
-      <div class="ps-layers-control-bar">
-        <select class="ps-blend-mode-select">
-          <option>Normal</option>
-          <option>Dissolve</option>
-          <option>Multiply</option>
-          <option>Screen</option>
-          <option>Overlay</option>
-        </select>
-        <div class="ps-opacity-box">
-          <span>Opacity:</span>
-          <b>100%</b>
-        </div>
-      </div>
-      <div class="ps-layers-lock-bar">
-        <span class="ps-lock-label">Lock:</span>
-        <span class="ps-lock-icon active">🔒</span>
-        <span class="ps-lock-icon">🖌</span>
-        <span class="ps-lock-icon">✥</span>
-        <span class="ps-lock-icon">⬜</span>
-        <div class="ps-fill-box">
-          <span>Fill:</span>
-          <b>100%</b>
-        </div>
-      </div>
-      <div class="ps-layers-list">
-        <div class="ps-layer-item active"><span class="ps-eye">👁</span><span class="ps-layer-type">T</span><span class="ps-layer-name">Text_Copy_Manuscript</span><span class="ps-lock">🔓</span></div>
-        <div class="ps-layer-item"><span class="ps-eye">👁</span><span class="ps-layer-type">📁</span><span class="ps-layer-name">Typography_Guides</span><span class="ps-lock">🔒</span></div>
-        <div class="ps-layer-item"><span class="ps-eye">👁</span><span class="ps-layer-type">fx</span><span class="ps-layer-name">Color_Lookup_Nordic</span><span class="ps-lock">🔓</span></div>
-        <div class="ps-layer-item"><span class="ps-eye">👁</span><span class="ps-layer-type">🖼</span><span class="ps-layer-name">Key_Visual_Retouch_v2</span><span class="ps-lock">🔒</span></div>
-        <div class="ps-layer-item"><span class="ps-eye">👁</span><span class="ps-layer-type">⬜</span><span class="ps-layer-name">Background (Locked)</span><span class="ps-lock">🔒</span></div>
-      </div>
-      <div class="ps-layers-footer">
-        <span class="ps-layer-action-btn" title="Add a layer style">fx</span>
-        <span class="ps-layer-action-btn" title="Add layer mask">○</span>
-        <span class="ps-layer-action-btn" title="Create new fill or adjustment layer">◑</span>
-        <span class="ps-layer-action-btn" title="Create a new group">📁</span>
-        <span class="ps-layer-action-btn" title="Create a new layer">+</span>
-        <span class="ps-layer-action-btn" title="Delete layer">🗑</span>
-      </div>
-      <div class="ps-properties-box">
-        <div class="ps-props-title">CHARACTER</div>
-        <div class="ps-props-grid">
-          <div><label>Font</label><span>Adobe Garamond</span></div>
-          <div><label>Size</label><span>11.5 pt</span></div>
-          <div><label>Leading</label><span>18 pt</span></div>
-          <div><label>Tracking</label><span>0</span></div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-
-  
-
-  
-
-
-
-  
-
-<!-- =========================================================
+  <!-- =========================================================
        MODAL 1: THEME PICKER MODAL (CHỌN GIAO DIỆN)
        ========================================================= -->
   <div class="stealth-modal-overlay" id="theme-modal">
@@ -604,7 +714,7 @@
                 <option value="Arial" selected>Arial (Mặc định chuẩn)</option>
                 <option value="Roboto">Roboto (Google)</option>
                 <option value="Calibri">Calibri (Văn phòng)</option>
-                <option value="Segoe UI">Segoe UI (Hiện đại)</option>
+                <option value="Segoe UI">Segoe UI (Hiện đại AutoCAD)</option>
                 <option value="Times New Roman">Times New Roman (Cổ điển)</option>
                 <option value="Georgia">Georgia (Truyện chữ)</option>
               </select>
