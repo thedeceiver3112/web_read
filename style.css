@@ -1,4 +1,4 @@
-﻿/* ==========================================================
+/* ==========================================================
    MULTI-THEME STEALTH WORKSPACE DISGUISE SYSTEM
    Supports: Google Sheets (Primary), Excel 365, and VS Code IDE
    ========================================================== */
@@ -1811,20 +1811,145 @@ body.theme-excel .section-break-badge {
   background: #f8fafc;
   border: 1px solid var(--portal-border);
   border-radius: 10px;
-  padding: 12px 16px;
-  margin-bottom: 12px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.duo-author-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.25);
 }
 
 .duo-author-text .name {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--portal-text-primary);
+  line-height: 1.2;
 }
 .duo-author-text .badge {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--portal-text-secondary);
-  margin-top: 1px;
+  margin-top: 2px;
+}
+
+/* Author Social Contacts */
+.duo-author-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.duo-social-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  background: #ffffff;
+  border: 1px solid var(--portal-border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--portal-text-primary);
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.duo-social-row:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+.duo-social-fb:hover {
+  border-color: #1877f2;
+  background: #f0f7ff;
+}
+
+.duo-social-zalo:hover {
+  border-color: #0068ff;
+  background: #f0f6ff;
+}
+
+.duo-social-gmail:hover {
+  border-color: #ea4335;
+  background: #fdf2f2;
+}
+
+.social-icon-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.social-icon-box.fb {
+  background: #1877f2;
+}
+
+.social-icon-box.zalo {
+  background: #0068ff;
+  font-size: 9px;
+  letter-spacing: -0.3px;
+}
+
+.social-icon-box.gmail {
+  background: #ea4335;
+}
+
+.social-row-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.social-row-info .social-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--portal-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.1;
+}
+
+.social-row-info .social-value {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.social-arrow {
+  font-size: 11px;
+  color: #94a3b8;
+  transition: transform 0.15s ease, color 0.15s ease;
+  font-weight: bold;
+}
+
+.duo-social-row:hover .social-arrow {
+  color: var(--portal-primary);
+  transform: translate(2px, -2px);
 }
 
 .duo-speech-donate {
@@ -1844,17 +1969,21 @@ body.theme-excel .section-break-badge {
   align-items: center;
   background: #ffffff;
   border: 1px solid var(--portal-border);
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: 12px;
+  padding: 8px;
   margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .duo-qr-img {
-  max-width: 195px;
   width: 100%;
+  max-width: 100%;
   height: auto;
   border-radius: 8px;
-  border: 1px solid var(--portal-border);
+  border: none;
+  display: block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .duo-bank-info {
