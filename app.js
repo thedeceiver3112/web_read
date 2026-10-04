@@ -134,23 +134,73 @@ const VSCODE_BOSS_CODE = [
 
 // Neutral project copy shown before a document is loaded.
 const SAMPLE_STORY_CHUNKS = [
-  "Q3 CAMPAIGN WORKSPACE - INTERNAL REVIEW COPY",
-  "Project scope includes editorial layout, visual direction, data validation and final delivery coordination.",
-  "Current status: working files have been consolidated and the primary review round is in progress.",
-  "Design team: verify spacing, hierarchy, color consistency and output dimensions across all approved formats.",
-  "Content team: complete the final language pass and flag any copy that still requires stakeholder approval.",
-  "Development team: confirm asset paths, browser compatibility and production build checks before handoff.",
-  "Open items are tracked by section so reviewers can continue from the most recently approved checkpoint.",
-  "Use the project navigation controls to move between sections and compare the latest revisions.",
-  "All external exports must use the approved naming convention and remain inside the delivery package.",
-  "Next review: finalize outstanding notes, prepare the release candidate and archive superseded versions."
+  "BÁO CÁO PHÂN TÍCH TỔNG QUAN CHIẾN DỊCH Q3 — TÀI LIỆU LƯU HÀNH NỘI BỘ",
+  "Hệ thống ghi nhận toàn bộ tiến độ triển khai các hạng mục cơ sở dữ liệu và vận hành hệ thống chuyển đổi số toàn diện.",
+  "Đội ngũ kỹ thuật đã hoàn tất quá trình đồng bộ hóa dữ liệu từ các chi nhánh trọng điểm về trung tâm điều hành.",
+  "Các chỉ số hiệu suất trọng yếu (KPI) trong tháng vừa qua đều ghi nhận mức tăng trưởng vượt kỳ vọng so với kế hoạch ban đầu.",
+  "Để đảm bảo tính liên tục của luồng công việc, các tài liệu hướng dẫn quy trình đã được cập nhật chi tiết trên cổng nội bộ.",
+  "Mỗi chuyên viên cần chủ động theo dõi các mốc thời gian chuyển giao để phối hợp nhịp nhàng giữa các phòng ban chức năng.",
+  "Hệ thống tự động kích hoạt chế độ sao lưu dự phòng định kỳ nhằm bảo vệ an toàn tuyệt đối cho kho dữ liệu doanh nghiệp.",
+  "Trong giai đoạn tiếp theo, các buổi đánh giá chéo sẽ được tổ chức định kỳ vào mỗi sáng thứ Hai đầu tuần.",
+  "Các kiến nghị cải tiến quy trình làm việc được khuyến khích gửi trực tiếp qua hệ thống khảo sát ý kiến trực tuyến.",
+  "Trang 1 kết thúc tại đây, hệ thống sẵn sàng chuyển giao các luồng dữ liệu tiếp nối sang các phân đoạn kế tiếp.",
+  "CHƯƠNG II: TIẾN TRÌNH TỐI ƯU HÓA QUY TRÌNH VẬN HÀNH & KIỂM SOÁT RỦI RO",
+  "Việc tinh gọn các bước phê duyệt chứng từ đã giúp rút ngắn thời gian xử lý hồ sơ từ 48 giờ xuống còn dưới 12 giờ làm việc.",
+  "Các phòng ban ghi nhận mức độ hài lòng của đối tác và khách hàng tăng lên rõ rệt sau khi áp dụng biểu mẫu số hóa mới.",
+  "Hệ thống cảnh báo sớm rủi ro vận hành đã phát hiện và ngăn chặn kịp thời các xung đột tiềm ẩn trong luồng điều phối.",
+  "Báo cáo kiểm toán độc lập đánh giá cao tính minh bạch và độ chính xác của các bảng cân đối dòng tiền phát sinh.",
+  "Mọi sai lệch số liệu đều được truy vết tự động đến từng dấu mốc thời gian và định danh tài khoản thực hiện.",
+  "Các trưởng bộ phận được phân quyền chủ động điều chỉnh kế hoạch phân bổ nguồn lực dựa trên dữ liệu thời gian thực.",
+  "Các chương trình đào tạo kỹ năng nâng cao cho nhân sự nòng cốt đã được lên lịch chi tiết trong quý tới.",
+  "Nguồn lực công nghệ thông tin tiếp tục được ưu tiên đầu tư để nâng cấp băng thông và năng lực xử lý máy chủ.",
+  "Trang 2 hoàn tất đánh giá, các nhóm công tác bắt đầu triển khai các gói giải pháp trọng điểm theo lộ trình.",
+  "CHƯƠNG III: ĐÁNH GIÁ CHỈ SỐ TĂNG TRƯỞNG & ĐỘT PHÁ CÔNG NGHỆ",
+  "Ứng dụng trí tuệ nhân tạo và tự động hóa quy trình (RPA) đã mang lại hiệu quả vượt bậc trong việc xử lý dữ liệu lớn.",
+  "Năng suất lao động trung bình của toàn khối văn phòng tăng 24.5% so với cùng kỳ năm trước.",
+  "Các kênh tương tác trực tuyến ghi nhận lượng truy cập ổn định với tỷ lệ phản hồi thành công đạt trên 99.8%.",
+  "Chiến lược đa nền tảng giúp mở rộng phạm vi tiếp cận đến đông đảo các nhóm khách hàng tiềm năng trên toàn quốc.",
+  "Các giải pháp bảo mật nhiều lớp được thắt chặt để bảo vệ toàn vẹn tài sản số của tổ chức.",
+  "Bản cập nhật giao diện người dùng mới nhận được nhiều phản hồi tích cực nhờ tính trực quan và dễ sử dụng.",
+  "Đội ngũ hỗ trợ kỹ thuật duy trì trạng thái trực ban 24/7 nhằm đảm bảo hệ thống vận hành liên tục không gián đoạn.",
+  "Kế hoạch mở rộng hạ tầng đám mây giai đoạn hai đã được phê duyệt và chuẩn bị bước vào giai đoạn đấu thầu.",
+  "Trang 3 tổng kết các kết quả đột phá, mở ra tiền đề vững chắc cho các bước phát triển bứt phá trong tương lai.",
+  "CHƯƠNG IV: QUẢN TRỊ NGUỒN NHÂN LỰC & XÂY DỰNG VĂN HÓA DOANH NGHIỆP",
+  "Môi trường làm việc linh hoạt và sáng tạo là chìa khóa then chốt giúp thu hút và giữ chân các nhân tài hàng đầu.",
+  "Chính sách đãi ngộ dựa trên hiệu suất thực tế đã tạo động lực mạnh mẽ cho các cá nhân và tập thể xuất sắc.",
+  "Các hoạt động gắn kết nội bộ và chia sẻ tri thức được tổ chức thường xuyên nhằm nâng cao tinh thần đồng đội.",
+  "Văn hóa học tập suốt đời được lan tỏa sâu rộng thông qua các khóa học trực tuyến miễn phí cho toàn thể cán bộ nhân viên.",
+  "Công tác chăm sóc sức khỏe thể chất và tinh thần cho người lao động luôn được ban lãnh đạo đặt lên hàng đầu.",
+  "Các sáng kiến cải tiến kỹ thuật từ cấp cơ sở đã giúp tiết kiệm hàng trăm triệu đồng chi phí vận hành mỗi năm.",
+  "Sự phối hợp chặt chẽ giữa các khối nghiệp vụ và khối hỗ trợ tạo nên sức mạnh tổng hợp to lớn cho cả tổ chức.",
+  "Mọi nỗ lực và đóng góp của từng thành viên đều được ghi nhận xứng đáng và tôn vinh kịp thời.",
+  "Trang 4 khép lại phần đánh giá nhân sự, khẳng định yếu tố con người là tài sản quý giá nhất của tổ chức.",
+  "CHƯƠNG V: KẾ HOẠCH HÀNH ĐỘNG CHIẾN LƯỢC & TẦM NHÌN DÀI HẠN",
+  "Tập trung nguồn lực cao nhất để hoàn thành thắng lợi các mục tiêu sản xuất kinh doanh đã đề ra cho năm tài chính.",
+  "Chủ động nắm bắt các xu hướng công nghệ mới nổi để đón đầu cơ hội và tạo lợi thế cạnh tranh bền vững.",
+  "Mở rộng mạng lưới hợp tác chiến lược với các đối tác uy tín trong và ngoài nước nhằm gia tăng giá trị chuỗi cung ứng.",
+  "Tăng cường công tác truyền thông thương hiệu và trách nhiệm xã hội của doanh nghiệp đối với cộng đồng.",
+  "Đảm bảo tuân thủ nghiêm ngặt các quy định pháp luật hiện hành và các chuẩn mực đạo đức kinh doanh quốc tế.",
+  "Hệ thống quản lý chất lượng toàn diện tiếp tục được hoàn thiện theo các tiêu chuẩn quốc tế mới nhất.",
+  "Ban điều hành cam kết tạo mọi điều kiện thuận lợi nhất để các dự án trọng điểm về đích đúng tiến độ.",
+  "Sự đoàn kết, đồng lòng và quyết tâm cao độ của toàn thể đội ngũ sẽ là bảo chứng vững chắc cho mọi thành công.",
+  "Trang 5 hoàn thành bức tranh chiến lược tổng thể, sẵn sàng cho những bước tiến mạnh mẽ và vững chắc tiếp theo.",
+  "CHƯƠNG VI: TỔNG KẾT & CHỈ ĐẠO TRIỂN KHAI CÁC NHIỆM VỤ TRỌNG TÂM",
+  "Yêu cầu các đơn vị trực thuộc khẩn trương cụ thể hóa các mục tiêu chung thành chương trình hành động chi tiết.",
+  "Thường xuyên kiểm tra, đôn đốc và đánh giá tiến độ thực hiện để kịp thời tháo gỡ các khó khăn, vướng mắc phát sinh.",
+  "Phát huy tối đa tính chủ động, sáng tạo và tinh thần trách nhiệm của người đứng đầu từng bộ phận.",
+  "Báo cáo kết quả thực hiện định kỳ gửi về văn phòng tổng hợp trước ngày 25 hàng tháng để theo dõi chung.",
+  "Toàn thể cán bộ, nhân viên nêu cao tinh thần kỷ luật, kỷ cương và trách nhiệm trong thực thi nhiệm vụ được giao.",
+  "Tin tưởng rằng với quyết tâm cao và sự nỗ lực không ngừng, chúng ta sẽ hoàn thành xuất sắc mọi chỉ tiêu đã đề ra.",
+  "Văn bản này có hiệu lực kể từ ngày ký và được phổ biến rộng rãi đến toàn thể các đơn vị có liên quan.",
+  "Lưu trữ: Văn thư tổng hợp, các phòng ban nghiệp vụ, cổng thông tin điện tử nội bộ.",
+  "TÀI LIỆU ĐÃ ĐƯỢC KIỂM TRA VÀ PHÊ DUYỆT BỞI HỘI ĐỒNG THẨM ĐỊNH NỘI BỘ — HOÀN TẤT."
 ];
 
 // Favicons for themes
 
 // Multi-File Workspace Mapping & Navigation
 const THEME_PAGES = {
-  'theme-googlesheets': 'index.html',
+  'theme-googlesheets': 'googlesheets.html',
   'theme-googledocs': 'docs.html',
   'theme-excel': 'excel.html',
   'theme-vscode': 'vscode.html',
@@ -165,6 +215,24 @@ const THEME_PAGES = {
   'theme-thuvienphapluat': 'thuvienphapluat.html'
 };
 
+// Single source of truth for per-page control id prefixes.
+// Control ids follow the pattern `${prefix}-${suffix}` (e.g. 'vsc-btn-next').
+// To add a theme, add its prefix here instead of editing every id list.
+const THEME_CONTROL_PREFIXES = [
+  'gs', 'gdocs', 'excel', 'vsc', 'ps', 'blender', 'linkedin',
+  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl'
+];
+
+function themeControlIds(suffix) {
+  return THEME_CONTROL_PREFIXES.map(prefix => `${prefix}-${suffix}`);
+}
+
+// Boss-key button ids use full theme names rather than the short prefixes above.
+const BOSS_KEY_BUTTON_IDS = [
+  'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'blender', 'linkedin',
+  'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat'
+].map(name => `btn-boss-key-${name}`);
+
 const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
 const DOCUMENT_CACHE_STORE_NAME = 'documents';
 const ACTIVE_DOCUMENT_CACHE_KEY = 'active-document';
@@ -173,6 +241,7 @@ let documentCacheWritePromise = Promise.resolve();
 
 function getThemeForCurrentPage() {
   const path = window.location.pathname.toLowerCase();
+  if (path.endsWith('googlesheets.html') || path.endsWith('sheets.html')) return 'theme-googlesheets';
   if (path.endsWith('docs.html') || path.endsWith('googledocs.html')) return 'theme-googledocs';
   if (path.endsWith('excel.html')) return 'theme-excel';
   if (path.endsWith('vscode.html')) return 'theme-vscode';
@@ -185,11 +254,14 @@ function getThemeForCurrentPage() {
   if (path.endsWith('canva.html')) return 'theme-canva';
   if (path.endsWith('powerpoint.html') || path.endsWith('ppt.html')) return 'theme-powerpoint';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
+  if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
+    return localStorage.getItem('selected_theme') || 'theme-googlesheets';
+  }
   return 'theme-googlesheets';
 }
 
 function getFileForTheme(themeName) {
-  return THEME_PAGES[themeName] || 'index.html';
+  return THEME_PAGES[themeName] || 'googlesheets.html';
 }
 
 async function navigateToThemePage(targetTheme) {
@@ -197,7 +269,9 @@ async function navigateToThemePage(targetTheme) {
   saveState();
   const currentTheme = getThemeForCurrentPage();
   const targetPage = getFileForTheme(targetTheme);
-  if (currentTheme !== targetTheme) {
+  await persistDocumentCache().catch(() => {});
+  const isIndexPage = window.location.pathname.toLowerCase().endsWith('index.html') || window.location.pathname.endsWith('/') || !window.location.pathname.includes('.html');
+  if (currentTheme !== targetTheme || isIndexPage) {
     await documentCacheWritePromise.catch(error => {
       console.warn('Document cache was not ready before theme navigation:', error);
     });
@@ -273,6 +347,8 @@ function applyCachedDocument(cache) {
   );
   state.currentPage = state.allChunks[state.currentGlobalIndex]?.page || 1;
 
+  const univFileName = document.getElementById('univ-file-name');
+  if (univFileName && state.pdfFileName) univFileName.textContent = state.pdfFileName;
   const portalNameLabel = document.getElementById('portal-pdf-filename');
   if (portalNameLabel && state.pdfFileName) portalNameLabel.textContent = state.pdfFileName;
   if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
@@ -295,8 +371,6 @@ function persistDocumentCache() {
 
   try {
     sessionStorage.setItem(ACTIVE_DOCUMENT_SESSION_KEY, JSON.stringify(payload));
-    documentCacheWritePromise = Promise.resolve();
-    return documentCacheWritePromise;
   } catch (error) {
     sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
     console.info('Tài liệu vượt giới hạn sessionStorage, chuyển sang IndexedDB.', error);
@@ -351,19 +425,19 @@ async function restoreDocumentCache() {
 }
 
 const FAVICONS = {
-  'theme-googlesheets': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%230F9D58' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%2387CEAB' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z'/></svg>",
-  'theme-googledocs': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 32'><path fill='%234285F4' d='M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z'/><path fill='%23A1C2FA' d='M15 0v9h9L15 0z'/><path fill='%23ffffff' d='M5 13h14v2H5zm0 4h14v2H5zm0 4h10v2H5z'/></svg>",
-  'theme-excel': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23107c41'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>X</text></svg>",
-  'theme-vscode': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23007ACC' d='M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z'/><path fill='%231F9CF0' d='M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z'/></svg>",
-  'theme-photoshop': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23001e36'/><text x='16' y='23' font-size='18' font-family='Segoe UI,sans-serif' font-weight='bold' fill='%2331a8ff' text-anchor='middle'>Ps</text></svg>",
-  'theme-blender': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23222222'/><circle cx='16' cy='18' r='7' fill='%23ea7600'/><circle cx='16' cy='18' r='3.5' fill='%23265787'/><path d='M16 5 L16 11 M10 8 L14 13 M22 8 L18 13' stroke='%23ea7600' stroke-width='2.5' stroke-linecap='round'/></svg>",
-  'theme-linkedin': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a66c2'/><text x='16' y='24' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>in</text></svg>",
-  'theme-autocad': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23c41527'/><text x='16' y='24' font-size='22' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>A</text></svg>",
-  'theme-zalo': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230068ff'/><text x='16' y='22' font-size='14' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>Zalo</text></svg>",
-  'theme-figma': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 57'><path d='M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z' fill='%231ABCFE'/><path d='M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z' fill='%230ACF83'/><path d='M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z' fill='%23FF7262'/><path d='M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z' fill='%23F24E1E'/><path d='M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z' fill='%23A259FF'/></svg>",
-  'theme-canva': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='cg' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%2300c4cc'/><stop offset='100%25' stop-color='%237d2ae8'/></linearGradient></defs><rect width='32' height='32' rx='6' fill='url(%23cg)'/><text x='16' y='23' font-size='20' font-family='Brush Script MT, cursive, Segoe UI' font-style='italic' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>",
-  'theme-powerpoint': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23d24726'/><text x='16' y='23' font-size='20' font-family='Segoe UI,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>P</text></svg>",
-  'theme-thuvienphapluat': "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%230c345c'/><path d='M16 6 L16 26 M8 12 L24 12 M8 12 L5 19 C5 21 11 21 11 19 Z M24 12 L21 19 C21 21 27 21 27 19 Z' stroke='%23d49200' stroke-width='2' fill='none'/><rect x='13' y='25' width='6' height='2' fill='%23d49200'/></svg>",
+  'theme-googlesheets': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M37%2045H11c-2.2%200-4-1.8-4-4V7c0-2.2%201.8-4%204-4h18l12%2012v26c0%202.2-1.8%204-4%204z%22/%3E%20%3Cpath%20fill%3D%22%2387CEAC%22%20d%3D%22M29%203l12%2012H29V3z%22/%3E%20%3Cpath%20fill%3D%22%230B8043%22%20d%3D%22M29%2015h12l-12-12v12z%22%20opacity%3D%220.2%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2221%22%20width%3D%2220%22%20height%3D%2218%22%20rx%3D%221.5%22/%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M14%2026.5h20v2H14zm0%205.5h20v2H14zm8-11h2.5v18H22z%22/%3E%20%3C/svg%3E",
+  'theme-googledocs': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M37%2045H11c-2.2%200-4-1.8-4-4V7c0-2.2%201.8-4%204-4h18l12%2012v26c0%202.2-1.8%204-4%204z%22/%3E%20%3Cpath%20fill%3D%22%23A1C2FA%22%20d%3D%22M29%203l12%2012H29V3z%22/%3E%20%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M29%2015h12l-12-12v12z%22%20opacity%3D%220.2%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2222%22%20width%3D%2220%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2227.5%22%20width%3D%2220%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2233%22%20width%3D%2213%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3C/svg%3E",
+  'theme-excel': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22ex-g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23107C41%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230B552C%22/%3E%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22ex-g2%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2321A366%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23107C41%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20x%3D%2215%22%20y%3D%227%22%20width%3D%2227%22%20height%3D%2234%22%20rx%3D%224%22%20fill%3D%22url%28%23ex-g1%29%22/%3E%20%3Crect%20x%3D%2221%22%20y%3D%2213%22%20width%3D%2215%22%20height%3D%2222%22%20rx%3D%221%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.15%22/%3E%20%3Cpath%20d%3D%22M21%2019h15M21%2025h15M21%2030h15M28%2013v22%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.9%22/%3E%20%3Crect%20x%3D%226%22%20y%3D%2211%22%20width%3D%2221%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22url%28%23ex-g2%29%22%20filter%3D%22drop-shadow%280%203px%206px%20rgba%280%2C0%2C0%2C0.35%29%29%22/%3E%20%3Cpath%20d%3D%22M11.5%2018l4.8%206-4.8%206h3.2l3.2-4.4%203.2%204.4h3.2l-4.8-6%204.8-6h-3.2l-3.2%204.4-3.2-4.4h-3.2z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
+  'theme-vscode': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%230065A9%22%20d%3D%22M35.2%2045.3L44.8%2040.5c1.4-.7%202.2-2.1%202.2-3.6V11.1c0-1.5-.8-2.9-2.2-3.6L35.2%202.7c-1.2-.6-2.6-.4-3.5.5L16.2%2016.5l-7.4-5.6c-.9-.7-2.1-.7-3%20.1L1.6%2014.3c-.9.8-1.1%202.1-.5%203.1l6.7%209.8-6.7%209.8c-.6%201-.4%202.3.5%203.1l4.2%203.3c.9.8%202.1.8%203%20.1l7.4-5.6%2015.5%2013.3c.9.9%202.3%201.1%203.5.5z%22/%3E%20%3Cpath%20fill%3D%22%23007ACC%22%20d%3D%22M35.2%202.7c-1.2-.6-2.6-.4-3.5.5L16.2%2016.5l8.5%207.5L37%2012V4.5l-1.8-1.8z%22/%3E%20%3Cpath%20fill%3D%22%231F9CF0%22%20d%3D%22M35.2%2045.3c-1.2.6-2.6.4-3.5-.5L16.2%2031.5l8.5-7.5L37%2036v7.5l-1.8%201.8z%22/%3E%20%3Cpath%20fill%3D%22%23005B9E%22%20opacity%3D%220.3%22%20d%3D%22M24.7%2024L37%2012v24L24.7%2024z%22/%3E%20%3C/svg%3E",
+  'theme-photoshop': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%23001E36%22/%3E%20%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2244%22%20height%3D%2244%22%20rx%3D%228%22%20stroke%3D%22%2331A8FF%22%20stroke-width%3D%222.5%22%20fill%3D%22none%22/%3E%20%3Cpath%20d%3D%22M13%2014h8c4.2%200%207%202.6%207%206.6s-2.8%206.6-7%206.6h-4.2V34H13V14zm3.8%209.8H21c2.2%200%203.4-1.3%203.4-3.2s-1.2-3.2-3.4-3.2h-4.2v6.4z%22%20fill%3D%22%2331A8FF%22/%3E%20%3Cpath%20d%3D%22M28.8%2029.6c1.2%201.4%203%202.2%205.2%202.2%202.2%200%203.6-1.1%203.6-2.7%200-3.6-8.2-2.6-8.2-8.8%200-3.3%202.8-5.5%206.8-5.5%202.8%200%205%201.1%206.2%202.7l-2.4%202.2c-.9-1.2-2.2-1.9-3.8-1.9-1.9%200-3%201-3%202.1%200%203.3%208.2%202.4%208.2%208.7%200%203.6-2.9%205.8-7.2%205.8-3.4%200-6.1-1.3-7.5-3.3l2.3-2.3z%22%20fill%3D%22%2331A8FF%22/%3E%20%3C/svg%3E",
+  'theme-blender': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2222%22%20fill%3D%22%23222222%22/%3E%20%3Cpath%20d%3D%22M24%206c1.2%200%202.2%201%202.2%202.2v9.6c0%201.2-1%202.2-2.2%202.2s-2.2-1-2.2-2.2V8.2c0-1.2%201-2.2%202.2-2.2zm-12.7%205.2c.9-.9%202.3-.9%203.1%200l6.8%206.8c.9.9.9%202.3%200%203.1s-2.3.9-3.1%200l-6.8-6.8c-.9-.8-.9-2.2%200-3.1zm25.4%200c.9.9.9%202.3%200%203.1l-6.8%206.8c-.9.9-2.3.9-3.1%200s-.9-2.3%200-3.1l6.8-6.8c.8-.9%202.2-.9%203.1%200z%22%20fill%3D%22%23EA7600%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%2212%22%20fill%3D%22%23EA7600%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%226%22%20fill%3D%22%2322578A%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%222.8%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
+  'theme-linkedin': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%230A66C2%22/%3E%20%3Ccircle%20cx%3D%2215.5%22%20cy%3D%2214.5%22%20r%3D%223.2%22%20fill%3D%22%23FFFFFF%22/%3E%20%3Crect%20x%3D%2212.5%22%20y%3D%2220%22%20width%3D%226%22%20height%3D%2215%22%20rx%3D%221%22%20fill%3D%22%23FFFFFF%22/%3E%20%3Cpath%20d%3D%22M23%2020h5.5v2.3h.1c.8-1.5%202.8-2.8%205.6-2.8%205.8%200%207%203.8%207%208.8V35h-6v-7.8c0-2.2-.1-4.2-2.8-4.2s-3.2%202.1-3.2%204.2V35H23V20z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
+  'theme-autocad': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%231C1E24%22/%3E%20%3Cpath%20d%3D%22M24%206L8%2038h9l4-9h10l-5-11-2-12z%22%20fill%3D%22%23E51937%22/%3E%20%3Cpath%20d%3D%22M24%206l9%2018H23l1-18z%22%20fill%3D%22%23FF334B%22/%3E%20%3Cpath%20d%3D%22M33%2024l7%2014h-9l-4-9%206-5z%22%20fill%3D%22%23B81126%22/%3E%20%3Cpath%20d%3D%22M21%2029h10l3%206H18l3-6z%22%20fill%3D%22%23800A18%22/%3E%20%3C/svg%3E",
+  'theme-zalo': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22zg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230091FF%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230058E6%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23zg%29%22/%3E%20%3Cpath%20d%3D%22M12%2018h9L13%2028h8.5v2.8H10.5l8-10H12V18zm13%203.5c0-2%201.5-3.5%203.8-3.5s3.8%201.5%203.8%203.5v8.3h-2.5V28c-.6%201-1.8%201.8-3.2%201.8-2.2%200-3.8-1.5-3.8-3.6%200-2.2%201.6-3.6%203.8-3.6h1.9v-.7c0-.9-.7-1.5-1.7-1.5s-1.7.6-1.7%201.5H25zm5%204.5h-1.6c-1%200-1.8.6-1.8%201.6s.8%201.6%201.8%201.6%201.6-.6%201.6-1.6V26zm3.5-7.5H36v12.3h-2.5V18.5zm5%204.5c0-2.8%202-4.8%204.8-4.8s4.8%202%204.8%204.8-2%204.8-4.8%204.8-4.8-2-4.8-4.8zm7%200c0-1.5-.9-2.6-2.2-2.6s-2.2%201.1-2.2%202.6.9%202.6%202.2%202.6%202.2-1.1%202.2-2.6z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
+  'theme-figma': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%2318181B%22/%3E%20%3Cg%20transform%3D%22translate%2810%2C%205%29%20scale%280.74%29%22%3E%20%3Cpath%20d%3D%22M19%2028.5C19%2023.3%2023.3%2019%2028.5%2019C33.7%2019%2038%2023.3%2038%2028.5C38%2033.7%2033.7%2038%2028.5%2038C23.3%2038%2019%2033.7%2019%2028.5Z%22%20fill%3D%22%231ABCFE%22/%3E%20%3Cpath%20d%3D%22M0%2047.5C0%2042.3%204.3%2038%209.5%2038H19V47.5C19%2052.7%2014.7%2057%209.5%2057C4.3%2057%200%2052.7%200%2047.5Z%22%20fill%3D%22%230ACF83%22/%3E%20%3Cpath%20d%3D%22M19%200V19H28.5C33.7%2019%2038%2014.7%2038%209.5C38%204.3%2033.7%200%2028.5%200H19Z%22%20fill%3D%22%23FF7262%22/%3E%20%3Cpath%20d%3D%22M0%209.5C0%2014.7%204.3%2019%209.5%2019H19V0H9.5C4.3%200%200%204.3%200%209.5Z%22%20fill%3D%22%23F24E1E%22/%3E%20%3Cpath%20d%3D%22M0%2028.5C0%2033.7%204.3%2038%209.5%2038H19V19H9.5C4.3%2019%200%2023.3%200%2028.5Z%22%20fill%3D%22%23A259FF%22/%3E%20%3C/g%3E%20%3C/svg%3E",
+  'theme-canva': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22canva-g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2300C4CC%22/%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%233A88E9%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237D2AE8%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2222%22%20fill%3D%22url%28%23canva-g%29%22/%3E%20%3Cpath%20d%3D%22M30%2016.5c-3.2%200-6.8%201.8-9.2%204.8-2.6%203.2-3.8%207.5-3.8%2011.2%200%204.2%202.6%206.5%206.5%206.5%203.8%200%206.6-2.2%208.2-4.5l-2.6-2.2c-1.2%201.5-3.2%203.1-5.2%203.1-2.2%200-3.5-1.5-3.5-4.2%200-3.2%201.2-7%203.2-9.6%201.8-2.2%204.2-3.5%206.4-3.5%202.1%200%203.2%201%203.2%202.6%200%201.2-.6%202.2-1.8%202.8-1.5.8-3.2%201-5.2%201.2l-1.2.1c-.2%201.2-.3%202.5-.3%203.6%200%201.5.3%202.8.8%203.8l2.8-.4c-.4-.8-.6-1.8-.6-2.8%200-.8.1-1.6.2-2.4%201.8-.2%203.6-.5%205.1-1.5%202-1.2%203-2.8%203-4.8%200-2.8-2.2-4.4-5.6-4.4z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
+  'theme-powerpoint': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22ppt-g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23D24726%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%239C2C12%22/%3E%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22ppt-g2%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FA8060%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23D24726%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20x%3D%2215%22%20y%3D%227%22%20width%3D%2227%22%20height%3D%2234%22%20rx%3D%224%22%20fill%3D%22url%28%23ppt-g1%29%22/%3E%20%3Ccircle%20cx%3D%2228.5%22%20cy%3D%2224%22%20r%3D%228.5%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.2%22/%3E%20%3Cpath%20d%3D%22M28.5%2015.5V24H37A8.5%208.5%200%200%200%2028.5%2015.5z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.9%22/%3E%20%3Crect%20x%3D%226%22%20y%3D%2211%22%20width%3D%2221%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22url%28%23ppt-g2%29%22%20filter%3D%22drop-shadow%280%203px%206px%20rgba%280%2C0%2C0%2C0.35%29%29%22/%3E%20%3Cpath%20d%3D%22M12%2017h6c2.8%200%204.8%201.8%204.8%204.5s-2%204.5-4.8%204.5h-2.8V31H12V17zm3.2%206.2h2.6c1.2%200%202-.7%202-1.7s-.8-1.7-2-1.7h-2.6v3.4z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
+  'theme-thuvienphapluat': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22tvpl-g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23990000%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23660000%22/%3E%20%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22tvpl-gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FFDF73%22/%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23D4AF37%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23AA820A%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22url%28%23tvpl-g%29%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2220%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.8%22%20fill%3D%22none%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2211.5%22%20r%3D%222.2%22%20fill%3D%22url%28%23tvpl-gold%29%22/%3E%20%3Cpath%20d%3D%22M24%2011v26M18%2037h12M12%2017h24%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209M12%2017l5%209M7%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209M36%2017l5%209M31%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3C/svg%3E",
 };
 
 // ==========================================================
@@ -412,6 +486,7 @@ function initFeedbackListeners() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   loadSavedState();
+  initUniversalNavbar();
   initThemeSystem();
   initTitleEditing();
   initStealthEditableElements();
@@ -475,7 +550,23 @@ function loadSavedState() {
   }
 }
 
+// Navigation fires saveState on every row; coalesce those writes and flush on page hide.
+let saveStateTimer = null;
+
+function scheduleSaveState() {
+  if (saveStateTimer) return;
+  saveStateTimer = setTimeout(saveState, 400);
+}
+
+window.addEventListener('pagehide', () => {
+  if (saveStateTimer) saveState();
+});
+
 function saveState() {
+  if (saveStateTimer) {
+    clearTimeout(saveStateTimer);
+    saveStateTimer = null;
+  }
   try {
     const data = {
       fontSize: state.fontSize,
@@ -556,7 +647,8 @@ function closeThemeModal() {
 
 function applyTheme(themeName) {
   state.theme = themeName;
-  document.body.className = themeName;
+  const isHidden = document.body.classList.contains('controls-hidden') || localStorage.getItem('stealth_controls_hidden') === '1';
+  document.body.className = `${themeName} has-pinned-navbar ${isHidden ? 'controls-hidden' : ''}`.trim();
 
   document.querySelectorAll('.theme-card').forEach(card => {
     card.classList.toggle('active', card.getAttribute('data-theme') === themeName);
@@ -1046,27 +1138,34 @@ function updatePortalUploadUI() {
 // ==========================================================
 // LANDING PORTAL, THEME SELECTOR & AUTHOR DONATE
 // ==========================================================
+function openPortal(showCloseButton = true) {
+  const portal = document.getElementById('landing-portal');
+  if (!portal) return;
+  portal.classList.remove('hidden');
+  portal.setAttribute('aria-hidden', 'false');
+  const closeBtn = document.getElementById('btn-portal-close');
+  if (closeBtn) closeBtn.style.display = showCloseButton ? 'flex' : 'none';
+  updatePortalThemeUI(state.theme);
+  updatePortalUploadUI();
+}
+
+function closePortal() {
+  const portal = document.getElementById('landing-portal');
+  if (!portal) return;
+  portal.classList.add('hidden');
+  portal.setAttribute('aria-hidden', 'true');
+}
+
 function initLandingPortal() {
   const portal = document.getElementById('landing-portal');
   if (!portal) return;
 
-  const currentTheme = getThemeForCurrentPage();
-  const isDedicatedPage = currentTheme !== 'theme-googlesheets';
+  const path = window.location.pathname.toLowerCase();
+  const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
+  const isDedicatedPage = !isIndexPage;
   const skipPortal = localStorage.getItem('skip_portal') === 'true' || isDedicatedPage;
   const closeBtn = document.getElementById('btn-portal-close');
   const rememberChk = document.getElementById('chk-remember-direct-mode');
-
-  const closePortal = () => {
-    portal.classList.add('hidden');
-    portal.setAttribute('aria-hidden', 'true');
-  };
-
-  const openPortal = (showCloseButton) => {
-    portal.classList.remove('hidden');
-    portal.setAttribute('aria-hidden', 'false');
-    if (closeBtn) closeBtn.style.display = showCloseButton ? 'flex' : 'none';
-    updatePortalUploadUI();
-  };
 
   if (rememberChk) rememberChk.checked = localStorage.getItem('skip_portal') === 'true';
 
@@ -1431,25 +1530,192 @@ function launchConfetti(originX, originY, count = 60) {
 }
 
 
+
+// ==========================================================
+// UNIVERSAL PINNED READING NAVBAR COMPONENT
+// ==========================================================
+function initUniversalNavbar() {
+  document.body.classList.add('has-pinned-navbar');
+
+  let nav = document.getElementById('universal-reader-navbar');
+  if (!nav) {
+    nav = document.createElement('header');
+    nav.id = 'universal-reader-navbar';
+    nav.className = 'universal-reader-navbar stealth-reading-ctrls';
+    nav.innerHTML = `
+      <div class="unav-section unav-left">
+        <div class="unav-brand" title="Stealth Reader - Web đọc truyện ngụy trang">
+          <span class="unav-brand-icon">📚</span>
+          <span class="unav-brand-text">Stealth Reader</span>
+        </div>
+        <label for="file-pdf-input" class="unav-btn unav-btn-upload" title="Nạp file PDF, TXT hoặc EPUB (hoặc kéo thả vào trang)">
+          <span class="unav-icon">📂</span>
+          <span>Nạp file</span>
+        </label>
+        <div class="unav-file-badge" id="univ-file-name" title="Tên tài liệu đang đọc">KPI_Report_Q3_2026.pdf</div>
+      </div>
+
+      <div class="unav-section unav-center">
+        <div class="unav-control-group unav-page-nav">
+          <button class="unav-icon-btn" id="univ-btn-prev" title="Trang trước (PageUp)">◀</button>
+          <span class="unav-indicator" id="univ-page-indicator" title="Trang hiện tại / Tổng số trang">1 / 1</span>
+          <button class="unav-icon-btn" id="univ-btn-next" title="Trang kế (PageDown)">▶</button>
+          <div class="unav-jump-box" title="Nhập số trang và nhấn Enter để nhảy nhanh">
+            <input type="number" id="univ-input-jump" min="1" max="1" placeholder="Trang" />
+          </div>
+        </div>
+
+        <div class="unav-control-group unav-font-ctrl" title="Tăng giảm cỡ chữ (hoặc phím [ và ])">
+          <button class="unav-btn-sm" id="univ-btn-font-dec" title="Giảm cỡ chữ ( [ )">A−</button>
+          <span class="unav-font-indicator" id="univ-font-val">11pt</span>
+          <button class="unav-btn-sm" id="univ-btn-font-inc" title="Tăng cỡ chữ ( ] )">A+</button>
+        </div>
+
+        <button class="unav-btn unav-btn-autoscroll" id="univ-btn-autoscroll" title="Tự cuộn đọc rảnh tay (Phím Space)">
+          <span class="unav-autoscroll-icon">▶</span>
+          <span class="unav-autoscroll-text">Tự cuộn</span>
+        </button>
+      </div>
+
+      <div class="unav-section unav-right">
+        <button class="unav-btn unav-btn-theme" id="univ-btn-theme" title="Đổi sang giao diện công sở khác">
+          <span class="unav-icon">🎨</span>
+          <span>Đổi theme</span>
+        </button>
+        <button class="unav-btn unav-btn-portal" id="univ-btn-portal" title="Trang chủ & Ủng hộ tác giả">
+          <span class="unav-icon">💖</span>
+          <span>Trang chủ & Donate</span>
+        </button>
+        <button class="unav-btn unav-btn-boss boss-key-btn" id="univ-btn-boss" title="Khẩn cấp: Báo cáo nhanh / Quay lại (Phím ESC hoặc F2)">
+          <span class="boss-badge">ESC</span>
+          <span class="unav-boss-text">Báo cáo nhanh</span>
+        </button>
+        <button class="unav-btn unav-btn-hide stealth-toggle-btn" id="univ-btn-hide" title="Ẩn thanh điều khiển (Phím tắt: H)">
+          <span>👁 Ẩn (H)</span>
+        </button>
+      </div>
+    `;
+    document.body.insertBefore(nav, document.body.firstChild);
+  }
+
+  // Ensure file input exists
+  let fileInput = document.getElementById('file-pdf-input');
+  if (!fileInput) {
+    fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.id = 'file-pdf-input';
+    fileInput.accept = '.pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip';
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+    fileInput.addEventListener('change', handleFileSelect);
+  }
+
+  // Event Listeners for Universal Navbar
+  const btnPrev = document.getElementById('univ-btn-prev');
+  if (btnPrev) btnPrev.addEventListener('click', () => changePage(-1));
+
+  const btnNext = document.getElementById('univ-btn-next');
+  if (btnNext) btnNext.addEventListener('click', () => changePage(1));
+
+  const inputJump = document.getElementById('univ-input-jump');
+  if (inputJump) {
+    inputJump.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const page = parseInt(inputJump.value);
+        if (page >= 1 && page <= state.totalPages) {
+          goToPage(page);
+        }
+      }
+    });
+  }
+
+  const btnFontDec = document.getElementById('univ-btn-font-dec');
+  if (btnFontDec) btnFontDec.addEventListener('click', (e) => { e.preventDefault(); changeFontSize(-1); });
+
+  const btnFontInc = document.getElementById('univ-btn-font-inc');
+  if (btnFontInc) btnFontInc.addEventListener('click', (e) => { e.preventDefault(); changeFontSize(1); });
+
+  const btnAutoscroll = document.getElementById('univ-btn-autoscroll');
+  if (btnAutoscroll) btnAutoscroll.addEventListener('click', toggleAutoScroll);
+
+  const btnTheme = document.getElementById('univ-btn-theme');
+  if (btnTheme) btnTheme.addEventListener('click', openThemeModal);
+
+  const btnPortal = document.getElementById('univ-btn-portal');
+  if (btnPortal) {
+    btnPortal.addEventListener('click', () => {
+      closeThemeModal();
+      openPortal(true);
+      updatePortalThemeUI(state.theme);
+      updatePortalUploadUI();
+    });
+  }
+
+  const btnBoss = document.getElementById('univ-btn-boss');
+  if (btnBoss) btnBoss.addEventListener('click', toggleBossKey);
+
+  const btnHide = document.getElementById('univ-btn-hide');
+  if (btnHide) btnHide.addEventListener('click', toggleControlsVisibility);
+
+  syncUniversalNavbar();
+}
+
+function syncUniversalNavbar() {
+  const fileBadge = document.getElementById('univ-file-name');
+  if (fileBadge) fileBadge.textContent = state.pdfFileName || 'KPI_Report_Q3_2026.pdf';
+
+  const pageInd = document.getElementById('univ-page-indicator');
+  if (pageInd) pageInd.textContent = `${state.currentPage} / ${state.totalPages}`;
+
+  const jumpInput = document.getElementById('univ-input-jump');
+  if (jumpInput) {
+    jumpInput.value = state.currentPage;
+    jumpInput.max = state.totalPages;
+  }
+
+  const prevBtn = document.getElementById('univ-btn-prev');
+  if (prevBtn) prevBtn.disabled = state.currentPage <= 1;
+
+  const nextBtn = document.getElementById('univ-btn-next');
+  const maxNavigablePage = state.isPdfProcessing ? state.loadedPages : state.totalPages;
+  if (nextBtn) nextBtn.disabled = state.currentPage >= maxNavigablePage;
+
+  const fontVal = document.getElementById('univ-font-val');
+  if (fontVal) fontVal.textContent = `${state.fontSize}pt`;
+
+  const autoscrollBtn = document.getElementById('univ-btn-autoscroll');
+  if (autoscrollBtn) {
+    const icon = autoscrollBtn.querySelector('.unav-autoscroll-icon');
+    const text = autoscrollBtn.querySelector('.unav-autoscroll-text');
+    if (state.isAutoScrolling) {
+      if (icon) icon.textContent = '⏸';
+      if (text) text.textContent = 'Tạm dừng';
+      autoscrollBtn.classList.add('playing');
+    } else {
+      if (icon) icon.textContent = '▶';
+      if (text) text.textContent = 'Tự cuộn';
+      autoscrollBtn.classList.remove('playing');
+    }
+  }
+
+  const bossBtn = document.getElementById('univ-btn-boss');
+  if (bossBtn) {
+    const bossText = bossBtn.querySelector('.unav-boss-text');
+    if (state.bossModeActive) {
+      if (bossText) bossText.textContent = 'Quay lại';
+      bossBtn.classList.add('boss-active');
+    } else {
+      if (bossText) bossText.textContent = 'Báo cáo nhanh';
+      bossBtn.classList.remove('boss-active');
+    }
+  }
+}
+
 // ==========================================================
 // EVENT LISTENERS & HOTKEYS
 // ==========================================================
 function initEventListeners() {
-  [
-    'btn-boss-key-gsheet',
-    'btn-boss-key-gdocs',
-    'btn-boss-key-excel',
-    'btn-boss-key-vscode',
-    'btn-boss-key-photoshop',
-    'btn-boss-key-blender',
-    'btn-boss-key-linkedin',
-    'btn-boss-key-autocad',
-    'btn-boss-key-zalo',
-    'btn-boss-key-figma',
-    'btn-boss-key-canva',
-    'btn-boss-key-powerpoint',
-    'btn-boss-key-thuvienphapluat'
-  ].forEach(id => {
+  BOSS_KEY_BUTTON_IDS.forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleBossKey);
   });
@@ -1494,10 +1760,10 @@ function initEventListeners() {
 
     if (state.bossModeActive) return;
 
-    if (e.key === 'ArrowDown' || e.key === 'j') {
+    if (e.key === 'ArrowDown' || e.key === 'j' || e.key === 'J') {
       e.preventDefault();
       navigateRow(1);
-    } else if (e.key === 'ArrowUp' || e.key === 'k') {
+    } else if (e.key === 'ArrowUp' || e.key === 'k' || e.key === 'K') {
       e.preventDefault();
       navigateRow(-1);
     } else if (e.key === 'PageDown') {
@@ -1561,21 +1827,11 @@ function initEventListeners() {
   }
 
   // Page Controls
-  [
-    'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
-    'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
-    'autocad-btn-prev', 'zalo-btn-prev', 'figma-btn-prev',
-    'canva-btn-prev', 'ppt-btn-prev', 'tvpl-btn-prev'
-  ].forEach(id => {
+  themeControlIds('btn-prev').forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(-1));
   });
-  [
-    'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
-    'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
-    'autocad-btn-next', 'zalo-btn-next', 'figma-btn-next',
-    'canva-btn-next', 'ppt-btn-next', 'tvpl-btn-next'
-  ].forEach(id => {
+  themeControlIds('btn-next').forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', () => changePage(1));
   });
@@ -1595,12 +1851,7 @@ function initEventListeners() {
   });
 
   // Auto Scroll
-  [
-    'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
-    'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
-    'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
-    'canva-btn-autoscroll', 'ppt-btn-autoscroll', 'tvpl-btn-autoscroll'
-  ].forEach(id => {
+  themeControlIds('btn-autoscroll').forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleAutoScroll);
   });
@@ -1658,14 +1909,7 @@ function initEventListeners() {
   });
 
   // Step decrement & increment buttons for Font Size across all themes
-  [
-    'gs-btn-font-dec', 'gdocs-btn-font-dec', 'excel-btn-font-dec',
-    'vsc-btn-font-dec', 'ps-btn-font-dec', 'blender-btn-font-dec',
-    'linkedin-btn-font-dec', 'autocad-btn-font-dec',
-    'zalo-btn-font-dec', 'figma-btn-font-dec',
-    'canva-btn-font-dec', 'ppt-btn-font-dec', 'tvpl-btn-font-dec',
-    'modal-btn-font-dec', 'stealth-btn-font-dec'
-  ].forEach(id => {
+  [...themeControlIds('btn-font-dec'), 'modal-btn-font-dec', 'stealth-btn-font-dec'].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.addEventListener('click', (e) => {
@@ -1675,14 +1919,7 @@ function initEventListeners() {
     }
   });
 
-  [
-    'gs-btn-font-inc', 'gdocs-btn-font-inc', 'excel-btn-font-inc',
-    'vsc-btn-font-inc', 'ps-btn-font-inc', 'blender-btn-font-inc',
-    'linkedin-btn-font-inc', 'autocad-btn-font-inc',
-    'zalo-btn-font-inc', 'figma-btn-font-inc',
-    'canva-btn-font-inc', 'ppt-btn-font-inc', 'tvpl-btn-font-inc',
-    'modal-btn-font-inc', 'stealth-btn-font-inc'
-  ].forEach(id => {
+  [...themeControlIds('btn-font-inc'), 'modal-btn-font-inc', 'stealth-btn-font-inc'].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.addEventListener('click', (e) => {
@@ -1908,7 +2145,21 @@ function applyStyles() {
   const color = `rgb(${grayVal}, ${grayVal}, ${grayVal})`;
   root.style.setProperty('--story-color', color);
 
-  document.querySelectorAll('.story-cell').forEach(cell => {
+  const univFontVal = document.getElementById('univ-font-val');
+  if (univFontVal) univFontVal.textContent = `${state.fontSize}pt`;
+
+  // Per-element pass: skip elements already styled with the current settings,
+  // so appending a batch doesn't re-style (and re-layout) every rendered row.
+  const styleKey = `${state.fontFamily}|${state.fontSize}|${state.lineHeight}|${state.isBold}|${state.isItalic}|${state.wrapText}`;
+  const restyle = (selector, apply) => {
+    document.querySelectorAll(selector).forEach(el => {
+      if (el._styleKey === styleKey) return;
+      apply(el);
+      el._styleKey = styleKey;
+    });
+  };
+
+  restyle('.story-cell', cell => {
     cell.style.fontWeight = state.isBold ? 'bold' : 'normal';
     cell.style.fontStyle = state.isItalic ? 'italic' : 'normal';
     cell.style.whiteSpace = state.wrapText ? 'normal' : 'nowrap';
@@ -1917,7 +2168,7 @@ function applyStyles() {
     if (state.lineHeight) cell.style.lineHeight = state.lineHeight;
   });
 
-  document.querySelectorAll('.gdocs-story-paragraph').forEach(p => {
+  restyle('.gdocs-story-paragraph', p => {
     p.style.fontWeight = state.isBold ? 'bold' : 'normal';
     p.style.fontStyle = state.isItalic ? 'italic' : 'normal';
     if (state.fontFamily) p.style.fontFamily = state.fontFamily;
@@ -1925,7 +2176,7 @@ function applyStyles() {
     if (state.lineHeight) p.style.lineHeight = state.lineHeight;
   });
 
-  document.querySelectorAll('.ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .zalo-msg-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text').forEach(el => {
+  restyle('.ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .zalo-msg-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text', el => {
     if (state.fontSize) el.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) el.style.lineHeight = state.lineHeight;
   });
@@ -1954,6 +2205,12 @@ function switchSheet(targetId) {
 
 function updateBossButton(btn, bossModeActive) {
   if (!btn) return;
+  if (btn.id === 'univ-btn-boss') {
+    const text = btn.querySelector('.unav-boss-text');
+    if (text) text.textContent = bossModeActive ? 'Quay lại' : 'Báo cáo nhanh';
+    btn.classList.toggle('boss-active', bossModeActive);
+    return;
+  }
   btn.innerHTML = bossModeActive
     ? '<span class="boss-badge">ESC</span> Quay lại'
     : '<span class="boss-badge">ESC</span> Báo cáo nhanh';
@@ -1961,21 +2218,9 @@ function updateBossButton(btn, bossModeActive) {
 }
 
 function toggleBossKey() {
-  const bossButtons = [
-    document.getElementById('btn-boss-key-gsheet'),
-    document.getElementById('btn-boss-key-gdocs'),
-    document.getElementById('btn-boss-key-excel'),
-    document.getElementById('btn-boss-key-vscode'),
-    document.getElementById('btn-boss-key-photoshop'),
-    document.getElementById('btn-boss-key-blender'),
-    document.getElementById('btn-boss-key-linkedin'),
-    document.getElementById('btn-boss-key-autocad'),
-    document.getElementById('btn-boss-key-zalo'),
-    document.getElementById('btn-boss-key-figma'),
-    document.getElementById('btn-boss-key-canva'),
-    document.getElementById('btn-boss-key-powerpoint'),
-    document.getElementById('btn-boss-key-thuvienphapluat'),
-  ];
+  const bossButtons = BOSS_KEY_BUTTON_IDS.map(id => document.getElementById(id));
+    const univBoss = document.getElementById('univ-btn-boss');
+    if (univBoss) bossButtons.push(univBoss);
 
   if (state.bossModeActive) {
     state.bossModeActive = false;
@@ -2023,7 +2268,7 @@ function toggleBossKey() {
     // Figma toggle
     const fStory = document.getElementById('figma-story-view');
     const fBoss = document.getElementById('figma-boss-view');
-    if (fStory) fStory.style.display = 'flex';
+    if (fStory) fStory.style.display = '';
     if (fBoss) fBoss.style.display = 'none';
 
     // Canva toggle
@@ -2041,7 +2286,7 @@ function toggleBossKey() {
     // Thư Viện Pháp Luật toggle
     const tvStory = document.getElementById('tvpl-story-view');
     const tvBoss = document.getElementById('tvpl-boss-view');
-    if (tvStory) tvStory.style.display = 'flex';
+    if (tvStory) tvStory.style.display = '';
     if (tvBoss) tvBoss.style.display = 'none';
 
     // In VS Code, re-render the novel code
@@ -2159,6 +2404,8 @@ function prepareDocumentLoad(file) {
   state.pdfFileName = file.name;
   showLoading('Đang đồng bộ dữ liệu vào hệ thống...');
 
+  const univFileName = document.getElementById('univ-file-name');
+  if (univFileName) univFileName.textContent = file.name;
   const portalNameLabel = document.getElementById('portal-pdf-filename');
   if (portalNameLabel) portalNameLabel.textContent = file.name;
   if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
@@ -2695,6 +2942,7 @@ async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken
   updatePaginationUI();
   showBanner(`Đã nạp thành công toàn bộ <b>${totalPages}</b> trang sách!`);
   saveState();
+  persistDocumentCache().catch(() => {});
 }
 
 async function processPdfFile(file) {
@@ -2902,50 +3150,35 @@ function initStoryFromChunks(chunks) {
 // ==========================================================
 // CONTINUOUS VIEW RENDERING & PROGRESSIVE BATCHING
 // ==========================================================
+// Per-theme renderer: batch appender + the containers cleared on a full re-render.
+const THEME_RENDERERS = {
+  'theme-vscode': { append: appendVSCodeBatch, streams: ['vsc-line-numbers', 'vsc-code-lines'] },
+  'theme-googledocs': { append: appendGoogleDocsBatch, streams: ['gdocs-story-stream'] },
+  'theme-photoshop': { append: appendPhotoshopBatch, streams: ['ps-story-stream'] },
+  'theme-blender': { append: appendBlenderBatch, streams: ['blender-story-stream'] },
+  'theme-linkedin': { append: appendLinkedInBatch, streams: ['linkedin-story-stream'] },
+  'theme-autocad': { append: appendAutoCADBatch, streams: ['autocad-story-stream'] },
+  'theme-zalo': { append: appendZaloBatch, streams: ['zalo-story-stream'] },
+  'theme-figma': { append: appendFigmaBatch, streams: ['figma-story-stream'] },
+  'theme-canva': { append: appendCanvaBatch, streams: ['canva-story-stream'] },
+  'theme-powerpoint': { append: appendPowerPointBatch, streams: ['ppt-story-stream'] },
+  'theme-thuvienphapluat': { append: appendTVPLBatch, streams: ['tvpl-story-stream'] },
+  // Google Sheets / Excel (spreadsheet table) is the default
+  default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
+};
+
+function getThemeRenderer() {
+  return THEME_RENDERERS[state.theme] || THEME_RENDERERS.default;
+}
+
 function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null) {
   const targetIdx = (targetScrollIdx !== null) ? targetScrollIdx : (preserveActiveRow ? state.currentGlobalIndex : 0);
 
   state.renderedCount = 0;
-
-  if (state.theme === 'theme-vscode') {
-    const lineGutter = document.getElementById('vsc-line-numbers');
-    const codeContainer = document.getElementById('vsc-code-lines');
-    if (lineGutter) lineGutter.innerHTML = '';
-    if (codeContainer) codeContainer.innerHTML = '';
-  } else if (state.theme === 'theme-googledocs') {
-    const stream = document.getElementById('gdocs-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-photoshop') {
-    const stream = document.getElementById('ps-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-blender') {
-    const stream = document.getElementById('blender-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-linkedin') {
-    const stream = document.getElementById('linkedin-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-autocad') {
-    const stream = document.getElementById('autocad-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-zalo') {
-    const stream = document.getElementById('zalo-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-figma') {
-    const stream = document.getElementById('figma-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-canva') {
-    const stream = document.getElementById('canva-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-powerpoint') {
-    const stream = document.getElementById('ppt-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else if (state.theme === 'theme-thuvienphapluat') {
-    const stream = document.getElementById('tvpl-story-stream');
-    if (stream) stream.innerHTML = '';
-  } else {
-    const tbody = document.getElementById('story-tbody');
-    if (tbody) tbody.innerHTML = '';
-  }
+  getThemeRenderer().streams.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.replaceChildren();
+  });
 
   // Render initial batch: up to targetIdx + 60, minimum 120 items
   const initialBatchCount = Math.max(120, targetIdx + 60);
@@ -2957,31 +3190,7 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
 }
 
 function renderNextBatch(count = 100) {
-  if (state.theme === 'theme-vscode') {
-    appendVSCodeBatch(count);
-  } else if (state.theme === 'theme-googledocs') {
-    appendGoogleDocsBatch(count);
-  } else if (state.theme === 'theme-photoshop') {
-    appendPhotoshopBatch(count);
-  } else if (state.theme === 'theme-blender') {
-    appendBlenderBatch(count);
-  } else if (state.theme === 'theme-linkedin') {
-    appendLinkedInBatch(count);
-  } else if (state.theme === 'theme-autocad') {
-    appendAutoCADBatch(count);
-  } else if (state.theme === 'theme-zalo') {
-    appendZaloBatch(count);
-  } else if (state.theme === 'theme-figma') {
-    appendFigmaBatch(count);
-  } else if (state.theme === 'theme-canva') {
-    appendCanvaBatch(count);
-  } else if (state.theme === 'theme-powerpoint') {
-    appendPowerPointBatch(count);
-  } else if (state.theme === 'theme-thuvienphapluat') {
-    appendTVPLBatch(count);
-  } else {
-    appendSpreadsheetBatch(count);
-  }
+  getThemeRenderer().append(count);
   applyStyles();
 }
 
@@ -3604,6 +3813,35 @@ function appendTVPLBatch(count) {
 // ==========================================================
 // SELECTION, FOCUS & NAVIGATION
 // ==========================================================
+// Per-theme spec: element id prefix + the CSS class marking the active item.
+const ACTIVE_ROW_SPECS = {
+  'theme-vscode': { id: 'vsc-story-line-', cls: 'active-line' },
+  'theme-photoshop': { id: 'ps-story-para-', cls: 'active-paragraph' },
+  'theme-blender': { id: 'blender-story-line-', cls: 'active-line' },
+  'theme-googledocs': { id: 'gdocs-story-para-', cls: 'active-paragraph' },
+  'theme-autocad': { id: 'autocad-note-', cls: 'active-note' },
+  'theme-zalo': { id: 'zalo-msg-', cls: 'active-msg' },
+  'theme-figma': { id: 'figma-layer-', cls: 'active-layer' },
+  'theme-canva': { id: 'canva-block-', cls: 'active-block' },
+  'theme-powerpoint': { id: 'ppt-para-', cls: 'active-bullet' },
+  'theme-thuvienphapluat': { id: 'tvpl-clause-', cls: 'active-clause' }
+};
+
+// Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
+const activeMarks = [];
+
+function clearActiveMarks() {
+  for (const [el, cls] of activeMarks) el.classList.remove(cls);
+  activeMarks.length = 0;
+}
+
+function markActive(el, cls) {
+  if (!el) return false;
+  el.classList.add(cls);
+  activeMarks.push([el, cls]);
+  return true;
+}
+
 function setActiveRow(index, scrollIntoView = true) {
   if (index < 0 || index >= state.allChunks.length) return;
   state.currentGlobalIndex = index;
@@ -3614,143 +3852,30 @@ function setActiveRow(index, scrollIntoView = true) {
     updatePaginationUI();
   }
 
-  if (state.theme === 'theme-vscode') {
-    document.querySelectorAll('.vsc-code-line').forEach(l => l.classList.remove('active-line'));
-    const activeLine = document.getElementById(`vsc-story-line-${index}`);
-    if (activeLine) {
-      activeLine.classList.add('active-line');
-      if (scrollIntoView) {
-        activeLine.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
+  clearActiveMarks();
+  let target = null;
+  const spec = ACTIVE_ROW_SPECS[state.theme];
 
-    const vscStatusLn = document.getElementById('vsc-status-ln');
-    if (vscStatusLn) {
-      vscStatusLn.textContent = `Ln ${18 + index * 4}, Col 28`;
-    }
-    const vscProgress = document.getElementById('vsc-status-progress');
-    if (vscProgress) {
-      const percent = Math.round(((index + 1) / Math.max(1, state.allChunks.length)) * 100);
-      vscProgress.textContent = `Page ${state.currentPage}/${state.totalPages} (${percent}%)`;
-    }
-  } else if (state.theme === 'theme-photoshop') {
-    document.querySelectorAll('.ps-story-paragraph').forEach(p => p.classList.remove('active-paragraph'));
-    const activeP = document.getElementById(`ps-story-para-${index}`);
-    if (activeP) {
-      activeP.classList.add('active-paragraph');
-      if (scrollIntoView) {
-        activeP.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } else if (state.theme === 'theme-blender') {
-    document.querySelectorAll('.blender-code-line').forEach(l => l.classList.remove('active-line'));
-    const activeL = document.getElementById(`blender-story-line-${index}`);
-    if (activeL) {
-      activeL.classList.add('active-line');
-      if (scrollIntoView) {
-        activeL.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
+  if (spec) {
+    target = document.getElementById(spec.id + index);
+    markActive(target, spec.cls);
   } else if (state.theme === 'theme-linkedin') {
-    document.querySelectorAll('.linkedin-post-card').forEach(c => c.classList.remove('active-post'));
-    document.querySelectorAll('.ln-post-paragraph').forEach(p => p.classList.remove('active-paragraph'));
-
-    const activePara = document.getElementById(`ln-para-${index}`);
-    if (activePara) {
-      activePara.classList.add('active-paragraph');
-      const parentPost = activePara.closest('.linkedin-post-card');
-      if (parentPost) {
-        parentPost.classList.add('active-post');
-      }
-      if (scrollIntoView) {
-        activePara.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+    target = document.getElementById(`ln-para-${index}`);
+    if (target) {
+      markActive(target, 'active-paragraph');
+      markActive(target.closest('.linkedin-post-card'), 'active-post');
     } else {
       // Fallback for legacy post if any
-      const activePost = document.getElementById(`linkedin-post-${index}`);
-      if (activePost) {
-        activePost.classList.add('active-post');
-        if (scrollIntoView) {
-          activePost.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-    }
-  } else if (state.theme === 'theme-googledocs') {
-    document.querySelectorAll('.gdocs-story-paragraph').forEach(n => n.classList.remove('active-paragraph'));
-    const activePara = document.getElementById(`gdocs-story-para-${index}`);
-    if (activePara) {
-      activePara.classList.add('active-paragraph');
-      if (scrollIntoView) {
-        activePara.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } else if (state.theme === 'theme-autocad') {
-    document.querySelectorAll('.cad-note-item').forEach(n => n.classList.remove('active-note'));
-    const activeNote = document.getElementById(`autocad-note-${index}`);
-    if (activeNote) {
-      activeNote.classList.add('active-note');
-      if (scrollIntoView) {
-        activeNote.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } else if (state.theme === 'theme-zalo') {
-    document.querySelectorAll('.zalo-msg-item').forEach(m => m.classList.remove('active-msg'));
-    const activeMsg = document.getElementById(`zalo-msg-${index}`);
-    if (activeMsg) {
-      activeMsg.classList.add('active-msg');
-      if (scrollIntoView) {
-        activeMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } else if (state.theme === 'theme-figma') {
-    document.querySelectorAll('.figma-layer-item').forEach(l => l.classList.remove('active-layer'));
-    const activeLayer = document.getElementById(`figma-layer-${index}`);
-    if (activeLayer) {
-      activeLayer.classList.add('active-layer');
-      if (scrollIntoView) {
-        activeLayer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } else if (state.theme === 'theme-canva') {
-    document.querySelectorAll('.canva-block-item').forEach(b => b.classList.remove('active-block'));
-    const activeBlock = document.getElementById(`canva-block-${index}`);
-    if (activeBlock) {
-      activeBlock.classList.add('active-block');
-      if (scrollIntoView) {
-        activeBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } else if (state.theme === 'theme-powerpoint') {
-    document.querySelectorAll('.ppt-para-item').forEach(p => p.classList.remove('active-bullet'));
-    const activePara = document.getElementById(`ppt-para-${index}`);
-    if (activePara) {
-      activePara.classList.add('active-bullet');
-      if (scrollIntoView) {
-        activePara.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  } else if (state.theme === 'theme-thuvienphapluat') {
-    document.querySelectorAll('.tvpl-clause-item').forEach(c => c.classList.remove('active-clause'));
-    const activeClause = document.getElementById(`tvpl-clause-${index}`);
-    if (activeClause) {
-      activeClause.classList.add('active-clause');
-      if (scrollIntoView) {
-        activeClause.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      target = document.getElementById(`linkedin-post-${index}`);
+      markActive(target, 'active-post');
     }
   } else {
-    document.querySelectorAll('#story-tbody tr').forEach(r => r.classList.remove('selected-story-row'));
-    document.querySelectorAll('.story-cell').forEach(c => c.classList.remove('cell-focused'));
-
     const activeRow = document.getElementById(`story-row-${index}`);
     const activeCell = document.getElementById(`story-cell-${index}`);
     if (activeRow && activeCell) {
-      activeRow.classList.add('selected-story-row');
-      activeCell.classList.add('cell-focused');
-
-      if (scrollIntoView) {
-        activeRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      markActive(activeRow, 'selected-story-row');
+      markActive(activeCell, 'cell-focused');
+      target = activeRow;
     }
 
     const storyText = chunk ? chunk.text : '';
@@ -3767,8 +3892,24 @@ function setActiveRow(index, scrollIntoView = true) {
     if (cellAddr) cellAddr.textContent = `D${index + 2}`;
   }
 
+  if (target && scrollIntoView) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  if (state.theme === 'theme-vscode') {
+    const vscStatusLn = document.getElementById('vsc-status-ln');
+    if (vscStatusLn) {
+      vscStatusLn.textContent = `Ln ${18 + index * 4}, Col 28`;
+    }
+    const vscProgress = document.getElementById('vsc-status-progress');
+    if (vscProgress) {
+      const percent = Math.round(((index + 1) / Math.max(1, state.allChunks.length)) * 100);
+      vscProgress.textContent = `Page ${state.currentPage}/${state.totalPages} (${percent}%)`;
+    }
+  }
+
   updateReadingProgressStatus(index);
-  saveState();
+  scheduleSaveState();
 }
 
 function updateReadingProgressStatus(index) {
@@ -3783,12 +3924,7 @@ function updatePaginationUI() {
   const text = `${state.currentPage} / ${state.totalPages}`;
   const maxNavigablePage = state.isPdfProcessing ? state.loadedPages : state.totalPages;
   
-  [
-    'gs-page-indicator', 'gdocs-page-indicator', 'excel-page-indicator', 'vsc-page-indicator',
-    'ps-page-indicator', 'blender-page-indicator', 'linkedin-page-indicator',
-    'autocad-page-indicator', 'zalo-page-indicator', 'figma-page-indicator',
-    'canva-page-indicator', 'ppt-page-indicator', 'tvpl-page-indicator'
-  ].forEach(id => {
+  themeControlIds('page-indicator').forEach(id => {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
   });
@@ -3801,25 +3937,16 @@ function updatePaginationUI() {
     }
   });
 
-  [
-    'gs-btn-prev', 'gdocs-btn-prev', 'excel-btn-prev', 'vsc-btn-prev',
-    'ps-btn-prev', 'blender-btn-prev', 'linkedin-btn-prev',
-    'autocad-btn-prev', 'zalo-btn-prev', 'figma-btn-prev',
-    'canva-btn-prev', 'ppt-btn-prev', 'tvpl-btn-prev'
-  ].forEach(id => {
+  themeControlIds('btn-prev').forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = state.currentPage <= 1;
   });
 
-  [
-    'gs-btn-next', 'gdocs-btn-next', 'excel-btn-next', 'vsc-btn-next',
-    'ps-btn-next', 'blender-btn-next', 'linkedin-btn-next',
-    'autocad-btn-next', 'zalo-btn-next', 'figma-btn-next',
-    'canva-btn-next', 'ppt-btn-next', 'tvpl-btn-next'
-  ].forEach(id => {
+  themeControlIds('btn-next').forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = state.currentPage >= maxNavigablePage;
   });
+  syncUniversalNavbar();
 }
 
 function goToPage(pageNum) {
@@ -3840,6 +3967,7 @@ function goToPage(pageNum) {
 
   state.currentPage = pageNum;
   state.currentGlobalIndex = targetIdx;
+  suppressScrollSyncUntil = Date.now() + 1000;
   updatePaginationUI();
   setActiveRow(targetIdx, true);
 
@@ -3847,10 +3975,18 @@ function goToPage(pageNum) {
 }
 
 function changePage(delta) {
-  const target = state.currentPage + delta;
-  if (target >= 1 && target <= state.totalPages) {
-    goToPage(target);
+  let currPage = state.currentPage;
+  const currentChunk = state.allChunks[state.currentGlobalIndex];
+  if (currentChunk && currentChunk.page) {
+    currPage = currentChunk.page;
   }
+
+  let target = currPage + delta;
+  if (delta > 0 && state.pageStartIndices[target] !== undefined && state.pageStartIndices[target] <= state.currentGlobalIndex) {
+    target = target + 1;
+  }
+  target = Math.max(1, Math.min(state.totalPages, target));
+  goToPage(target);
 }
 
 function navigateRow(delta) {
@@ -3859,6 +3995,7 @@ function navigateRow(delta) {
     if (next >= state.renderedCount - 15) {
       renderNextBatch(state.BATCH_SIZE);
     }
+    suppressScrollSyncUntil = Date.now() + 650;
     setActiveRow(next, true);
   }
 }
@@ -3867,6 +4004,43 @@ function navigateRow(delta) {
 // INFINITE CONTINUOUS SCROLL LISTENERS
 // ==========================================================
 let scrollThrottleTimer = false;
+let suppressScrollSyncUntil = 0;
+
+function getActiveScrollContainer() {
+  const containerMap = {
+    'theme-googlesheets': 'grid-scroll-container',
+    'theme-excel': 'grid-scroll-container',
+    'theme-googledocs': 'gdocs-canvas-scroll-container',
+    'theme-vscode': 'vsc-code-scroll-container',
+    'theme-photoshop': 'ps-canvas-scroll-container',
+    'theme-blender': 'blender-viewport-scroll-container',
+    'theme-linkedin': 'linkedin-feed-scroll-container',
+    'theme-autocad': 'autocad-canvas-scroll-container',
+    'theme-zalo': 'zalo-chat-scroll-container',
+    'theme-figma': 'figma-canvas-scroll-container',
+    'theme-canva': 'canva-canvas-scroll-container',
+    'theme-powerpoint': 'ppt-canvas-scroll-container',
+    'theme-thuvienphapluat': 'tvpl-document-scroll-container',
+  };
+  const id = containerMap[state.theme];
+  if (id) {
+    const el = document.getElementById(id);
+    if (el) return el;
+  }
+  return document.getElementById('grid-scroll-container') ||
+         document.getElementById('tvpl-document-scroll-container') ||
+         document.getElementById('gdocs-canvas-scroll-container') ||
+         document.getElementById('vsc-code-scroll-container') ||
+         document.getElementById('ps-canvas-scroll-container') ||
+         document.getElementById('blender-viewport-scroll-container') ||
+         document.getElementById('linkedin-feed-scroll-container') ||
+         document.getElementById('autocad-canvas-scroll-container') ||
+         document.getElementById('zalo-chat-scroll-container') ||
+         document.getElementById('figma-canvas-scroll-container') ||
+         document.getElementById('canva-canvas-scroll-container') ||
+         document.getElementById('ppt-canvas-scroll-container') ||
+         document.querySelector('.table-container');
+}
 
 function initContinuousScrollListeners() {
   function handleContainerScroll(container) {
@@ -3880,13 +4054,15 @@ function initContinuousScrollListeners() {
     }
 
     // 2. Viewport detection: detect current page from top third of viewport
+    if (Date.now() < suppressScrollSyncUntil) return;
+
     if (scrollThrottleTimer) return;
     scrollThrottleTimer = true;
     requestAnimationFrame(() => {
       scrollThrottleTimer = false;
       const rect = container.getBoundingClientRect();
       const sampleX = rect.left + Math.min(220, rect.width / 2);
-      const sampleY = rect.top + 70;
+      const sampleY = rect.top + Math.max(80, Math.min(rect.height * 0.45, rect.height - 40));
 
       const el = document.elementFromPoint(sampleX, sampleY);
       if (!el) return;
@@ -3927,9 +4103,47 @@ function initContinuousScrollListeners() {
   ];
   scrollContainers.forEach(container => {
     if (container) {
-      container.addEventListener('scroll', () => handleContainerScroll(container));
+      container.addEventListener('scroll', () => handleContainerScroll(container), { passive: true });
     }
   });
+
+  // Global mouse wheel listener: route the wheel to the active reading pane.
+  // The app shell keeps body overflow hidden, so relying on native bubbling can
+  // leave the mouse wheel inert when the cursor is over headers or nested panes.
+  window.addEventListener('wheel', (e) => {
+    if (state.bossModeActive) return;
+    if (e.ctrlKey) return;
+
+    // Allow modal overlays to scroll normally
+    if (document.querySelector('.stealth-modal-overlay.show, .landing-portal-overlay.show')) {
+      return;
+    }
+
+    const activeContainer = getActiveScrollContainer();
+    if (!activeContainer) return;
+
+    // Check if the event originated inside an independent scrollable pane (e.g. layers list, chat history, left sidebar)
+    let el = e.target;
+    let isIndependentScroll = false;
+    while (el && el !== document.body && el !== document.documentElement) {
+      const style = window.getComputedStyle(el);
+      const overflowY = style.overflowY;
+      if (el !== activeContainer && (overflowY === 'auto' || overflowY === 'scroll') && el.scrollHeight > el.clientHeight) {
+        if ((e.deltaY > 0 && el.scrollTop + el.clientHeight < el.scrollHeight) ||
+            (e.deltaY < 0 && el.scrollTop > 0)) {
+          isIndependentScroll = true;
+          break;
+        }
+      }
+      el = el.parentElement;
+    }
+
+    if (!isIndependentScroll) {
+      e.preventDefault();
+      const unit = e.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 : (e.deltaMode === WheelEvent.DOM_DELTA_PAGE ? activeContainer.clientHeight : 1);
+      activeContainer.scrollBy({ top: e.deltaY * unit, left: e.deltaX * unit, behavior: 'auto' });
+    }
+  }, { passive: false });
 }
 
 // ==========================================================
@@ -3946,12 +4160,7 @@ function toggleAutoScroll() {
 function startAutoScroll() {
   state.isAutoScrolling = true;
 
-  [
-    'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
-    'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
-    'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
-    'canva-btn-autoscroll', 'ppt-btn-autoscroll', 'tvpl-btn-autoscroll'
-  ].forEach(id => {
+  themeControlIds('btn-autoscroll').forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.textContent = '⏸ Tạm dừng';
@@ -3962,17 +4171,13 @@ function startAutoScroll() {
   state.autoScrollInterval = setInterval(() => {
     navigateRow(1);
   }, state.autoScrollDelay);
+  syncUniversalNavbar();
 }
 
 function stopAutoScroll() {
   state.isAutoScrolling = false;
 
-  [
-    'gs-btn-autoscroll', 'gdocs-btn-autoscroll', 'excel-btn-autoscroll', 'vsc-btn-autoscroll',
-    'ps-btn-autoscroll', 'blender-btn-autoscroll', 'linkedin-btn-autoscroll',
-    'autocad-btn-autoscroll', 'zalo-btn-autoscroll', 'figma-btn-autoscroll',
-    'canva-btn-autoscroll', 'ppt-btn-autoscroll', 'tvpl-btn-autoscroll'
-  ].forEach(id => {
+  themeControlIds('btn-autoscroll').forEach(id => {
     const btn = document.getElementById(id);
     if (btn) {
       btn.textContent = '▶ Tự cuộn';
@@ -3984,6 +4189,7 @@ function stopAutoScroll() {
     clearInterval(state.autoScrollInterval);
     state.autoScrollInterval = null;
   }
+  syncUniversalNavbar();
 }
 
 // ==========================================================

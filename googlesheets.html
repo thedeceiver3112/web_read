@@ -10,33 +10,7 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <script src="version-check.js?v=1" data-app-version="20261004-03"></script>
-    <script>
-      (function() {
-        try {
-          var skipPortal = localStorage.getItem('skip_portal') === 'true';
-          var savedTheme = localStorage.getItem('selected_theme');
-          var themePages = {
-            'theme-googlesheets': 'googlesheets.html',
-            'theme-googledocs': 'docs.html',
-            'theme-excel': 'excel.html',
-            'theme-vscode': 'vscode.html',
-            'theme-photoshop': 'photoshop.html',
-            'theme-blender': 'blender.html',
-            'theme-linkedin': 'linkedin.html',
-            'theme-autocad': 'autocad.html',
-            'theme-zalo': 'zalo.html',
-            'theme-figma': 'figma.html',
-            'theme-canva': 'canva.html',
-            'theme-powerpoint': 'powerpoint.html',
-            'theme-thuvienphapluat': 'thuvienphapluat.html'
-          };
-          if (skipPortal && savedTheme && themePages[savedTheme]) {
-            window.location.replace(themePages[savedTheme]);
-          }
-        } catch(e) {}
-      })();
-    </script>
-    <title>Stealth Reader - Trung tâm Chọn Giao Diện &amp; Nạp Truyện</title>
+    <title>Báo cáo số liệu & Phân tích KPI Q3 - Google Trang tính</title>
   <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M37%2045H11c-2.2%200-4-1.8-4-4V7c0-2.2%201.8-4%204-4h18l12%2012v26c0%202.2-1.8%204-4%204z%22/%3E%20%3Cpath%20fill%3D%22%2387CEAC%22%20d%3D%22M29%203l12%2012H29V3z%22/%3E%20%3Cpath%20fill%3D%22%230B8043%22%20d%3D%22M29%2015h12l-12-12v12z%22%20opacity%3D%220.2%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2221%22%20width%3D%2220%22%20height%3D%2218%22%20rx%3D%221.5%22/%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M14%2026.5h20v2H14zm0%205.5h20v2H14zm8-11h2.5v18H22z%22/%3E%20%3C/svg%3E">
     />
     <link rel="stylesheet" href="style.css?v=20261004-03" />
@@ -46,18 +20,13 @@
     <div class="theme-header-container gsheet-only">
       <header class="gsheet-top-bar">
         <div class="gsheet-top-left">
-          <a
-            href="javascript:void(0)"
-            class="gsheet-logo-btn"
-            title="Trang chủ Google Trang tính"
-          >
-            <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
-              <path d="M37 45H11C8.8 45 7 43.2 7 41V7C7 4.8 8.8 3 11 3H29L41 15V41C41 43.2 39.2 45 37 45Z" fill="#0F9D58"/>
-              <path d="M29 3L41 15H29V3Z" fill="#87CEAC"/>
-              <path d="M14 21H34V39H14V21Z" fill="white"/>
-              <path d="M14 27H34V29H14V27ZM14 33H34V35H14V33ZM22 21V39H24V21H22Z" fill="#0F9D58"/>
-            </svg>
-          </a>
+          <a href="javascript:void(0)" class="gsheet-logo-btn" title="Trang chủ Google Trang tính"><svg width="28" height="28" viewBox="0 0 48 48">
+              <path fill="#0F9D58" d="M37 45H11c-2.2 0-4-1.8-4-4V7c0-2.2 1.8-4 4-4h18l12 12v26c0 2.2-1.8 4-4 4z"/>
+              <path fill="#87CEAC" d="M29 3l12 12H29V3z"/>
+              <path fill="#0B8043" d="M29 15h12l-12-12v12z" opacity="0.2"/>
+              <rect fill="#FFFFFF" x="14" y="21" width="20" height="18" rx="1.5"/>
+              <path fill="#0F9D58" d="M14 26.5h20v2H14zm0 5.5h20v2H14zm8-11h2.5v18H22z"/>
+            </svg></a>
 
           <div class="gsheet-title-and-menu">
             <div class="gsheet-title-row">
@@ -1482,7 +1451,7 @@
     <!-- =========================================================
        TRANG CHỦ: CLEAN & MODERN PORTAL, THEMES & DONATE
        ========================================================= -->
-    <div id="landing-portal" class="landing-portal-overlay">
+    <div id="landing-portal" class="landing-portal-overlay hidden">
       <div class="portal-container">
         <!-- Top Modern Navbar -->
         <div class="duo-top-navbar">

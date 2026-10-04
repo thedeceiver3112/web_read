@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -6,12 +6,11 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <script src="version-check.js?v=1" data-app-version="20261002-12"></script>
+  <script src="version-check.js?v=1" data-app-version="20261004-03"></script>
   <title>stream_pipeline_processor.py - dev_workspace - Visual Studio Code</title>
-  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23007ACC' d='M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z'/><path fill='%231F9CF0' d='M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z'/></svg>">
-  <link rel="stylesheet" href="style.css?v=20261002-12">
-  <script src="static/pdf.min.js"></script>
-  <script src="static/jszip.min.js?v=20261002-1"></script>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%230065A9%22%20d%3D%22M35.2%2045.3L44.8%2040.5c1.4-.7%202.2-2.1%202.2-3.6V11.1c0-1.5-.8-2.9-2.2-3.6L35.2%202.7c-1.2-.6-2.6-.4-3.5.5L16.2%2016.5l-7.4-5.6c-.9-.7-2.1-.7-3%20.1L1.6%2014.3c-.9.8-1.1%202.1-.5%203.1l6.7%209.8-6.7%209.8c-.6%201-.4%202.3.5%203.1l4.2%203.3c.9.8%202.1.8%203%20.1l7.4-5.6%2015.5%2013.3c.9.9%202.3%201.1%203.5.5z%22/%3E%20%3Cpath%20fill%3D%22%23007ACC%22%20d%3D%22M35.2%202.7c-1.2-.6-2.6-.4-3.5.5L16.2%2016.5l8.5%207.5L37%2012V4.5l-1.8-1.8z%22/%3E%20%3Cpath%20fill%3D%22%231F9CF0%22%20d%3D%22M35.2%2045.3c-1.2.6-2.6.4-3.5-.5L16.2%2031.5l8.5-7.5L37%2036v7.5l-1.8%201.8z%22/%3E%20%3Cpath%20fill%3D%22%23005B9E%22%20opacity%3D%220.3%22%20d%3D%22M24.7%2024L37%2012v24L24.7%2024z%22/%3E%20%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=20261004-03">
+  <script src="static/pdf.min.js" defer></script>
 </head>
 <body class="theme-vscode">
 
@@ -19,9 +18,12 @@
     <!-- Top Bar -->
     <header class="vscode-title-bar">
       <div class="vscode-title-left">
-        <span class="vscode-icon">
-          <svg width="16" height="16" viewBox="0 0 100 100"><path fill="#007ACC" d="M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z"/><path fill="#1F9CF0" d="M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z"/></svg>
-        </span>
+        <span class="vscode-icon" style="display:flex; align-items:center;"><svg width="18" height="18" viewBox="0 0 48 48">
+            <path fill="#0065A9" d="M35.2 45.3L44.8 40.5c1.4-.7 2.2-2.1 2.2-3.6V11.1c0-1.5-.8-2.9-2.2-3.6L35.2 2.7c-1.2-.6-2.6-.4-3.5.5L16.2 16.5l-7.4-5.6c-.9-.7-2.1-.7-3 .1L1.6 14.3c-.9.8-1.1 2.1-.5 3.1l6.7 9.8-6.7 9.8c-.6 1-.4 2.3.5 3.1l4.2 3.3c.9.8 2.1.8 3 .1l7.4-5.6 15.5 13.3c.9.9 2.3 1.1 3.5.5z"/>
+            <path fill="#007ACC" d="M35.2 2.7c-1.2-.6-2.6-.4-3.5.5L16.2 16.5l8.5 7.5L37 12V4.5l-1.8-1.8z"/>
+            <path fill="#1F9CF0" d="M35.2 45.3c-1.2.6-2.6.4-3.5-.5L16.2 31.5l8.5-7.5L37 36v7.5l-1.8 1.8z"/>
+            <path fill="#005B9E" opacity="0.3" d="M24.7 24L37 12v24L24.7 24z"/>
+          </svg></span>
         <div class="vscode-menu-bar">
           <span>File</span><span>Edit</span><span>Selection</span><span>View</span><span>Go</span><span>Run</span><span>Terminal</span><span>Help</span>
         </div>
@@ -30,12 +32,6 @@
         <span id="vsc-title-doc">stream_pipeline_processor.py - dev_workspace - Visual Studio Code</span>
       </div>
       <div class="vscode-title-right">
-        <div class="stealth-reading-ctrls vscode-reading-nav">
-          <button class="portal-nav-btn" id="btn-open-portal-vscode" title="Trang chủ & Ủng hộ tác giả">Trang chủ & Donate</button>
-          <button class="theme-switch-pill vscode-theme-btn" id="btn-open-theme-modal-vscode">Đổi giao diện</button>
-          <button class="boss-key-btn" id="btn-boss-key-vscode" title="Xem báo cáo nhanh (Nhấn ESC)"><span class="boss-badge">ESC</span> Báo cáo nhanh</button>
-          <button class="stealth-toggle-btn" title="Ẩn các nút điều khiển đọc (Phím tắt: H)">👁 Ẩn nút (H)</button>
-        </div>
         <button class="win-btn">―</button>
         <button class="win-btn">▢</button>
         <button class="win-btn win-close">✕</button>
@@ -45,7 +41,7 @@
     <!-- Editor Tab strip -->
     <div class="vscode-tabs-bar">
       <div class="vscode-tab active" id="vsc-tab-main">
-        <span class="py-icon">🐍</span>
+        <span class="py-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:-2px; margin-right:3px;"><path d="M12 2C6.48 2 6.5 4.5 6.5 4.5V7H12v1H4.5S2 7.98 2 13.5C2 19 4 19 4 19H6v-2.5C6 14 8 14 8 14h5.5s2.5.02 2.5-2.5V4.5S16.02 2 12 2zm-2 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" fill="#3776AB"/><path d="M12 22c5.52 0 5.5-2.5 5.5-2.5V17H12v-1h7.5s2.5.02 2.5-5.5C22 5 20 5 20 5h-2v2.5C18 10 16 10 16 10H10.5S8 9.98 8 12.5V19.5S7.98 22 12 22zm2-2a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="#FFD438"/></svg></span>
         <span id="vsc-tab-filename" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên file code ngụy trang">stream_pipeline_processor.py</span>
         <span class="tab-close">×</span>
       </div>
@@ -54,26 +50,11 @@
         <span class="stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tên file tab 2" data-stealth-key="stealth_vsc_tab2">pipeline_config.json</span>
       </div>
       <div class="vscode-tab" id="vsc-tab-db">
-        <span class="sql-icon">🗄️</span>
+        <span class="sql-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#eab308" stroke-width="2" style="vertical-align:-2px; margin-right:3px;"><path d="M7 4a3 3 0 0 0-3 3v2a2 2 0 0 1-2 2 2 2 0 0 1 2 2v2a3 3 0 0 0 3 3M17 4a3 3 0 0 1 3 3v2a2 2 0 0 0 2 2 2 2 0 0 0-2 2v2a3 3 0 0 1-3 3"/></svg></span>
         <span>schema.sql</span>
       </div>
 
       <!-- Quick Stealth Toolbar in VS Code Header -->
-      <div class="vscode-stealth-toolbar stealth-reading-ctrls">
-        <label for="file-pdf-input" class="vscode-pill-btn">📂 Nạp tài liệu</label>
-        <span id="vscode-file-name-label" class="vscode-file-text">dataset_telemetry.pdf</span>
-        <div class="vscode-page-ctrl">
-          <button class="vsc-btn" id="vsc-btn-prev">◀</button>
-          <span id="vsc-page-indicator">1/1</span>
-          <button class="vsc-btn" id="vsc-btn-next">▶</button>
-        </div>
-        <div class="vsc-font-ctrl" style="display:flex; align-items:center; gap:3px; background:#252526; border:1px solid #3c3c3c; border-radius:4px; padding:1px 5px;" title="Cỡ chữ (hoặc phím [ và ])">
-          <button class="vsc-btn" id="vsc-btn-font-dec" style="padding:2px 6px; font-size:11px; font-weight:bold;" title="Giảm cỡ chữ ( [ )">A−</button>
-          <span id="vsc-font-val" style="font-size:11px; min-width:32px; text-align:center; color:#4ec9b0; font-family:monospace; font-weight:600;">11pt</span>
-          <button class="vsc-btn" id="vsc-btn-font-inc" style="padding:2px 6px; font-size:11px; font-weight:bold;" title="Tăng cỡ chữ ( ] )">A+</button>
-        </div>
-        <button class="vsc-btn" id="vsc-btn-autoscroll">▶ Tự cuộn</button>
-      </div>
     </div>
   </div>
 
@@ -87,14 +68,14 @@
   <main class="vscode-workspace vscode-only" id="vscode-ide-workspace">
     <!-- 1. Left Activity Bar -->
     <div class="vsc-activity-bar">
-      <div class="vsc-act-icon active" title="Explorer (Ctrl+Shift+E)">📁</div>
-      <div class="vsc-act-icon" title="Search (Ctrl+Shift+F)">🔍</div>
-      <div class="vsc-act-icon" title="Source Control (Ctrl+Shift+G)">🌿</div>
-      <div class="vsc-act-icon" title="Run and Debug (Ctrl+Shift+D)">🐞</div>
-      <div class="vsc-act-icon" title="Extensions (Ctrl+Shift+X)">🧩</div>
+      <div class="vsc-act-icon active" title="Explorer (Ctrl+Shift+E)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4a1 1 0 0 1 1-1h6l2 2h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z"/></svg></div>
+      <div class="vsc-act-icon" title="Search (Ctrl+Shift+F)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></div>
+      <div class="vsc-act-icon" title="Source Control (Ctrl+Shift+G)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="9" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><path d="M18 12a9 9 0 0 1-9 9"/></svg></div>
+      <div class="vsc-act-icon" title="Run and Debug (Ctrl+Shift+D)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      <div class="vsc-act-icon" title="Extensions (Ctrl+Shift+X)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8V4h4v1a2 2 0 0 0 4 0V4h4v4h-1a2 2 0 0 0 0 4h1v4h-4v-1a2 2 0 0 0-4 0v1H4v-4h1a2 2 0 0 0 0-4H4z"/></svg></div>
       <div class="vsc-act-bottom">
-        <div class="vsc-act-icon" title="Accounts">👤</div>
-        <div class="vsc-act-icon" title="Settings">⚙️</div>
+        <div class="vsc-act-icon" title="Accounts"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/></svg></div>
+        <div class="vsc-act-icon" title="Settings"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       </div>
     </div>
 
@@ -205,7 +186,7 @@
   <div class="stealth-modal-overlay" id="theme-modal">
     <div class="stealth-modal-content theme-picker-content">
       <div class="modal-header">
-        <h3>🎨 Chọn Giao Diện Ngụy Trang Làm Việc</h3>
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-3px; margin-right:6px;"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.64 10.56 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>Chọn Giao Diện Ngụy Trang Làm Việc</h3>
         <button class="modal-close-btn" id="btn-close-theme-modal">✕</button>
       </div>
       <div class="modal-body">
@@ -214,10 +195,10 @@
         <div class="theme-selection-grid">
           <!-- Option 1: Google Sheets -->
           <div class="theme-card active" data-theme="theme-googlesheets">
-            <div class="theme-card-badge">Khuyên Dùng ⭐</div>
+            <div class="theme-card-badge">Khuyên Dùng ★</div>
             <div class="theme-preview-img gsheet-preview">
               <div class="prev-top-bar" style="background:#fff; border-bottom:1px solid #e0e0e0;">
-                <span style="color:#0F9D58; font-weight:bold; font-size:12px;">📊 Google Sheets</span>
+                <span style="color:#0F9D58; font-weight:bold; font-size:12px;">Google Sheets</span>
                 <span style="background:#c2e7ff; color:#001d35; border-radius:10px; padding:2px 8px; font-size:9px; font-weight:600;">Chia sẻ</span>
               </div>
               <div class="prev-grid" style="background:#f8fafd;">
@@ -235,7 +216,7 @@
             <div class="theme-card-badge" style="background:#1a73e8; color:white;">Văn Phòng </div>
             <div class="theme-preview-img gdocs-preview">
               <div class="prev-top-bar" style="background:#ffffff; border-bottom:1px solid #e0e0e0;">
-                <span style="color:#1a73e8; font-weight:bold; font-size:11px;">📄 Google Docs (Tài liệu)</span>
+                <span style="color:#1a73e8; font-weight:bold; font-size:11px;">Google Docs (Tài liệu)</span>
                 <span style="background:#c2e7ff; color:#001d35; border-radius:10px; padding:2px 8px; font-size:9px; font-weight:600;">Chia sẻ</span>
               </div>
               <div class="prev-grid" style="background:#f9fbfd; padding:6px; display:flex; justify-content:center;">
@@ -253,7 +234,7 @@
           <div class="theme-card" data-theme="theme-excel">
             <div class="theme-preview-img excel-preview">
               <div class="prev-top-bar" style="background:#107c41; color:white;">
-                <span style="font-weight:bold; font-size:11px;">📗 Excel 365 (Bao_Cao.xlsx)</span>
+                <span style="font-weight:bold; font-size:11px;">Excel 365 (Bao_Cao.xlsx)</span>
               </div>
               <div class="prev-grid">
                 <div class="prev-row header" style="background:#e7f2eb; color:#107c41;"><span>A</span><span>B</span><span>C</span><span>D (Truyện)</span></div>
@@ -267,10 +248,10 @@
 
           <!-- Option 3: VS Code IDE -->
           <div class="theme-card" data-theme="theme-vscode">
-            <div class="theme-card-badge" style="background:#007acc;">Dành cho IT 💻</div>
+            <div class="theme-card-badge" style="background:#007acc;">Dành cho IT 🖥️</div>
             <div class="theme-preview-img vscode-preview">
               <div class="prev-top-bar" style="background:#3c3c3c; color:#d4d4d4;">
-                <span style="color:#007acc; font-weight:bold; font-size:11px;">💻 VS Code (Dark IDE)</span>
+                <span style="color:#007acc; font-weight:bold; font-size:11px;">VS Code (Dark IDE)</span>
               </div>
               <div class="prev-grid" style="background:#1e1e1e; color:#9cdcfe; font-family:monospace; font-size:9px;">
                 <div class="prev-row" style="color:#6a9955;"># Chapter 1: Ishigami...</div>
@@ -284,7 +265,7 @@
 
           <!-- Option 4: Photoshop 2026 -->
           <div class="theme-card" data-theme="theme-photoshop">
-            <div class="theme-card-badge" style="background:#001e36; color:#31a8ff;">Designer 🎨</div>
+            <div class="theme-card-badge" style="background:#001e36; color:#31a8ff;">Designer 🖌️</div>
             <div class="theme-preview-img ps-preview">
               <div class="prev-top-bar" style="background:#282828; color:#eee;">
                 <span style="color:#31a8ff; font-weight:bold; font-size:11px;">Ps Adobe Photoshop 2026</span>
@@ -315,7 +296,7 @@
 
           <!-- Option 6: LinkedIn Feed -->
           <div class="theme-card" data-theme="theme-linkedin">
-            <div class="theme-card-badge" style="background:#0a66c2;">Công Sở 👔</div>
+            <div class="theme-card-badge" style="background:#0a66c2;">Công Sở 💼</div>
             <div class="theme-preview-img linkedin-preview">
               <div class="prev-top-bar" style="background:#ffffff; border-bottom:1px solid #e0e0e0;">
                 <span style="color:#0a66c2; font-weight:bold; font-size:11px;">in LinkedIn Feed</span>
@@ -550,7 +531,7 @@
   <!-- =========================================================
        TRANG CHỦ: CLEAN & MODERN PORTAL, THEMES & DONATE
        ========================================================= -->
-  <div id="landing-portal" class="landing-portal-overlay">
+  <div id="landing-portal" class="landing-portal-overlay hidden">
     <div class="portal-container">
       
       <!-- Top Modern Navbar -->
@@ -753,14 +734,15 @@
             Chọn định dạng phù hợp với cửa sổ làm việc và tệp sách cần đọc:
           </p>
 
-          <div class="duo-theme-missions" id="portal-theme-list">
+                              <div class="duo-theme-missions" id="portal-theme-list">
             <!-- Theme 1: Google Sheets -->
-            <div class="duo-mission-item selected" data-theme="theme-googlesheets">
-              <div class="duo-mission-icon-box gsheet">
-                <svg width="22" height="26" viewBox="0 0 24 32">
-                  <path fill="#0F9D58" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-                  <path fill="#87CEAB" d="M15 0v9h9L15 0z"/>
-                  <path fill="#ffffff" d="M4 14h16v2H4zm0 4h16v2H4zm0 4h16v2H4zm6-10v14h2V12h-2z"/>
+            <div class="duo-mission-item" data-theme="theme-googlesheets">
+              <div class="duo-mission-icon-box gsheet" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path d="M37 45H11C8.8 45 7 43.2 7 41V7C7 4.8 8.8 3 11 3H29L41 15V41C41 43.2 39.2 45 37 45Z" fill="#0F9D58"/>
+                  <path d="M29 3L41 15H29V3Z" fill="#87CEAC"/>
+                  <path d="M14 21H34V39H14V21Z" fill="white"/>
+                  <path d="M14 27H34V29H14V27ZM14 33H34V35H14V33ZM22 21V39H24V21H22Z" fill="#0F9D58"/>
                 </svg>
               </div>
               <div class="duo-mission-info">
@@ -774,11 +756,13 @@
 
             <!-- Theme 2: Google Docs -->
             <div class="duo-mission-item" data-theme="theme-googledocs">
-              <div class="duo-mission-icon-box gdocs" style="background:#fff; display:flex; align-items:center; justify-content:center;">
-                <svg width="22" height="26" viewBox="0 0 24 32">
-                  <path fill="#4285F4" d="M15 0H2C.9 0 0 .9 0 2v28c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V9l-9-9z"/>
-                  <path fill="#A1C2FA" d="M15 0v9h9L15 0z"/>
-                  <path fill="#ffffff" d="M5 13h14v2H5zm0 4h14v2H5zm0 4h10v2H5z"/>
+              <div class="duo-mission-icon-box gdocs" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path d="M37 45H11C8.8 45 7 43.2 7 41V7C7 4.8 8.8 3 11 3H29L41 15V41C41 43.2 39.2 45 37 45Z" fill="#4285F4"/>
+                  <path d="M29 3L41 15H29V3Z" fill="#A1C2FA"/>
+                  <rect x="14" y="22" width="20" height="2.5" rx="1.25" fill="white"/>
+                  <rect x="14" y="27.5" width="20" height="2.5" rx="1.25" fill="white"/>
+                  <rect x="14" y="33" width="13" height="2.5" rx="1.25" fill="white"/>
                 </svg>
               </div>
               <div class="duo-mission-info">
@@ -792,10 +776,13 @@
 
             <!-- Theme 3: Microsoft Excel 365 -->
             <div class="duo-mission-item" data-theme="theme-excel">
-              <div class="duo-mission-icon-box excel">
-                <svg width="22" height="22" viewBox="0 0 32 32">
-                  <rect width="32" height="32" rx="4" fill="#107c41"/>
-                  <text x="16" y="23" font-size="20" font-family="Segoe UI,Arial" font-weight="bold" fill="white" text-anchor="middle">X</text>
+              <div class="duo-mission-icon-box excel" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect x="16" y="8" width="26" height="32" rx="3" fill="#107C41"/>
+                  <path d="M22 15H36V33H22V15Z" fill="#21A366"/>
+                  <path d="M22 21H36M22 27H36M28 15V33" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                  <rect x="6" y="12" width="20" height="24" rx="3" fill="#185C37" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"/>
+                  <path d="M11 18L21 30M21 18L11 30" stroke="white" stroke-width="3" stroke-linecap="round"/>
                 </svg>
               </div>
               <div class="duo-mission-info">
@@ -807,12 +794,14 @@
               <div class="duo-mission-check">✓</div>
             </div>
 
-            <!-- Theme 3: Visual Studio Code -->
+            <!-- Theme 4: Visual Studio Code -->
             <div class="duo-mission-item" data-theme="theme-vscode">
-              <div class="duo-mission-icon-box vscode">
-                <svg width="22" height="22" viewBox="0 0 100 100">
-                  <path fill="#007ACC" d="M72 98L97 86V14L72 2 28 42 11 29 2 34l22 20L2 74l9 5 17-13 44 32z"/>
-                  <path fill="#1F9CF0" d="M72 2v96l25-12V14L72 2zm0 28L46 54l26 24V30z"/>
+              <div class="duo-mission-icon-box vscode" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path d="M35.5 45.5L45 40.5V7.5L35.5 2.5L16 19.5L8.5 13.5L3 16.5L12 24L3 31.5L8.5 34.5L16 28.5L35.5 45.5Z" fill="#007ACC"/>
+                  <path d="M35.5 45.5L45 40.5V7.5L35.5 2.5L25 17L35.5 24L25 31L35.5 45.5Z" fill="#1F9CF0"/>
+                  <path d="M35.5 2.5L16 19.5L8.5 13.5L3 16.5L12 24L25 17L35.5 2.5Z" fill="#0065A9"/>
+                  <path d="M35.5 45.5L25 31L12 24L3 31.5L8.5 34.5L16 28.5L35.5 45.5Z" fill="#0065A9"/>
                 </svg>
               </div>
               <div class="duo-mission-info">
@@ -824,24 +813,35 @@
               <div class="duo-mission-check">✓</div>
             </div>
 
-            <!-- Theme 4: Photoshop 2026 -->
+            <!-- Theme 5: Photoshop 2026 -->
             <div class="duo-mission-item" data-theme="theme-photoshop">
-              <div class="duo-mission-icon-box photoshop" style="background:#001e36; color:#31a8ff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px;">
-                Ps
+              <div class="duo-mission-icon-box photoshop" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#001E36"/>
+                  <rect x="2" y="2" width="44" height="44" rx="8" stroke="#31A8FF" stroke-width="2.5" fill="none"/>
+                  <path d="M14 15H21.5C24.5 15 26.5 16.8 26.5 19.8C26.5 22.8 24.5 24.6 21.5 24.6H17.8V33H14V15ZM17.8 21.5H21.2C22.6 21.5 23.5 20.8 23.5 19.8C23.5 18.8 22.6 18.1 21.2 18.1H17.8V21.5Z" fill="#31A8FF"/>
+                  <path d="M28.5 29.2C29.2 30.5 30.8 31.3 32.5 31.3C34.3 31.3 35.3 30.4 35.3 29.2C35.3 26.5 28.8 27.2 28.8 22.5C28.8 20.1 30.8 18.5 33.7 18.5C35.7 18.5 37.3 19.3 38.2 20.7L36 22.3C35.4 21.4 34.5 20.9 33.5 20.9C32.1 20.9 31.3 21.6 31.3 22.4C31.3 24.8 37.8 24.2 37.8 28.8C37.8 31.4 35.6 33.3 32.4 33.3C29.7 33.3 27.6 32 26.5 30.2L28.5 29.2Z" fill="#31A8FF"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top">
                   <span class="duo-mission-title">Adobe Photoshop 2026</span>
                 </div>
-                <div class="duo-mission-desc">Bản thảo Typography & Artboard thiết kế đồ họa với bảng Layers.</div>
+                <div class="duo-mission-desc">Bản thảo Typography &amp; Artboard thiết kế đồ họa với bảng Layers.</div>
               </div>
               <div class="duo-mission-check">✓</div>
             </div>
 
-            <!-- Theme 5: Blender 4.2 -->
+            <!-- Theme 6: Blender 4.2 -->
             <div class="duo-mission-item" data-theme="theme-blender">
-              <div class="duo-mission-icon-box blender" style="background:#222; display:flex; align-items:center; justify-content:center;">
-                <svg width="22" height="22" viewBox="0 0 32 32"><circle cx="16" cy="18" r="7" fill="#ea7600"/><circle cx="16" cy="18" r="3.5" fill="#265787"/><path d="M16 5 L16 11 M10 8 L14 13 M22 8 L18 13" stroke="#ea7600" stroke-width="2.5" stroke-linecap="round"/></svg>
+              <div class="duo-mission-icon-box blender" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="22" fill="#222222"/>
+                  <circle cx="24" cy="27" r="11" fill="#EA7600"/>
+                  <circle cx="24" cy="27" r="5.5" fill="#22578A"/>
+                  <circle cx="24" cy="27" r="2.5" fill="#FFFFFF"/>
+                  <path d="M24 7V16M15 11L21 18M33 11L27 18" stroke="#EA7600" stroke-width="3.8" stroke-linecap="round"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top">
@@ -852,10 +852,15 @@
               <div class="duo-mission-check">✓</div>
             </div>
 
-            <!-- Theme 6: LinkedIn Feed -->
+            <!-- Theme 7: LinkedIn Feed -->
             <div class="duo-mission-item" data-theme="theme-linkedin">
-              <div class="duo-mission-icon-box linkedin" style="background:#0a66c2; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px;">
-                in
+              <div class="duo-mission-icon-box linkedin" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#0A66C2"/>
+                  <circle cx="15.5" cy="14.5" r="3" fill="white"/>
+                  <rect x="12.5" y="20" width="6" height="15" rx="1" fill="white"/>
+                  <path d="M23 20H28.5V22.5C29.4 20.9 31.4 20 34 20C38.4 20 40 22.8 40 27.5V35H34V28.5C34 26.5 33.2 25 31.2 25C29.2 25 28.5 26.5 28.5 28.5V35H23V20Z" fill="white"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top">
@@ -866,10 +871,16 @@
               <div class="duo-mission-check">✓</div>
             </div>
 
-            <!-- Theme 7: Autodesk AutoCAD 2026 -->
+            <!-- Theme 8: Autodesk AutoCAD 2026 -->
             <div class="duo-mission-item" data-theme="theme-autocad">
-              <div class="duo-mission-icon-box autocad" style="background:#c41527; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px;">
-                A
+              <div class="duo-mission-icon-box autocad" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#1C1E24"/>
+                  <path d="M24 6L8 38H17L21 29H31L26 18L24 6Z" fill="#E51937"/>
+                  <path d="M24 6L33 24H23L24 6Z" fill="#FA465E"/>
+                  <path d="M33 24L40 38H30L26 29L33 24Z" fill="#B81126"/>
+                  <path d="M21 29H31L34 35H18L21 29Z" fill="#850B19"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top">
@@ -882,8 +893,11 @@
 
             <!-- Theme 9: Zalo PC -->
             <div class="duo-mission-item" data-theme="theme-zalo">
-              <div class="duo-mission-icon-box zalo" style="background:#0068ff; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:14px; border-radius:6px;">
-                Zalo
+              <div class="duo-mission-icon-box zalo" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="12" fill="#0068FF"/>
+                  <path d="M12 18H24L14 30H26M28 20V30M32 18V30M34 24C34 21.8 35.8 20 38 20C40.2 20 42 21.8 42 24V26C42 28.2 40.2 30 38 30C35.8 30 34 28.2 34 26V24Z" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top"><span class="duo-mission-title">Zalo PC (Chat Nhóm Dự Án)</span></div>
@@ -894,13 +908,16 @@
 
             <!-- Theme 10: Figma -->
             <div class="duo-mission-item" data-theme="theme-figma">
-              <div class="duo-mission-icon-box figma" style="background:#1e1e1e; display:flex; align-items:center; justify-content:center; border-radius:6px;">
-                <svg width="20" height="20" viewBox="0 0 38 57" fill="none">
-                  <path d="M19 28.5C19 23.2533 23.2533 19 28.5 19C33.7467 19 38 23.2533 38 28.5C38 33.7467 33.7467 38 28.5 38C23.2533 38 19 33.7467 19 28.5Z" fill="#1ABCFE"/>
-                  <path d="M0 47.5C0 42.2533 4.25329 38 9.5 38H19V47.5C19 52.7467 14.7467 57 9.5 57C4.25329 57 0 52.7467 0 47.5Z" fill="#0ACF83"/>
-                  <path d="M19 0V19H28.5C33.7467 19 38 14.7467 38 9.5C38 4.25329 33.7467 0 28.5 0H19Z" fill="#FF7262"/>
-                  <path d="M0 9.5C0 14.7467 4.25329 19 9.5 19H19V0H9.5C4.25329 0 0 4.25329 0 9.5Z" fill="#F24E1E"/>
-                  <path d="M0 28.5C0 33.7467 4.25329 38 9.5 38H19V19H9.5C4.25329 19 0 23.2533 0 28.5Z" fill="#A259FF"/>
+              <div class="duo-mission-icon-box figma" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#18181B"/>
+                  <g transform="translate(10, 4) scale(0.72)">
+                    <path d="M19 28.5C19 23.3 23.3 19 28.5 19C33.7 19 38 23.3 38 28.5C38 33.7 33.7 38 28.5 38C23.3 38 19 33.7 19 28.5Z" fill="#1ABCFE"/>
+                    <path d="M0 47.5C0 42.3 4.3 38 9.5 38H19V47.5C19 52.7 14.7 57 9.5 57C4.3 57 0 52.7 0 47.5Z" fill="#0ACF83"/>
+                    <path d="M19 0V19H28.5C33.7 19 38 14.7 38 9.5C38 4.3 33.7 0 28.5 0H19Z" fill="#FF7262"/>
+                    <path d="M0 9.5C0 14.7 4.3 19 9.5 19H19V0H9.5C4.3 0 0 4.3 0 9.5Z" fill="#F24E1E"/>
+                    <path d="M0 28.5C0 33.7 4.3 38 9.5 38H19V19H9.5C4.3 19 0 23.3 0 28.5Z" fill="#A259FF"/>
+                  </g>
                 </svg>
               </div>
               <div class="duo-mission-info">
@@ -912,8 +929,17 @@
 
             <!-- Theme 11: Canva -->
             <div class="duo-mission-item" data-theme="theme-canva">
-              <div class="duo-mission-icon-box canva" style="background:linear-gradient(135deg,#00c4cc,#7d2ae8); color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px; font-style:italic; border-radius:6px;">
-                C
+              <div class="duo-mission-icon-box canva" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <defs>
+                    <linearGradient id="cg_canva" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#00C4CC"/>
+                      <stop offset="1" stop-color="#7D2AE8"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="24" cy="24" r="22" fill="url(#cg_canva)"/>
+                  <path d="M28.5 16C23 16 16 20.5 16 27C16 31.5 19.5 34 23.5 34C28 34 32.5 30.5 33 27C33.2 25.5 32 25.2 31.2 26C29.5 27.8 26.5 29.5 24 29.5C21 29.5 19.8 27.5 20.2 24.5C20.8 20.5 25.2 18.5 28.2 18.5C30.2 18.5 31.2 19.2 30.8 21C30.5 22.2 29.2 22.8 28.2 22.8C27.5 22.8 27 22.5 27.2 21.8C27.5 21 28.8 20.8 28.5 20C28.2 19.2 26.5 19.5 25.5 20.5C23.5 22.5 22.8 25.8 23.8 27.2C24.2 27.8 25.5 27.8 26.5 27C28.5 25.2 31.5 21 32 18C32.2 16.5 30.5 16 28.5 16Z" fill="white"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top"><span class="duo-mission-title">Canva (Thiết Kế Slide)</span></div>
@@ -924,8 +950,14 @@
 
             <!-- Theme 12: PowerPoint -->
             <div class="duo-mission-item" data-theme="theme-powerpoint">
-              <div class="duo-mission-icon-box powerpoint" style="background:#d24726; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px; border-radius:6px;">
-                P
+              <div class="duo-mission-icon-box powerpoint" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect x="16" y="8" width="26" height="32" rx="3" fill="#D24726"/>
+                  <circle cx="29" cy="24" r="8" fill="#FF8F6B"/>
+                  <path d="M29 16V24H37C37 19.6 33.4 16 29 16Z" fill="#C43E1C"/>
+                  <rect x="6" y="12" width="20" height="24" rx="3" fill="#B73A1B" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"/>
+                  <path d="M12 18H18C20.5 18 22 19.5 22 22C22 24.5 20.5 26 18 26H15V30H12V18ZM15 23.5H18C19 23.5 19.5 23 19.5 22C19.5 21 19 20.5 18 20.5H15V23.5Z" fill="white"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top"><span class="duo-mission-title">Microsoft PowerPoint 365</span></div>
@@ -933,11 +965,21 @@
               </div>
               <div class="duo-mission-check">✓</div>
             </div>
-          
+
             <!-- Theme 13: Thư Viện Pháp Luật -->
             <div class="duo-mission-item" data-theme="theme-thuvienphapluat">
-              <div class="duo-mission-icon-box tvpl" style="background:#0c345c; color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:18px; border-radius:6px;">
-                ⚖️
+              <div class="duo-mission-icon-box tvpl" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#0C345C"/>
+                  <rect x="3" y="3" width="42" height="42" rx="8" stroke="#D4AF37" stroke-width="1.8" fill="none"/>
+                  <path d="M24 10V36M18 36H30" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M12 16H36" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M12 16L7 26H17L12 16Z" fill="#D4AF37" opacity="0.3"/>
+                  <path d="M12 16L7 26M12 16L17 26M6 26C6 29 18 29 18 26" stroke="#D4AF37" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M36 16L31 26H41L36 16Z" fill="#D4AF37" opacity="0.3"/>
+                  <path d="M36 16L31 26M36 16L41 26M30 26C30 29 42 29 42 26" stroke="#D4AF37" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="24" cy="11" r="2.5" fill="#D4AF37"/>
+                </svg>
               </div>
               <div class="duo-mission-info">
                 <div class="duo-mission-top"><span class="duo-mission-title">Thư Viện Pháp Luật (TVPL)</span></div>
@@ -945,7 +987,7 @@
               </div>
               <div class="duo-mission-check">✓</div>
             </div>
-</div>
+          </div>
 
           <!-- Nạp tài liệu (Nổi bật & Bắt buộc có truyện mới bắt đầu đọc) -->
           <div class="duo-upload-quest" id="portal-upload-card">
@@ -1102,6 +1144,7 @@
   <!-- Toast Notification for Seamless Page Navigation -->
   <div id="page-flip-toast" class="page-flip-toast"></div>
 
-  <script src="app.js?v=20261002-12"></script>
+  <script src="app.js?v=20261004-03" defer></script>
 </body>
 </html>
+
