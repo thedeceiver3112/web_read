@@ -1,0 +1,730 @@
+/* ==========================================================================
+   THEME 17: MICROSOFT TEAMS (NEW MODERN TEAMS 2.0 / 2026 LIGHT MODE)
+   Exact match to official user screenshot:
+   - Light grey/off-white titlebar (#f3f2f1) with Fluent icon & pills
+   - White app rail with modern outline Fluent icons (Chat, Meet, People, Copilot, Communities, Calendar, Activity)
+   - Pill filter tabs: Unread, Meeting chats, Muted
+   - Section headers: ▾ Favorites, ▾ Chats
+   - Clean professional document-like chat thread layout (Times / Segoe typography)
+   ========================================================================== */
+
+body.theme-teams {
+  background: #ffffff;
+  color: #242424;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+body.theme-teams * {
+  box-sizing: border-box;
+}
+
+body.theme-teams.has-pinned-navbar {
+  padding-top: var(--unav-height, 38px) !important;
+}
+body.theme-teams.controls-hidden {
+  padding-top: 0 !important;
+}
+
+.teams-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* 1. TOP TITLEBAR (NEW TEAMS: LIGHT BG #F3F3F3 / #F0F0F0) */
+.teams-titlebar {
+  height: 44px;
+  min-height: 44px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px 0 16px;
+  color: #242424;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+}
+
+.teams-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.teams-logo-wrap {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.teams-logo-wrap:hover {
+  background: #e5e5e5;
+}
+
+.teams-nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #616161;
+  margin-left: 8px;
+}
+.teams-nav-arrow {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  color: #616161;
+  font-size: 14px;
+  transition: background 0.15s, color 0.15s;
+}
+.teams-nav-arrow:hover {
+  background: #e5e5e5;
+  color: #242424;
+}
+
+/* Central Search Bar (Pill style matching screenshot) */
+.teams-search-wrap {
+  flex: 1;
+  max-width: 480px;
+  margin: 0 16px;
+}
+.teams-search-box {
+  background: #ffffff;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 8px;
+  color: #616161;
+  font-size: 12.5px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.teams-search-box:hover, .teams-search-box:focus-within {
+  border-color: #5b5fc7;
+  box-shadow: 0 0 0 1px #5b5fc7;
+}
+.teams-search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #242424;
+  font-size: 12px;
+  width: 100%;
+}
+.teams-search-input::placeholder {
+  color: #616161;
+}
+
+.teams-titlebar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.teams-dots-btn {
+  color: #616161;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.teams-dots-btn:hover {
+  background: #e5e5e5;
+  color: #242424;
+}
+
+.teams-profile-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #0078d4;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+}
+.teams-profile-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.teams-status-dot-top {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #237b4b;
+  border: 1.5px solid #ffffff;
+}
+
+.teams-win-controls {
+  display: flex;
+  align-items: center;
+  margin-left: 6px;
+}
+.teams-win-btn {
+  width: 36px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #616161;
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s;
+}
+.teams-win-btn:hover {
+  background: #e5e5e5;
+  color: #242424;
+}
+.teams-win-btn.close:hover {
+  background: #c42b1c;
+  color: #ffffff;
+}
+
+/* 2. BODY LAYOUT */
+.teams-body {
+  display: flex;
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* 2.1 MODERN LEFT APP RAIL (Clean light icons matching screenshot) */
+.teams-app-rail {
+  width: 60px;
+  min-width: 60px;
+  background: #f5f5f5;
+  border-right: 1px solid #edebe9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  flex-shrink: 0;
+  justify-content: space-between;
+}
+
+.teams-rail-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.teams-rail-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding-bottom: 4px;
+}
+
+.teams-rail-btn {
+  width: 52px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #616161;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s;
+  gap: 3px;
+}
+.teams-rail-btn svg {
+  color: #616161;
+}
+.teams-rail-btn:hover {
+  background: #e8e8e8;
+  color: #242424;
+}
+.teams-rail-btn:hover svg {
+  color: #242424;
+}
+.teams-rail-btn.active {
+  background: #ffffff;
+  color: #5b5fc7;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.teams-rail-btn.active svg {
+  color: #5b5fc7;
+}
+.teams-rail-btn.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: #5b5fc7;
+  border-radius: 0 3px 3px 0;
+}
+
+/* 2.2 CHAT LIST PANE */
+.teams-chat-list-pane {
+  width: 280px;
+  min-width: 280px;
+  background: #fbfbfb;
+  border-right: 1px solid #edebe9;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: 0;
+}
+
+.teams-chat-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 6px 14px;
+}
+.teams-chat-heading {
+  font-size: 17px;
+  font-weight: 700;
+  color: #242424;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.teams-chat-heading-arrow {
+  font-size: 11px;
+  color: #616161;
+}
+
+.teams-chat-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.teams-icon-btn {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #616161;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.teams-icon-btn:hover {
+  background: #e8e8e8;
+  color: #242424;
+}
+.teams-compose-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  background: #5b5fc7;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.teams-compose-btn:hover {
+  background: #4f52b2;
+}
+
+/* Filter Pills: Unread | Meeting chats | Unmuted */
+.teams-filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 10px 14px;
+  overflow-x: auto;
+}
+.teams-pill {
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #edebe9;
+  color: #616161;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.teams-pill:hover {
+  background: #e0dedc;
+  color: #242424;
+}
+.teams-pill.active {
+  background: #5b5fc7;
+  color: #ffffff;
+}
+
+.teams-chat-items-scroll {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 2px 8px 12px 8px;
+}
+
+.teams-section-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #616161;
+  padding: 8px 6px 4px 6px;
+  cursor: pointer;
+}
+.teams-section-arrow {
+  font-size: 9px;
+}
+
+.teams-chat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.15s;
+  margin-bottom: 2px;
+}
+.teams-chat-item:hover {
+  background: #f0f0f0;
+}
+.teams-chat-item.active {
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+.teams-chat-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: #5b5fc7;
+  border-radius: 0 3px 3px 0;
+}
+
+.teams-avatar-wrap {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+.teams-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.teams-avatar.green-tag {
+  background: #dff6dd;
+  color: #107c41;
+  border: 1px solid #bceab8;
+}
+.teams-avatar.blue-gradient {
+  background: linear-gradient(135deg, #0078d4, #00bcf2);
+}
+.teams-status-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #237b4b;
+  border: 1.5px solid #ffffff;
+}
+
+.teams-chat-item-content {
+  flex: 1;
+  min-width: 0;
+}
+.teams-chat-item-row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+.teams-chat-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #242424;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.teams-chat-time {
+  font-size: 11px;
+  color: #707070;
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+.teams-chat-preview {
+  font-size: 11.5px;
+  color: #616161;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 2.3 MAIN CHAT PANE */
+.teams-chat-main {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #ffffff;
+}
+
+.teams-main-header {
+  height: 48px;
+  min-height: 48px;
+  border-bottom: 1px solid #edebe9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.teams-main-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.teams-main-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #dff6dd;
+  color: #107c41;
+  border: 1px solid #bceab8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+}
+.teams-main-person-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #242424;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teams-header-tabs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: 18px;
+  height: 100%;
+}
+.teams-header-tab {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #616161;
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  padding: 0 2px;
+}
+.teams-header-tab.active {
+  color: #5b5fc7;
+  border-bottom-color: #5b5fc7;
+}
+
+.teams-main-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.teams-call-icon-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #616161;
+  cursor: pointer;
+}
+.teams-call-icon-btn:hover {
+  background: #f0f0f0;
+  color: #242424;
+}
+
+/* 2.4 CHAT READING STREAM (DOCUMENT LIKE CLEAN FLOW - MATCHING SCREENSHOT) */
+.teams-messages-scroll {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 24px 36px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+#teams-story-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 920px;
+}
+
+/* Clean document paragraph with heading like user image */
+.teams-doc-paragraph-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.teams-doc-paragraph-card:hover {
+  background: #f9f9fb;
+}
+.teams-doc-paragraph-card.active-msg {
+  background: #f4f4fa !important;
+  border-left: 3px solid #5b5fc7 !important;
+  padding-left: 10px !important;
+}
+
+.teams-doc-heading {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #242424;
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+.teams-doc-body {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #333333;
+}
+
+.teams-doc-meta {
+  font-size: 10.5px;
+  color: #8a8886;
+  margin-top: 2px;
+}
+
+/* 2.5 COMPOSER BOTTOM BAR */
+.teams-composer-wrap {
+  padding: 0 32px 14px 32px;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+.teams-composer-box {
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 4px 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.teams-composer-box:focus-within {
+  border-color: #5b5fc7;
+  box-shadow: 0 0 0 1px #5b5fc7;
+}
+.teams-composer-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 12.5px;
+  color: #242424;
+  padding: 6px 4px;
+  background: transparent;
+}
+.teams-composer-input::placeholder {
+  color: #707070;
+}
+.teams-composer-icons-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #616161;
+}
+.teams-composer-icon-btn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  transition: background 0.15s, color 0.15s;
+}
+.teams-composer-icon-btn:hover {
+  background: #f0f0f0;
+  color: #242424;
+}
+
+/* Stealth Editable Focus for Teams */
+.theme-teams .stealth-editable:hover,
+.theme-teams [data-stealth-key]:hover {
+  outline: 1px dashed rgba(91, 95, 199, 0.6) !important;
+  background-color: rgba(91, 95, 199, 0.08) !important;
+}
+
+.theme-teams .stealth-editable:focus,
+.theme-teams [data-stealth-key]:focus {
+  outline: 2px solid #5b5fc7 !important;
+  background-color: #ffffff !important;
+  color: #242424 !important;
+}

@@ -215,7 +215,8 @@ const THEME_PAGES = {
   'theme-thuvienphapluat': 'thuvienphapluat.html',
   'theme-premiere': 'premiere.html',
   'theme-claude': 'claude.html',
-  'theme-chatgpt': 'chatgpt.html'
+  'theme-chatgpt': 'chatgpt.html',
+  'theme-teams': 'teams.html'
 };
 
 // Single source of truth for per-page control id prefixes.
@@ -259,6 +260,7 @@ function getThemeForCurrentPage() {
   if (path.endsWith('premiere.html')) return 'theme-premiere';
   if (path.endsWith('claude.html')) return 'theme-claude';
   if (path.endsWith('chatgpt.html')) return 'theme-chatgpt';
+  if (path.endsWith('teams.html')) return 'theme-teams';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -538,6 +540,7 @@ function loadSavedState() {
     state.linkedinTitle = localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn';
     state.autocadTitle = localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg';
     state.tvplTitle = localStorage.getItem('stealth_title_tvpl') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ';
+    state.teamsTitle = localStorage.getItem('stealth_title_teams') || 'Dong Mia';
 
 
     const saved = localStorage.getItem('excel_reader_state');
@@ -757,6 +760,11 @@ function applyTheme(themeName) {
     document.title = `${docTitle} - ChatGPT`;
     const gptTitle = document.getElementById('chatgpt-doc-title');
     if (gptTitle) gptTitle.textContent = docTitle;
+  } else if (themeName === 'theme-teams') {
+    const docTitle = state.teamsTitle || 'Dong Mia';
+    document.title = `${docTitle} | Chat | Microsoft Teams`;
+    const tTitle = document.getElementById('teams-doc-title');
+    if (tTitle) tTitle.textContent = docTitle;
   }
 
   applyStyles();
@@ -1095,6 +1103,27 @@ function initTitleEditing() {
       if (e.key === 'Enter') {
         e.preventDefault();
         gptTitle.blur();
+      }
+    });
+  }
+
+  const teamsTitle = document.getElementById('teams-doc-title');
+  if (teamsTitle) {
+    teamsTitle.addEventListener('blur', () => {
+      let val = teamsTitle.textContent.trim();
+      if (!val) val = 'Dong Mia';
+      teamsTitle.textContent = val;
+      state.teamsTitle = val;
+      localStorage.setItem('stealth_title_teams', val);
+      if (state.theme === 'theme-teams') {
+        document.title = `${val} | Chat | Microsoft Teams`;
+      }
+      showPageFlipToast(`✅ Đã đổi người trò chuyện Teams: <b>${escapeHtml(val)}</b>`);
+    });
+    teamsTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        teamsTitle.blur();
       }
     });
   }
@@ -2385,7 +2414,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = '';
     if (tvBoss) tvBoss.style.display = 'none';
 
-    ['premiere', 'claude', 'chatgpt'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = '';
@@ -2465,7 +2494,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = 'none';
     if (tvBoss) tvBoss.style.display = 'block';
 
-    ['premiere', 'claude', 'chatgpt'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = 'none';
@@ -3276,6 +3305,7 @@ const THEME_RENDERERS = {
   'theme-premiere': { append: appendPremiereBatch, streams: ['premiere-story-stream'] },
   'theme-claude': { append: appendClaudeBatch, streams: ['claude-story-stream'] },
   'theme-chatgpt': { append: appendChatGPTBatch, streams: ['chatgpt-story-stream'] },
+  'theme-teams': { append: appendTeamsBatch, streams: ['teams-story-stream'] },
   // Google Sheets / Excel (spreadsheet table) is the default
   default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
 };
@@ -3940,7 +3970,8 @@ const ACTIVE_ROW_SPECS = {
   'theme-thuvienphapluat': { id: 'tvpl-clause-', cls: 'active-clause' },
   'theme-premiere': { id: 'pr-caption-', cls: 'active-caption' },
   'theme-claude': { id: 'claude-para-', cls: 'active-para' },
-  'theme-chatgpt': { id: 'gpt-para-', cls: 'active-para' }
+  'theme-chatgpt': { id: 'gpt-para-', cls: 'active-para' },
+  'theme-teams': { id: 'teams-msg-', cls: 'active-msg' }
 };
 
 // Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
@@ -4140,6 +4171,7 @@ function getActiveScrollContainer() {
     'theme-premiere': 'premiere-transcript-scroll-container',
     'theme-claude': 'claude-chat-scroll-container',
     'theme-chatgpt': 'chatgpt-chat-scroll-container',
+    'theme-teams': 'teams-chat-scroll-container',
   };
   const id = containerMap[state.theme];
   if (id) {
@@ -4225,6 +4257,7 @@ function initContinuousScrollListeners() {
     document.getElementById('premiere-transcript-scroll-container'),
     document.getElementById('claude-chat-scroll-container'),
     document.getElementById('chatgpt-chat-scroll-container'),
+    document.getElementById('teams-chat-scroll-container'),
   ];
   scrollContainers.forEach(container => {
     if (container) {
@@ -4424,4 +4457,43 @@ function appendChatGPTBatch(count) {
     el.innerHTML = `${heading}<p>${escapeHtml(chunk.text)}</p>`;
     return el;
   });
+}
+
+function appendTeamsBatch(count) {
+  const stream = document.getElementById('teams-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+
+    const cardEl = document.createElement('div');
+    cardEl.className = 'teams-doc-paragraph-card';
+    cardEl.id = `teams-msg-${chunk.globalIndex}`;
+    cardEl.dataset.index = chunk.globalIndex;
+    cardEl.dataset.page = chunk.page;
+
+    let headingHtml = '';
+    if (chunk.indexInPage === 0) {
+      headingHtml = `<div class="teams-doc-heading">Phần ${chunk.page}: Báo cáo tiến độ &amp; Hợp đồng dự án</div>`;
+    }
+
+    cardEl.innerHTML = `
+      ${headingHtml}
+      <div class="teams-doc-body">${escapeHtml(chunk.text)}</div>
+      <div class="teams-doc-meta">&bull; Trang ${chunk.page} - Đoạn #${chunk.globalIndex + 1}</div>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    cardEl.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(cardEl);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
 }
