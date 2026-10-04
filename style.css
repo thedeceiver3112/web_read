@@ -9702,9 +9702,1621 @@ body.controls-hidden {
 #figma-canvas-scroll-container,
 #canva-canvas-scroll-container,
 #ppt-canvas-scroll-container,
-#tvpl-document-scroll-container {
+#tvpl-document-scroll-container,
+#premiere-transcript-scroll-container,
+#claude-chat-scroll-container,
+#chatgpt-chat-scroll-container {
   overflow-y: auto !important;
   min-height: 0 !important;
   flex: 1 1 0% !important;
   -webkit-overflow-scrolling: touch !important;
+}
+
+
+
+
+/* ==========================================================================
+   THEME 14: ADOBE PREMIERE PRO 2026 (.theme-premiere) - HIGH FIDELITY
+   ========================================================================== */
+body.theme-premiere {
+  background: #181818;
+  color: #c8c8c8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  user-select: none;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+body.theme-premiere * {
+  box-sizing: border-box;
+}
+
+body.theme-premiere.has-pinned-navbar {
+  padding-top: var(--unav-height, 38px) !important;
+}
+body.theme-premiere.controls-hidden {
+  padding-top: 0 !important;
+}
+
+.pr-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  background: #181818;
+  overflow: hidden;
+}
+
+/* Premiere Titlebar - Clear, Bold, Standout */
+.pr-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  min-height: 38px;
+  background: #0f0f0f;
+  border-bottom: 1px solid #282828;
+  padding: 0 10px;
+  font-size: 12.5px;
+  flex-shrink: 0;
+}
+.pr-title-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.pr-logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.pr-menu {
+  display: flex;
+  gap: 16px;
+  color: #d1d1d1;
+  font-size: 13px;
+  font-weight: 500;
+}
+.pr-menu span {
+  cursor: pointer;
+  padding: 4px 2px;
+  transition: color 0.15s;
+}
+.pr-menu span:hover {
+  color: #ffffff;
+}
+.pr-title-center {
+  color: #aaaaaa;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.pr-win {
+  display: flex;
+  gap: 4px;
+  color: #aaaaaa;
+  font-size: 13px;
+}
+.pr-win span {
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s;
+}
+.pr-win span:hover {
+  background: #252525;
+  color: #fff;
+}
+.pr-win span.x:hover {
+  background: #e81123;
+  color: #fff;
+}
+
+/* Premiere Headerbar - Big Mode Pills & Workspaces */
+.pr-headerbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 42px;
+  min-height: 42px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #2b2b2b;
+  padding: 0 14px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.pr-modes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #141414;
+  padding: 3px;
+  border-radius: 6px;
+  border: 1px solid #282828;
+}
+.pr-modes span {
+  color: #999;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.pr-modes span:hover {
+  color: #fff;
+}
+.pr-modes span.active {
+  color: #fff;
+  background: #2563eb;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.pr-project-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.3px;
+}
+.pr-edited {
+  color: #888;
+  font-weight: normal;
+  font-size: 12px;
+}
+.pr-ws {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.pr-ws span {
+  color: #a3a3a3;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.pr-ws span:hover {
+  color: #fff;
+}
+.pr-ws span.active {
+  color: #3b82f6;
+  font-weight: 600;
+  border-bottom: 2px solid #3b82f6;
+  border-radius: 0;
+}
+
+.pr-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-height: 0;
+  gap: 4px;
+  padding: 4px;
+  background: #111;
+  overflow: hidden;
+}
+.pr-top {
+  display: flex;
+  flex: 1.15 1 0%;
+  min-height: 0;
+  gap: 4px;
+}
+.pr-bottom {
+  display: flex;
+  flex: 0.85 1 0%;
+  min-height: 0;
+  gap: 4px;
+}
+
+.pr-panel {
+  background: #202020;
+  border: 1px solid #2d2d2d;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.pr-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #181818;
+  border-bottom: 1px solid #2d2d2d;
+  padding: 4px 8px 0 8px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.pr-tabs span {
+  padding: 6px 12px;
+  color: #949494;
+  cursor: pointer;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  font-weight: 500;
+}
+.pr-tabs span:hover {
+  color: #ddd;
+}
+.pr-tabs span.active {
+  color: #ffffff;
+  background: #202020;
+  border: 1px solid #2d2d2d;
+  border-bottom: 1px solid #202020;
+  margin-bottom: -1px;
+  font-weight: 600;
+}
+.pr-tab-menu {
+  margin-left: auto;
+  color: #888;
+  font-size: 15px;
+}
+
+/* Premiere Text Panel (Novel Container) */
+.pr-text-panel {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.pr-subtabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #282828;
+  flex-shrink: 0;
+}
+.pr-subtabs span {
+  color: #888;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pr-subtabs span.active {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.15);
+  font-weight: 600;
+}
+.pr-text-search {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #141414;
+  border: 1px solid #2d2d2d;
+  border-radius: 4px;
+  padding: 3px 10px;
+  color: #888;
+  font-size: 12px;
+}
+.pr-text-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #181818;
+  border-bottom: 1px solid #262626;
+  font-size: 11.5px;
+  color: #888;
+  flex-shrink: 0;
+}
+.pr-badge-lang {
+  background: #2a2a3e;
+  color: #9999FF;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+}
+.pr-text-right {
+  margin-left: auto;
+  color: #3b82f6;
+  cursor: pointer;
+  font-weight: 500;
+}
+.pr-text-scroll {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 16px;
+  background: #1c1c1c;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  user-select: text;
+}
+.pr-cap {
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background: #232323;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+.pr-cap:hover {
+  background: #2a2a2a;
+}
+.pr-cap.active-caption {
+  background: rgba(59, 130, 246, 0.16);
+  border-left-color: #3b82f6;
+}
+.pr-cap-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 11.5px;
+}
+.pr-cap-speaker {
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10.5px;
+}
+.pr-cap-speaker.s1 {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+.pr-cap-speaker.s0 {
+  background: #4c1d63;
+  color: #e9d5ff;
+}
+.pr-cap-tc {
+  color: #38bdf8;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+.pr-cap-text {
+  color: #e2e8f0;
+  line-height: 1.65;
+  font-size: 13.5px;
+}
+
+/* Premiere Program Monitor - High Realistic 4K Visual */
+.pr-program {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.pr-monitor {
+  flex: 1 1 0%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  min-height: 0;
+  overflow: hidden;
+}
+.pr-frame {
+  aspect-ratio: 16/9;
+  width: 100%;
+  max-height: 100%;
+  background: #0b1320;
+  border: 1px solid #333;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.pr-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pr-scene-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Lower Third */
+.pr-lower-third {
+  position: absolute;
+  bottom: 24px;
+  left: 28px;
+  display: flex;
+  background: rgba(10, 15, 26, 0.88);
+  backdrop-filter: blur(8px);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.pr-lt-bar {
+  width: 5px;
+  background: linear-gradient(180deg, #38bdf8 0%, #2563eb 100%);
+}
+.pr-lt-content {
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pr-lt-content b {
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+.pr-lt-content span {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.pr-mon-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: #181818;
+  border-top: 1px solid #282828;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.pr-tc-blue {
+  color: #38bdf8;
+  font-family: 'Consolas', monospace;
+  font-weight: bold;
+}
+.pr-tc-blue.big {
+  font-size: 14px;
+}
+.pr-sel {
+  color: #aaa;
+  cursor: pointer;
+  font-weight: 500;
+}
+.pr-tc-dur {
+  color: #888;
+  font-family: 'Consolas', monospace;
+}
+.pr-mon-scrub {
+  height: 4px;
+  background: #252525;
+  position: relative;
+  flex-shrink: 0;
+}
+.pr-mon-scrub i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 33%;
+  background: #3b82f6;
+}
+.pr-transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px;
+  background: #1c1c1c;
+  border-top: 1px solid #282828;
+  color: #a0a0a0;
+  flex-shrink: 0;
+}
+.pr-transport span {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.pr-transport span:hover {
+  color: #fff;
+  background: #262626;
+}
+.pr-transport span.pr-play {
+  color: #38bdf8;
+}
+
+/* Premiere Project Bin */
+.pr-project {
+  flex: 0 0 240px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.pr-proj-path {
+  padding: 5px 10px;
+  background: #181818;
+  border-bottom: 1px solid #282828;
+  font-size: 11px;
+  color: #999;
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.pr-media-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 10px;
+  background: #161616;
+  color: #777;
+  font-size: 11px;
+  border-bottom: 1px solid #242424;
+  flex-shrink: 0;
+}
+.pr-media-list {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  background: #1a1a1a;
+  min-height: 0;
+}
+.pr-media-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid #202020;
+  cursor: pointer;
+}
+.pr-media-row:hover {
+  background: #262626;
+}
+.pr-media-ic {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.pr-media-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #ddd;
+}
+.pr-media-dur {
+  color: #777;
+  font-family: 'Consolas', monospace;
+  font-size: 11px;
+}
+
+/* Premiere Tools */
+.pr-tools {
+  width: 36px;
+  min-width: 36px;
+  background: #1c1c1c;
+  border: 1px solid #2d2d2d;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.pr-tools span {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pr-tools span:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+.pr-tools span.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+/* Premiere Timeline */
+.pr-timeline {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.pr-tl-top {
+  display: flex;
+  align-items: center;
+  background: #181818;
+  border-bottom: 1px solid #282828;
+  padding: 4px 10px;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.pr-ruler {
+  flex: 1;
+  height: 18px;
+  position: relative;
+  font-family: 'Consolas', monospace;
+  font-size: 10px;
+  color: #777;
+  overflow: hidden;
+}
+.pr-ruler span {
+  position: absolute;
+  top: 0;
+}
+.pr-tracks {
+  flex: 1 1 0%;
+  background: #161616;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 0;
+  min-height: 0;
+}
+.pr-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 33%;
+  width: 1.5px;
+  background: #38bdf8;
+  z-index: 10;
+  pointer-events: none;
+}
+.pr-playhead::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -5px;
+  width: 11px;
+  height: 9px;
+  background: #38bdf8;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.pr-track {
+  display: flex;
+  height: 26px;
+  min-height: 26px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #242424;
+  flex-shrink: 0;
+}
+.pr-track-head {
+  width: 75px;
+  background: #202020;
+  border-right: 1px solid #282828;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 6px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.pr-tk-name {
+  font-weight: 700;
+  color: #999;
+}
+.pr-tk-ico {
+  font-size: 10px;
+  color: #777;
+  border: 1px solid #333;
+  padding: 0 3px;
+  border-radius: 2px;
+}
+.pr-track-lane {
+  flex: 1;
+  position: relative;
+  background: #181818;
+}
+.pr-clip {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  border-radius: 2px;
+  padding: 3px 8px;
+  font-size: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #fff;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.pr-clip.vid { background: #5353a2; }
+.pr-clip.gfx { background: #b0437e; }
+.pr-clip.aud { background: #2e7d56; }
+.pr-clip.aud2 { background: #3d6a7d; }
+
+.pr-meters {
+  width: 32px;
+  min-width: 32px;
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 3px;
+  display: flex;
+  padding: 8px 3px;
+  gap: 3px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.pr-meter {
+  flex: 1;
+  height: 100%;
+  background: #111;
+  border-radius: 1px;
+  display: flex;
+  align-items: flex-end;
+}
+.pr-meter i {
+  width: 100%;
+  background: linear-gradient(0deg, #22c55e 0%, #eab308 70%, #ef4444 100%);
+  border-radius: 1px;
+}
+.pr-meter-scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #666;
+  height: 100%;
+  padding-left: 1px;
+}
+
+/* Premiere Boss View */
+.pr-boss-head {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2d2d2d;
+}
+.pr-boss-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+.pr-boss-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #262626;
+}
+.pr-boss-table td:first-child {
+  color: #999;
+  width: 180px;
+}
+.pr-boss-table td:last-child {
+  color: #eee;
+  font-family: 'Consolas', monospace;
+}
+.pr-boss-queue {
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 4px;
+  padding: 12px;
+}
+.pr-boss-queue b {
+  color: #eee;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.pr-q {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.pr-q-bar {
+  flex: 1;
+  height: 7px;
+  background: #262626;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.pr-q-bar i {
+  display: block;
+  height: 100%;
+  background: #3b82f6;
+}
+
+
+/* ==========================================================================
+   THEME 15: CLAUDE AI (.theme-claude)
+   ========================================================================== */
+body.theme-claude {
+  background: #FAF9F5;
+  color: #1D1C16;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+}
+body.theme-claude * {
+  box-sizing: border-box;
+}
+
+.cl-app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: #FAF9F5;
+}
+.cl-sidebar {
+  width: 260px;
+  background: #F5F4EE;
+  border-right: 1px solid #E5E3D8;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.cl-side-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px;
+}
+.cl-wordmark {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  color: #1D1C16;
+  letter-spacing: -0.3px;
+}
+.cl-icon-btn {
+  color: #6E6B62;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.cl-newchat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ECE9DF;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1D1C16;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.cl-newchat:hover {
+  background: #E2DFD3;
+}
+.cl-plus {
+  color: #D97757;
+  display: flex;
+}
+.cl-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cl-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: #6E6B62;
+  font-size: 13px;
+  cursor: pointer;
+}
+.cl-nav-item:hover {
+  background: #ECE9DF;
+  color: #1D1C16;
+}
+.cl-recents-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9C988D;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 8px 2px 8px;
+}
+.cl-recents {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cl-recent {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #4A4840;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.cl-recent:hover {
+  background: #ECE9DF;
+  color: #1D1C16;
+}
+.cl-recent.active {
+  background: #ECE9DF;
+  color: #1D1C16;
+  font-weight: 500;
+}
+.cl-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  background: #ECE9DF;
+  cursor: pointer;
+}
+.cl-user-av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #D97757;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+}
+.cl-user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.cl-user-info b {
+  font-size: 12px;
+  color: #1D1C16;
+}
+.cl-user-info span {
+  font-size: 10px;
+  color: #8C887B;
+}
+.cl-user-caret {
+  color: #8C887B;
+}
+
+.cl-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #FAF9F5;
+}
+.cl-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-bottom: 1px solid #E5E3D8;
+}
+.cl-chat-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1D1C16;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.cl-top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cl-share {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #D1CEBF;
+  font-size: 12px;
+  color: #4A4840;
+  cursor: pointer;
+}
+.cl-share:hover {
+  background: #F5F4EE;
+}
+
+.cl-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 24px 20px;
+  display: flex;
+  justify-content: center;
+}
+.cl-thread {
+  width: 100%;
+  max-width: 760px;
+}
+
+.cl-user-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+.cl-user-bubble {
+  max-width: 85%;
+  background: #F5F4EE;
+  border: 1px solid #E5E3D8;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1D1C16;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cl-file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #DCD9CD;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.cl-file-ic {
+  background: #E05252;
+  color: #fff;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+.cl-file-chip b {
+  font-size: 12px;
+  display: block;
+  color: #1D1C16;
+}
+.cl-file-chip span {
+  font-size: 10px;
+  color: #8C887B;
+}
+.cl-av-sm {
+  display: none;
+}
+
+.cl-assistant {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.cl-assistant-mark {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.cl-assistant-body {
+  flex: 1;
+  min-width: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #2D2B24;
+}
+
+/* Claude novel paragraphs */
+.cl-para {
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.cl-para:hover {
+  background: #F0EFEA;
+}
+.cl-para.active-para {
+  background: #ECE9DF;
+  border-left: 3px solid #D97757;
+  padding-left: 7px;
+}
+.cl-h {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1D1C16;
+  margin: 16px 0 8px 0;
+}
+.cl-list {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+.cl-list li {
+  margin-bottom: 6px;
+}
+
+.cl-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  color: #8C887B;
+  font-size: 12px;
+}
+.cl-actions span {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.cl-actions span:hover {
+  color: #1D1C16;
+}
+.cl-retry {
+  margin-left: 8px;
+}
+.cl-mistake {
+  font-size: 11px;
+  color: #ABA79C;
+  margin-top: 8px;
+}
+
+.cl-composer-wrap {
+  padding: 0 24px 20px 24px;
+  display: flex;
+  justify-content: center;
+}
+.cl-composer {
+  width: 100%;
+  max-width: 760px;
+  background: #F5F4EE;
+  border: 1px solid #DCD9CD;
+  border-radius: 16px;
+  padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+.cl-input {
+  color: #8C887B;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.cl-comp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cl-comp-left {
+  display: flex;
+  gap: 12px;
+  color: #6E6B62;
+}
+.cl-cbtn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.cl-cbtn:hover {
+  color: #1D1C16;
+}
+.cl-comp-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cl-model {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4A4840;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+.cl-send {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #D97757;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+
+/* ==========================================================================
+   THEME 16: CHATGPT (.theme-chatgpt)
+   ========================================================================== */
+body.theme-chatgpt {
+  background: #212121;
+  color: #ECECEC;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+}
+body.theme-chatgpt * {
+  box-sizing: border-box;
+}
+
+.gpt-app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: #212121;
+}
+.gpt-sidebar {
+  width: 260px;
+  background: #171717;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 8px;
+  flex-shrink: 0;
+  border-right: 1px solid #2a2a2a;
+}
+.gpt-side-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+}
+.gpt-logo {
+  color: #ECECEC;
+  display: flex;
+}
+.gpt-icon-btn {
+  color: #B4B4B4;
+  cursor: pointer;
+  display: flex;
+}
+.gpt-icon-btn:hover {
+  color: #fff;
+}
+.gpt-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.gpt-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: #ECECEC;
+  font-size: 13px;
+  cursor: pointer;
+}
+.gpt-nav-item:hover {
+  background: #212121;
+}
+.gpt-chats-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8E8E8E;
+  padding: 8px 10px 2px 10px;
+}
+.gpt-chats {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.gpt-chat {
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #C5C5C5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.gpt-chat:hover {
+  background: #212121;
+  color: #fff;
+}
+.gpt-chat.active {
+  background: #212121;
+  color: #fff;
+}
+.gpt-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.gpt-user:hover {
+  background: #212121;
+}
+.gpt-user-av {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #10a37f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+}
+.gpt-user-info {
+  display: flex;
+  flex-direction: column;
+}
+.gpt-user-info b {
+  font-size: 13px;
+  color: #ECECEC;
+}
+.gpt-user-info span {
+  font-size: 11px;
+  color: #8E8E8E;
+}
+
+.gpt-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #212121;
+}
+.gpt-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+.gpt-model {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ECECEC;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+.gpt-top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.gpt-share {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 16px;
+  background: #2F2F2F;
+  font-size: 12px;
+  color: #ECECEC;
+  cursor: pointer;
+}
+.gpt-share:hover {
+  background: #3a3a3a;
+}
+
+.gpt-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+.gpt-thread {
+  width: 100%;
+  max-width: 760px;
+}
+
+.gpt-user-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+.gpt-file-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #2F2F2F;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.gpt-file-ic {
+  background: #E05252;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+.gpt-file-card b {
+  font-size: 13px;
+  display: block;
+  color: #ECECEC;
+}
+.gpt-file-card span {
+  font-size: 10px;
+  color: #8E8E8E;
+}
+.gpt-user-bubble {
+  max-width: 80%;
+  background: #2F2F2F;
+  border-radius: 18px;
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #ECECEC;
+}
+
+.gpt-assistant {
+  margin-bottom: 28px;
+}
+.gpt-thought {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #8E8E8E;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+.gpt-para {
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #D1D5DB;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.gpt-para:hover {
+  background: #2a2a2a;
+}
+.gpt-para.active-para {
+  background: #2e333d;
+  border-left: 3px solid #10a37f;
+  padding-left: 7px;
+  color: #fff;
+}
+.gpt-h {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ECECEC;
+  margin: 14px 0 8px 0;
+}
+.gpt-list {
+  padding-left: 20px;
+  margin: 8px 0;
+  color: #D1D5DB;
+}
+.gpt-list li {
+  margin-bottom: 6px;
+}
+.gpt-code {
+  background: #171717;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'Consolas', monospace;
+  font-size: 13px;
+  color: #5eead4;
+  overflow-x: auto;
+  margin: 10px 0;
+}
+.gpt-code-head {
+  display: flex;
+  justify-content: space-between;
+  color: #8E8E8E;
+  font-size: 11px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #282828;
+  padding-bottom: 4px;
+}
+
+.gpt-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  color: #8E8E8E;
+  font-size: 13px;
+}
+.gpt-actions span {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.gpt-actions span:hover {
+  color: #fff;
+}
+
+.gpt-composer-wrap {
+  padding: 0 20px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.gpt-composer {
+  width: 100%;
+  max-width: 760px;
+  background: #2F2F2F;
+  border-radius: 24px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.gpt-input {
+  flex: 1;
+  color: #8E8E8E;
+  font-size: 14px;
+}
+.gpt-cbtn {
+  color: #B4B4B4;
+  cursor: pointer;
+  display: flex;
+}
+.gpt-cbtn:hover {
+  color: #fff;
+}
+.gpt-voice {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ECECEC;
+  color: #171717;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.gpt-disclaimer {
+  font-size: 11px;
+  color: #8E8E8E;
+}
+
+
+/* Dark & Light Theme Stealth Editable Focus */
+.theme-premiere .stealth-editable:hover,
+.theme-premiere [data-stealth-key]:hover,
+.theme-chatgpt .stealth-editable:hover,
+.theme-chatgpt [data-stealth-key]:hover {
+  outline: 1px dashed rgba(59, 130, 246, 0.6) !important;
+  background-color: rgba(59, 130, 246, 0.12) !important;
+}
+
+.theme-premiere .stealth-editable:focus,
+.theme-premiere [data-stealth-key]:focus,
+.theme-chatgpt .stealth-editable:focus,
+.theme-chatgpt [data-stealth-key]:focus {
+  outline: 2px solid #3b82f6 !important;
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+.theme-claude .stealth-editable:hover,
+.theme-claude [data-stealth-key]:hover {
+  outline: 1px dashed rgba(217, 119, 87, 0.6) !important;
+  background-color: rgba(217, 119, 87, 0.08) !important;
+}
+
+.theme-claude .stealth-editable:focus,
+.theme-claude [data-stealth-key]:focus {
+  outline: 2px solid #d97757 !important;
+  background-color: #faf9f5 !important;
+  color: #1d1c16 !important;
 }

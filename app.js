@@ -212,7 +212,10 @@ const THEME_PAGES = {
   'theme-figma': 'figma.html',
   'theme-canva': 'canva.html',
   'theme-powerpoint': 'powerpoint.html',
-  'theme-thuvienphapluat': 'thuvienphapluat.html'
+  'theme-thuvienphapluat': 'thuvienphapluat.html',
+  'theme-premiere': 'premiere.html',
+  'theme-claude': 'claude.html',
+  'theme-chatgpt': 'chatgpt.html'
 };
 
 // Single source of truth for per-page control id prefixes.
@@ -253,6 +256,9 @@ function getThemeForCurrentPage() {
   if (path.endsWith('figma.html')) return 'theme-figma';
   if (path.endsWith('canva.html')) return 'theme-canva';
   if (path.endsWith('powerpoint.html') || path.endsWith('ppt.html')) return 'theme-powerpoint';
+  if (path.endsWith('premiere.html')) return 'theme-premiere';
+  if (path.endsWith('claude.html')) return 'theme-claude';
+  if (path.endsWith('chatgpt.html')) return 'theme-chatgpt';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -425,6 +431,9 @@ async function restoreDocumentCache() {
 }
 
 const FAVICONS = {
+  'theme-premiere': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%2300005B%22/%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2244%22%20height%3D%2244%22%20rx%3D%228%22%20fill%3D%22none%22%20stroke%3D%22%239999FF%22%20stroke-width%3D%222.5%22/%3E%3Cpath%20fill%3D%22%239999FF%22%20d%3D%22M11%2014h8c4.2%200%207%202.6%207%206.6s-2.8%206.6-7%206.6h-4.2V34H11V14zm3.8%209.8H19c2.2%200%203.4-1.3%203.4-3.2s-1.2-3.2-3.4-3.2h-4.2v6.4z%22/%3E%3Cpath%20fill%3D%22%239999FF%22%20d%3D%22M28.5%2019h3.5v2.6c.9-1.8%202.5-2.9%204.9-2.9v3.8c-3-.2-4.7%201.3-4.7%204.6V34h-3.7V19z%22/%3E%3C/svg%3E",
+  'theme-claude': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%23D97757%22/%3E%3Cg%20fill%3D%22%23FFFFFF%22%20transform%3D%22translate%2824%2024%29%22%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-15.75%22%20width%3D%223.57%22%20height%3D%2213.65%22%20rx%3D%221.78%22%20transform%3D%22rotate%287%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-12.60%22%20width%3D%223.57%22%20height%3D%2210.50%22%20rx%3D%221.78%22%20transform%3D%22rotate%2837%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-15.23%22%20width%3D%223.57%22%20height%3D%2213.13%22%20rx%3D%221.78%22%20transform%3D%22rotate%2867%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-11.55%22%20width%3D%223.57%22%20height%3D%229.45%22%20rx%3D%221.78%22%20transform%3D%22rotate%2897%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-16.28%22%20width%3D%223.57%22%20height%3D%2214.18%22%20rx%3D%221.78%22%20transform%3D%22rotate%28127%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-13.12%22%20width%3D%223.57%22%20height%3D%2211.03%22%20rx%3D%221.78%22%20transform%3D%22rotate%28157%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-14.70%22%20width%3D%223.57%22%20height%3D%2212.60%22%20rx%3D%221.78%22%20transform%3D%22rotate%28187%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-12.08%22%20width%3D%223.57%22%20height%3D%229.98%22%20rx%3D%221.78%22%20transform%3D%22rotate%28217%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-15.75%22%20width%3D%223.57%22%20height%3D%2213.65%22%20rx%3D%221.78%22%20transform%3D%22rotate%28247%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-12.60%22%20width%3D%223.57%22%20height%3D%2210.50%22%20rx%3D%221.78%22%20transform%3D%22rotate%28277%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-15.23%22%20width%3D%223.57%22%20height%3D%2213.13%22%20rx%3D%221.78%22%20transform%3D%22rotate%28307%29%22/%3E%3Crect%20x%3D%22-1.78%22%20y%3D%22-12.08%22%20width%3D%223.57%22%20height%3D%229.98%22%20rx%3D%221.78%22%20transform%3D%22rotate%28337%29%22/%3E%3C/g%3E%3C/svg%3E",
+  'theme-chatgpt': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%23000000%22/%3E%3Cg%20transform%3D%22translate%2810%2010%29%20scale%281.1667%29%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M22.2819%209.8211a5.9847%205.9847%200%200%200-.5157-4.9108%206.0462%206.0462%200%200%200-6.5098-2.9A6.0651%206.0651%200%200%200%204.9807%204.1818a5.9847%205.9847%200%200%200-3.9977%202.9%206.0462%206.0462%200%200%200%20.7427%207.0966%205.98%205.98%200%200%200%20.511%204.9107%206.051%206.051%200%200%200%206.5146%202.9001A5.9847%205.9847%200%200%200%2013.2599%2024a6.0557%206.0557%200%200%200%205.7718-4.2058%205.9894%205.9894%200%200%200%203.9977-2.9001%206.0557%206.0557%200%200%200-.7475-7.0729zm-9.022%2012.6081a4.4755%204.4755%200%200%201-2.8764-1.0408l.1419-.0804%204.7783-2.7582a.7948.7948%200%200%200%20.3927-.6813v-6.7369l2.02%201.1686a.071.071%200%200%201%20.038.052v5.5826a4.504%204.504%200%200%201-4.4945%204.4944zm-9.6607-4.1254a4.4708%204.4708%200%200%201-.5346-3.0137l.142.0852%204.783%202.7582a.7712.7712%200%200%200%20.7806%200l5.8428-3.3685v2.3324a.0804.0804%200%200%201-.0332.0615L9.74%2019.9502a4.4992%204.4992%200%200%201-6.1408-1.6464zM2.3408%207.8956a4.485%204.485%200%200%201%202.3655-1.9728V11.6a.7664.7664%200%200%200%20.3879.6765l5.8144%203.3543-2.0201%201.1685a.0757.0757%200%200%201-.071%200l-4.8303-2.7865A4.504%204.504%200%200%201%202.3408%207.872zm16.5963%203.8558L13.1038%208.364%2015.1192%207.2a.0757.0757%200%200%201%20.071%200l4.8303%202.7913a4.4944%204.4944%200%200%201-.6765%208.1042v-5.6772a.79.79%200%200%200-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759%200%200%200-.7854%200L9.409%209.2297V6.8974a.0662.0662%200%200%201%20.0284-.0615l4.8303-2.7866a4.4992%204.4992%200%200%201%206.6802%204.66zM8.3065%2012.863l-2.02-1.1638a.0804.0804%200%200%201-.038-.0567V6.0742a4.4992%204.4992%200%200%201%207.3757-3.4537l-.142.0805L8.704%205.459a.7948.7948%200%200%200-.3927.6813zm1.0976-2.3654l2.602-1.4998%202.6069%201.4998v2.9994l-2.5974%201.4997-2.6067-1.4997Z%22/%3E%3C/g%3E%3C/svg%3E",
   'theme-googlesheets': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M37%2045H11c-2.2%200-4-1.8-4-4V7c0-2.2%201.8-4%204-4h18l12%2012v26c0%202.2-1.8%204-4%204z%22/%3E%20%3Cpath%20fill%3D%22%2387CEAC%22%20d%3D%22M29%203l12%2012H29V3z%22/%3E%20%3Cpath%20fill%3D%22%230B8043%22%20d%3D%22M29%2015h12l-12-12v12z%22%20opacity%3D%220.2%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2221%22%20width%3D%2220%22%20height%3D%2218%22%20rx%3D%221.5%22/%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M14%2026.5h20v2H14zm0%205.5h20v2H14zm8-11h2.5v18H22z%22/%3E%20%3C/svg%3E",
   'theme-googledocs': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M37%2045H11c-2.2%200-4-1.8-4-4V7c0-2.2%201.8-4%204-4h18l12%2012v26c0%202.2-1.8%204-4%204z%22/%3E%20%3Cpath%20fill%3D%22%23A1C2FA%22%20d%3D%22M29%203l12%2012H29V3z%22/%3E%20%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M29%2015h12l-12-12v12z%22%20opacity%3D%220.2%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2222%22%20width%3D%2220%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2227.5%22%20width%3D%2220%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2233%22%20width%3D%2213%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3C/svg%3E",
   'theme-excel': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22ex-g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23107C41%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230B552C%22/%3E%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22ex-g2%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2321A366%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23107C41%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20x%3D%2215%22%20y%3D%227%22%20width%3D%2227%22%20height%3D%2234%22%20rx%3D%224%22%20fill%3D%22url%28%23ex-g1%29%22/%3E%20%3Crect%20x%3D%2221%22%20y%3D%2213%22%20width%3D%2215%22%20height%3D%2222%22%20rx%3D%221%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.15%22/%3E%20%3Cpath%20d%3D%22M21%2019h15M21%2025h15M21%2030h15M28%2013v22%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.9%22/%3E%20%3Crect%20x%3D%226%22%20y%3D%2211%22%20width%3D%2221%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22url%28%23ex-g2%29%22%20filter%3D%22drop-shadow%280%203px%206px%20rgba%280%2C0%2C0%2C0.35%29%29%22/%3E%20%3Cpath%20d%3D%22M11.5%2018l4.8%206-4.8%206h3.2l3.2-4.4%203.2%204.4h3.2l-4.8-6%204.8-6h-3.2l-3.2%204.4-3.2-4.4h-3.2z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
@@ -731,6 +740,23 @@ function applyTheme(themeName) {
     document.title = `Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT`;
     const tvTitle = document.getElementById('tvpl-doc-title');
     if (tvTitle) tvTitle.textContent = docTitle;
+  } else if (themeName === 'theme-premiere') {
+    const docTitle = state.premiereTitle || 'Adobe Premiere Pro 2026 - D:\\Projects\\Brand_Film_Q3\\Brand_Film_Q3.prproj *';
+    document.title = docTitle;
+    const prTitle = document.getElementById('premiere-doc-title');
+    if (prTitle) prTitle.textContent = docTitle;
+    const prProj = document.getElementById('premiere-proj-name');
+    if (prProj) prProj.textContent = localStorage.getItem('stealth_premiere_proj_name') || 'Brand_Film_Q3';
+  } else if (themeName === 'theme-claude') {
+    const docTitle = state.claudeTitle || 'Phân tích báo cáo tài chính Q3';
+    document.title = `${docTitle} - Claude`;
+    const clTitle = document.getElementById('claude-doc-title');
+    if (clTitle) clTitle.textContent = docTitle;
+  } else if (themeName === 'theme-chatgpt') {
+    const docTitle = state.chatgptTitle || 'ChatGPT 5';
+    document.title = `${docTitle} - ChatGPT`;
+    const gptTitle = document.getElementById('chatgpt-doc-title');
+    if (gptTitle) gptTitle.textContent = docTitle;
   }
 
   applyStyles();
@@ -1003,6 +1029,76 @@ function initTitleEditing() {
       }
     });
   }
+
+  const prTitle = document.getElementById('premiere-doc-title');
+  if (prTitle) {
+    prTitle.addEventListener('blur', () => {
+      let val = prTitle.textContent.trim();
+      if (!val) val = 'Adobe Premiere Pro 2026 - D:\\Projects\\Brand_Film_Q3\\Brand_Film_Q3.prproj *';
+      prTitle.textContent = val;
+      state.premiereTitle = val;
+      localStorage.setItem('stealth_title_premiere', val);
+      if (state.theme === 'theme-premiere') {
+        document.title = val;
+      }
+      showPageFlipToast(`✅ Đã đổi đường dẫn Premiere: <b>${escapeHtml(val)}</b>`);
+    });
+    prTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        prTitle.blur();
+      }
+    });
+  }
+
+  const clTitle = document.getElementById('claude-doc-title');
+  if (clTitle) {
+    clTitle.addEventListener('blur', () => {
+      let val = clTitle.textContent.trim();
+      if (!val) val = 'Phân tích báo cáo tài chính Q3';
+      clTitle.textContent = val;
+      state.claudeTitle = val;
+      localStorage.setItem('stealth_title_claude', val);
+      if (state.theme === 'theme-claude') {
+        document.title = `${val} - Claude`;
+      }
+      // Sync first recent chat
+      const firstRecent = document.querySelector('.cl-recent .stealth-editable');
+      if (firstRecent) {
+        firstRecent.textContent = val;
+        localStorage.setItem('stealth_claude_recent_0', val);
+      }
+      showPageFlipToast(`✅ Đã đổi tiêu đề Claude: <b>${escapeHtml(val)}</b>`);
+    });
+    clTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        clTitle.blur();
+      }
+    });
+  }
+
+  const gptTitle = document.getElementById('chatgpt-doc-title');
+  if (gptTitle) {
+    gptTitle.addEventListener('blur', () => {
+      let val = gptTitle.textContent.trim();
+      if (!val) val = 'ChatGPT 5';
+      gptTitle.textContent = val;
+      state.chatgptTitle = val;
+      localStorage.setItem('stealth_title_chatgpt', val);
+      if (state.theme === 'theme-chatgpt') {
+        document.title = `${val} - ChatGPT`;
+      }
+      showPageFlipToast(`✅ Đã đổi tiêu đề ChatGPT: <b>${escapeHtml(val)}</b>`);
+    });
+    gptTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        gptTitle.blur();
+      }
+    });
+  }
+
 }
 
 // ==========================================================
@@ -2289,6 +2385,13 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = '';
     if (tvBoss) tvBoss.style.display = 'none';
 
+    ['premiere', 'claude', 'chatgpt'].forEach(p => {
+      const s = document.getElementById(`${p}-story-view`);
+      const b = document.getElementById(`${p}-boss-view`);
+      if (s) s.style.display = '';
+      if (b) b.style.display = 'none';
+    });
+
     // In VS Code, re-render the novel code
     if (state.theme === 'theme-vscode') {
       renderContinuousView(true);
@@ -2361,6 +2464,13 @@ function toggleBossKey() {
     const tvBoss = document.getElementById('tvpl-boss-view');
     if (tvStory) tvStory.style.display = 'none';
     if (tvBoss) tvBoss.style.display = 'block';
+
+    ['premiere', 'claude', 'chatgpt'].forEach(p => {
+      const s = document.getElementById(`${p}-story-view`);
+      const b = document.getElementById(`${p}-boss-view`);
+      if (s) s.style.display = 'none';
+      if (b) b.style.display = 'block';
+    });
 
     // In VS Code, render pure algorithm code for Boss Key
     if (state.theme === 'theme-vscode') {
@@ -3163,6 +3273,9 @@ const THEME_RENDERERS = {
   'theme-canva': { append: appendCanvaBatch, streams: ['canva-story-stream'] },
   'theme-powerpoint': { append: appendPowerPointBatch, streams: ['ppt-story-stream'] },
   'theme-thuvienphapluat': { append: appendTVPLBatch, streams: ['tvpl-story-stream'] },
+  'theme-premiere': { append: appendPremiereBatch, streams: ['premiere-story-stream'] },
+  'theme-claude': { append: appendClaudeBatch, streams: ['claude-story-stream'] },
+  'theme-chatgpt': { append: appendChatGPTBatch, streams: ['chatgpt-story-stream'] },
   // Google Sheets / Excel (spreadsheet table) is the default
   default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
 };
@@ -3824,7 +3937,10 @@ const ACTIVE_ROW_SPECS = {
   'theme-figma': { id: 'figma-layer-', cls: 'active-layer' },
   'theme-canva': { id: 'canva-block-', cls: 'active-block' },
   'theme-powerpoint': { id: 'ppt-para-', cls: 'active-bullet' },
-  'theme-thuvienphapluat': { id: 'tvpl-clause-', cls: 'active-clause' }
+  'theme-thuvienphapluat': { id: 'tvpl-clause-', cls: 'active-clause' },
+  'theme-premiere': { id: 'pr-caption-', cls: 'active-caption' },
+  'theme-claude': { id: 'claude-para-', cls: 'active-para' },
+  'theme-chatgpt': { id: 'gpt-para-', cls: 'active-para' }
 };
 
 // Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
@@ -4021,6 +4137,9 @@ function getActiveScrollContainer() {
     'theme-canva': 'canva-canvas-scroll-container',
     'theme-powerpoint': 'ppt-canvas-scroll-container',
     'theme-thuvienphapluat': 'tvpl-document-scroll-container',
+    'theme-premiere': 'premiere-transcript-scroll-container',
+    'theme-claude': 'claude-chat-scroll-container',
+    'theme-chatgpt': 'chatgpt-chat-scroll-container',
   };
   const id = containerMap[state.theme];
   if (id) {
@@ -4039,6 +4158,9 @@ function getActiveScrollContainer() {
          document.getElementById('figma-canvas-scroll-container') ||
          document.getElementById('canva-canvas-scroll-container') ||
          document.getElementById('ppt-canvas-scroll-container') ||
+         document.getElementById('premiere-transcript-scroll-container') ||
+         document.getElementById('claude-chat-scroll-container') ||
+         document.getElementById('chatgpt-chat-scroll-container') ||
          document.querySelector('.table-container');
 }
 
@@ -4100,6 +4222,9 @@ function initContinuousScrollListeners() {
     document.getElementById('canva-canvas-scroll-container'),
     document.getElementById('ppt-canvas-scroll-container'),
     document.getElementById('tvpl-document-scroll-container'),
+    document.getElementById('premiere-transcript-scroll-container'),
+    document.getElementById('claude-chat-scroll-container'),
+    document.getElementById('chatgpt-chat-scroll-container'),
   ];
   scrollContainers.forEach(container => {
     if (container) {
@@ -4237,3 +4362,66 @@ function showPageFlipToast(msg) {
   }, 1000);
 }
 
+
+
+// ==========================================================
+// 14-16. PREMIERE PRO / CLAUDE / CHATGPT RENDERERS
+// ==========================================================
+function appendSimpleThemeBatch(count, streamId, makeItem) {
+  const stream = document.getElementById(streamId);
+  if (!stream || state.allChunks.length === 0) return;
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+  const fragment = document.createDocumentFragment();
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+    const el = makeItem(chunk);
+    el.dataset.index = chunk.globalIndex;
+    el.dataset.page = chunk.page;
+    const gIdx = chunk.globalIndex;
+    el.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(el);
+  }
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+function premiereTimecode(i) {
+  const total = i * 7 + 3;
+  const pad = n => String(n).padStart(2, '0');
+  return `${pad(Math.floor(total / 3600))}:${pad(Math.floor(total / 60) % 60)}:${pad(total % 60)}:${pad((i * 11) % 25)}`;
+}
+
+function appendPremiereBatch(count) {
+  appendSimpleThemeBatch(count, 'premiere-story-stream', chunk => {
+    const el = document.createElement('div');
+    el.className = 'pr-cap';
+    el.id = `pr-caption-${chunk.globalIndex}`;
+    const speaker = chunk.page % 2 ? 'Speaker 1' : 'Speaker 2';
+    el.innerHTML = `<div class="pr-cap-meta"><span class="pr-cap-speaker s${chunk.page % 2}">${speaker}</span><span class="pr-cap-tc">${premiereTimecode(chunk.globalIndex)}</span></div><div class="pr-cap-text">${escapeHtml(chunk.text)}</div>`;
+    return el;
+  });
+}
+
+function appendClaudeBatch(count) {
+  appendSimpleThemeBatch(count, 'claude-story-stream', chunk => {
+    const el = document.createElement('div');
+    el.className = 'cl-para';
+    el.id = `claude-para-${chunk.globalIndex}`;
+    const heading = (chunk.indexInPage === 0) ? `<h3 class="cl-h">Phần ${chunk.page}</h3>` : '';
+    el.innerHTML = `${heading}<p>${escapeHtml(chunk.text)}</p>`;
+    return el;
+  });
+}
+
+function appendChatGPTBatch(count) {
+  appendSimpleThemeBatch(count, 'chatgpt-story-stream', chunk => {
+    const el = document.createElement('div');
+    el.className = 'gpt-para';
+    el.id = `gpt-para-${chunk.globalIndex}`;
+    const heading = (chunk.indexInPage === 0) ? `<h3 class="gpt-h">${chunk.page}. Phần ${chunk.page}</h3>` : '';
+    el.innerHTML = `${heading}<p>${escapeHtml(chunk.text)}</p>`;
+    return el;
+  });
+}

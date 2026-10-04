@@ -1,0 +1,851 @@
+/* ==========================================================================
+   THEME 14: ADOBE PREMIERE PRO 2026 (.theme-premiere) - HIGH FIDELITY
+   ========================================================================== */
+body.theme-premiere {
+  background: #181818;
+  color: #c8c8c8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  user-select: none;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+body.theme-premiere * {
+  box-sizing: border-box;
+}
+
+body.theme-premiere.has-pinned-navbar {
+  padding-top: var(--unav-height, 38px) !important;
+}
+body.theme-premiere.controls-hidden {
+  padding-top: 0 !important;
+}
+
+.pr-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  background: #181818;
+  overflow: hidden;
+}
+
+/* Premiere Titlebar - Clear, Bold, Standout */
+.pr-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  min-height: 38px;
+  background: #0f0f0f;
+  border-bottom: 1px solid #282828;
+  padding: 0 10px;
+  font-size: 12.5px;
+  flex-shrink: 0;
+}
+.pr-title-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.pr-logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.pr-menu {
+  display: flex;
+  gap: 16px;
+  color: #d1d1d1;
+  font-size: 13px;
+  font-weight: 500;
+}
+.pr-menu span {
+  cursor: pointer;
+  padding: 4px 2px;
+  transition: color 0.15s;
+}
+.pr-menu span:hover {
+  color: #ffffff;
+}
+.pr-title-center {
+  color: #aaaaaa;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+.pr-win {
+  display: flex;
+  gap: 4px;
+  color: #aaaaaa;
+  font-size: 13px;
+}
+.pr-win span {
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s;
+}
+.pr-win span:hover {
+  background: #252525;
+  color: #fff;
+}
+.pr-win span.x:hover {
+  background: #e81123;
+  color: #fff;
+}
+
+/* Premiere Headerbar - Big Mode Pills & Workspaces */
+.pr-headerbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 42px;
+  min-height: 42px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #2b2b2b;
+  padding: 0 14px;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.pr-modes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #141414;
+  padding: 3px;
+  border-radius: 6px;
+  border: 1px solid #282828;
+}
+.pr-modes span {
+  color: #999;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.pr-modes span:hover {
+  color: #fff;
+}
+.pr-modes span.active {
+  color: #fff;
+  background: #2563eb;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.pr-project-name {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 13.5px;
+  letter-spacing: 0.3px;
+}
+.pr-edited {
+  color: #888;
+  font-weight: normal;
+  font-size: 12px;
+}
+.pr-ws {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.pr-ws span {
+  color: #a3a3a3;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.pr-ws span:hover {
+  color: #fff;
+}
+.pr-ws span.active {
+  color: #3b82f6;
+  font-weight: 600;
+  border-bottom: 2px solid #3b82f6;
+  border-radius: 0;
+}
+
+.pr-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-height: 0;
+  gap: 4px;
+  padding: 4px;
+  background: #111;
+  overflow: hidden;
+}
+.pr-top {
+  display: flex;
+  flex: 1.15 1 0%;
+  min-height: 0;
+  gap: 4px;
+}
+.pr-bottom {
+  display: flex;
+  flex: 0.85 1 0%;
+  min-height: 0;
+  gap: 4px;
+}
+
+.pr-panel {
+  background: #202020;
+  border: 1px solid #2d2d2d;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.pr-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #181818;
+  border-bottom: 1px solid #2d2d2d;
+  padding: 4px 8px 0 8px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.pr-tabs span {
+  padding: 6px 12px;
+  color: #949494;
+  cursor: pointer;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  font-weight: 500;
+}
+.pr-tabs span:hover {
+  color: #ddd;
+}
+.pr-tabs span.active {
+  color: #ffffff;
+  background: #202020;
+  border: 1px solid #2d2d2d;
+  border-bottom: 1px solid #202020;
+  margin-bottom: -1px;
+  font-weight: 600;
+}
+.pr-tab-menu {
+  margin-left: auto;
+  color: #888;
+  font-size: 15px;
+}
+
+/* Premiere Text Panel (Novel Container) */
+.pr-text-panel {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.pr-subtabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #282828;
+  flex-shrink: 0;
+}
+.pr-subtabs span {
+  color: #888;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.pr-subtabs span.active {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.15);
+  font-weight: 600;
+}
+.pr-text-search {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #141414;
+  border: 1px solid #2d2d2d;
+  border-radius: 4px;
+  padding: 3px 10px;
+  color: #888;
+  font-size: 12px;
+}
+.pr-text-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: #181818;
+  border-bottom: 1px solid #262626;
+  font-size: 11.5px;
+  color: #888;
+  flex-shrink: 0;
+}
+.pr-badge-lang {
+  background: #2a2a3e;
+  color: #9999FF;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+}
+.pr-text-right {
+  margin-left: auto;
+  color: #3b82f6;
+  cursor: pointer;
+  font-weight: 500;
+}
+.pr-text-scroll {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 16px;
+  background: #1c1c1c;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  user-select: text;
+}
+.pr-cap {
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background: #232323;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+.pr-cap:hover {
+  background: #2a2a2a;
+}
+.pr-cap.active-caption {
+  background: rgba(59, 130, 246, 0.16);
+  border-left-color: #3b82f6;
+}
+.pr-cap-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 11.5px;
+}
+.pr-cap-speaker {
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10.5px;
+}
+.pr-cap-speaker.s1 {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+.pr-cap-speaker.s0 {
+  background: #4c1d63;
+  color: #e9d5ff;
+}
+.pr-cap-tc {
+  color: #38bdf8;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+.pr-cap-text {
+  color: #e2e8f0;
+  line-height: 1.65;
+  font-size: 13.5px;
+}
+
+/* Premiere Program Monitor - High Realistic 4K Visual */
+.pr-program {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.pr-monitor {
+  flex: 1 1 0%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  min-height: 0;
+  overflow: hidden;
+}
+.pr-frame {
+  aspect-ratio: 16/9;
+  width: 100%;
+  max-height: 100%;
+  background: #0b1320;
+  border: 1px solid #333;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+.pr-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.pr-scene-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Lower Third */
+.pr-lower-third {
+  position: absolute;
+  bottom: 24px;
+  left: 28px;
+  display: flex;
+  background: rgba(10, 15, 26, 0.88);
+  backdrop-filter: blur(8px);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.pr-lt-bar {
+  width: 5px;
+  background: linear-gradient(180deg, #38bdf8 0%, #2563eb 100%);
+}
+.pr-lt-content {
+  padding: 8px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pr-lt-content b {
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+}
+.pr-lt-content span {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.pr-mon-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: #181818;
+  border-top: 1px solid #282828;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.pr-tc-blue {
+  color: #38bdf8;
+  font-family: 'Consolas', monospace;
+  font-weight: bold;
+}
+.pr-tc-blue.big {
+  font-size: 14px;
+}
+.pr-sel {
+  color: #aaa;
+  cursor: pointer;
+  font-weight: 500;
+}
+.pr-tc-dur {
+  color: #888;
+  font-family: 'Consolas', monospace;
+}
+.pr-mon-scrub {
+  height: 4px;
+  background: #252525;
+  position: relative;
+  flex-shrink: 0;
+}
+.pr-mon-scrub i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 33%;
+  background: #3b82f6;
+}
+.pr-transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px;
+  background: #1c1c1c;
+  border-top: 1px solid #282828;
+  color: #a0a0a0;
+  flex-shrink: 0;
+}
+.pr-transport span {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.pr-transport span:hover {
+  color: #fff;
+  background: #262626;
+}
+.pr-transport span.pr-play {
+  color: #38bdf8;
+}
+
+/* Premiere Project Bin */
+.pr-project {
+  flex: 0 0 240px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.pr-proj-path {
+  padding: 5px 10px;
+  background: #181818;
+  border-bottom: 1px solid #282828;
+  font-size: 11px;
+  color: #999;
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.pr-media-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 10px;
+  background: #161616;
+  color: #777;
+  font-size: 11px;
+  border-bottom: 1px solid #242424;
+  flex-shrink: 0;
+}
+.pr-media-list {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  background: #1a1a1a;
+  min-height: 0;
+}
+.pr-media-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid #202020;
+  cursor: pointer;
+}
+.pr-media-row:hover {
+  background: #262626;
+}
+.pr-media-ic {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.pr-media-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #ddd;
+}
+.pr-media-dur {
+  color: #777;
+  font-family: 'Consolas', monospace;
+  font-size: 11px;
+}
+
+/* Premiere Tools */
+.pr-tools {
+  width: 36px;
+  min-width: 36px;
+  background: #1c1c1c;
+  border: 1px solid #2d2d2d;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 0;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.pr-tools span {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pr-tools span:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+.pr-tools span.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+/* Premiere Timeline */
+.pr-timeline {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.pr-tl-top {
+  display: flex;
+  align-items: center;
+  background: #181818;
+  border-bottom: 1px solid #282828;
+  padding: 4px 10px;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.pr-ruler {
+  flex: 1;
+  height: 18px;
+  position: relative;
+  font-family: 'Consolas', monospace;
+  font-size: 10px;
+  color: #777;
+  overflow: hidden;
+}
+.pr-ruler span {
+  position: absolute;
+  top: 0;
+}
+.pr-tracks {
+  flex: 1 1 0%;
+  background: #161616;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 0;
+  min-height: 0;
+}
+.pr-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 33%;
+  width: 1.5px;
+  background: #38bdf8;
+  z-index: 10;
+  pointer-events: none;
+}
+.pr-playhead::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -5px;
+  width: 11px;
+  height: 9px;
+  background: #38bdf8;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.pr-track {
+  display: flex;
+  height: 26px;
+  min-height: 26px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #242424;
+  flex-shrink: 0;
+}
+.pr-track-head {
+  width: 75px;
+  background: #202020;
+  border-right: 1px solid #282828;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 6px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.pr-tk-name {
+  font-weight: 700;
+  color: #999;
+}
+.pr-tk-ico {
+  font-size: 10px;
+  color: #777;
+  border: 1px solid #333;
+  padding: 0 3px;
+  border-radius: 2px;
+}
+.pr-track-lane {
+  flex: 1;
+  position: relative;
+  background: #181818;
+}
+.pr-clip {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  border-radius: 2px;
+  padding: 3px 8px;
+  font-size: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #fff;
+  border-left: 2px solid rgba(255,255,255,0.5);
+}
+.pr-clip.vid { background: #5353a2; }
+.pr-clip.gfx { background: #b0437e; }
+.pr-clip.aud { background: #2e7d56; }
+.pr-clip.aud2 { background: #3d6a7d; }
+
+.pr-meters {
+  width: 32px;
+  min-width: 32px;
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 3px;
+  display: flex;
+  padding: 8px 3px;
+  gap: 3px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.pr-meter {
+  flex: 1;
+  height: 100%;
+  background: #111;
+  border-radius: 1px;
+  display: flex;
+  align-items: flex-end;
+}
+.pr-meter i {
+  width: 100%;
+  background: linear-gradient(0deg, #22c55e 0%, #eab308 70%, #ef4444 100%);
+  border-radius: 1px;
+}
+.pr-meter-scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #666;
+  height: 100%;
+  padding-left: 1px;
+}
+
+/* Premiere Boss View */
+.pr-boss-head {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2d2d2d;
+}
+.pr-boss-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+.pr-boss-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #262626;
+}
+.pr-boss-table td:first-child {
+  color: #999;
+  width: 180px;
+}
+.pr-boss-table td:last-child {
+  color: #eee;
+  font-family: 'Consolas', monospace;
+}
+.pr-boss-queue {
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 4px;
+  padding: 12px;
+}
+.pr-boss-queue b {
+  color: #eee;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+.pr-q {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.pr-q-bar {
+  flex: 1;
+  height: 7px;
+  background: #262626;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.pr-q-bar i {
+  display: block;
+  height: 100%;
+  background: #3b82f6;
+}
+
+
+/* Dark & Light Theme Stealth Editable Focus */
+.theme-premiere .stealth-editable:hover,
+.theme-premiere [data-stealth-key]:hover,
+.theme-chatgpt .stealth-editable:hover,
+.theme-chatgpt [data-stealth-key]:hover {
+  outline: 1px dashed rgba(59, 130, 246, 0.6) !important;
+  background-color: rgba(59, 130, 246, 0.12) !important;
+}
+
+.theme-premiere .stealth-editable:focus,
+.theme-premiere [data-stealth-key]:focus,
+.theme-chatgpt .stealth-editable:focus,
+.theme-chatgpt [data-stealth-key]:focus {
+  outline: 2px solid #3b82f6 !important;
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+}
+
+.theme-claude .stealth-editable:hover,
+.theme-claude [data-stealth-key]:hover {
+  outline: 1px dashed rgba(217, 119, 87, 0.6) !important;
+  background-color: rgba(217, 119, 87, 0.08) !important;
+}
+
+.theme-claude .stealth-editable:focus,
+.theme-claude [data-stealth-key]:focus {
+  outline: 2px solid #d97757 !important;
+  background-color: #faf9f5 !important;
+  color: #1d1c16 !important;
+}

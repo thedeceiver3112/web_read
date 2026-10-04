@@ -2714,7 +2714,10 @@ body.controls-hidden {
 #figma-canvas-scroll-container,
 #canva-canvas-scroll-container,
 #ppt-canvas-scroll-container,
-#tvpl-document-scroll-container {
+#tvpl-document-scroll-container,
+#premiere-transcript-scroll-container,
+#claude-chat-scroll-container,
+#chatgpt-chat-scroll-container {
   overflow-y: auto !important;
   min-height: 0 !important;
   flex: 1 1 0% !important;
