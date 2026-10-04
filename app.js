@@ -216,7 +216,9 @@ const THEME_PAGES = {
   'theme-premiere': 'premiere.html',
   'theme-claude': 'claude.html',
   'theme-chatgpt': 'chatgpt.html',
-  'theme-teams': 'teams.html'
+  'theme-teams': 'teams.html',
+  'theme-revit': 'revit.html',
+  'theme-misa': 'misa.html'
 };
 
 // Single source of truth for per-page control id prefixes.
@@ -234,7 +236,8 @@ function themeControlIds(suffix) {
 // Boss-key button ids use full theme names rather than the short prefixes above.
 const BOSS_KEY_BUTTON_IDS = [
   'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'blender', 'linkedin',
-  'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat'
+  'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat',
+  'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa'
 ].map(name => `btn-boss-key-${name}`);
 
 const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
@@ -261,6 +264,8 @@ function getThemeForCurrentPage() {
   if (path.endsWith('claude.html')) return 'theme-claude';
   if (path.endsWith('chatgpt.html')) return 'theme-chatgpt';
   if (path.endsWith('teams.html')) return 'theme-teams';
+  if (path.endsWith('revit.html')) return 'theme-revit';
+  if (path.endsWith('misa.html')) return 'theme-misa';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -1124,6 +1129,28 @@ function initTitleEditing() {
       if (e.key === 'Enter') {
         e.preventDefault();
         teamsTitle.blur();
+      }
+    });
+  }
+
+  const revitTitle = document.getElementById('revit-doc-title');
+  if (revitTitle) {
+    revitTitle.addEventListener('blur', () => {
+      let val = revitTitle.textContent.trim();
+      if (!val) val = 'arch_buildinga1_144104999.rvt';
+      if (!val.toLowerCase().endsWith('.rvt')) val += '.rvt';
+      revitTitle.textContent = val;
+      state.revitTitle = val;
+      localStorage.setItem('stealth_title_revit', val);
+      if (state.theme === 'theme-revit') {
+        document.title = `${val} - 3D View: 3D - West Facade Room Detail - Autodesk Revit 2025`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên dự án Revit: <b>${escapeHtml(val)}</b>`);
+    });
+    revitTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        revitTitle.blur();
       }
     });
   }
@@ -2414,7 +2441,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = '';
     if (tvBoss) tvBoss.style.display = 'none';
 
-    ['premiere', 'claude', 'chatgpt', 'teams'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = '';
@@ -2494,7 +2521,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = 'none';
     if (tvBoss) tvBoss.style.display = 'block';
 
-    ['premiere', 'claude', 'chatgpt', 'teams'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = 'none';
@@ -3306,6 +3333,8 @@ const THEME_RENDERERS = {
   'theme-claude': { append: appendClaudeBatch, streams: ['claude-story-stream'] },
   'theme-chatgpt': { append: appendChatGPTBatch, streams: ['chatgpt-story-stream'] },
   'theme-teams': { append: appendTeamsBatch, streams: ['teams-story-stream'] },
+  'theme-revit': { append: appendRevitBatch, streams: ['revit-story-stream'] },
+  'theme-misa': { append: appendMisaBatch, streams: ['misa-story-stream'] },
   // Google Sheets / Excel (spreadsheet table) is the default
   default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
 };
@@ -3971,7 +4000,9 @@ const ACTIVE_ROW_SPECS = {
   'theme-premiere': { id: 'pr-caption-', cls: 'active-caption' },
   'theme-claude': { id: 'claude-para-', cls: 'active-para' },
   'theme-chatgpt': { id: 'gpt-para-', cls: 'active-para' },
-  'theme-teams': { id: 'teams-msg-', cls: 'active-msg' }
+  'theme-teams': { id: 'teams-msg-', cls: 'active-msg' },
+  'theme-revit': { id: 'revit-clause-', cls: 'active-clause' },
+  'theme-misa': { id: 'misa-order-', cls: 'selected-order-row' }
 };
 
 // Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
@@ -4172,6 +4203,8 @@ function getActiveScrollContainer() {
     'theme-claude': 'claude-chat-scroll-container',
     'theme-chatgpt': 'chatgpt-chat-scroll-container',
     'theme-teams': 'teams-chat-scroll-container',
+    'theme-revit': 'revit-schedule-scroll-container',
+    'theme-misa': 'misa-orders-scroll-container',
   };
   const id = containerMap[state.theme];
   if (id) {
@@ -4200,8 +4233,9 @@ function initContinuousScrollListeners() {
   function handleContainerScroll(container) {
     if (state.bossModeActive) return;
 
-    // 1. Infinite scroll: check if near bottom to load next batch
-    if (container.scrollTop + container.clientHeight >= container.scrollHeight - 700) {
+    // 1. Infinite scroll: check if near bottom to load next batch (expanded threshold for seamless continuous reading)
+    const distanceToBottom = container.scrollHeight - (container.scrollTop + container.clientHeight);
+    if (distanceToBottom <= 1200 || container.scrollTop + container.clientHeight >= container.scrollHeight - 50) {
       if (state.renderedCount < state.allChunks.length) {
         renderNextBatch(state.BATCH_SIZE);
       }
@@ -4258,6 +4292,8 @@ function initContinuousScrollListeners() {
     document.getElementById('claude-chat-scroll-container'),
     document.getElementById('chatgpt-chat-scroll-container'),
     document.getElementById('teams-chat-scroll-container'),
+    document.getElementById('revit-schedule-scroll-container'),
+    document.getElementById('misa-orders-scroll-container'),
   ];
   scrollContainers.forEach(container => {
     if (container) {
@@ -4496,4 +4532,106 @@ function appendTeamsBatch(count) {
 
   stream.appendChild(fragment);
   state.renderedCount = end;
+}
+
+function appendRevitBatch(count) {
+  const stream = document.getElementById('revit-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+
+    const note = document.createElement('div');
+    note.className = 'rvt-note-item';
+    note.id = `revit-clause-${chunk.globalIndex}`;
+    note.dataset.index = chunk.globalIndex;
+    note.dataset.page = chunk.page;
+
+    const specTag = `SPEC-A${chunk.page}.${String(chunk.indexInPage + 1).padStart(2, '0')}`;
+
+    note.innerHTML = `
+      <span class="rvt-note-tag">${specTag}</span>
+      <span class="rvt-note-text">${escapeHtml(chunk.text)}</span>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    note.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(note);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+}
+
+// 19. MISA SME.NET 2021 Batch Renderer (Orders Master Grid)
+function appendMisaBatch(count) {
+  const stream = document.getElementById('misa-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  // Fake accounting customer names for high fidelity disguise
+  const customers = [
+    'Công ty TNHH Ánh Dương',
+    'Tập đoàn VinaTech',
+    'Cty CP Đầu tư Phát Đạt',
+    'DNTN Thương Mại Minh Long',
+    'Cty Cổ phần Dịch vụ Đại Dương',
+    'TNHH Sản xuất & TMDV Hồng Phúc',
+    'Chi nhánh Miền Nam - Cty Á Châu',
+    'Cty TNHH Giải pháp Phần mềm An Phát'
+  ];
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+
+    const tr = document.createElement('tr');
+    tr.className = 'misa-order-row';
+    tr.id = `misa-order-${chunk.globalIndex}`;
+    tr.dataset.index = chunk.globalIndex;
+    tr.dataset.page = chunk.page;
+
+    const orderNum = `DH2026-${String(chunk.globalIndex + 1).padStart(5, '0')}`;
+    const orderDate = `0${(chunk.globalIndex % 28) + 1}/10/2026`.replace('00', '0');
+    const custName = customers[chunk.globalIndex % customers.length];
+    const amountVal = ((chunk.globalIndex + 1) * 1250000).toLocaleString('vi-VN') + ',00';
+
+    tr.innerHTML = `
+      <td style="text-align:center;"><input type="checkbox"></td>
+      <td style="color:#059669; font-weight:500;">Chưa thực hiện</td>
+      <td>${orderDate}</td>
+      <td style="font-weight:600; color:#005a9c;">${orderNum}</td>
+      <td>${orderDate}</td>
+      <td title="${custName}">${custName}</td>
+      <td class="misa-col-desc">${escapeHtml(chunk.text)}</td>
+      <td style="text-align:right; font-family:Consolas, monospace;">${amountVal}</td>
+      <td style="text-align:right; font-family:Consolas, monospace;">0,00</td>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    tr.addEventListener('click', () => {
+      setActiveRow(gIdx, true);
+    });
+
+    fragment.appendChild(tr);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+
+  // Update row count indicator
+  const rowCountEl = document.getElementById('misa-row-count');
+  if (rowCountEl) {
+    rowCountEl.textContent = `Số dòng = ${end}`;
+  }
 }

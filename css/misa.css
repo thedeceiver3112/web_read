@@ -1,0 +1,807 @@
+/* ==========================================================================
+   THEME 19: MISA SME.NET 2021 R1 (.theme-misa) - ENTERPRISE ACCOUNTING WORKSPACE
+   Replicating Screenshot Desktop UI: Blue Classic Window, Accounting Menu,
+   Vertical Subsystem Sidebar, Dual-Grid (Master Orders & Detail Items),
+   Editable Customer/Date/DLKT Fields, Realistic Windows Chrome & Statusbar.
+   ========================================================================== */
+
+body.theme-misa {
+  background: #d8e4f8;
+  color: #000000;
+  font-family: Tahoma, "Segoe UI", Arial, sans-serif;
+  font-size: 11px;
+  user-select: none;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+body.theme-misa * {
+  box-sizing: border-box;
+}
+
+body.theme-misa.has-pinned-navbar {
+  padding-top: var(--unav-height, 38px) !important;
+}
+
+body.theme-misa.controls-hidden {
+  padding-top: 0 !important;
+}
+
+/* App Main Container */
+.misa-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  background: #dce7f6;
+  overflow: hidden;
+}
+
+/* 1. MISA Titlebar (Classic Windows / MISA Form Header) */
+.misa-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  min-height: 30px;
+  background: linear-gradient(180deg, #e4eefb 0%, #c8daf5 100%);
+  border-bottom: 1px solid #9bb5dc;
+  padding: 0 4px 0 6px;
+  flex-shrink: 0;
+}
+
+.misa-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.misa-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.misa-menubar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.misa-menu-item {
+  padding: 3px 6px;
+  color: #1a2a44;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.misa-menu-item:hover {
+  background: #b8d2f5;
+  color: #0b1a30;
+}
+
+.misa-search-box {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #95b3d7;
+  border-radius: 3px;
+  height: 20px;
+  padding: 0 4px;
+  margin-left: 10px;
+  width: 220px;
+}
+
+.misa-search-box input {
+  border: none;
+  outline: none;
+  font-size: 10.5px;
+  font-style: italic;
+  width: 100%;
+  background: transparent;
+  color: #555;
+}
+
+.misa-search-box .misa-search-icon {
+  font-size: 11px;
+  color: #666;
+  cursor: pointer;
+}
+
+.misa-titlebar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.misa-header-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #1a2a44;
+  cursor: pointer;
+}
+
+.misa-header-link:hover {
+  color: #004b9c;
+}
+
+.misa-badge-noti {
+  background: #e51937;
+  color: #fff;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 9.5px;
+  font-weight: bold;
+}
+
+.misa-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #1a2a44;
+}
+
+.misa-win-ctrls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 6px;
+}
+
+.misa-win-btn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.misa-win-btn:hover {
+  background: rgba(0,0,0,0.08);
+}
+
+.misa-win-btn.close:hover {
+  background: #e81123;
+  color: #fff;
+}
+
+/* 2. Secondary Context Bar (Sổ tài chính, Báo cáo, Tìm chứng từ...) */
+.misa-context-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 26px;
+  min-height: 26px;
+  background: #ebf2fb;
+  border-bottom: 1px solid #b2c9e6;
+  padding: 0 10px;
+  font-size: 11px;
+  color: #1c3254;
+  flex-shrink: 0;
+}
+
+.misa-ctx-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.misa-ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.misa-ctx-item:hover {
+  color: #0056b3;
+}
+
+.misa-ctx-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 3. Main Body: Subsystem Sidebar + Accounting Work Area */
+.misa-body {
+  display: flex;
+  flex: 1 1 0%;
+  height: calc(100% - 78px);
+  min-height: 0;
+  width: 100%;
+  background: #f0f4fa;
+  overflow: hidden;
+  position: relative;
+}
+
+/* LEFT SIDEBAR: Phân Hệ Nghiệp Vụ Kế Toán */
+.misa-sidebar {
+  width: 150px;
+  min-width: 150px;
+  background: #e2ecf8;
+  border-right: 1px solid #95b3d7;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Top Subsystem Header (Bán hàng) */
+.misa-subsystem-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #cfdff4;
+  border-bottom: 1px solid #a8c4e6;
+  padding: 6px 8px;
+  font-weight: bold;
+  font-size: 13px;
+  color: #112a4f;
+}
+
+.misa-subsystem-top .misa-collapse-arrow {
+  cursor: pointer;
+  color: #60799f;
+  font-size: 11px;
+}
+
+/* Sub-items under Bán hàng */
+.misa-sub-links {
+  background: #ffffff;
+  border-bottom: 1px solid #b8cee8;
+  padding: 4px 0;
+}
+
+.misa-sub-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #222;
+  cursor: pointer;
+}
+
+.misa-sub-link.active {
+  background: #fedc97;
+  font-weight: bold;
+}
+
+.misa-sub-link:hover:not(.active) {
+  background: #eef4fc;
+}
+
+/* Sidebar List of Major Subsystems */
+.misa-modules-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  background: #d8e5f7;
+}
+
+.misa-module-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  font-size: 11px;
+  color: #142848;
+  border-bottom: 1px solid #c2d6f0;
+  cursor: pointer;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+
+.misa-module-btn:hover {
+  background: #c5d9f3;
+}
+
+.misa-module-btn.active {
+  background: #fedc97;
+  font-weight: bold;
+  border-right: 2px solid #e29700;
+}
+
+.misa-module-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Quick bottom toolbar in sidebar */
+.misa-sidebar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 4px 2px;
+  background: #cadbf2;
+  border-top: 1px solid #a8c4e6;
+}
+
+.misa-sb-mini-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.misa-sb-mini-icon:hover {
+  background: #b2c9e8;
+}
+
+/* RIGHT WORK AREA: Accounting Documents & Dual Grids */
+.misa-workarea {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-width: 0;
+  height: 100%;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* Top Subsystem Tabs (Báo giá, Đơn đặt hàng, Bán hàng, Xuất hóa đơn...) */
+.misa-doc-tabs {
+  display: flex;
+  align-items: center;
+  height: 25px;
+  background: #50678c;
+  padding: 0 4px;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.misa-doc-tab {
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #e6eef8;
+  cursor: pointer;
+  white-space: nowrap;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.misa-doc-tab:hover {
+  background: #617b9f;
+  color: #fff;
+}
+
+.misa-doc-tab.active {
+  background: #fedc97;
+  color: #111;
+  font-weight: bold;
+}
+
+.misa-doc-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  color: #fff;
+  font-size: 10px;
+}
+
+/* Action Toolbar (Thêm, Xem, Xóa, Gửi email, Xuất khẩu, Góp ý, Giúp...) */
+.misa-action-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  background: linear-gradient(180deg, #f7faff 0%, #e2ecf9 100%);
+  border-bottom: 1px solid #b8cee8;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.misa-tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  color: #1a2a44;
+  cursor: pointer;
+  border-radius: 2px;
+  border: 1px solid transparent;
+}
+
+.misa-tool-btn:hover {
+  background: #d4e4f7;
+  border-color: #a4c2e6;
+}
+
+.misa-tool-btn.disabled {
+  color: #8c9cb0;
+  cursor: default;
+}
+
+.misa-tool-sep {
+  width: 1px;
+  height: 16px;
+  background: #c0d3eb;
+  margin: 0 2px;
+}
+
+.misa-help-bubble-right {
+  margin-left: auto;
+  background: #fff4d2;
+  border: 1px solid #f6d177;
+  color: #7a5000;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Filter Controls Row (Kỳ, Từ ngày, Đến ngày, Lấy dữ liệu) */
+.misa-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  background: #f3f7fd;
+  border-bottom: 1px solid #cadbf0;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.misa-filter-label {
+  font-size: 11px;
+  color: #333;
+}
+
+.misa-select, .misa-date-input {
+  height: 22px;
+  border: 1px solid #95b3d7;
+  border-radius: 2px;
+  font-size: 11px;
+  padding: 0 4px;
+  background: #fff;
+  color: #111;
+  outline: none;
+}
+
+.misa-btn-fetch {
+  height: 22px;
+  padding: 0 10px;
+  background: linear-gradient(180deg, #f0f6fe 0%, #cce0f7 100%);
+  border: 1px solid #8baad2;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #1a2f4c;
+  cursor: pointer;
+}
+
+.misa-btn-fetch:hover {
+  background: linear-gradient(180deg, #e4effd 0%, #b8d4f4 100%);
+  border-color: #6a92c4;
+}
+
+/* Dual Split View (Master Order Grid + Detail Item Grid) */
+.misa-split-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* UPPER SECTION: Master Orders Grid (Continuous Reading Stream Container) */
+.misa-upper-pane {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-height: 140px;
+  background: #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+
+.misa-table-container {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  overflow-x: auto;
+  min-height: 0;
+  background: #ffffff;
+}
+
+/* Master Accounting Grid Table */
+.misa-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 11px;
+  color: #000;
+}
+
+.misa-grid-table th {
+  background: #cadcf3;
+  color: #112a4f;
+  font-weight: 500;
+  border: 1px solid #a2bfe0;
+  padding: 4px 6px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.misa-grid-table td {
+  border: 1px solid #d3e2f2;
+  padding: 3px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* Column Filtering Row below TH */
+.misa-grid-filter-row th {
+  background: #e6f0fa;
+  padding: 2px 4px;
+  font-weight: normal;
+}
+
+.misa-grid-filter-row input {
+  width: 100%;
+  height: 18px;
+  border: 1px solid #b8d0eb;
+  border-radius: 1px;
+  font-size: 10px;
+  padding: 0 2px;
+}
+
+/* Master Row: Reading Chunks */
+.misa-order-row {
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+.misa-order-row:nth-child(even) {
+  background: #fafcfe;
+}
+
+.misa-order-row:hover {
+  background: #eaf2fc;
+}
+
+.misa-order-row.selected-order-row {
+  background: #fedc97 !important;
+  color: #000000 !important;
+}
+
+.misa-order-row.selected-order-row td {
+  border-color: #e5b95a !important;
+}
+
+/* The Novel Stream Text Column */
+.misa-col-desc {
+  white-space: normal !important;
+  word-break: break-word;
+  line-height: 1.4;
+  color: #111;
+  font-size: 11.5px;
+}
+
+.misa-order-row.selected-order-row .misa-col-desc {
+  font-weight: 600;
+  color: #000;
+}
+
+/* Upper Grid Footer (Số dòng, Tổng tiền) */
+.misa-grid-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 22px;
+  min-height: 22px;
+  background: #eaf1fb;
+  border-top: 1px solid #b8cee8;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #1a2f4c;
+  flex-shrink: 0;
+}
+
+/* Horizontal Splitter Bar */
+.misa-splitter-bar {
+  height: 6px;
+  min-height: 6px;
+  background: linear-gradient(180deg, #c0d4ec 0%, #9cb9dc 100%);
+  cursor: row-resize;
+  border-top: 1px solid #7d9ec4;
+  border-bottom: 1px solid #7d9ec4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.misa-splitter-knob {
+  width: 24px;
+  height: 2px;
+  background: #507198;
+  border-radius: 1px;
+}
+
+/* LOWER SECTION: Detail Items Grid (Hàng hóa, dịch vụ / Bán hàng) */
+.misa-lower-pane {
+  display: flex;
+  flex-direction: column;
+  height: 170px;
+  min-height: 120px;
+  background: #ffffff;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.misa-detail-tabs {
+  display: flex;
+  align-items: center;
+  height: 23px;
+  background: #cedff4;
+  border-bottom: 1px solid #a8c4e6;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.misa-detail-tab {
+  padding: 3px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  background: #cedff4;
+  color: #1a2f4c;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+}
+
+.misa-detail-tab.active {
+  background: #fedc97;
+  font-weight: bold;
+  border-color: #a8c4e6;
+  border-bottom: 1px solid #fedc97;
+}
+
+.misa-detail-table-wrap {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  overflow-x: auto;
+  min-height: 0;
+}
+
+/* Lower Detail Table */
+.misa-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 10.5px;
+}
+
+.misa-detail-table th {
+  background: #d8e6f7;
+  color: #112a4f;
+  font-weight: normal;
+  border: 1px solid #b2c9e4;
+  padding: 3px 6px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.misa-detail-table td {
+  border: 1px solid #dbe6f4;
+  padding: 3px 6px;
+  white-space: nowrap;
+}
+
+
+
+/* 4. MISA Statusbar (Tên DLKT: MSHOP | MISA SME.NET 2021 R1 (Version: 1.0.0.63)) */
+.misa-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 22px;
+  min-height: 22px;
+  background: #cadcf3;
+  border-top: 1px solid #9bb5dc;
+  padding: 0 8px;
+  font-size: 11px;
+  color: #1a2a44;
+  flex-shrink: 0;
+}
+
+.misa-status-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.misa-status-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #334a6d;
+}
+
+/* Boss View Table (Full Screen Accounting Ledger) */
+.misa-boss-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  overflow: auto;
+}
+
+.misa-boss-header {
+  font-size: 14px;
+  font-weight: bold;
+  color: #003366;
+  border-bottom: 2px solid #005a9c;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Custom Inline Stealth Editable Text for MISA */
+.stealth-editable {
+  outline: none;
+  border-radius: 2px;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stealth-editable:hover {
+  background: rgba(254, 220, 151, 0.4);
+  box-shadow: 0 0 0 1px #d4a017;
+  cursor: text;
+}
+
+.stealth-editable:focus {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 0 0 2px #005a9c;
+}
