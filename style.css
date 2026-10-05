@@ -4433,8 +4433,21 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
 }
 
 /* Guide scrollable container polish */
+.portal-col-left {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.portal-col-guide {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
+
 .portal-guide-stacked {
-  max-height: 270px;
+  max-height: 600px;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -4444,6 +4457,87 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
 .portal-guide-stacked::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
+}
+
+.guide-badge.purple {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.portal-guide-starter {
+  background: #fbfbfe;
+  border: 1px solid #e0e7ff;
+}
+
+.guide-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.guide-step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.guide-step-num {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  background: #6366f1;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.guide-step-content {
+  flex: 1;
+}
+
+.guide-step-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--portal-text-primary);
+  margin-bottom: 2px;
+}
+
+.guide-step-desc {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--portal-text-secondary);
+  line-height: 1.45;
+}
+
+.guide-step-desc b {
+  color: var(--portal-text-primary);
+}
+
+.guide-step-desc code {
+  background: #e2e8f0;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 10.5px;
+  color: #334155;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.portal-guide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--portal-border);
+  font-size: 11px;
+  color: var(--portal-text-secondary);
 }
 
 

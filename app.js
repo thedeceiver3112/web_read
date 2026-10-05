@@ -662,6 +662,19 @@ function closeThemeModal() {
   document.getElementById('theme-modal').classList.remove('show');
 }
 
+function setDocumentTitle(title) {
+  const path = window.location.pathname.toLowerCase();
+  const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
+  const portal = document.getElementById('landing-portal');
+  const isPortalVisible = portal ? !portal.classList.contains('hidden') : isIndexPage;
+
+  if (isIndexPage && isPortalVisible) {
+    document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+  } else {
+    document.title = title;
+  }
+}
+
 function applyTheme(themeName) {
   state.theme = themeName;
   const isHidden = document.body.classList.contains('controls-hidden') || localStorage.getItem('stealth_controls_hidden') === '1';
@@ -679,95 +692,104 @@ function applyTheme(themeName) {
   const storyLabel = document.getElementById('tab-story-label');
   const headerTitle = document.getElementById('story-header-title');
 
+  const path = window.location.pathname.toLowerCase();
+  const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
+  const portal = document.getElementById('landing-portal');
+  const isPortalVisible = portal ? !portal.classList.contains('hidden') : isIndexPage;
+
+  if (isIndexPage && isPortalVisible) {
+    document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+  }
+
   if (themeName === 'theme-googlesheets') {
     state.readingMode = 'grid';
     const docTitle = state.gsheetTitle || 'Báo cáo số liệu & Phân tích KPI Q3';
-    document.title = `${docTitle} - Google Trang tính`;
+    setDocumentTitle(`${docTitle} - Google Trang tính`);
     const gTitle = document.getElementById('gsheet-doc-title');
     if (gTitle) gTitle.textContent = docTitle;
     if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_gsheet_0') || 'Trang tính1';
     if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_gsheet') || 'Log Description & Execution Details';
   } else if (themeName === 'theme-googledocs') {
     const docTitle = state.gdocsTitle || 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3';
-    document.title = `${docTitle} - Google Tài liệu`;
+    setDocumentTitle(`${docTitle} - Google Tài liệu`);
     const gdTitle = document.getElementById('gdocs-doc-title');
     if (gdTitle) gdTitle.textContent = docTitle;
   } else if (themeName === 'theme-excel') {
     const docTitle = state.excelTitle || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
-    document.title = `${docTitle} - Excel`;
+    setDocumentTitle(`${docTitle} - Excel`);
     const eTitle = document.getElementById('excel-doc-title');
     if (eTitle) eTitle.textContent = docTitle;
     if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_excel_0') || 'Audit_Finding_Q3';
     if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_excel') || 'Audit Log Finding & Notes (Story Text)';
   } else if (themeName === 'theme-vscode') {
     const docTitle = state.vscodeTitle || 'stream_pipeline_processor.py';
-    document.title = `${docTitle} - dev_workspace - Visual Studio Code`;
+    setDocumentTitle(`${docTitle} - dev_workspace - Visual Studio Code`);
     const vTitle = document.getElementById('vsc-title-doc');
     if (vTitle) vTitle.textContent = `${docTitle} - dev_workspace - Visual Studio Code`;
     const tabName = document.getElementById('vsc-tab-filename');
     if (tabName) tabName.textContent = docTitle;
   } else if (themeName === 'theme-photoshop') {
     const docTitle = state.photoshopTitle || 'Brand_Campaign_KeyVisual_v2.psd';
-    document.title = `${docTitle} @ 66.7% (RGB/8#*) - Adobe Photoshop 2026`;
+    setDocumentTitle(`${docTitle} @ 66.7% (RGB/8#*) - Adobe Photoshop 2026`);
     const psTitle = document.getElementById('ps-doc-title');
     if (psTitle) psTitle.textContent = docTitle;
   } else if (themeName === 'theme-blender') {
     const docTitle = state.blenderTitle || 'cyberpunk_city_scene_v4.blend';
-    document.title = `${docTitle} - Blender 4.2.0`;
+    setDocumentTitle(`${docTitle} - Blender 4.2.0`);
     const bTitle = document.getElementById('blender-doc-title');
     if (bTitle) bTitle.textContent = docTitle;
   } else if (themeName === 'theme-linkedin') {
-    document.title = 'Feed | LinkedIn';
+    setDocumentTitle('Feed | LinkedIn');
   } else if (themeName === 'theme-autocad') {
     const docTitle = state.autocadTitle || 'LAYOUT_MASTER_PLAN_Q3.dwg';
-    document.title = `${docTitle} - Autodesk AutoCAD 2026`;
+    setDocumentTitle(`${docTitle} - Autodesk AutoCAD 2026`);
     const cadTitle = document.getElementById('autocad-doc-title');
     if (cadTitle) cadTitle.textContent = docTitle;
   } else if (themeName === 'theme-zalo') {
     const docTitle = state.zaloTitle || 'Dự án Sprint Q3 - Tech Lead & Team Sync';
-    document.title = `${docTitle} - Zalo`;
+    setDocumentTitle(`${docTitle} - Zalo`);
     const zTitle = document.getElementById('zalo-doc-title');
     if (zTitle) zTitle.textContent = docTitle;
   } else if (themeName === 'theme-figma') {
     const docTitle = state.figmaTitle || 'Mobile_Banking_Design_System_v4.2';
-    document.title = `${docTitle} – Figma`;
+    setDocumentTitle(`${docTitle} – Figma`);
     const fTitle = document.getElementById('figma-doc-title');
     if (fTitle) fTitle.textContent = docTitle;
   } else if (themeName === 'theme-canva') {
     const docTitle = state.canvaTitle || 'Báo Cáo Chiến Lược Thương Hiệu 2026';
-    document.title = `${docTitle} - Canva`;
+    setDocumentTitle(`${docTitle} - Canva`);
     const cTitle = document.getElementById('canva-doc-title');
     if (cTitle) cTitle.textContent = docTitle;
   } else if (themeName === 'theme-powerpoint') {
     const docTitle = state.powerpointTitle || 'Q3_Business_Review_Strategic_Plan.pptx';
-    document.title = `${docTitle} - PowerPoint`;
+    setDocumentTitle(`${docTitle} - PowerPoint`);
     const pTitle = document.getElementById('ppt-doc-title');
     if (pTitle) pTitle.textContent = docTitle;
   } else if (themeName === 'theme-thuvienphapluat') {
     const docTitle = state.tvplTitle || 'SỬA ĐỔI, BỔ SUNG MỘT SỐ ĐIỀU CỦA CÁC NGHỊ ĐỊNH QUY ĐỊNH CHI TIẾT MỘT SỐ ĐIỀU VÀ BIỆN PHÁP THI HÀNH LUẬT ĐẤU THẦU VỀ LỰA CHỌN NHÀ THẦU';
-    document.title = `Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT`;
+    setDocumentTitle(`Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT`);
     const tvTitle = document.getElementById('tvpl-doc-title');
     if (tvTitle) tvTitle.textContent = docTitle;
   } else if (themeName === 'theme-premiere') {
     const docTitle = state.premiereTitle || 'Adobe Premiere Pro 2026 - D:\\Projects\\Brand_Film_Q3\\Brand_Film_Q3.prproj *';
-    document.title = docTitle;
+    setDocumentTitle(docTitle);
     const prTitle = document.getElementById('premiere-doc-title');
     if (prTitle) prTitle.textContent = docTitle;
     const prProj = document.getElementById('premiere-proj-name');
     if (prProj) prProj.textContent = localStorage.getItem('stealth_premiere_proj_name') || 'Brand_Film_Q3';
   } else if (themeName === 'theme-claude') {
     const docTitle = state.claudeTitle || 'Phân tích báo cáo tài chính Q3';
-    document.title = `${docTitle} - Claude`;
+    setDocumentTitle(`${docTitle} - Claude`);
     const clTitle = document.getElementById('claude-doc-title');
     if (clTitle) clTitle.textContent = docTitle;
   } else if (themeName === 'theme-chatgpt') {
     const docTitle = state.chatgptTitle || 'ChatGPT 5';
-    document.title = `${docTitle} - ChatGPT`;
+    setDocumentTitle(`${docTitle} - ChatGPT`);
     const gptTitle = document.getElementById('chatgpt-doc-title');
     if (gptTitle) gptTitle.textContent = docTitle;
   } else if (themeName === 'theme-teams') {
     const docTitle = state.teamsTitle || 'Dong Mia';
-    document.title = `${docTitle} | Chat | Microsoft Teams`;
+    setDocumentTitle(`${docTitle} | Chat | Microsoft Teams`);
     const tTitle = document.getElementById('teams-doc-title');
     if (tTitle) tTitle.textContent = docTitle;
   }
@@ -1297,6 +1319,11 @@ function openPortal(showCloseButton = true) {
   portal.setAttribute('aria-hidden', 'false');
   const closeBtn = document.getElementById('btn-portal-close');
   if (closeBtn) closeBtn.style.display = showCloseButton ? 'flex' : 'none';
+  const path = window.location.pathname.toLowerCase();
+  const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
+  if (isIndexPage) {
+    document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+  }
   updatePortalThemeUI(state.theme);
   updatePortalUploadUI();
 }
@@ -1306,6 +1333,7 @@ function closePortal() {
   if (!portal) return;
   portal.classList.add('hidden');
   portal.setAttribute('aria-hidden', 'true');
+  applyTheme(state.theme);
 }
 
 function initLandingPortal() {
@@ -1327,6 +1355,9 @@ function initLandingPortal() {
     if (closeBtn) closeBtn.style.display = 'flex';
   } else {
     openPortal(false);
+    if (isIndexPage) {
+      document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+    }
   }
 
   // Sync theme UI
