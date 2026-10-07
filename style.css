@@ -1094,34 +1094,36 @@ body.theme-excel .status-item.ready { color: var(--excel-green-dark); }
 }
 .stealth-modal-overlay.show { display: flex; }
 .stealth-modal-content {
-  background: white;
+  background: #fffdf9;
   width: 580px;
   max-width: 95vw;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 9px 12px 10px 11px;
+  border: 1.5px solid #ded2bf;
+  box-shadow: 0 12px 35px rgba(50, 40, 30, 0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  font-family: var(--portal-font, serif);
 }
-.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid #e0e0e0; }
-.modal-header h3 { font-size: 15px; color: #1f1f1f; }
-.modal-close-btn { background: transparent; border: none; font-size: 16px; color: #5f6368; cursor: pointer; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1.5px solid #ded2bf; background: #faf4e8; }
+.modal-header h3 { font-family: var(--portal-font-display, serif); font-size: 15px; color: #1f1b16; font-weight: 700; margin: 0; }
+.modal-close-btn { background: transparent; border: none; font-size: 16px; color: #6d5f4e; cursor: pointer; }
 
-.modal-body { padding: 18px 20px; overflow-y: auto; max-height: 70vh; display: flex; flex-direction: column; gap: 16px; }
-.settings-group h4 { font-size: 13px; color: #0F9D58; margin-bottom: 6px; }
-.guide-text { font-size: 12px; color: #5f6368; margin-bottom: 8px; line-height: 1.4; }
+.modal-body { padding: 18px 20px; overflow-y: auto; max-height: 70vh; display: flex; flex-direction: column; gap: 16px; color: #221d17; }
+.settings-group h4 { font-family: var(--portal-font-display, serif); font-size: 13px; color: #284b6f; margin-bottom: 6px; font-weight: 700; }
+.guide-text { font-size: 12px; color: #6d5f4e; margin-bottom: 8px; line-height: 1.45; }
 
-.file-drop-area { border: 2px dashed #a8dab5; background-color: #f7faf8; border-radius: 6px; padding: 22px; text-align: center; cursor: pointer; position: relative; }
-.file-drop-area:hover, .file-drop-area.dragover { border-color: #0F9D58; background-color: #edf7f0; }
+.file-drop-area { border: 2px dashed #bba68d; background-color: #f7efe1; border-radius: 8px; padding: 22px; text-align: center; cursor: pointer; position: relative; }
+.file-drop-area:hover, .file-drop-area.dragover { border-color: #284b6f; background-color: #ede2cf; }
 .file-drop-area input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-.browse-link { color: #0F9D58; font-weight: 600; text-decoration: underline; }
+.browse-link { color: #284b6f; font-weight: 700; text-decoration: underline; }
 
 .hotkey-list { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
-kbd { background-color: #edebe9; border: 1px solid #c8c6c4; border-radius: 3px; padding: 2px 6px; font-family: monospace; font-weight: 600; }
+kbd { background-color: #fbf7ee; border: 1.5px solid #c7b79e; border-bottom: 2.5px solid #9c8a70; border-radius: 4px; padding: 2px 6px; font-family: var(--portal-font-mono, monospace); font-weight: 700; color: #1f1a14; }
 
-.modal-footer { padding: 12px 20px; border-top: 1px solid #e0e0e0; display: flex; justify-content: flex-end; background: #f8fafd; }
-.primary-btn { background-color: #0F9D58; color: white; border: none; padding: 8px 18px; border-radius: 4px; font-weight: 600; cursor: pointer; }
-.primary-btn:hover { background-color: #0c8046; }
+.modal-footer { padding: 12px 20px; border-top: 1.5px solid #ded2bf; display: flex; justify-content: flex-end; background: #faf4e8; }
+.primary-btn { background-color: #284b6f; color: #fffdf9; border: 1px solid #162c44; padding: 8px 18px; border-radius: 6px; font-family: var(--portal-font-display, serif); font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px rgba(40, 75, 111, 0.25); transition: all 0.18s ease; }
+.primary-btn:hover { background-color: #1c3652; filter: brightness(1.05); }
 
 .loading-overlay {
   position: fixed;
@@ -1222,7 +1224,7 @@ body.theme-excel .section-break-badge {
    Colors: Duolingo Green (#58CC02), Feather Blue (#1CB0F6), Owl Orange (#FF9600)
    ================================================== */
 /* ==========================================================
-   LANDING PORTAL - CLEAN & MODERN DESIGN
+   LANDING PORTAL - CLEAN & MODERN DESIGN (BRIGHT WHITE)
    ========================================================== */
 :root {
   --portal-bg: #f8fafc;
@@ -1237,6 +1239,8 @@ body.theme-excel .section-break-badge {
   --portal-green: #10b981;
   --portal-green-light: #ecfdf5;
   --portal-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --portal-font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --portal-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /* Portal Overlay */
@@ -1330,7 +1334,7 @@ body.theme-excel .section-break-badge {
   border-color: var(--portal-border-hover);
 }
 
-/* 3-Column Desktop Grid: Left (Guide) - Center (Main Function: 3-col themes) - Right (Donate) */
+/* 3-Column Desktop Grid */
 .duo-main-grid {
   display: grid;
   grid-template-columns: 310px 1fr 310px;
@@ -1363,28 +1367,30 @@ body.theme-excel .section-break-badge {
   }
 }
 
-/* Clean Modern Cards */
+/* Clean White Cards */
 .duo-card {
   background: var(--portal-card-bg);
   border: 1px solid var(--portal-border);
   border-radius: 12px;
-  padding: 22px 20px;
+  padding: 24px 22px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .duo-card-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 12px;
 }
 
 .duo-card-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--portal-text-primary);
+  letter-spacing: -0.2px;
 }
 
 .duo-card-desc {
@@ -1394,7 +1400,7 @@ body.theme-excel .section-break-badge {
   line-height: 1.5;
 }
 
-/* Theme Selection Items: 3 Columns Grid (Khớp yêu cầu 3 cột) */
+/* Theme Selection Grid */
 .duo-theme-missions {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1418,7 +1424,7 @@ body.theme-excel .section-break-badge {
   background: #ffffff;
   border: 1px solid var(--portal-border);
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1443,13 +1449,17 @@ body.theme-excel .section-break-badge {
 }
 
 .duo-mission-icon-box {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+.duo-mission-icon-box svg {
+  width: 28px;
+  height: 28px;
 }
 .duo-mission-icon-box.gsheet { background: #e8f5e9; }
 .duo-mission-icon-box.excel { background: #e8f5e9; }
@@ -1459,11 +1469,14 @@ body.theme-excel .section-break-badge {
   flex: 1;
   min-width: 0;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .duo-mission-top {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .duo-mission-title {
@@ -1478,15 +1491,7 @@ body.theme-excel .section-break-badge {
 }
 
 .duo-mission-desc {
-  font-size: 11px;
-  color: var(--portal-text-secondary);
-  margin-top: 2px;
-  line-height: 1.35;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-  width: 100%;
+  display: none !important;
 }
 
 .duo-mission-check {
@@ -1512,7 +1517,7 @@ body.theme-excel .section-break-badge {
   color: #ffffff;
 }
 
-/* File Upload Quest Row (Highlighted Upload Section) */
+/* File Upload Quest Box */
 .duo-upload-quest {
   background: linear-gradient(135deg, #f0f7ff 0%, #e6f0fd 100%);
   border: 2px dashed #1a73e8;
@@ -1543,38 +1548,24 @@ body.theme-excel .section-break-badge {
   box-shadow: 0 4px 14px rgba(22, 163, 74, 0.14);
 }
 
-.duo-upload-quest.shake {
-  animation: uploadShakeAnim 0.45s ease-in-out;
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3) !important;
-}
-
-@keyframes uploadShakeAnim {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-7px); }
-  40%, 80% { transform: translateX(7px); }
-}
-
 .duo-upload-badge-tag {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #1a73e8;
-  color: #ffffff;
-  font-size: 10px;
-  font-weight: 700;
+  background: rgba(26, 115, 232, 0.15);
+  color: #1557b0;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 5px rgba(26, 115, 232, 0.25);
-  transition: background 0.2s ease;
 }
 
 .duo-upload-quest.has-doc .duo-upload-badge-tag {
-  background: #16a34a;
-  box-shadow: 0 2px 5px rgba(22, 163, 74, 0.25);
+  background: rgba(22, 163, 74, 0.18);
+  color: #15803d;
 }
 
 .duo-upload-main {
@@ -1589,12 +1580,11 @@ body.theme-excel .section-break-badge {
   align-items: center;
   gap: 12px;
   min-width: 0;
-  flex: 1;
 }
 
 .duo-upload-icon-box {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 10px;
   background: #ffffff;
   color: #1a73e8;
@@ -1602,18 +1592,19 @@ body.theme-excel .section-break-badge {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .duo-upload-quest.has-doc .duo-upload-icon-box {
-  color: #16a34a;
   background: #ffffff;
+  color: #16a34a;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
 }
 
 .duo-upload-text-group {
+  display: flex;
+  flex-direction: column;
   min-width: 0;
-  flex: 1;
 }
 
 .duo-upload-title-row {
@@ -1621,44 +1612,36 @@ body.theme-excel .section-break-badge {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 3px;
 }
 
 .duo-upload-name {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--portal-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 230px;
-}
-
-.duo-upload-quest.has-doc .duo-upload-name {
-  color: #15803d;
+  max-width: 240px;
 }
 
 .duo-upload-status-pill {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: #fff7ed;
-  color: #c2410c;
-  border: 1px solid #fed7aa;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 12px;
+  background: #e2e8f0;
+  color: #475569;
 }
 
 .duo-upload-quest.has-doc .duo-upload-status-pill {
-  background: #dcfce7;
+  background: #bbf7d0;
   color: #15803d;
-  border-color: #86efac;
 }
 
 .duo-upload-hint {
-  font-size: 11px;
-  color: #64748b;
-  display: block;
-  line-height: 1.4;
+  font-size: 11.5px;
+  color: var(--portal-text-secondary);
+  margin-top: 2px;
 }
 
 .portal-file-change-btn {
@@ -1712,12 +1695,6 @@ body.theme-excel .section-break-badge {
   display: flex;
   align-items: center;
   gap: 6px;
-  animation: fadeInDown 0.2s ease;
-}
-
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Primary Action Buttons */
@@ -1743,7 +1720,6 @@ body.theme-excel .section-break-badge {
   transform: translateY(-1px);
 }
 
-/* Enter button state when document is NOT loaded yet */
 .duo-btn-primary.disabled-need-file {
   background: #e2e8f0;
   color: #64748b;
@@ -1759,7 +1735,6 @@ body.theme-excel .section-break-badge {
   transform: none;
 }
 
-/* Enter button state when document IS loaded */
 .duo-btn-primary.ready {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
@@ -1772,55 +1747,44 @@ body.theme-excel .section-break-badge {
 }
 
 .duo-btn-orange {
-  background-color: #0f172a;
+  background-color: #ff9600;
   color: #ffffff;
   border: none;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 11px 18px;
+  font-size: 12.5px;
+  font-weight: 700;
+  padding: 10px 16px;
   border-radius: 8px;
   width: 100%;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(255, 150, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .duo-btn-orange:hover {
-  background-color: #1e293b;
+  background-color: #e68700;
+  transform: translateY(-1px);
 }
 
-.duo-chk-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--portal-text-secondary);
-  cursor: pointer;
-  user-select: none;
-}
-.duo-chk-label input {
-  accent-color: var(--portal-primary);
-  width: 15px;
-  height: 15px;
-}
-
-/* Author Info Card */
+/* Author Box */
 .duo-author-box {
-  display: flex;
-  align-items: center;
   background: #f8fafc;
   border: 1px solid var(--portal-border);
-  border-radius: 10px;
-  padding: 10px 14px;
-  margin-bottom: 10px;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
   gap: 12px;
+  margin-bottom: 12px;
 }
 
 .duo-author-avatar {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -1838,6 +1802,7 @@ body.theme-excel .section-break-badge {
   color: var(--portal-text-primary);
   line-height: 1.2;
 }
+
 .duo-author-text .badge {
   font-size: 11.5px;
   font-weight: 500;
@@ -1953,7 +1918,7 @@ body.theme-excel .section-break-badge {
 }
 
 .duo-speech-donate {
-  background: #ffffff;
+  background: #f8fafc;
   border: 1px solid var(--portal-border);
   border-radius: 10px;
   padding: 12px 14px;
@@ -2004,6 +1969,7 @@ body.theme-excel .section-break-badge {
   justify-content: space-between;
   font-size: 12px;
 }
+
 .duo-bank-row.stk-row {
   margin-top: 4px;
   padding-top: 6px;
@@ -2019,6 +1985,7 @@ body.theme-excel .section-break-badge {
   color: var(--portal-text-primary);
   font-weight: 600;
 }
+
 .duo-bank-val.stk-highlight {
   font-size: 15px;
   font-weight: 700;
@@ -2034,104 +2001,165 @@ body.theme-excel .section-break-badge {
   margin-top: 8px;
 }
 
-/* User Guide Stacked Column */
-.portal-col-guide {
-  display: flex;
-  flex-direction: column;
-}
-
-.portal-guide-stacked {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-}
-
-.portal-guide-item {
+/* User Guide Column (Simplified & Modern) */
+.guide-block {
   background: #f8fafc;
   border: 1px solid var(--portal-border);
   border-radius: 10px;
-  padding: 13px 15px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  padding: 12px 14px;
+  margin-bottom: 12px;
 }
 
-.guide-item-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.guide-item-header h5 {
-  margin: 0;
+.guide-block-title {
   font-size: 13px;
   font-weight: 700;
   color: var(--portal-text-primary);
+  margin-bottom: 8px;
 }
 
-.guide-badge {
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  white-space: nowrap;
-}
-.guide-badge.red {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-.guide-badge.blue {
-  background: #e0f2fe;
-  color: #0369a1;
-}
-.guide-badge.green {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-.guide-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.guide-steps-list {
   display: flex;
   flex-direction: column;
   gap: 7px;
+}
+
+.guide-step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+
+.guide-step-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--portal-primary-light);
+  color: var(--portal-primary);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.guide-step-text {
+  flex: 1;
   font-size: 12px;
   color: var(--portal-text-secondary);
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
-.guide-list li {
-  position: relative;
-  padding-left: 12px;
+.guide-step-text b {
+  color: var(--portal-text-primary);
 }
 
-.guide-list li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #94a3b8;
-  font-weight: bold;
+.guide-step-text code {
+  background: #e2e8f0;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 10.5px;
+  color: #334155;
+  font-family: ui-monospace, SFMono-Regular, monospace;
 }
 
-.guide-list kbd {
+.guide-shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid var(--portal-border);
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+
+.guide-shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--portal-border);
+  font-size: 12px;
+}
+
+.guide-shortcut-item:last-child {
+  border-bottom: none;
+}
+
+.guide-shortcut-keys {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.guide-shortcut-keys kbd {
   background: #ffffff;
   border: 1px solid #cbd5e1;
   border-bottom: 2px solid #94a3b8;
   border-radius: 4px;
   padding: 1px 5px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: ui-monospace, SFMono-Regular, monospace;
   font-size: 11px;
   font-weight: 600;
   color: #0f172a;
   display: inline-block;
   line-height: 1.25;
+}
+
+.guide-key-or {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.guide-shortcut-info {
+  text-align: right;
+  color: var(--portal-text-secondary);
+  font-size: 11.5px;
+}
+
+.guide-shortcut-info b {
+  color: var(--portal-text-primary);
+}
+
+.guide-tip-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #166534;
+  margin-top: 10px;
+}
+
+.guide-tip-icon {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.guide-tip-content {
+  flex: 1;
+}
+
+.guide-tip-content b {
+  color: #15803d;
+}
+
+.portal-guide-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--portal-border);
+  font-size: 11px;
+  color: var(--portal-text-secondary);
 }
 
 /* Portal Nav Button in Themes Header */
@@ -2159,31 +2187,8 @@ body.theme-excel .section-break-badge {
   transform: translateY(1px);
 }
 
-body.theme-googlesheets .portal-nav-btn {
-  border-color: #dadce0;
-  color: #3c4043;
-}
-body.theme-excel .portal-nav-btn {
-  border-color: rgba(255, 255, 255, 0.4);
-  background-color: transparent;
-  color: #ffffff;
-}
-body.theme-excel .portal-nav-btn:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.7);
-}
-body.theme-vscode .portal-nav-btn {
-  background: #252526;
-  border-color: #3c3c3c;
-  color: #cccccc;
-}
-body.theme-vscode .portal-nav-btn:hover {
-  background: #2d2d30;
-  border-color: #007acc;
-  color: #ffffff;
-}
 
-/* ==========================================================
+* ==========================================================
    EDITABLE STEALTH DOCUMENT TITLES (CLICK-TO-RENAME)
    ========================================================== */
 .gsheet-doc-title[contenteditable="true"] {
@@ -4446,100 +4451,194 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
   flex: 1;
 }
 
-.portal-guide-stacked {
-  max-height: 600px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-.portal-guide-stacked::-webkit-scrollbar {
-  width: 5px;
-}
-.portal-guide-stacked::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+.portal-guide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
 }
 
-.guide-badge.purple {
-  background: #ede9fe;
-  color: #6d28d9;
+.guide-block {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
-.portal-guide-starter {
-  background: #fbfbfe;
-  border: 1px solid #e0e7ff;
+.guide-block-title {
+  font-family: var(--portal-font-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--portal-ink-sepia);
+  margin-bottom: 1px;
 }
 
+/* 3 Steps List (Paper & Ink) */
 .guide-steps-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 6px;
+  gap: 7px;
+  background: #faf4e9;
+  border: 1.5px solid #ded1bd;
+  border-radius: 7px 9px 8px 10px;
+  padding: 10px 12px;
+  box-shadow: inset 0 1px 3px rgba(60, 48, 36, 0.03);
 }
 
 .guide-step-row {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 9px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #383025;
 }
 
 .guide-step-num {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
+  width: 19px;
+  height: 19px;
+  min-width: 19px;
   border-radius: 50%;
-  background: #6366f1;
-  color: #ffffff;
+  background: #ece1cc;
+  color: #2b2218;
+  border: 1.5px solid #c9b99e;
+  font-family: var(--portal-font-display);
   font-size: 11px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 1px;
+  box-shadow: 0 1px 2px rgba(60, 48, 36, 0.1);
 }
 
-.guide-step-content {
+.guide-step-text {
   flex: 1;
 }
 
-.guide-step-title {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--portal-text-primary);
-  margin-bottom: 2px;
+.guide-step-text b {
+  color: var(--portal-ink);
 }
 
-.guide-step-desc {
-  margin: 0;
-  font-size: 11.5px;
-  color: var(--portal-text-secondary);
-  line-height: 1.45;
+.guide-step-text i {
+  font-style: normal;
+  font-weight: 600;
+  color: #284b6f;
 }
 
-.guide-step-desc b {
-  color: var(--portal-text-primary);
-}
-
-.guide-step-desc code {
-  background: #e2e8f0;
-  padding: 1px 4px;
+.guide-step-text code {
+  background: #ece3d3;
+  padding: 1px 5px;
   border-radius: 3px;
-  font-size: 10.5px;
-  color: #334155;
-  font-family: ui-monospace, SFMono-Regular, monospace;
+  border: 1px dashed #c9bca9;
+  font-size: 11px;
+  color: #3a2e22;
+  font-family: var(--portal-font-mono);
+}
+
+/* Shortcuts List (Typewriter Keys) */
+.guide-shortcuts-list {
+  display: flex;
+  flex-direction: column;
+  background: #faf4e9;
+  border: 1.5px solid #ded1bd;
+  border-radius: 7px 9px 8px 10px;
+  padding: 4px 12px;
+  box-shadow: inset 0 1px 3px rgba(60, 48, 36, 0.03);
+}
+
+.guide-shortcut-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ded1bd;
+  font-size: 12px;
+}
+
+.guide-shortcut-item:last-child {
+  border-bottom: none;
+}
+
+.guide-shortcut-keys {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.guide-shortcut-keys kbd {
+  background: #fbf7ee;
+  border: 1.5px solid #c7b79e;
+  border-bottom: 2.5px solid #9c8a70;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: var(--portal-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f1a14;
+  display: inline-block;
+  line-height: 1.25;
+  box-shadow: 0 1px 2px rgba(50, 40, 30, 0.1);
+}
+
+.guide-key-or {
+  font-size: 11px;
+  color: #9c8a73;
+}
+
+.guide-shortcut-info {
+  text-align: right;
+  color: #55483a;
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+
+.guide-shortcut-info b {
+  color: var(--portal-ink);
+}
+
+/* Quick Tip Box (Torn Memo Note) */
+.guide-tip-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  background: #f9f0db;
+  border: 1.5px dashed #cdb78e;
+  border-radius: 6px 9px 7px 8px;
+  padding: 10px 13px;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: #554433;
+  box-shadow: 0 2px 6px rgba(100, 80, 50, 0.05);
+}
+
+.guide-tip-icon {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.guide-tip-content {
+  flex: 1;
+}
+
+.guide-tip-content b {
+  color: #2b2014;
 }
 
 .portal-guide-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 12px;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 14px;
   padding-top: 10px;
-  border-top: 1px dashed var(--portal-border);
+  border-top: 1.5px dashed var(--portal-border);
   font-size: 11px;
   color: var(--portal-text-secondary);
 }
-
 
 /* Google Form Feedback Section & Buttons */
 .duo-top-actions {
@@ -4567,6 +4666,25 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
   border-color: var(--portal-primary);
 }
 
+.duo-btn-sheet-nav {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.duo-btn-sheet-nav:hover {
+  background: #d1fae5;
+  border-color: #059669;
+}
+
 .duo-feedback-box {
   margin-top: 14px;
   padding: 12px 14px;
@@ -4576,7 +4694,6 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
   display: flex;
   flex-direction: column;
   gap: 8px;
-  text-align: left;
 }
 
 .duo-feedback-header {
@@ -4603,6 +4720,13 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
   color: var(--portal-text-secondary);
 }
 
+.duo-feedback-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+
 .duo-btn-feedback {
   background: #ffffff;
   color: var(--portal-primary);
@@ -4626,6 +4750,31 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
   background: var(--portal-primary);
   color: #ffffff;
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.duo-btn-progress {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1.5px solid #10b981;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.duo-btn-progress:hover {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
 }
 
 .portal-updates-footer {
@@ -4654,6 +4803,32 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
 .portal-link-feedback:hover {
   text-decoration: underline;
   background: var(--portal-primary-light);
+}
+
+.portal-link-sheet {
+  background: none;
+  border: none;
+  color: #047857;
+  font-weight: 600;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+.portal-link-sheet:hover {
+  text-decoration: underline;
+  background: #ecfdf5;
+}
+
+.duo-btn-progress-settings {
+  background: #188038 !important;
+  color: #ffffff !important;
+  border: 1px solid #137333 !important;
+  transition: all 0.18s ease;
+}
+.duo-btn-progress-settings:hover {
+  background: #137333 !important;
 }
 
 /* ==================================================
