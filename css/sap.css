@@ -1,0 +1,569 @@
+/* ==========================================================================
+   SAP GUI 8.0 / S/4HANA - Enterprise ERP Stealth Camouflage Theme
+   ========================================================================== */
+
+:root {
+  --sap-shell-bg: #2f3c48;
+  --sap-shell-text: #ffffff;
+  --sap-app-header-bg: #e5edf5;
+  --sap-app-header-border: #bccbd9;
+  --sap-title-color: #0b3760;
+  --sap-btn-bg: #ffffff;
+  --sap-btn-border: #b0c0d0;
+  --sap-btn-hover: #e8f0f8;
+  --sap-grid-header-bg: #edf2f7;
+  --sap-grid-border: #d0dbe5;
+  --sap-grid-line: #e2e8f0;
+  --sap-grid-text: #1d2d3d;
+  --sap-grid-selected: #d8e8f8;
+  --sap-status-bar-bg: #dbe4ee;
+  --sap-status-bar-text: #2c3e50;
+  --sap-green-check: #107c41;
+  --sap-accent-blue: #0a6ed1;
+}
+
+body.theme-sap {
+  background-color: #f5f7fa;
+  color: var(--sap-grid-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+body.theme-sap * {
+  box-sizing: border-box;
+}
+
+body.theme-sap.has-pinned-navbar {
+  padding-top: var(--unav-height, 38px) !important;
+}
+
+body.theme-sap.controls-hidden {
+  padding-top: 0 !important;
+}
+
+.sap-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  background-color: #f5f7fa;
+  overflow: hidden;
+}
+
+/* 1. SAP Top Menu Bar */
+.sap-menubar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30px;
+  background-color: var(--sap-shell-bg);
+  color: #fff;
+  padding: 0 8px;
+  font-size: 11.5px;
+  flex-shrink: 0;
+}
+
+.sap-menu-left {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.sap-logo-badge {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.sap-menu-btn {
+  color: #d8e2ec;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sap-menu-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.sap-menu-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.sap-win-ctrls {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.sap-win-btn {
+  color: #cfd8dc;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.sap-win-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.sap-win-btn.close:hover {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+/* 2. SAP Command Bar / System Standard Toolbar */
+.sap-command-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  background-color: #f0f4f8;
+  border-bottom: 1px solid var(--sap-app-header-border);
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.sap-cmd-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sap-okcode-box {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #9fb3c8;
+  border-radius: 3px;
+  height: 24px;
+  padding: 0 2px 0 6px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.sap-okcode-input {
+  border: none;
+  outline: none;
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0b3760;
+  width: 70px;
+  text-transform: uppercase;
+}
+
+.sap-btn-enter {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.sap-sys-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 8px;
+}
+
+.sap-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 6px;
+  background-color: #ffffff;
+  border: 1px solid #b4c6d8;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sap-btn:hover {
+  background-color: #e5effa;
+  border-color: #8da4be;
+}
+
+.sap-btn-icon-only {
+  width: 24px;
+  padding: 0;
+}
+
+.sap-toolbar-sep {
+  width: 1px;
+  height: 18px;
+  background-color: #cdd8e4;
+  margin: 0 4px;
+}
+
+/* 3. SAP Application Header / Title Bar */
+.sap-app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  background-color: var(--sap-app-header-bg);
+  border-bottom: 1px solid var(--sap-app-header-border);
+  padding: 0 12px;
+  flex-shrink: 0;
+}
+
+.sap-app-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--sap-title-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sap-app-title-text {
+  outline: none;
+  border: 1px solid transparent;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.sap-app-title-text:hover,
+.sap-app-title-text:focus {
+  border-color: #9fb3c8;
+  background-color: #fff;
+}
+
+.sap-app-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 4. SAP Header Collapsible Summary Card */
+.sap-po-header-card {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--sap-app-header-border);
+  padding: 8px 14px;
+  flex-shrink: 0;
+}
+
+.sap-po-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.sap-po-meta-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.sap-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sap-meta-label {
+  color: #5c6f84;
+  font-weight: 500;
+}
+
+.sap-meta-val {
+  font-weight: 600;
+  color: #1a2a3a;
+}
+
+.sap-status-pill {
+  background-color: #e6f4ea;
+  color: #137333;
+  border: 1px solid #ceead6;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sap-header-tabstrip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border-bottom: 1px solid #d0dbe5;
+  margin-top: 6px;
+}
+
+.sap-header-tab {
+  font-size: 11px;
+  color: #5c6f84;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.sap-header-tab:hover {
+  color: #0b3760;
+}
+
+.sap-header-tab.active {
+  color: var(--sap-accent-blue);
+  border-bottom-color: var(--sap-accent-blue);
+  font-weight: 600;
+}
+
+/* 5. Main Item Overview Area (ALV Grid Continuous Reading) */
+.sap-main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  min-height: 0;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.sap-item-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  background-color: #f7fafc;
+  border-bottom: 1px solid var(--sap-grid-border);
+  padding: 0 10px;
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+.sap-item-tools-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sap-alv-btn {
+  background: #ffffff;
+  border: 1px solid #ccd6e0;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.sap-alv-btn:hover {
+  background-color: #e8f0fe;
+  border-color: #a4bfe8;
+}
+
+/* Scroll Container for SAP Grid */
+.sap-scroll-container {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: #ffffff;
+}
+
+.sap-scroll-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.sap-scroll-container::-webkit-scrollbar-thumb {
+  background-color: #bccbd9;
+  border-radius: 4px;
+}
+
+.sap-scroll-container::-webkit-scrollbar-track {
+  background: #f1f4f8;
+}
+
+/* SAP ALV Table */
+.sap-alv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  table-layout: auto;
+}
+
+.sap-alv-table th {
+  background-color: var(--sap-grid-header-bg);
+  color: #3e5062;
+  font-weight: 600;
+  text-align: left;
+  padding: 6px 8px;
+  border-right: 1px solid var(--sap-grid-border);
+  border-bottom: 2px solid #b8cad9;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+.sap-alv-table td {
+  padding: 7px 8px;
+  border-right: 1px solid var(--sap-grid-line);
+  border-bottom: 1px solid var(--sap-grid-line);
+  color: #1e293b;
+  vertical-align: top;
+}
+
+.sap-item-row {
+  cursor: pointer;
+  transition: background-color 0.12s;
+}
+
+.sap-item-row:hover {
+  background-color: #f0f6ff;
+}
+
+.sap-item-row.selected-sap-row {
+  background-color: var(--sap-grid-selected) !important;
+}
+
+.sap-item-num {
+  font-family: Consolas, Monaco, monospace;
+  font-weight: 600;
+  color: var(--sap-accent-blue);
+  text-align: center;
+}
+
+.sap-item-desc {
+  font-family: var(--story-font-family, inherit);
+  font-size: var(--story-font-size, 11pt);
+  line-height: var(--story-line-height, 1.7);
+  color: var(--story-color, #1e293b);
+  word-break: break-word;
+  min-width: 380px;
+}
+
+.sap-item-qty,
+.sap-item-price {
+  font-family: Consolas, Monaco, monospace;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Boss Mode Camouflage View for SAP (T-Code FS10N GL Account Balances) */
+.sap-boss-container {
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.sap-boss-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0b3760;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #d0dbe5;
+  padding-bottom: 8px;
+}
+
+.sap-boss-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.sap-boss-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+
+.sap-boss-table th {
+  background-color: #e2ebf5;
+  color: #1e3a5f;
+  padding: 6px 10px;
+  border: 1px solid #c0d2e5;
+  text-align: right;
+}
+
+.sap-boss-table th:first-child,
+.sap-boss-table td:first-child {
+  text-align: center;
+}
+
+.sap-boss-table td {
+  padding: 5px 10px;
+  border: 1px solid #e1e8f0;
+  text-align: right;
+  font-family: Consolas, monospace;
+}
+
+.sap-boss-table tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.sap-boss-table tr.total-row td {
+  font-weight: 700;
+  background-color: #e8f0fe;
+  border-top: 2px solid #9bb5dc;
+}
+
+/* 6. SAP Bottom System Status Bar */
+.sap-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 24px;
+  background-color: var(--sap-status-bar-bg);
+  border-top: 1px solid var(--sap-app-header-border);
+  padding: 0 8px;
+  font-size: 11px;
+  color: var(--sap-status-bar-text);
+  flex-shrink: 0;
+}
+
+.sap-status-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sap-status-icon {
+  color: #107c41;
+  display: flex;
+  align-items: center;
+}
+
+.sap-status-right {
+  display: flex;
+  align-items: center;
+}
+
+.sap-status-cell {
+  border-left: 1px solid #bccbd9;
+  padding: 0 8px;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 10.5px;
+  color: #3b5066;
+}

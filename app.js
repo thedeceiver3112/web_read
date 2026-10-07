@@ -67,6 +67,8 @@ const state = {
   canvaTitle: localStorage.getItem('stealth_title_canva') || 'Báo Cáo Chiến Lược Thương Hiệu 2026',
   powerpointTitle: localStorage.getItem('stealth_title_powerpoint') || 'Q3_Business_Review_Strategic_Plan.pptx',
   tvplTitle: localStorage.getItem('stealth_title_tvpl') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ',
+  capcutTitle: localStorage.getItem('stealth_title_capcut') || 'CapCut Pro - Draft_Project_0928_Vlog',
+  sapTitle: localStorage.getItem('stealth_title_sap') || 'Display Purchase Order 4500192834',
 };
 
 // Realistic mock categories & modules for corporate audit camouflage
@@ -218,7 +220,9 @@ const THEME_PAGES = {
   'theme-chatgpt': 'chatgpt.html',
   'theme-teams': 'teams.html',
   'theme-revit': 'revit.html',
-  'theme-misa': 'misa.html'
+  'theme-misa': 'misa.html',
+  'theme-capcut': 'capcut.html',
+  'theme-sap': 'sap.html'
 };
 
 // Single source of truth for per-page control id prefixes.
@@ -226,7 +230,7 @@ const THEME_PAGES = {
 // To add a theme, add its prefix here instead of editing every id list.
 const THEME_CONTROL_PREFIXES = [
   'gs', 'gdocs', 'excel', 'vsc', 'ps', 'blender', 'linkedin',
-  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl'
+  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap'
 ];
 
 function themeControlIds(suffix) {
@@ -237,7 +241,7 @@ function themeControlIds(suffix) {
 const BOSS_KEY_BUTTON_IDS = [
   'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'blender', 'linkedin',
   'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat',
-  'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa'
+  'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap'
 ].map(name => `btn-boss-key-${name}`);
 
 const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
@@ -266,6 +270,8 @@ function getThemeForCurrentPage() {
   if (path.endsWith('teams.html')) return 'theme-teams';
   if (path.endsWith('revit.html')) return 'theme-revit';
   if (path.endsWith('misa.html')) return 'theme-misa';
+  if (path.endsWith('capcut.html')) return 'theme-capcut';
+  if (path.endsWith('sap.html')) return 'theme-sap';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -454,6 +460,11 @@ const FAVICONS = {
   'theme-canva': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22canva-g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2300C4CC%22/%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%233A88E9%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237D2AE8%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2222%22%20fill%3D%22url%28%23canva-g%29%22/%3E%20%3Cpath%20d%3D%22M30%2016.5c-3.2%200-6.8%201.8-9.2%204.8-2.6%203.2-3.8%207.5-3.8%2011.2%200%204.2%202.6%206.5%206.5%206.5%203.8%200%206.6-2.2%208.2-4.5l-2.6-2.2c-1.2%201.5-3.2%203.1-5.2%203.1-2.2%200-3.5-1.5-3.5-4.2%200-3.2%201.2-7%203.2-9.6%201.8-2.2%204.2-3.5%206.4-3.5%202.1%200%203.2%201%203.2%202.6%200%201.2-.6%202.2-1.8%202.8-1.5.8-3.2%201-5.2%201.2l-1.2.1c-.2%201.2-.3%202.5-.3%203.6%200%201.5.3%202.8.8%203.8l2.8-.4c-.4-.8-.6-1.8-.6-2.8%200-.8.1-1.6.2-2.4%201.8-.2%203.6-.5%205.1-1.5%202-1.2%203-2.8%203-4.8%200-2.8-2.2-4.4-5.6-4.4z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
   'theme-powerpoint': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22ppt-g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23D24726%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%239C2C12%22/%3E%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22ppt-g2%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FA8060%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23D24726%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20x%3D%2215%22%20y%3D%227%22%20width%3D%2227%22%20height%3D%2234%22%20rx%3D%224%22%20fill%3D%22url%28%23ppt-g1%29%22/%3E%20%3Ccircle%20cx%3D%2228.5%22%20cy%3D%2224%22%20r%3D%228.5%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.2%22/%3E%20%3Cpath%20d%3D%22M28.5%2015.5V24H37A8.5%208.5%200%200%200%2028.5%2015.5z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.9%22/%3E%20%3Crect%20x%3D%226%22%20y%3D%2211%22%20width%3D%2221%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22url%28%23ppt-g2%29%22%20filter%3D%22drop-shadow%280%203px%206px%20rgba%280%2C0%2C0%2C0.35%29%29%22/%3E%20%3Cpath%20d%3D%22M12%2017h6c2.8%200%204.8%201.8%204.8%204.5s-2%204.5-4.8%204.5h-2.8V31H12V17zm3.2%206.2h2.6c1.2%200%202-.7%202-1.7s-.8-1.7-2-1.7h-2.6v3.4z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
   'theme-thuvienphapluat': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22tvpl-g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23990000%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23660000%22/%3E%20%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22tvpl-gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FFDF73%22/%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23D4AF37%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23AA820A%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22url%28%23tvpl-g%29%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2220%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.8%22%20fill%3D%22none%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2211.5%22%20r%3D%222.2%22%20fill%3D%22url%28%23tvpl-gold%29%22/%3E%20%3Cpath%20d%3D%22M24%2011v26M18%2037h12M12%2017h24%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209M12%2017l5%209M7%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209M36%2017l5%209M31%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3C/svg%3E",
+  'theme-teams': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%23464EB8%22/%3E%3Ccircle%20cx%3D%2233%22%20cy%3D%2217%22%20r%3D%225%22%20fill%3D%22%237B83EB%22/%3E%3Cpath%20d%3D%22M25%2031c0-4.4%203.6-8%208-8s8%203.6%208%208v2H25v-2z%22%20fill%3D%22%237B83EB%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2215%22%20r%3D%227%22%20fill%3D%22%23FFFFFF%22/%3E%3Cpath%20d%3D%22M9%2034c0-6%205-11%2011-11s11%205%2011%2011v2H9v-2z%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
+  'theme-revit': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%227%22%20fill%3D%22%23005A9C%22/%3E%3Cpath%20d%3D%22M12%209H26C31.5%209%2035.5%2012.8%2035.5%2018C35.5%2021.8%2032.8%2024.8%2028.5%2026.2L36%2039H28L21.5%2027.5H18V39H12V9ZM18%2022H25C27.5%2022%2029.5%2020.5%2029.5%2018C29.5%2015.5%2027.5%2014%2025%2014H18V22Z%22%20fill%3D%22white%22/%3E%3Cpath%20d%3D%22M22%2027.5L28.5%2039H35L27%2027.5H22Z%22%20fill%3D%22%2378C2F5%22/%3E%3C/svg%3E",
+  'theme-misa': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20d%3D%22M24%203L38%2017L28%2024L24%2016L20%2024L10%2017L24%203Z%22%20fill%3D%22%23E51937%22/%3E%3Cpath%20d%3D%22M45%2024L31%2038L24%2028L32%2024L24%2020L31%2010L45%2024Z%22%20fill%3D%22%23FF9800%22/%3E%3Cpath%20d%3D%22M24%2045L10%2031L20%2024L24%2032L28%2024L38%2031L24%2045Z%22%20fill%3D%22%231976D2%22/%3E%3Cpath%20d%3D%22M3%2024L17%2010L24%2020L16%2024L24%2028L17%2038L3%2024Z%22%20fill%3D%22%234CAF50%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%225%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
+  'theme-capcut': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%23000000%22/%3E%3Cpath%20d%3D%22M10%2014L22%2022V26L10%2034V14Z%22%20fill%3D%22%2300F2FE%22/%3E%3Cpath%20d%3D%22M38%2014L26%2022V26L38%2034V14Z%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
+  'theme-sap': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%2300386B%22/%3E%3Cpath%20d%3D%22M10%2012h28l-8%2024H2l8-24z%22%20fill%3D%22%23007DB8%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%2231%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2216%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%221%22%3ESAP%3C/text%3E%3C/svg%3E",
 };
 
 // ==========================================================
@@ -461,10 +472,13 @@ const FAVICONS = {
 // ==========================================================
 
 // ==========================================================
-// GOOGLE FORM FEEDBACK CONFIGURATION & HANDLER
+// GOOGLE FORM FEEDBACK & SHEET PROGRESS CONFIGURATION
 // ==========================================================
 // Dán link Google Form (forms.gle/... hoặc docs.google.com/forms/...) vào đây:
 const CONFIG_FEEDBACK_FORM_URL = 'https://forms.gle/YxPd6zRZEeyQ3z3e8';
+
+// Dán link Google Sheets theo dõi tiến độ cập nhật vào đây:
+const CONFIG_PROGRESS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/126sjvPWcDbwGrtrObHFdcCZ1KzQ7cfeaTozgfyESHOA/edit?gid=1898748271#gid=1898748271';
 
 function getFeedbackFormUrl() {
   const saved = localStorage.getItem('stealth_feedback_form_url');
@@ -489,6 +503,29 @@ function configFeedbackFormUrl() {
   }
 }
 
+function getProgressSheetUrl() {
+  const saved = localStorage.getItem('stealth_progress_sheet_url');
+  if (saved && saved.startsWith('http')) {
+    return saved;
+  }
+  return CONFIG_PROGRESS_SHEET_URL;
+}
+
+function openProgressSheet() {
+  const url = getProgressSheetUrl();
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function configProgressSheetUrl() {
+  const current = getProgressSheetUrl();
+  const input = prompt('Nhập đường link Google Sheets theo dõi tiến độ cập nhật:\n(Ví dụ: https://docs.google.com/spreadsheets/d/...)', current);
+  if (input !== null && input.trim()) {
+    const cleanUrl = input.trim();
+    localStorage.setItem('stealth_progress_sheet_url', cleanUrl);
+    showPageFlipToast(`Đã lưu link Google Sheets tiến độ: <b>${escapeHtml(cleanUrl)}</b>`);
+  }
+}
+
 function initFeedbackListeners() {
   document.querySelectorAll(
     '#btn-open-feedback-nav, #btn-open-feedback-portal, #btn-open-feedback-updates, #btn-open-feedback-settings, .duo-btn-feedback-nav, .portal-link-feedback, .duo-btn-feedback'
@@ -496,8 +533,17 @@ function initFeedbackListeners() {
     btn.addEventListener('click', openFeedbackForm);
   });
 
+  document.querySelectorAll(
+    '#btn-open-progress-nav, #btn-open-progress-portal, #btn-open-progress-updates, #btn-open-progress-settings, .duo-btn-sheet-nav, .portal-link-sheet, .duo-btn-progress, .duo-btn-progress-settings'
+  ).forEach(btn => {
+    btn.addEventListener('click', openProgressSheet);
+  });
+
   const configBtn = document.getElementById('btn-config-feedback-url');
   if (configBtn) configBtn.addEventListener('click', configFeedbackFormUrl);
+
+  const configSheetBtn = document.getElementById('btn-config-progress-url');
+  if (configSheetBtn) configSheetBtn.addEventListener('click', configProgressSheetUrl);
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -510,6 +556,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSheetTabs();
   initContinuousScrollListeners();
   initLandingPortal();
+  initPortalTriggers();
   initControlsVisibilityToggle();
   initVersionReloadButton();
   initFeedbackListeners();
@@ -546,6 +593,8 @@ function loadSavedState() {
     state.autocadTitle = localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg';
     state.tvplTitle = localStorage.getItem('stealth_title_tvpl') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ';
     state.teamsTitle = localStorage.getItem('stealth_title_teams') || 'Dong Mia';
+    state.capcutTitle = localStorage.getItem('stealth_title_capcut') || 'CapCut Pro - Draft_Project_0928_Vlog';
+    state.sapTitle = localStorage.getItem('stealth_title_sap') || 'Display Purchase Order 4500192834';
 
 
     const saved = localStorage.getItem('excel_reader_state');
@@ -792,6 +841,23 @@ function applyTheme(themeName) {
     setDocumentTitle(`${docTitle} | Chat | Microsoft Teams`);
     const tTitle = document.getElementById('teams-doc-title');
     if (tTitle) tTitle.textContent = docTitle;
+  } else if (themeName === 'theme-revit') {
+    const docTitle = state.revitTitle || 'arch_buildinga1_144104999.rvt';
+    setDocumentTitle(`${docTitle} - 3D View: 3D - West Facade Room Detail - Autodesk Revit 2025`);
+    const rTitle = document.getElementById('revit-doc-title');
+    if (rTitle) rTitle.textContent = docTitle;
+  } else if (themeName === 'theme-misa') {
+    setDocumentTitle('MISA SME.NET 2021 - [Bán hàng - Đơn đặt hàng]');
+  } else if (themeName === 'theme-capcut') {
+    const docTitle = state.capcutTitle || 'CapCut Pro - Draft_Project_0928_Vlog';
+    setDocumentTitle(docTitle);
+    const ccTitle = document.getElementById('capcut-doc-title');
+    if (ccTitle) ccTitle.textContent = docTitle;
+  } else if (themeName === 'theme-sap') {
+    const docTitle = state.sapTitle || 'Display Purchase Order 4500192834';
+    setDocumentTitle(`SAP GUI for Windows 8.0 - [ME23N - ${docTitle}]`);
+    const spTitle = document.getElementById('sap-doc-title');
+    if (spTitle) spTitle.textContent = docTitle;
   }
 
   applyStyles();
@@ -1177,6 +1243,48 @@ function initTitleEditing() {
     });
   }
 
+  const capcutTitle = document.getElementById('capcut-doc-title');
+  if (capcutTitle) {
+    capcutTitle.addEventListener('blur', () => {
+      let val = capcutTitle.textContent.trim();
+      if (!val) val = 'CapCut Pro - Draft_Project_0928_Vlog';
+      capcutTitle.textContent = val;
+      state.capcutTitle = val;
+      localStorage.setItem('stealth_title_capcut', val);
+      if (state.theme === 'theme-capcut') {
+        document.title = val;
+      }
+      showPageFlipToast(`✅ Đã đổi tên dự án CapCut: <b>${escapeHtml(val)}</b>`);
+    });
+    capcutTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        capcutTitle.blur();
+      }
+    });
+  }
+
+  const sapTitle = document.getElementById('sap-doc-title');
+  if (sapTitle) {
+    sapTitle.addEventListener('blur', () => {
+      let val = sapTitle.textContent.trim();
+      if (!val) val = 'Display Purchase Order 4500192834';
+      sapTitle.textContent = val;
+      state.sapTitle = val;
+      localStorage.setItem('stealth_title_sap', val);
+      if (state.theme === 'theme-sap') {
+        document.title = `SAP GUI for Windows 8.0 - [ME23N - ${val}]`;
+      }
+      showPageFlipToast(`✅ Đã đổi tiêu đề chứng từ SAP: <b>${escapeHtml(val)}</b>`);
+    });
+    sapTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sapTitle.blur();
+      }
+    });
+  }
+
 }
 
 // ==========================================================
@@ -1340,10 +1448,16 @@ function initLandingPortal() {
   const portal = document.getElementById('landing-portal');
   if (!portal) return;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const forcePortal = urlParams.has('portal') || urlParams.has('home');
+  if (forcePortal) {
+    try { localStorage.removeItem('skip_portal'); } catch(e) {}
+  }
+
   const path = window.location.pathname.toLowerCase();
   const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
   const isDedicatedPage = !isIndexPage;
-  const skipPortal = localStorage.getItem('skip_portal') === 'true' || isDedicatedPage;
+  const skipPortal = !forcePortal && (localStorage.getItem('skip_portal') === 'true' || isDedicatedPage);
   const closeBtn = document.getElementById('btn-portal-close');
   const rememberChk = document.getElementById('chk-remember-direct-mode');
 
@@ -1419,34 +1533,6 @@ function initLandingPortal() {
     });
   }
 
-  // Open Portal Buttons from theme headers and theme modal
-  [
-    'btn-open-portal-gsheet',
-    'btn-open-portal-gdocs',
-    'btn-open-portal-excel',
-    'btn-open-portal-vscode',
-    'btn-open-portal-photoshop',
-    'btn-open-portal-blender',
-    'btn-open-portal-linkedin',
-    'btn-open-portal-autocad',
-    'btn-open-portal-zalo',
-    'btn-open-portal-figma',
-    'btn-open-portal-canva',
-    'btn-open-portal-powerpoint',
-    'btn-open-portal-thuvienphapluat',
-    'btn-modal-to-portal'
-  ].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) {
-      btn.addEventListener('click', () => {
-        closeThemeModal();
-        openPortal(true);
-        updatePortalThemeUI(state.theme);
-        updatePortalUploadUI();
-      });
-    }
-  });
-
   // Copy STK Button
   const copyBtn = document.getElementById('btn-copy-stk');
   if (copyBtn) {
@@ -1495,6 +1581,49 @@ function initLandingPortal() {
   }
 }
 
+function goToHomePage() {
+  try {
+    localStorage.removeItem('skip_portal');
+  } catch(e) {}
+  window.location.href = 'index.html?portal=1';
+}
+
+function initPortalTriggers() {
+  // Open Portal Buttons from theme headers and theme modal
+  [
+    'btn-open-portal-gsheet',
+    'btn-open-portal-gdocs',
+    'btn-open-portal-excel',
+    'btn-open-portal-vscode',
+    'btn-open-portal-photoshop',
+    'btn-open-portal-blender',
+    'btn-open-portal-linkedin',
+    'btn-open-portal-autocad',
+    'btn-open-portal-zalo',
+    'btn-open-portal-figma',
+    'btn-open-portal-canva',
+    'btn-open-portal-powerpoint',
+    'btn-open-portal-thuvienphapluat',
+    'btn-modal-to-portal'
+  ].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        const portal = document.getElementById('landing-portal');
+        if (portal) {
+          closeThemeModal();
+          openPortal(true);
+          updatePortalThemeUI(state.theme);
+          updatePortalUploadUI();
+        } else {
+          e.preventDefault();
+          goToHomePage();
+        }
+      });
+    }
+  });
+}
+
 function updatePortalThemeUI(themeName) {
   document.querySelectorAll('.duo-mission-item, .portal-theme-item').forEach(item => {
     const match = item.getAttribute('data-theme') === themeName;
@@ -1504,7 +1633,7 @@ function updatePortalThemeUI(themeName) {
 
 function copyAccountNumber() {
   const stk = '1015471873';
-  const copyBtn = document.getElementById('btn-copy-stk');
+  const copyBtn = document.getElementById('btn-copy-stk') || document.getElementById('btn-copy-stk-modal');
   
   if (copyBtn) {
     const rect = copyBtn.getBoundingClientRect();
@@ -1513,10 +1642,12 @@ function copyAccountNumber() {
 
   const showFeedback = () => {
     if (copyBtn) {
+      const orig = copyBtn.getAttribute('data-orig') || copyBtn.textContent;
+      copyBtn.setAttribute('data-orig', orig);
       copyBtn.textContent = 'Đã sao chép số tài khoản!';
       copyBtn.classList.add('copied');
       setTimeout(() => {
-        copyBtn.textContent = 'Sao chép số tài khoản';
+        copyBtn.textContent = orig;
         copyBtn.classList.remove('copied');
       }, 2500);
     }
@@ -1718,6 +1849,10 @@ function launchConfetti(originX, originY, count = 60) {
 // UNIVERSAL PINNED READING NAVBAR COMPONENT
 // ==========================================================
 function initUniversalNavbar() {
+  const path = window.location.pathname.toLowerCase();
+  const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
+  if (isIndexPage) return;
+
   document.body.classList.add('has-pinned-navbar');
 
   let nav = document.getElementById('universal-reader-navbar');
@@ -1827,10 +1962,15 @@ function initUniversalNavbar() {
   const btnPortal = document.getElementById('univ-btn-portal');
   if (btnPortal) {
     btnPortal.addEventListener('click', () => {
-      closeThemeModal();
-      openPortal(true);
-      updatePortalThemeUI(state.theme);
-      updatePortalUploadUI();
+      const portal = document.getElementById('landing-portal');
+      if (portal) {
+        closeThemeModal();
+        openPortal(true);
+        updatePortalThemeUI(state.theme);
+        updatePortalUploadUI();
+      } else {
+        goToHomePage();
+      }
     });
   }
 
@@ -2359,7 +2499,7 @@ function applyStyles() {
     if (state.lineHeight) p.style.lineHeight = state.lineHeight;
   });
 
-  restyle('.ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .zalo-msg-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text', el => {
+  restyle('.ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .zalo-msg-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text, .sap-item-desc', el => {
     if (state.fontSize) el.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) el.style.lineHeight = state.lineHeight;
   });
@@ -2472,7 +2612,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = '';
     if (tvBoss) tvBoss.style.display = 'none';
 
-    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = '';
@@ -2552,7 +2692,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = 'none';
     if (tvBoss) tvBoss.style.display = 'block';
 
-    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = 'none';
@@ -3366,6 +3506,8 @@ const THEME_RENDERERS = {
   'theme-teams': { append: appendTeamsBatch, streams: ['teams-story-stream'] },
   'theme-revit': { append: appendRevitBatch, streams: ['revit-story-stream'] },
   'theme-misa': { append: appendMisaBatch, streams: ['misa-story-stream'] },
+  'theme-capcut': { append: appendCapCutBatch, streams: ['capcut-story-stream'] },
+  'theme-sap': { append: appendSAPBatch, streams: ['sap-story-stream'] },
   // Google Sheets / Excel (spreadsheet table) is the default
   default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
 };
@@ -4033,7 +4175,9 @@ const ACTIVE_ROW_SPECS = {
   'theme-chatgpt': { id: 'gpt-para-', cls: 'active-para' },
   'theme-teams': { id: 'teams-msg-', cls: 'active-msg' },
   'theme-revit': { id: 'revit-clause-', cls: 'active-clause' },
-  'theme-misa': { id: 'misa-order-', cls: 'selected-order-row' }
+  'theme-misa': { id: 'misa-order-', cls: 'selected-order-row' },
+  'theme-capcut': { id: 'capcut-cap-', cls: 'active-caption' },
+  'theme-sap': { id: 'sap-item-', cls: 'selected-sap-row' }
 };
 
 // Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
@@ -4236,6 +4380,8 @@ function getActiveScrollContainer() {
     'theme-teams': 'teams-chat-scroll-container',
     'theme-revit': 'revit-schedule-scroll-container',
     'theme-misa': 'misa-orders-scroll-container',
+    'theme-capcut': 'capcut-scroll-container',
+    'theme-sap': 'sap-scroll-container',
   };
   const id = containerMap[state.theme];
   if (id) {
@@ -4243,6 +4389,8 @@ function getActiveScrollContainer() {
     if (el) return el;
   }
   return document.getElementById('grid-scroll-container') ||
+         document.getElementById('capcut-scroll-container') ||
+         document.getElementById('sap-scroll-container') ||
          document.getElementById('tvpl-document-scroll-container') ||
          document.getElementById('gdocs-canvas-scroll-container') ||
          document.getElementById('vsc-code-scroll-container') ||
@@ -4666,3 +4814,97 @@ function appendMisaBatch(count) {
     rowCountEl.textContent = `Số dòng = ${end}`;
   }
 }
+
+// 20. CapCut Pro Subtitle & Captions Batch Renderer
+function capcutTimecode(i) {
+  const total = i * 4 + 2;
+  const pad = n => String(n).padStart(2, '0');
+  const h = pad(Math.floor(total / 3600));
+  const m = pad(Math.floor(total / 60) % 60);
+  const s = pad(total % 60);
+  const f = pad((i * 13) % 60);
+  const endTotal = total + 3;
+  const em = pad(Math.floor(endTotal / 60) % 60);
+  const es = pad(endTotal % 60);
+  const ef = pad(((i * 13) + 24) % 60);
+  return `${h}:${m}:${s}:${f} - ${h}:${em}:${es}:${ef}`;
+}
+
+function appendCapCutBatch(count) {
+  appendSimpleThemeBatch(count, 'capcut-story-stream', chunk => {
+    const el = document.createElement('div');
+    el.className = 'cc-caption-card';
+    el.id = `capcut-cap-${chunk.globalIndex}`;
+    const tc = capcutTimecode(chunk.globalIndex);
+    el.innerHTML = `
+      <div class="cc-caption-meta">
+        <span class="cc-caption-tc">${tc}</span>
+        <span class="cc-caption-num">#${String(chunk.globalIndex + 1).padStart(3, '0')}</span>
+        <span class="cc-caption-dur">3.4s</span>
+      </div>
+      <div class="cc-caption-text">${escapeHtml(chunk.text)}</div>
+    `;
+    return el;
+  });
+}
+
+// 21. SAP GUI 8.0 / S/4HANA Purchase Order ALV Grid Batch Renderer
+function appendSAPBatch(count) {
+  const stream = document.getElementById('sap-story-stream');
+  if (!stream || state.allChunks.length === 0) return;
+
+  const start = state.renderedCount;
+  const end = Math.min(start + count, state.allChunks.length);
+  if (start >= end) return;
+
+  const fragment = document.createDocumentFragment();
+
+  for (let i = start; i < end; i++) {
+    const chunk = state.allChunks[i];
+
+    const tr = document.createElement('tr');
+    tr.className = 'sap-item-row';
+    tr.id = `sap-item-${chunk.globalIndex}`;
+    tr.dataset.index = chunk.globalIndex;
+    tr.dataset.page = chunk.page;
+
+    const itemNum = String((chunk.globalIndex + 1) * 10).padStart(5, '0');
+    const matNum = `MAT-${String(100000 + (chunk.globalIndex % 450))}`;
+    const poQty = ((chunk.globalIndex % 15) + 1) * 10;
+    const unitPrice = ((chunk.globalIndex % 50) + 5) * 125000;
+    const netVal = (poQty * unitPrice).toLocaleString('vi-VN');
+    const day = String((chunk.globalIndex % 28) + 1).padStart(2, '0');
+    const delivDate = `${day}.10.2026`;
+
+    tr.innerHTML = `
+      <td style="text-align:center;"><input type="checkbox"></td>
+      <td style="text-align:center;"><span style="color:#107c41;">●</span></td>
+      <td class="sap-item-num">${itemNum}</td>
+      <td style="font-family:Consolas, monospace; font-weight:600; color:#0b3760;">${matNum}</td>
+      <td class="sap-item-desc">${escapeHtml(chunk.text)}</td>
+      <td class="sap-item-qty">${poQty}</td>
+      <td style="text-align:center;">EA</td>
+      <td class="sap-item-price">${netVal}</td>
+      <td style="text-align:center;">VND</td>
+      <td style="white-space:nowrap; font-family:Consolas, monospace;">${delivDate}</td>
+      <td style="text-align:center;">1000</td>
+      <td style="text-align:center;">0001</td>
+    `;
+
+    const gIdx = chunk.globalIndex;
+    tr.addEventListener('click', () => {
+      setActiveRow(gIdx, true);
+    });
+
+    fragment.appendChild(tr);
+  }
+
+  stream.appendChild(fragment);
+  state.renderedCount = end;
+
+  const countEl = document.getElementById('sap-row-count-badge');
+  if (countEl) {
+    countEl.textContent = `Hiển thị ${end} hạng mục · SAP ALV Grid ME23N`;
+  }
+}
+

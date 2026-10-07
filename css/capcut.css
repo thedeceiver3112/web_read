@@ -1,0 +1,842 @@
+/* ==========================================================================
+   CapCut Pro Desktop - Video Editor Stealth Camouflage Theme
+   ========================================================================== */
+
+:root {
+  --cc-bg-darkest: #111113;
+  --cc-bg-dark: #18181c;
+  --cc-bg-panel: #202026;
+  --cc-bg-card: #282830;
+  --cc-bg-hover: #32323c;
+  --cc-border: #2e2e38;
+  --cc-border-light: #3e3e4c;
+  --cc-accent-cyan: #00f2fe;
+  --cc-accent-blue: #0088ff;
+  --cc-text-main: #f0f0f5;
+  --cc-text-muted: #9595a5;
+  --cc-text-dim: #6b6b7b;
+  --cc-caption-yellow: #f5c518;
+  --cc-timeline-bg: #151518;
+  --cc-playhead: #00f2fe;
+}
+
+body.theme-capcut {
+  background-color: var(--cc-bg-darkest);
+  color: var(--cc-text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+body.theme-capcut * {
+  box-sizing: border-box;
+}
+
+body.theme-capcut.has-pinned-navbar {
+  padding-top: var(--unav-height, 38px) !important;
+}
+
+body.theme-capcut.controls-hidden {
+  padding-top: 0 !important;
+}
+
+.cc-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  background-color: var(--cc-bg-darkest);
+  overflow: hidden;
+}
+
+/* 1. Top Titlebar */
+.cc-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 42px;
+  background-color: var(--cc-bg-dark);
+  border-bottom: 1px solid var(--cc-border);
+  padding: 0 12px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.cc-title-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 260px;
+}
+
+.cc-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+}
+
+.cc-pro-badge {
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  color: #000;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cc-menu-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cc-menu-item {
+  color: var(--cc-text-muted);
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cc-menu-item:hover {
+  color: var(--cc-text-main);
+  background-color: var(--cc-bg-hover);
+}
+
+.cc-menu-item.active {
+  color: var(--cc-accent-cyan);
+  font-weight: 600;
+  background-color: rgba(0, 242, 254, 0.1);
+}
+
+.cc-title-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--cc-text-muted);
+}
+
+.cc-project-title {
+  color: var(--cc-text-main);
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  outline: none;
+  cursor: text;
+}
+
+.cc-project-title:hover,
+.cc-project-title:focus {
+  border-color: var(--cc-border-light);
+  background-color: var(--cc-bg-card);
+}
+
+.cc-cloud-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #10b981;
+}
+
+.cc-title-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cc-btn-export {
+  background: linear-gradient(135deg, #00f2fe 0%, #00c0fa 100%);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 242, 254, 0.25);
+  transition: opacity 0.2s;
+}
+
+.cc-btn-export:hover {
+  opacity: 0.9;
+}
+
+.cc-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--cc-text-muted);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cc-icon-btn:hover {
+  color: var(--cc-text-main);
+  background-color: var(--cc-bg-hover);
+}
+
+.cc-win-ctrls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+.cc-win-btn {
+  color: var(--cc-text-muted);
+  font-size: 11px;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.cc-win-btn:hover {
+  background-color: var(--cc-bg-hover);
+  color: #fff;
+}
+
+.cc-win-btn.close:hover {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+/* 2. Main Work Area (Split Top and Timeline) */
+.cc-work-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.cc-upper-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  border-bottom: 1px solid var(--cc-border);
+}
+
+/* LEFT: Transcript / Caption Panel (The reading stealth area) */
+.cc-transcript-panel {
+  flex: 1.1;
+  min-width: 380px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--cc-bg-panel);
+  border-right: 1px solid var(--cc-border);
+  overflow: hidden;
+}
+
+.cc-panel-tabs {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  background-color: var(--cc-bg-dark);
+  border-bottom: 1px solid var(--cc-border);
+  padding: 0 10px;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cc-tab {
+  font-size: 12px;
+  color: var(--cc-text-muted);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cc-tab:hover {
+  color: var(--cc-text-main);
+}
+
+.cc-tab.active {
+  color: var(--cc-accent-cyan);
+  font-weight: 600;
+  background-color: var(--cc-bg-card);
+}
+
+.cc-transcript-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--cc-border);
+  background-color: rgba(32, 32, 38, 0.7);
+  flex-shrink: 0;
+}
+
+.cc-lang-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--cc-bg-card);
+  border: 1px solid var(--cc-border-light);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--cc-text-main);
+}
+
+.cc-transcript-search {
+  display: flex;
+  align-items: center;
+  background-color: var(--cc-bg-dark);
+  border: 1px solid var(--cc-border);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--cc-text-muted);
+  width: 140px;
+}
+
+.cc-transcript-search input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 11px;
+  outline: none;
+  width: 100%;
+  margin-left: 5px;
+}
+
+/* Scroll Container for CapCut Captions (Story text) */
+.cc-scroll-container {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 14px;
+  background-color: var(--cc-bg-darkest);
+}
+
+.cc-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cc-scroll-container::-webkit-scrollbar-thumb {
+  background-color: var(--cc-border-light);
+  border-radius: 3px;
+}
+
+.cc-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* CapCut Caption Card */
+.cc-caption-card {
+  background-color: var(--cc-bg-panel);
+  border: 1px solid var(--cc-border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+}
+
+.cc-caption-card:hover {
+  border-color: var(--cc-border-light);
+  background-color: var(--cc-bg-card);
+}
+
+.cc-caption-card.active-caption {
+  border-color: var(--cc-accent-cyan);
+  background-color: rgba(0, 242, 254, 0.08);
+  box-shadow: 0 0 0 1px rgba(0, 242, 254, 0.3);
+}
+
+.cc-caption-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.cc-caption-tc {
+  font-family: Consolas, Monaco, monospace;
+  color: var(--cc-accent-cyan);
+  background-color: rgba(0, 242, 254, 0.12);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.cc-caption-num {
+  color: var(--cc-text-dim);
+}
+
+.cc-caption-dur {
+  color: var(--cc-text-muted);
+  font-size: 10px;
+}
+
+.cc-caption-text {
+  color: var(--cc-text-main);
+  font-family: var(--story-font-family, inherit);
+  font-size: var(--story-font-size, 11pt);
+  line-height: var(--story-line-height, 1.7);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* Boss Mode Camouflage View for CapCut */
+.cc-boss-container {
+  padding: 20px;
+  background-color: var(--cc-bg-panel);
+  border-radius: 8px;
+  border: 1px solid var(--cc-border);
+}
+
+.cc-boss-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cc-boss-specs {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.cc-boss-specs td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--cc-border);
+}
+
+.cc-boss-specs td:first-child {
+  color: var(--cc-text-muted);
+  width: 140px;
+}
+
+.cc-boss-specs td:last-child {
+  color: var(--cc-text-main);
+  font-weight: 500;
+}
+
+.cc-boss-bar-wrap {
+  margin-top: 14px;
+}
+
+.cc-boss-bar-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--cc-text-muted);
+  margin-bottom: 6px;
+}
+
+.cc-boss-progress {
+  height: 6px;
+  background-color: var(--cc-bg-dark);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cc-boss-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00f2fe, #4facfe);
+  border-radius: 3px;
+}
+
+/* CENTER / RIGHT: Video Player Monitor & Inspector */
+.cc-player-workspace {
+  flex: 1.4;
+  display: flex;
+  flex-direction: column;
+  background-color: #0b0b0d;
+  min-width: 400px;
+  overflow: hidden;
+}
+
+.cc-player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 14px;
+  background-color: var(--cc-bg-dark);
+  border-bottom: 1px solid var(--cc-border);
+  font-size: 12px;
+  color: var(--cc-text-muted);
+}
+
+.cc-player-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cc-monitor-frame {
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  background-color: #000;
+  border: 1px solid var(--cc-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cc-monitor-scene {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.cc-monitor-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cc-monitor-overlay {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: Consolas, Monaco, monospace;
+  color: var(--cc-accent-cyan);
+}
+
+.cc-monitor-sub-preview {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.cc-player-controls {
+  height: 48px;
+  background-color: var(--cc-bg-dark);
+  border-top: 1px solid var(--cc-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.cc-tc-display {
+  font-family: Consolas, monospace;
+  font-size: 12px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cc-tc-current {
+  color: var(--cc-accent-cyan);
+  font-weight: 700;
+}
+
+.cc-transport-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cc-play-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.cc-play-btn:hover {
+  background-color: var(--cc-accent-cyan);
+}
+
+/* RIGHT: Properties Inspector */
+.cc-inspector-panel {
+  width: 260px;
+  background-color: var(--cc-bg-panel);
+  border-left: 1px solid var(--cc-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.cc-inspector-tabs {
+  display: flex;
+  height: 38px;
+  background-color: var(--cc-bg-dark);
+  border-bottom: 1px solid var(--cc-border);
+  padding: 0 6px;
+  gap: 2px;
+}
+
+.cc-insp-tab {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  color: var(--cc-text-muted);
+  padding: 10px 4px;
+  cursor: pointer;
+}
+
+.cc-insp-tab.active {
+  color: var(--cc-accent-cyan);
+  border-bottom: 2px solid var(--cc-accent-cyan);
+  font-weight: 600;
+}
+
+.cc-inspector-body {
+  padding: 12px;
+  overflow-y: auto;
+  font-size: 11px;
+}
+
+.cc-insp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.cc-insp-label {
+  color: var(--cc-text-muted);
+}
+
+.cc-insp-slider {
+  width: 100px;
+  accent-color: var(--cc-accent-cyan);
+}
+
+/* 3. Bottom Multi-Track Timeline */
+.cc-timeline {
+  height: 240px;
+  background-color: var(--cc-timeline-bg);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cc-timeline-toolbar {
+  height: 36px;
+  background-color: var(--cc-bg-dark);
+  border-bottom: 1px solid var(--cc-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+.cc-tl-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-tl-tool-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--cc-text-muted);
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cc-tl-tool-btn:hover {
+  background-color: var(--cc-bg-hover);
+  color: var(--cc-text-main);
+  border-color: var(--cc-border);
+}
+
+.cc-tl-zoom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--cc-text-muted);
+}
+
+.cc-tl-zoom input[type="range"] {
+  width: 80px;
+  accent-color: var(--cc-accent-cyan);
+}
+
+/* Timecode Ruler */
+.cc-timeline-ruler {
+  height: 24px;
+  background-color: var(--cc-bg-dark);
+  border-bottom: 1px solid var(--cc-border);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  font-family: Consolas, monospace;
+  font-size: 9px;
+  color: var(--cc-text-dim);
+  padding-left: 120px;
+}
+
+.cc-ruler-tick {
+  position: absolute;
+  bottom: 0;
+  border-left: 1px solid var(--cc-border-light);
+  height: 8px;
+  padding-left: 3px;
+}
+
+.cc-ruler-tick.major {
+  height: 14px;
+  color: var(--cc-text-muted);
+}
+
+/* Timeline Tracks Container */
+.cc-tracks-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  background-color: #131316;
+}
+
+.cc-track-row {
+  display: flex;
+  height: 44px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+}
+
+.cc-track-header {
+  width: 120px;
+  background-color: var(--cc-bg-dark);
+  border-right: 1px solid var(--cc-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-size: 11px;
+  color: var(--cc-text-muted);
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+.cc-track-body {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+  overflow: hidden;
+}
+
+/* Clip Blocks on Tracks */
+.cc-clip {
+  position: absolute;
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #fff;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.cc-clip.text-clip {
+  background: linear-gradient(135deg, #c79212, #8b6405);
+  border-color: #f5c518;
+}
+
+.cc-clip.video-clip {
+  background: linear-gradient(135deg, #1b5e20, #0d3810);
+  border-color: #4caf50;
+}
+
+.cc-clip.audio-clip {
+  background: linear-gradient(135deg, #5e35b1, #311b92);
+  border-color: #7e57c2;
+}
+
+/* Red Playhead Line */
+.cc-playhead-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 280px;
+  width: 1.5px;
+  background-color: var(--cc-playhead);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.cc-playhead-cap {
+  position: absolute;
+  top: 0;
+  left: -5px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--cc-playhead);
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
