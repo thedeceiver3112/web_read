@@ -5717,93 +5717,211 @@ body.theme-googledocs {
 /* Zalo PC Desktop Theme Styles - Pixel-Perfect Replica of Real Zalo PC Windows App */
 
 /* ==========================================================
-   THEME 9: ZALO PC WORKSPACE STYLES
+   THEME 9: ZALO PC WORKSPACE STYLES (AUTHENTIC ZALO WEB REPLICA)
    ========================================================== */
 body.theme-zalo {
-  background-color: #f4f5f7;
+  background-color: #ebedf0;
   color: #081c36;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   overflow: hidden;
   margin: 0;
   padding: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+#app-page {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #ffffff;
 }
 
 .zalo-app-container {
   display: flex;
   width: 100vw;
-  height: 100%; min-height: 0; flex: 1;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
   overflow: hidden;
   background-color: #ffffff;
 }
 
-/* 1. Left Nav Rail (Zalo Iconic Deep Blue #0068ff - Matching Image 3) */
+/* TOP SYSTEM DOWNLOAD BANNER */
+.system-banner__container {
+  width: 100%;
+  background-color: #e5f3ff;
+  border-bottom: 1px solid #cce5ff;
+  font-size: 13px;
+  color: #081c36;
+  flex-shrink: 0;
+  z-index: 100;
+}
+.system-banner__item__wrapper {
+  padding: 6px 16px;
+}
+.z-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+.z-banner__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+.z-banner__info__content {
+  font-size: 13px;
+  color: #081c36;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.z-banner__action.--link {
+  background: transparent;
+  border: none;
+  color: #0068ff;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+.z-banner__close {
+  cursor: pointer;
+  color: #72808e;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  user-select: none;
+}
+.z-banner__close:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* MAIN WEB CONTAINER */
+#container.WEB {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 1. LEFT NAV RAIL (ZALO ICONIC DEEP BLUE #0068FF) */
+#sidebarNav,
 .zalo-nav-rail {
   width: 64px;
   background: #0068ff;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 12px 0 14px;
   flex-shrink: 0;
   z-index: 25;
 }
-.zalo-user-avatar-wrap {
-  position: relative;
-  margin-bottom: 16px;
-  cursor: pointer;
-}
-.zalo-user-avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #2563eb;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid rgba(255,255,255,0.9);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-.zalo-user-status-dot {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  background: #10b981;
-  border-radius: 50%;
-  border: 2px solid #0068ff;
-}
-.zalo-rail-items {
+.nav__tabs {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 100%;
+  justify-content: space-between;
   align-items: center;
+  padding: 12px 0 14px;
+  box-sizing: border-box;
 }
-.zalo-rail-btn {
-  width: 46px;
-  height: 46px;
-  border-radius: 10px;
+.nav__tabs__zalo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  position: relative;
+}
+.zavatar-container {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-size: 20px;
   cursor: pointer;
-  position: relative;
-  transition: all 0.12s ease;
-  opacity: 0.82;
 }
+.zavatar {
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.zavatar-m {
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.zavatar-l {
+  width: 48px;
+  height: 48px;
+}
+.a-child {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.avatar-emoji-status {
+  position: absolute;
+}
+.nav__tabs__top,
+.nav__tabs__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+}
+.leftbar-tab,
+.zalo-rail-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  cursor: pointer;
+  opacity: 0.82;
+  transition: all 0.12s ease;
+  padding: 4px 0;
+  box-sizing: border-box;
+  position: relative;
+}
+.leftbar-tab:hover,
 .zalo-rail-btn:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   opacity: 1;
 }
+.leftbar-tab.selected,
 .zalo-rail-btn.active {
   background: #0052cc;
   opacity: 1;
+}
+.mmi-icon-wr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lb-tab-title {
+  font-size: 10px;
+  line-height: 12px;
+  margin-top: 3px;
+  text-align: center;
+  max-width: 52px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .zalo-badge-count {
   position: absolute;
@@ -5822,25 +5940,19 @@ body.theme-zalo {
   justify-content: center;
   border: 1.5px solid #0068ff;
 }
-.zalo-rail-bottom {
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
 
-/* 2. Conversation List Column (Width ~310px, Matching Image 3) */
+/* 2. CONVERSATION LIST COLUMN (WIDTH 344PX - AUTHENTIC ZALO WEB) */
 .zalo-chat-list-pane {
-  width: 310px;
+  width: 344px;
   background: #ffffff;
   border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  height: 100%;
 }
 .zalo-search-bar-row {
-  padding: 10px 12px 6px;
+  padding: 10px 14px 8px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -5849,61 +5961,64 @@ body.theme-zalo {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: #eaedf0;
   border-radius: 4px;
-  padding: 5px 10px;
-  font-size: 12px;
+  padding: 6px 10px;
+  font-size: 13px;
   color: #64748b;
 }
 .zalo-search-input-box input {
   border: none;
   background: transparent;
   outline: none;
-  font-size: 12px;
+  font-size: 13px;
   width: 100%;
   color: #0f172a;
 }
 .zalo-icon-btn {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
   color: #475569;
   cursor: pointer;
   background: transparent;
   border: none;
 }
-.zalo-icon-btn:hover { background: #f1f5f9; }
+.zalo-icon-btn:hover {
+  background: #f1f5f9;
+  color: #0068ff;
+}
 
-/* Filter Tabs: Ưu tiên | Khác | Phân loại v (Matching Image 3) */
-.zalo-filter-tabs-row {
+/* FILTER TABS: ƯU TIÊN | KHÁC | PHÂN LOẠI ▾ */
+.msg-filters-bar {
+  border-bottom: 1px solid #f1f3f6;
+  font-size: 13px;
+}
+.tab-main {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 12px;
-  border-bottom: 1px solid #f1f3f6;
-  font-size: 12px;
-}
-.zalo-tabs-left {
-  display: flex;
   gap: 16px;
+  height: 38px;
 }
-.zalo-filter-tab {
-  padding: 8px 2px;
+.tab-item {
+  height: 100%;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   color: #64748b;
   position: relative;
   font-weight: 500;
+  font-size: 13px;
 }
-.zalo-filter-tab.active {
+.tab-item.selected {
   color: #0068ff;
   font-weight: 600;
 }
-.zalo-filter-tab.active::after {
+.tab-item.selected::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -5912,16 +6027,22 @@ body.theme-zalo {
   height: 2px;
   background: #0068ff;
 }
-.zalo-tabs-right {
+.filter-preview-v2 {
+  color: #64748b;
+  font-size: 12px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #64748b;
-  font-size: 11px;
+  gap: 4px;
+}
+.zalo-icon-btn-small {
   cursor: pointer;
+  color: #64748b;
+  font-weight: bold;
+  padding: 0 4px;
 }
 
-/* Conversation Scroll List */
+/* CONVERSATION SCROLL LIST */
 .zalo-conversations-scroll {
   flex: 1;
   overflow-y: auto;
@@ -5929,50 +6050,46 @@ body.theme-zalo {
 .zalo-conv-item {
   display: flex;
   align-items: center;
-  padding: 10px 12px;
-  gap: 10px;
+  padding: 10px 14px;
+  gap: 12px;
   cursor: pointer;
   transition: background 0.1s;
   position: relative;
+  border-bottom: 1px solid #f8fafc;
 }
-.zalo-conv-item:hover { background: #f8fafc; }
+.zalo-conv-item:hover {
+  background: #f8fafc;
+}
 .zalo-conv-item.active {
   background: #e5efff;
 }
+.zalo-conv-item.pinned {
+  background: #fafbfc;
+}
+.zalo-conv-item.pinned:hover {
+  background: #f1f5f9;
+}
 .zalo-conv-avatar-box {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  color: #ffffff;
-  flex-shrink: 0;
-  position: relative;
+  background: #e2e8f0;
 }
-.zalo-conv-online {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  background: #10b981;
+.zalo-conv-avatar-box.stranger-bg {
+  background: #cbd5e1;
+  font-size: 20px;
+}
+.zalo-conv-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
-  border: 1.5px solid #ffffff;
-}
-.zalo-conv-group-badge {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  background: #64748b;
-  color: #fff;
-  font-size: 8px;
-  font-weight: bold;
-  border-radius: 8px;
-  padding: 1px 3px;
-  border: 1px solid #fff;
 }
 .zalo-conv-info {
   flex: 1;
@@ -5982,38 +6099,49 @@ body.theme-zalo {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
 }
 .zalo-conv-name {
   font-weight: 600;
-  font-size: 13px;
-  color: #0f172a;
+  font-size: 14px;
+  color: #081c36;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.zalo-conv-time { font-size: 11px; color: #94a3b8; }
+.zalo-conv-time {
+  font-size: 11px;
+  color: #72808e;
+  flex-shrink: 0;
+}
 .zalo-conv-preview {
-  font-size: 12px;
-  color: #64748b;
+  font-size: 13px;
+  color: #72808e;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.zalo-pin-icon,
+.zalo-mute-icon {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-left: 4px;
 }
 
-/* 3. Main Chat Pane Workspace (Matching Image 3) */
+/* 3. MAIN CHAT PANE WORKSPACE */
 .zalo-chat-main-pane {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #ebedf0;
+  background: #eaedf0;
   min-width: 0;
   position: relative;
+  height: 100%;
 }
 
-/* Header with action icons and window controls (Matching Image 3) */
+/* CHAT HEADER */
 .zalo-chat-header {
-  height: 52px;
+  height: 64px;
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   padding: 0 16px;
@@ -6026,34 +6154,26 @@ body.theme-zalo {
 .zalo-header-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  min-width: 0;
 }
 .zalo-header-avatar {
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: #0284c7;
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
 }
-.zalo-header-group-count {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  background: #475569;
-  color: #fff;
-  font-size: 8px;
-  border-radius: 6px;
-  padding: 1px 3px;
+.zalo-header-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 .zalo-header-meta {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 .zalo-header-title-row {
   display: flex;
@@ -6062,28 +6182,33 @@ body.theme-zalo {
 }
 .zalo-header-title {
   font-weight: 700;
-  font-size: 14px;
-  color: #0f172a;
-  cursor: text;
+  font-size: 16px;
+  color: #081c36;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  outline: none;
+}
+.zalo-header-tag {
+  font-size: 11px;
+  color: #ea580c;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-left: 6px;
 }
 .zalo-header-sub {
-  font-size: 11px;
-  color: #64748b;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 12px;
+  color: #72808e;
+  margin-top: 2px;
 }
-.zalo-header-sub span.tag-work {
-  color: #ea580c;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
 .zalo-header-right {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 .zalo-top-action-icons {
   display: flex;
@@ -6097,76 +6222,20 @@ body.theme-zalo {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
   color: #475569;
   cursor: pointer;
   background: transparent;
   border: none;
 }
-.zalo-top-action-btn:hover { background: #f1f5f9; color: #0068ff; }
-.zalo-top-action-btn.active { color: #0068ff; }
-
-/* Stealth Reading Controls in Zalo Header */
-.zalo-stealth-ctrls {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: 8px;
-}
-.zalo-pill-btn {
-  background: #0068ff;
-  color: #ffffff;
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  border: none;
-}
-.zalo-pill-btn:hover { background: #0050d8; }
-.zalo-page-ctrl {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 11px;
-  color: #475569;
-}
-.zalo-btn {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  padding: 2px 7px;
-  border-radius: 4px;
-  font-size: 11px;
-  cursor: pointer;
-  color: #334155;
-}
-.zalo-btn:hover { background: #f8fafc; }
-.zalo-font-ctrl {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  padding: 1px 5px;
-}
-.zalo-font-ctrl button {
-  background: transparent;
-  border: none;
-  font-weight: bold;
+.zalo-top-action-btn:hover {
+  background: #f1f5f9;
   color: #0068ff;
-  cursor: pointer;
-  padding: 1px 3px;
 }
-.zalo-font-ctrl span {
-  font-size: 11px;
-  font-weight: 600;
-  color: #0f172a;
-  min-width: 26px;
-  text-align: center;
+.zalo-top-action-btn.active {
+  color: #0068ff;
 }
 
-/* Window Buttons (Lock, Min, Max, Close) */
+/* WINDOW CONTROLS */
 .zalo-win-ctrls {
   display: flex;
   align-items: center;
@@ -6184,9 +6253,11 @@ body.theme-zalo {
   color: #64748b;
   cursor: pointer;
 }
-.zalo-win-btn:hover { background: #f1f5f9; }
+.zalo-win-btn:hover {
+  background: #f1f5f9;
+}
 
-/* Pinned Message Banner (Matching Image 3) */
+/* PINNED MESSAGE BANNER */
 .zalo-pinned-banner {
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
@@ -6194,9 +6265,10 @@ body.theme-zalo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 12px;
   color: #334155;
   z-index: 5;
+  flex-shrink: 0;
 }
 .zalo-pinned-content {
   display: flex;
@@ -6214,14 +6286,12 @@ body.theme-zalo {
   font-size: 10px;
   font-weight: 600;
   color: #475569;
-  display: flex;
-  align-items: center;
-  gap: 3px;
 }
 .zalo-pinned-actions {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 .zalo-pinned-btn {
   background: #f1f5f9;
@@ -6233,7 +6303,7 @@ body.theme-zalo {
   cursor: pointer;
 }
 
-/* Chat Message Scroll Feed (Matching Image 3) */
+/* CHAT MESSAGES SCROLL FEED */
 .zalo-messages-scroll {
   flex: 1;
   overflow-y: auto;
@@ -6249,7 +6319,7 @@ body.theme-zalo {
   margin: 4px 0 10px;
 }
 .zalo-date-divider span {
-  background: rgba(0,0,0,0.18);
+  background: rgba(0, 0, 0, 0.18);
   color: #ffffff;
   font-size: 11px;
   padding: 2px 14px;
@@ -6257,10 +6327,10 @@ body.theme-zalo {
   font-weight: 500;
 }
 
-/* Incoming Message (Left, White Bubble, Matching Image 3) */
+/* INCOMING MESSAGE (WHITE BUBBLE) */
 .zalo-msg-row-incoming {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
   max-width: 780px;
   align-self: flex-start;
@@ -6269,30 +6339,83 @@ body.theme-zalo {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
+  position: relative;
   flex-shrink: 0;
+}
+.zalo-msg-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.zavatar-key-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  font-size: 11px;
+  background: #ffffff;
+  border-radius: 50%;
+  line-height: 1;
+  padding: 1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+.zalo-msg-bubble-wrap {
+  display: flex;
+  flex-direction: column;
+  max-width: 680px;
+}
+.zalo-msg-sender {
+  font-size: 12px;
+  font-weight: 600;
+  color: #72808e;
+  margin-bottom: 3px;
 }
 .zalo-msg-bubble-in {
   background: #ffffff;
   padding: 10px 14px;
   border-radius: 2px 14px 14px 14px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
   position: relative;
 }
-.zalo-msg-sender {
+.zalo-quote-box {
+  background: #f1f5f9;
+  border-left: 3px solid #0068ff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
   font-size: 11px;
+}
+.zalo-quote-author {
   font-weight: 600;
-  color: #64748b;
+  color: #0068ff;
   margin-bottom: 2px;
 }
+.zalo-quote-text {
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zalo-mention {
+  color: #0068ff;
+  font-weight: 600;
+}
+.zalo-msg-content-text {
+  font-size: 13px;
+  color: #081c36;
+  line-height: 1.5;
+}
+.zalo-msg-time-row {
+  font-size: 10px;
+  color: #94a3b8;
+  margin-top: 4px;
+  text-align: right;
+}
 
-/* Outgoing Message (Right, Zalo Signature Light Blue Bubble, Matching Image 3) */
+/* OUTGOING MESSAGE (LIGHT BLUE BUBBLE) */
 .zalo-msg-row-outgoing {
   display: flex;
   flex-direction: column;
@@ -6304,7 +6427,7 @@ body.theme-zalo {
   background: #e5efff;
   padding: 10px 14px;
   border-radius: 14px 2px 14px 14px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   border: 1px solid #c7ddff;
   position: relative;
   color: #081c36;
@@ -6322,26 +6445,10 @@ body.theme-zalo {
   font-size: 11px;
 }
 
-/* Reactions on bubbles */
-.zalo-msg-reactions {
-  position: absolute;
-  bottom: -8px;
-  right: 12px;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1px 6px;
-  font-size: 10px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-/* Novel Story Stream Message Item */
+/* NOVEL STORY STREAM MESSAGE ITEM */
 .zalo-msg-item {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
   max-width: 820px;
   cursor: pointer;
@@ -6349,7 +6456,7 @@ body.theme-zalo {
 }
 .zalo-msg-item:hover .zalo-msg-bubble {
   border-color: #0068ff;
-  box-shadow: 0 2px 8px rgba(0,104,255,0.15);
+  box-shadow: 0 2px 8px rgba(0, 104, 255, 0.15);
 }
 .zalo-msg-item.active-msg .zalo-msg-bubble {
   border-left: 3.5px solid #0068ff;
@@ -6359,41 +6466,41 @@ body.theme-zalo {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
   flex-shrink: 0;
+  position: relative;
 }
 .zalo-msg-content-box {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  max-width: calc(100% - 44px);
+  max-width: calc(100% - 46px);
 }
 .zalo-msg-sender-name {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: #64748b;
+  color: #72808e;
   display: flex;
   align-items: center;
   gap: 6px;
 }
-.zalo-msg-time { font-size: 10px; color: #94a3b8; font-weight: normal; }
+.zalo-msg-time {
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: normal;
+}
 .zalo-msg-bubble {
   background: #ffffff;
   padding: 10px 16px;
   border-radius: 2px 14px 14px 14px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
   transition: all 0.12s ease;
   position: relative;
 }
 .zalo-msg-text {
   font-size: var(--story-font-size, 11pt);
-  line-height: var(--story-line-height, 1.7);
+  line-height: var(--story-line-height, 1.75);
+  font-family: var(--story-font-family, inherit);
   letter-spacing: var(--story-letter-spacing, 0.15px);
   color: #081c36;
   word-break: break-word;
@@ -6407,7 +6514,7 @@ body.theme-zalo {
   justify-content: space-between;
 }
 
-/* Chat Input Bar (Matching Image 3 Toolbar) */
+/* CHAT INPUT BAR */
 .zalo-chat-input-area {
   background: #ffffff;
   border-top: 1px solid #e5e7eb;
@@ -6426,7 +6533,9 @@ body.theme-zalo {
   cursor: pointer;
   transition: color 0.1s;
 }
-.zalo-tool-icon:hover { color: #0068ff; }
+.zalo-tool-icon:hover {
+  color: #0068ff;
+}
 .zalo-textarea-row {
   display: flex;
   align-items: center;
@@ -6450,7 +6559,7 @@ body.theme-zalo {
   cursor: pointer;
 }
 
-/* 4. Right Sidebar: "Thông tin nhóm" (Matching Image 3) */
+/* 4. RIGHT SIDEBAR: "THÔNG TIN NHÓM" (ISSUE WMS) */
 .zalo-info-sidebar {
   width: 280px;
   background: #ffffff;
@@ -6459,15 +6568,16 @@ body.theme-zalo {
   flex-direction: column;
   flex-shrink: 0;
   overflow-y: auto;
+  height: 100%;
 }
 .zalo-sidebar-header {
-  height: 52px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 14px;
-  color: #0f172a;
+  font-size: 15px;
+  color: #081c36;
   border-bottom: 1px solid #f1f3f6;
   flex-shrink: 0;
 }
@@ -6482,26 +6592,9 @@ body.theme-zalo {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #0284c7;
-  color: #ffffff;
-  font-weight: 800;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   position: relative;
   margin-bottom: 8px;
-}
-.zalo-group-big-badge {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #475569;
-  color: #fff;
-  font-size: 9px;
-  border-radius: 8px;
-  padding: 1px 4px;
-  border: 1px solid #fff;
 }
 .zalo-group-name-edit {
   display: flex;
@@ -6513,7 +6606,7 @@ body.theme-zalo {
   margin-bottom: 14px;
 }
 
-/* 4 Action Buttons: Tắt thông báo | Ghim | Thêm tv | Quản lý */
+/* 4 ACTION BUTTONS: TẮT THÔNG BÁO | GHIM | THÊM TV | QUẢN LÝ */
 .zalo-quick-action-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -6540,9 +6633,11 @@ body.theme-zalo {
   justify-content: center;
   font-size: 14px;
 }
-.zalo-action-icon-circle:hover { background: #e2e8f0; }
+.zalo-action-icon-circle:hover {
+  background: #e2e8f0;
+}
 
-/* Sections: Thành viên nhóm | Bảng tin nhóm | Ảnh/Video | File */
+/* SECTIONS: THÀNH VIÊN NHÓM | BẢNG TIN NHÓM | ẢNH/VIDEO | FILE */
 .zalo-sidebar-section {
   padding: 12px 14px;
   border-bottom: 8px solid #f4f5f7;
@@ -6566,9 +6661,11 @@ body.theme-zalo {
   color: #334155;
   cursor: pointer;
 }
-.zalo-section-sub-item:hover { color: #0068ff; }
+.zalo-section-sub-item:hover {
+  color: #0068ff;
+}
 
-/* Photo grid matching Image 3 */
+/* MEDIA GRID */
 .zalo-media-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -6599,7 +6696,7 @@ body.theme-zalo {
   cursor: pointer;
 }
 
-/* File items matching Image 3 */
+/* FILE ROWS */
 .zalo-file-row {
   display: flex;
   align-items: center;
@@ -6632,7 +6729,7 @@ body.theme-zalo {
   font-size: 11px;
 }
 
-/* Boss Mode View (Urgent Internal Corporate Notice) */
+/* BOSS MODE VIEW (TECHNICAL INCIDENT REPORT) */
 .zalo-boss-view {
   flex: 1;
   background: #ffffff;
@@ -6644,8 +6741,16 @@ body.theme-zalo {
   padding-bottom: 16px;
   margin-bottom: 24px;
 }
-.zalo-boss-header h2 { font-size: 20px; color: #0068ff; margin-bottom: 6px; }
-.zalo-boss-body { font-size: 13px; line-height: 1.8; color: #334155; }
+.zalo-boss-header h2 {
+  font-size: 20px;
+  color: #0068ff;
+  margin-bottom: 6px;
+}
+.zalo-boss-body {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #334155;
+}
 
 /* ==========================================================
    THEME 10: FIGMA WORKSPACE STYLES
@@ -11829,4 +11934,216 @@ body.theme-chatgpt * {
   background-color: rgba(56, 189, 248, 0.08) !important;
   filter: brightness(1.1);
   transition: all 0.2s ease;
+}
+
+/* Canva Custom Stealth Image Boxes */
+.canva-custom-orbit-box {
+  width: 100%;
+  max-height: 220px;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #ffffff;
+  margin-bottom: 14px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.canva-custom-orbit-box img {
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+}
+.canva-custom-boss-box {
+  width: 100%;
+  max-height: 380px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #ffffff;
+  margin-bottom: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+.canva-custom-boss-box img {
+  max-width: 100%;
+  max-height: 380px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+}
+
+/* PowerPoint Custom Stealth Image Boxes */
+.ppt-custom-img-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 0;
+}
+.ppt-custom-img-body {
+  width: 100%;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 6px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+.ppt-custom-img-body img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  border-radius: 3px;
+  display: block;
+  margin: 0 auto;
+}
+.ppt-custom-boss-box {
+  margin: 14px 0;
+  text-align: center;
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.ppt-custom-boss-box img {
+  max-width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+  margin: 0 auto;
+}
+
+.reader-tools-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+.reader-tools-modal.open { display: flex; }
+.reader-tools-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.55); }
+.reader-tools-dialog,
+.reader-error-dialog {
+  position: relative;
+  width: min(760px, 96vw);
+  max-height: min(760px, 88vh);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: #fff;
+  color: #172033;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+.reader-tools-header,
+.reader-error-dialog > header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 58px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  box-sizing: border-box;
+}
+.reader-tools-header > div { display: flex; min-width: 0; flex-direction: column; gap: 3px; }
+.reader-tools-header strong { font-size: 16px; }
+.reader-tools-header small { overflow: hidden; color: #64748b; text-overflow: ellipsis; white-space: nowrap; }
+.reader-tools-icon-button,
+.reader-error-dialog header button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #475569;
+  font-size: 24px;
+  cursor: pointer;
+}
+.reader-tools-tabs {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid #e2e8f0;
+  box-sizing: border-box;
+}
+.reader-tools-tabs button { min-height: 42px; border: 0; border-bottom: 3px solid transparent; background: #f8fafc; color: #475569; cursor: pointer; }
+.reader-tools-tabs button.active { border-bottom-color: #2563eb; background: #fff; color: #1d4ed8; font-weight: 700; }
+.reader-tools-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 16px 24px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+.reader-tools-storage { margin-bottom: 10px; color: #64748b; font-size: 12px; }
+.reader-tools-list { display: grid; gap: 8px; padding-bottom: 8px; }
+.reader-tools-item { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px solid #dbe3ee; border-radius: 6px; background: #fff; }
+.reader-tools-item.current { border-color: #2563eb; background: #eff6ff; }
+.reader-tools-item-main { display: grid; min-width: 0; flex: 1; gap: 5px; }
+.reader-tools-item-main strong,
+.reader-tools-item-main small { overflow: hidden; text-overflow: ellipsis; }
+.reader-tools-item-main small { color: #64748b; }
+.reader-tools-item-main input,
+.reader-search-form input { min-width: 0; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font: inherit; }
+.reader-tools-actions { display: flex; gap: 6px; }
+.reader-tools-actions button,
+.reader-tools-toolbar button,
+.reader-search-form button,
+.reader-error-dialog footer button { padding: 7px 12px; border: 1px solid #2563eb; border-radius: 4px; background: #2563eb; color: #fff; cursor: pointer; }
+.reader-tools-actions button.danger { border-color: #dc2626; background: #fff; color: #dc2626; }
+.reader-tools-toolbar { margin-bottom: 12px; }
+.reader-tools-empty { padding: 36px 16px; color: #64748b; text-align: center; }
+.reader-toc-item,
+.reader-search-result { display: flex; width: 100%; gap: 12px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 5px; background: #fff; color: #172033; text-align: left; cursor: pointer; }
+.reader-toc-item { align-items: center; justify-content: space-between; }
+.reader-toc-item span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.reader-toc-item small { flex: 0 0 auto; color: #64748b; }
+.reader-search-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 8px; }
+.reader-search-summary { min-height: 24px; color: #64748b; font-size: 12px; }
+.reader-search-result { flex-direction: column; }
+.reader-search-result span { color: #475569; line-height: 1.45; }
+.reader-search-hit { outline: 3px solid #f59e0b !important; outline-offset: 2px; }
+.reader-error-dialog { padding-bottom: 14px; }
+.reader-error-dialog > p,
+.reader-error-stage,
+.reader-error-file,
+.reader-error-dialog details { margin: 12px 16px; }
+.reader-error-stage { color: #b45309; font-weight: 700; }
+.reader-error-file { color: #64748b; font-size: 12px; }
+.reader-error-dialog pre { max-height: 160px; overflow: auto; padding: 10px; background: #f1f5f9; white-space: pre-wrap; }
+.reader-error-dialog footer { display: flex; justify-content: flex-end; gap: 8px; padding: 4px 16px; }
+.reader-loading-progress { width: min(360px, 80vw); height: 7px; overflow: hidden; border-radius: 4px; background: #dbe3ee; }
+.reader-loading-progress-bar { width: 0; height: 100%; background: #2563eb; transition: width 160ms ease; }
+.reader-loading-progress-label { min-height: 18px; color: #64748b; font-size: 12px; }
+.reader-loading-cancel { padding: 8px 16px; border: 1px solid #dc2626; border-radius: 4px; background: #fff; color: #dc2626; cursor: pointer; }
+
+@media (max-width: 680px) {
+  .reader-tools-modal { padding: 8px; }
+  .reader-tools-dialog, .reader-error-dialog { width: 100%; max-height: 94vh; }
+  .reader-tools-content { max-height: none; }
+  .reader-tools-item { align-items: stretch; flex-direction: column; }
+  .reader-tools-actions button { flex: 1; }
+  .reader-tools-tabs button { font-size: 12px; }
 }

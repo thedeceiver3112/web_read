@@ -34,6 +34,9 @@ const state = {
   // Continuous stream across entire document
   allChunks: [], // Array of { text, page, indexInPage, globalIndex }
   pageStartIndices: {}, // pageNum -> globalIndex
+  documentToc: [], // Array of { title, page, globalIndex }
+  searchResults: [],
+  searchResultCursor: -1,
   
   // Progressive infinite rendering
   renderedCount: 0,
@@ -252,6 +255,39 @@ const ACTIVE_DOCUMENT_SESSION_KEY = 'stealth_active_document_v2';
 const READING_BOOKMARKS_STORAGE_KEY = 'stealth_reader_bookmarks_v1';
 const MAX_SAVED_BOOKMARKS = 30;
 let documentCacheWritePromise = Promise.resolve();
+let activeDocumentWorker = null;
+let activeDocumentAbortController = null;
+let activePdfLoadingTask = null;
+let lastFailedDocumentFile = null;
+let previousDocumentSnapshot = null;
+
+function normalizeBookmarkEntry(raw, documentId = '') {
+  if (!raw || typeof raw !== 'object') {
+    return { documentId, documentName: '', lastPosition: null, marks: [], updatedAt: 0 };
+  }
+  if (Object.prototype.hasOwnProperty.call(raw, 'lastPosition') || Array.isArray(raw.marks)) {
+    return {
+      documentId: raw.documentId || documentId,
+      documentName: raw.documentName || '',
+      lastPosition: raw.lastPosition && typeof raw.lastPosition === 'object' ? raw.lastPosition : null,
+      marks: Array.isArray(raw.marks) ? raw.marks : [],
+      updatedAt: Number(raw.updatedAt) || 0
+    };
+  }
+  const legacyPosition = Number.isFinite(Number(raw.globalIndex)) ? {
+    page: Number(raw.page) || 1,
+    globalIndex: Number(raw.globalIndex) || 0,
+    totalPages: Number(raw.totalPages) || 1,
+    updatedAt: Number(raw.updatedAt) || 0
+  } : null;
+  return {
+    documentId: raw.documentId || documentId,
+    documentName: raw.documentName || '',
+    lastPosition: legacyPosition,
+    marks: [],
+    updatedAt: Number(raw.updatedAt) || 0
+  };
+}
 
 function hashDocumentIdentity(value) {
   let hash = 2166136261;
@@ -299,8 +335,8 @@ function readSavedBookmarks() {
 function getCurrentBookmark() {
   const documentId = getCurrentDocumentId();
   if (!documentId) return null;
-  const bookmark = readSavedBookmarks()[documentId];
-  return bookmark && typeof bookmark === 'object' ? bookmark : null;
+  const entry = normalizeBookmarkEntry(readSavedBookmarks()[documentId], documentId);
+  return entry.lastPosition;
 }
 
 function saveCurrentBookmark(options = {}) {
@@ -319,14 +355,17 @@ function saveCurrentBookmark(options = {}) {
 
   try {
     const bookmarks = readSavedBookmarks();
-    bookmarks[documentId] = {
-      documentId,
-      documentName: state.pdfFileName,
+    const entry = normalizeBookmarkEntry(bookmarks[documentId], documentId);
+    entry.documentId = documentId;
+    entry.documentName = state.pdfFileName;
+    entry.lastPosition = {
       page,
       globalIndex,
       totalPages: state.totalPages,
       updatedAt: Date.now()
     };
+    entry.updatedAt = Date.now();
+    bookmarks[documentId] = entry;
 
     const trimmedBookmarks = Object.fromEntries(
       Object.entries(bookmarks)
@@ -343,6 +382,44 @@ function saveCurrentBookmark(options = {}) {
   } catch (error) {
     console.warn('Không thể lưu trang đánh dấu:', error);
     if (notify) showPageFlipToast('Không thể lưu trang đánh dấu trên trình duyệt này.');
+    return false;
+  }
+}
+
+function addManualBookmark(note = '') {
+  if (!saveCurrentBookmark()) return false;
+  const documentId = getCurrentDocumentId();
+  const globalIndex = Math.min(Math.max(0, Number(state.currentGlobalIndex) || 0), state.allChunks.length - 1);
+  const page = state.allChunks[globalIndex]?.page || state.currentPage || 1;
+  try {
+    const bookmarks = readSavedBookmarks();
+    const entry = normalizeBookmarkEntry(bookmarks[documentId], documentId);
+    const duplicate = entry.marks.find(mark => Number(mark.globalIndex) === globalIndex);
+    if (duplicate) {
+      duplicate.note = note.trim() || duplicate.note || `Trang ${page}, dòng ${globalIndex + 1}`;
+      duplicate.updatedAt = Date.now();
+    } else {
+      entry.marks.unshift({
+        id: `mark-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        page,
+        globalIndex,
+        note: note.trim() || `Trang ${page}, dòng ${globalIndex + 1}`,
+        excerpt: (state.allChunks[globalIndex]?.text || '').slice(0, 180),
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      });
+      entry.marks = entry.marks.slice(0, 100);
+    }
+    entry.updatedAt = Date.now();
+    bookmarks[documentId] = entry;
+    localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(bookmarks));
+    syncBookmarkButton();
+    renderReaderToolsPanel('bookmarks');
+    showPageFlipToast(`Đã thêm dấu trang tại <b>trang ${page}</b>.`);
+    return true;
+  } catch (error) {
+    console.warn('Không thể thêm dấu trang:', error);
+    showReaderError('Không thể lưu dấu trang', 'Trình duyệt đã từ chối ghi dữ liệu cục bộ.', error, 'Dấu trang');
     return false;
   }
 }
@@ -450,7 +527,15 @@ async function writeDocumentCache(payload) {
   try {
     await new Promise((resolve, reject) => {
       const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readwrite');
-      transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).put(payload);
+      const store = transaction.objectStore(DOCUMENT_CACHE_STORE_NAME);
+      const documentRecordId = `document:${payload.documentId}`;
+      store.put({ ...payload, id: documentRecordId });
+      store.put({
+        id: ACTIVE_DOCUMENT_CACHE_KEY,
+        documentRecordId,
+        documentId: payload.documentId,
+        savedAt: payload.savedAt
+      });
       transaction.oncomplete = () => resolve();
       transaction.onerror = () => reject(transaction.error || new Error('Không lưu được tài liệu.'));
       transaction.onabort = () => reject(transaction.error || new Error('Lưu tài liệu đã bị hủy.'));
@@ -463,11 +548,68 @@ async function writeDocumentCache(payload) {
 async function readDocumentCache() {
   const database = await openDocumentCacheDatabase();
   try {
-    return await new Promise((resolve, reject) => {
+    const active = await new Promise((resolve, reject) => {
       const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readonly');
       const request = transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).get(ACTIVE_DOCUMENT_CACHE_KEY);
       request.onsuccess = () => resolve(request.result || null);
       request.onerror = () => reject(request.error || new Error('Không đọc được tài liệu đã lưu.'));
+    });
+    if (!active || Array.isArray(active.chunks)) return active;
+    if (!active.documentRecordId) return null;
+    return await new Promise((resolve, reject) => {
+      const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readonly');
+      const request = transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).get(active.documentRecordId);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(request.error || new Error('Không đọc được tài liệu đang hoạt động.'));
+    });
+  } finally {
+    database.close();
+  }
+}
+
+async function listDocumentCaches() {
+  const database = await openDocumentCacheDatabase();
+  try {
+    const records = await new Promise((resolve, reject) => {
+      const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readonly');
+      const request = transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).getAll();
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => reject(request.error || new Error('Không đọc được thư viện tài liệu.'));
+    });
+    const unique = new Map();
+    records.forEach(record => {
+      if (!record || !record.documentId || !isValidCachedDocument(record)) return;
+      const existing = unique.get(record.documentId);
+      if (!existing || (record.savedAt || 0) > (existing.savedAt || 0)) unique.set(record.documentId, record);
+    });
+    return [...unique.values()].sort((left, right) => (right.savedAt || 0) - (left.savedAt || 0));
+  } finally {
+    database.close();
+  }
+}
+
+async function readDocumentCacheById(documentId) {
+  const database = await openDocumentCacheDatabase();
+  try {
+    return await new Promise((resolve, reject) => {
+      const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readonly');
+      const request = transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).get(`document:${documentId}`);
+      request.onsuccess = () => resolve(request.result || null);
+      request.onerror = () => reject(request.error || new Error('Không mở được tài liệu đã chọn.'));
+    });
+  } finally {
+    database.close();
+  }
+}
+
+async function deleteDocumentCache(documentId) {
+  const database = await openDocumentCacheDatabase();
+  try {
+    await new Promise((resolve, reject) => {
+      const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readwrite');
+      transaction.objectStore(DOCUMENT_CACHE_STORE_NAME).delete(`document:${documentId}`);
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error || new Error('Không xóa được tài liệu.'));
     });
   } finally {
     database.close();
@@ -475,7 +617,7 @@ async function readDocumentCache() {
 }
 
 function applyCachedDocument(cache) {
-  if (!cache || !Array.isArray(cache.chunks) || cache.chunks.length === 0) return false;
+  if (!isValidCachedDocument(cache)) return false;
 
   const previousDocumentName = state.pdfFileName;
   state.allChunks = cache.chunks.map(chunk => ({
@@ -483,6 +625,7 @@ function applyCachedDocument(cache) {
     text: cleanAndRepairVietnameseText(chunk.text || '')
   }));
   state.pageStartIndices = cache.pageStartIndices || {};
+  state.documentToc = Array.isArray(cache.documentToc) ? cache.documentToc : [];
   state.totalPages = Math.max(1, Number(cache.totalPages) || 1);
   state.loadedPages = state.totalPages;
   state.isPdfProcessing = false;
@@ -511,13 +654,19 @@ function persistDocumentCache() {
   if (!state.allChunks || state.allChunks.length === 0 || !state.pdfFileName) {
     return Promise.resolve();
   }
+  if (state.isPdfProcessing && state.loadedPages === 0) {
+    return Promise.resolve();
+  }
 
   const payload = {
-    id: ACTIVE_DOCUMENT_CACHE_KEY,
+    id: `document:${getCurrentDocumentId()}`,
+    cacheVersion: 2,
+    processingComplete: !state.isPdfProcessing,
     documentName: state.pdfFileName,
     documentId: getCurrentDocumentId(),
     chunks: state.allChunks,
     pageStartIndices: state.pageStartIndices,
+    documentToc: state.documentToc,
     totalPages: state.totalPages,
     currentPage: state.currentPage,
     currentGlobalIndex: state.currentGlobalIndex,
@@ -541,15 +690,34 @@ function persistDocumentCache() {
   return documentCacheWritePromise;
 }
 
+function isSampleContent(chunks) {
+  if (!Array.isArray(chunks) || chunks.length !== SAMPLE_STORY_CHUNKS.length) return false;
+  const expectedFirst = cleanAndRepairVietnameseText(SAMPLE_STORY_CHUNKS[0]);
+  const expectedLast = cleanAndRepairVietnameseText(SAMPLE_STORY_CHUNKS[SAMPLE_STORY_CHUNKS.length - 1]);
+  return chunks[0]?.text === expectedFirst && chunks[chunks.length - 1]?.text === expectedLast;
+}
+
+function isValidCachedDocument(cache) {
+  if (!cache || !Array.isArray(cache.chunks) || cache.chunks.length === 0) return false;
+  if (!cache.documentName || !cache.documentId) return false;
+  if (isSampleContent(cache.chunks)) {
+    console.warn(`Bỏ qua cache lỗi của ${cache.documentName}: dữ liệu tài liệu trùng nội dung mẫu.`);
+    return false;
+  }
+  return true;
+}
+
 function restoreChunksFromLegacySession() {
   try {
     const raw = sessionStorage.getItem('stealth_cached_chunks');
     if (raw) {
+      const documentName = sessionStorage.getItem('stealth_cached_doc_name') || 'Tài liệu đã lưu';
       return applyCachedDocument({
         chunks: JSON.parse(raw),
         pageStartIndices: JSON.parse(sessionStorage.getItem('stealth_cached_page_indices') || '{}'),
         totalPages: parseInt(sessionStorage.getItem('stealth_cached_total_pages') || '1', 10),
-        documentName: sessionStorage.getItem('stealth_cached_doc_name') || ''
+        documentName,
+        documentId: `legacy-${hashDocumentIdentity(documentName.toLowerCase())}`
       });
     }
   } catch (e) {
@@ -682,9 +850,223 @@ function initFeedbackListeners() {
   if (configSheetBtn) configSheetBtn.addEventListener('click', configProgressSheetUrl);
 }
 
+function initReaderToolsUI() {
+  if (document.getElementById('reader-tools-modal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'reader-tools-modal';
+  modal.className = 'reader-tools-modal';
+  modal.setAttribute('aria-hidden', 'true');
+  modal.innerHTML = `
+    <div class="reader-tools-backdrop" data-reader-tools-close></div>
+    <section class="reader-tools-dialog" role="dialog" aria-modal="true" aria-labelledby="reader-tools-title">
+      <header class="reader-tools-header">
+        <div><strong id="reader-tools-title">Công cụ đọc</strong><small id="reader-tools-document-name">Chưa nạp tài liệu</small></div>
+        <button class="reader-tools-icon-button" data-reader-tools-close title="Đóng" aria-label="Đóng">×</button>
+      </header>
+      <nav class="reader-tools-tabs" aria-label="Công cụ tài liệu">
+        <button data-reader-tab="library">Thư viện</button>
+        <button data-reader-tab="bookmarks">Dấu trang</button>
+        <button data-reader-tab="toc">Mục lục</button>
+        <button data-reader-tab="search">Tìm kiếm</button>
+      </nav>
+      <div class="reader-tools-content" id="reader-tools-content"></div>
+    </section>`;
+  document.body.appendChild(modal);
+  modal.querySelectorAll('[data-reader-tools-close]').forEach(button => button.addEventListener('click', closeReaderTools));
+  modal.querySelectorAll('[data-reader-tab]').forEach(button => {
+    button.addEventListener('click', () => renderReaderToolsPanel(button.dataset.readerTab));
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeReaderTools();
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'f' && hasLoadedDocument()) {
+      event.preventDefault();
+      openReaderTools('search');
+    }
+  });
+}
+
+function openReaderTools(tab = 'search') {
+  initReaderToolsUI();
+  const modal = document.getElementById('reader-tools-modal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  renderReaderToolsPanel(tab);
+}
+
+function closeReaderTools() {
+  const modal = document.getElementById('reader-tools-modal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
+async function renderReaderToolsPanel(tab = 'search') {
+  const modal = document.getElementById('reader-tools-modal');
+  const content = document.getElementById('reader-tools-content');
+  if (!modal || !content) return;
+  modal.querySelectorAll('[data-reader-tab]').forEach(button => button.classList.toggle('active', button.dataset.readerTab === tab));
+  const name = document.getElementById('reader-tools-document-name');
+  if (name) name.textContent = state.pdfFileName || 'Chưa nạp tài liệu';
+  content.innerHTML = '<div class="reader-tools-empty">Đang đọc dữ liệu...</div>';
+
+  if (tab === 'library') return renderDocumentLibrary(content);
+  if (tab === 'bookmarks') return renderBookmarksPanel(content);
+  if (tab === 'toc') return renderTocPanel(content);
+  renderSearchPanel(content);
+}
+
+async function renderDocumentLibrary(content) {
+  try {
+    const records = await listDocumentCaches();
+    let storageText = '';
+    if (navigator.storage?.estimate) {
+      const estimate = await navigator.storage.estimate();
+      const usage = estimate.usage ? `${(estimate.usage / 1048576).toFixed(1)} MB` : 'không rõ';
+      const quota = estimate.quota ? `${(estimate.quota / 1048576).toFixed(0)} MB` : 'không rõ';
+      storageText = `<div class="reader-tools-storage">Bộ nhớ trình duyệt: ${usage} / ${quota}</div>`;
+    }
+    if (!records.length) {
+      content.innerHTML = `${storageText}<div class="reader-tools-empty">Chưa có tài liệu nào trong thư viện. Tài liệu sẽ được lưu sau khi nạp thành công.</div>`;
+      return;
+    }
+    content.innerHTML = `${storageText}<div class="reader-tools-list">${records.map(record => {
+      const active = record.documentId === getCurrentDocumentId();
+      const date = record.savedAt ? new Date(record.savedAt).toLocaleString('vi-VN') : '';
+      return `<article class="reader-tools-item${active ? ' current' : ''}">
+        <div class="reader-tools-item-main"><strong>${escapeHtml(record.documentName || 'Tài liệu')}</strong><small>${record.totalPages || 1} trang · ${(record.chunks || []).length} đoạn · ${escapeHtml(date)}</small></div>
+        <div class="reader-tools-actions"><button data-library-open="${escapeHtml(record.documentId)}">Mở</button>${active ? '<button disabled>Đang mở</button>' : `<button class="danger" data-library-delete="${escapeHtml(record.documentId)}">Xóa</button>`}</div>
+      </article>`;
+    }).join('')}</div>`;
+    content.querySelectorAll('[data-library-open]').forEach(button => button.addEventListener('click', async () => {
+      const cache = await readDocumentCacheById(button.dataset.libraryOpen);
+      if (!applyCachedDocument(cache)) return;
+      renderContinuousView(true, state.currentGlobalIndex);
+      await persistDocumentCache();
+      closeReaderTools();
+      showPageFlipToast(`Đã mở <b>${escapeHtml(state.pdfFileName)}</b>.`);
+    }));
+    content.querySelectorAll('[data-library-delete]').forEach(button => button.addEventListener('click', async () => {
+      const record = records.find(item => item.documentId === button.dataset.libraryDelete);
+      if (!window.confirm(`Xóa "${record?.documentName || 'tài liệu'}" khỏi thư viện trên thiết bị này?`)) return;
+      await deleteDocumentCache(button.dataset.libraryDelete);
+      renderDocumentLibrary(content);
+    }));
+  } catch (error) {
+    content.innerHTML = '<div class="reader-tools-empty">Không thể đọc thư viện trên trình duyệt này.</div>';
+    console.warn(error);
+  }
+}
+
+function renderBookmarksPanel(content) {
+  const documentId = getCurrentDocumentId();
+  if (!documentId) {
+    content.innerHTML = '<div class="reader-tools-empty">Hãy nạp một tài liệu trước khi dùng dấu trang.</div>';
+    return;
+  }
+  const all = readSavedBookmarks();
+  const entry = normalizeBookmarkEntry(all[documentId], documentId);
+  content.innerHTML = `<div class="reader-tools-toolbar"><button id="reader-add-bookmark">+ Đánh dấu vị trí hiện tại</button></div>
+    <div class="reader-tools-list">${entry.marks.length ? entry.marks.map(mark => `<article class="reader-tools-item">
+      <div class="reader-tools-item-main"><strong>Trang ${mark.page}, dòng ${Number(mark.globalIndex) + 1}</strong><input data-mark-note="${escapeHtml(mark.id)}" value="${escapeHtml(mark.note || '')}" aria-label="Ghi chú dấu trang"><small>${escapeHtml(mark.excerpt || '')}</small></div>
+      <div class="reader-tools-actions"><button data-mark-open="${escapeHtml(mark.id)}">Mở</button><button class="danger" data-mark-delete="${escapeHtml(mark.id)}">Xóa</button></div>
+    </article>`).join('') : '<div class="reader-tools-empty">Chưa có dấu trang thủ công.</div>'}</div>`;
+  content.querySelector('#reader-add-bookmark')?.addEventListener('click', () => addManualBookmark());
+  content.querySelectorAll('[data-mark-open]').forEach(button => button.addEventListener('click', () => {
+    const mark = entry.marks.find(item => item.id === button.dataset.markOpen);
+    if (mark) jumpToChunk(mark.globalIndex);
+    closeReaderTools();
+  }));
+  content.querySelectorAll('[data-mark-note]').forEach(input => input.addEventListener('change', () => {
+    const mark = entry.marks.find(item => item.id === input.dataset.markNote);
+    if (!mark) return;
+    mark.note = input.value.trim();
+    mark.updatedAt = Date.now();
+    entry.updatedAt = Date.now();
+    all[documentId] = entry;
+    localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(all));
+  }));
+  content.querySelectorAll('[data-mark-delete]').forEach(button => button.addEventListener('click', () => {
+    entry.marks = entry.marks.filter(item => item.id !== button.dataset.markDelete);
+    entry.updatedAt = Date.now();
+    all[documentId] = entry;
+    localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(all));
+    renderBookmarksPanel(content);
+  }));
+}
+
+function renderTocPanel(content) {
+  if (!state.documentToc.length) {
+    content.innerHTML = '<div class="reader-tools-empty">Tài liệu này không có mục lục chương. File EPUB hoặc PDF có bookmark sẽ tự động hiển thị mục lục tại đây.</div>';
+    return;
+  }
+  content.innerHTML = `<div class="reader-tools-list">${state.documentToc.map((item, index) => `<button class="reader-toc-item" data-toc-index="${index}"><span>${escapeHtml(item.title)}</span><small>Trang ${item.page}</small></button>`).join('')}</div>`;
+  content.querySelectorAll('[data-toc-index]').forEach(button => button.addEventListener('click', () => {
+    const item = state.documentToc[Number(button.dataset.tocIndex)];
+    jumpToChunk(item.globalIndex ?? state.pageStartIndices[item.page] ?? 0);
+    closeReaderTools();
+  }));
+}
+
+function renderSearchPanel(content) {
+  content.innerHTML = `<form class="reader-search-form" id="reader-search-form"><input id="reader-search-input" type="search" placeholder="Tìm trong toàn bộ tài liệu" autocomplete="off"><button type="submit">Tìm</button></form><div id="reader-search-summary" class="reader-search-summary"></div><div id="reader-search-results" class="reader-tools-list"></div>`;
+  const form = content.querySelector('#reader-search-form');
+  const input = content.querySelector('#reader-search-input');
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const query = input.value.trim().toLocaleLowerCase('vi');
+    state.searchResults = query ? state.allChunks.filter(chunk => (chunk.text || '').toLocaleLowerCase('vi').includes(query)).slice(0, 300) : [];
+    state.searchResultCursor = state.searchResults.length ? 0 : -1;
+    const summary = content.querySelector('#reader-search-summary');
+    const results = content.querySelector('#reader-search-results');
+    summary.textContent = query ? `${state.searchResults.length}${state.searchResults.length === 300 ? '+' : ''} kết quả` : '';
+    results.innerHTML = state.searchResults.length ? state.searchResults.map((chunk, index) => `<button class="reader-search-result" data-search-index="${index}"><strong>Trang ${chunk.page}</strong><span>${escapeHtml(chunk.text.slice(0, 220))}</span></button>`).join('') : '<div class="reader-tools-empty">Không tìm thấy nội dung phù hợp.</div>';
+    results.querySelectorAll('[data-search-index]').forEach(button => button.addEventListener('click', () => {
+      const chunk = state.searchResults[Number(button.dataset.searchIndex)];
+      if (chunk) jumpToChunk(chunk.globalIndex, true);
+      closeReaderTools();
+    }));
+  });
+  setTimeout(() => input.focus(), 0);
+}
+
+function jumpToChunk(index, highlight = false) {
+  const target = Math.min(Math.max(0, Number(index) || 0), Math.max(0, state.allChunks.length - 1));
+  if (target + 60 > state.renderedCount) renderNextBatch(Math.max(state.BATCH_SIZE, target + 60 - state.renderedCount));
+  setActiveRow(target, true);
+  if (highlight) {
+    setTimeout(() => {
+      const element = document.querySelector(`[data-index="${target}"]`);
+      if (!element) return;
+      element.classList.add('reader-search-hit');
+      setTimeout(() => element.classList.remove('reader-search-hit'), 2400);
+    }, 100);
+  }
+}
+
+function showReaderError(title, summary, error = null, stage = '', file = lastFailedDocumentFile) {
+  initReaderToolsUI();
+  let modal = document.getElementById('reader-error-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'reader-error-modal';
+    modal.className = 'reader-tools-modal';
+    document.body.appendChild(modal);
+  }
+  const detail = error?.message || String(error || 'Không có chi tiết kỹ thuật.');
+  const metadata = file ? `${file.name} · ${(file.size / 1048576).toFixed(1)} MB · ${file.type || 'không rõ định dạng'}` : '';
+  modal.innerHTML = `<div class="reader-tools-backdrop" data-error-close></div><section class="reader-error-dialog" role="alertdialog" aria-modal="true"><header><strong>${escapeHtml(title)}</strong><button data-error-close aria-label="Đóng">×</button></header><p>${escapeHtml(summary)}</p>${stage ? `<div class="reader-error-stage">Bước lỗi: ${escapeHtml(stage)}</div>` : ''}${metadata ? `<div class="reader-error-file">${escapeHtml(metadata)}</div>` : ''}<details><summary>Chi tiết kỹ thuật</summary><pre>${escapeHtml(detail)}</pre></details><footer>${file ? '<button id="reader-error-retry">Thử lại</button>' : ''}<button data-error-close>Đóng</button></footer></section>`;
+  modal.classList.add('open');
+  modal.querySelectorAll('[data-error-close]').forEach(button => button.addEventListener('click', () => modal.classList.remove('open')));
+  modal.querySelector('#reader-error-retry')?.addEventListener('click', () => {
+    modal.classList.remove('open');
+    processDocumentFile(file);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   loadSavedState();
   initUniversalNavbar();
+  initReaderToolsUI();
   initThemeSystem();
   StealthImageManager.init();
   initTitleEditing();
@@ -943,15 +1325,18 @@ const StealthImageManager = {
         if (svg) svg.style.opacity = '0';
       }
     } else if (theme === 'theme-premiere') {
-      const monitor = document.querySelector('.pr-monitor');
-      if (monitor) {
-        monitor.style.backgroundImage = `url("${dataUrl}")`;
-        monitor.style.backgroundSize = 'contain';
-        monitor.style.backgroundPosition = 'center';
-        monitor.style.backgroundRepeat = 'no-repeat';
-        const svg = monitor.querySelector('svg');
-        if (svg) svg.style.opacity = '0';
+      const frame = document.querySelector('.pr-frame');
+      if (frame) {
+        frame.style.backgroundImage = `url("${dataUrl}")`;
+        frame.style.backgroundSize = 'contain';
+        frame.style.backgroundPosition = 'center';
+        frame.style.backgroundRepeat = 'no-repeat';
+        frame.style.backgroundColor = '#000000';
       }
+      const svg = document.querySelector('.pr-scene-svg');
+      if (svg) svg.style.display = 'none';
+      const monitor = document.querySelector('.pr-monitor');
+      if (monitor) monitor.style.backgroundImage = '';
     } else if (theme === 'theme-blender') {
       const scene = document.querySelector('.b-viewport-scene');
       if (scene) {
@@ -963,13 +1348,62 @@ const StealthImageManager = {
         if (svg) svg.style.opacity = '0';
       }
     } else if (theme === 'theme-canva') {
-      const canva = document.querySelector('.canva-canvas-viewport');
-      if (canva) {
-        canva.style.backgroundImage = `url("${dataUrl}")`;
-        canva.style.backgroundSize = 'contain';
-        canva.style.backgroundPosition = 'center';
-        canva.style.backgroundRepeat = 'no-repeat';
+      const orbitContainer = document.querySelector('#canva-story-view .canva-infographic-orbit-container');
+      if (orbitContainer) {
+        let customBox = document.getElementById('canva-custom-orbit-box');
+        if (!customBox) {
+          customBox = document.createElement('div');
+          customBox.id = 'canva-custom-orbit-box';
+          customBox.className = 'canva-custom-orbit-box';
+          const img = document.createElement('img');
+          img.id = 'canva-custom-orbit-img';
+          customBox.appendChild(img);
+          orbitContainer.insertBefore(customBox, orbitContainer.firstChild);
+        }
+        const customImg = document.getElementById('canva-custom-orbit-img');
+        if (customImg) customImg.src = dataUrl;
+
+        const svg = orbitContainer.querySelector('.canva-orbit-svg');
+        if (svg) svg.style.display = 'none';
+        const milestones = orbitContainer.querySelector('.canva-orbit-milestones-row');
+        if (milestones) milestones.style.display = 'none';
       }
+
+      const bossOrbit = document.querySelector('#canva-boss-view .canva-infographic-orbit-container');
+      if (bossOrbit) {
+        let bossBox = document.getElementById('canva-custom-boss-box');
+        if (!bossBox) {
+          bossBox = document.createElement('div');
+          bossBox.id = 'canva-custom-boss-box';
+          bossBox.className = 'canva-custom-boss-box';
+          const img = document.createElement('img');
+          img.id = 'canva-custom-boss-img';
+          bossBox.appendChild(img);
+          bossOrbit.insertBefore(bossBox, bossOrbit.firstChild);
+        }
+        const bossImg = document.getElementById('canva-custom-boss-img');
+        if (bossImg) bossImg.src = dataUrl;
+
+        const svg = bossOrbit.querySelector('.canva-orbit-svg');
+        if (svg) svg.style.display = 'none';
+        const milestones = bossOrbit.querySelector('.canva-orbit-milestones-row');
+        if (milestones) milestones.style.display = 'none';
+      }
+
+      const activeThumb = document.querySelector('.canva-grid-card.active');
+      if (activeThumb) {
+        let thumbImg = document.getElementById('canva-custom-thumb-img');
+        if (!thumbImg) {
+          thumbImg = document.createElement('img');
+          thumbImg.id = 'canva-custom-thumb-img';
+          thumbImg.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block; border-radius:3px; position:absolute; top:0; left:0; z-index:2;';
+          activeThumb.style.position = 'relative';
+          activeThumb.appendChild(thumbImg);
+        }
+        thumbImg.src = dataUrl;
+      }
+      const canva = document.querySelector('.canva-canvas-viewport');
+      if (canva) canva.style.backgroundImage = '';
     } else if (theme === 'theme-figma') {
       const mockup = document.querySelector('.figma-mockup-canvas');
       if (mockup) {
@@ -978,14 +1412,66 @@ const StealthImageManager = {
         mockup.style.backgroundPosition = 'center';
         mockup.style.backgroundRepeat = 'no-repeat';
       }
+      const tourImgs = document.querySelectorAll('.btn-card-img-box');
+      tourImgs.forEach(el => {
+        el.style.backgroundImage = `url("${dataUrl}")`;
+        el.style.backgroundSize = 'cover';
+      });
     } else if (theme === 'theme-powerpoint') {
-      const ppt = document.querySelector('.ppt-canvas-viewport');
-      if (ppt) {
-        ppt.style.backgroundImage = `url("${dataUrl}")`;
-        ppt.style.backgroundSize = 'contain';
-        ppt.style.backgroundPosition = 'center';
-        ppt.style.backgroundRepeat = 'no-repeat';
+      const panel = document.querySelector('.ppt-visuals-panel');
+      if (panel) {
+        let customCard = document.getElementById('ppt-custom-img-card');
+        if (!customCard) {
+          customCard = document.createElement('div');
+          customCard.id = 'ppt-custom-img-card';
+          customCard.className = 'ppt-chart-card ppt-custom-img-card';
+          customCard.innerHTML = `
+            <div class="ppt-chart-card-title">
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px; margin-right:4px;"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>Hình Ảnh Trình Chiếu</span>
+              <span style="color: #d24726; font-size: 10px;">Media Box</span>
+            </div>
+            <div class="ppt-custom-img-body">
+              <img id="ppt-custom-img" alt="PowerPoint Media" />
+            </div>
+          `;
+          panel.insertBefore(customCard, panel.firstChild);
+        }
+        const img = document.getElementById('ppt-custom-img');
+        if (img) img.src = dataUrl;
       }
+
+      const bossSlide = document.querySelector('.ppt-boss-slide');
+      if (bossSlide) {
+        let bossBox = document.getElementById('ppt-custom-boss-box');
+        if (!bossBox) {
+          bossBox = document.createElement('div');
+          bossBox.id = 'ppt-custom-boss-box';
+          bossBox.className = 'ppt-custom-boss-box';
+          const img = document.createElement('img');
+          img.id = 'ppt-custom-boss-img';
+          bossBox.appendChild(img);
+          const kpiGrid = bossSlide.querySelector('.ppt-kpi-grid');
+          if (kpiGrid) bossSlide.insertBefore(bossBox, kpiGrid);
+          else bossSlide.appendChild(bossBox);
+        }
+        const bossImg = document.getElementById('ppt-custom-boss-img');
+        if (bossImg) bossImg.src = dataUrl;
+      }
+
+      const activeThumb = document.querySelector('.ppt-thumb-card.active .ppt-thumb-preview');
+      if (activeThumb) {
+        let thumbImg = document.getElementById('ppt-custom-thumb-img');
+        if (!thumbImg) {
+          thumbImg = document.createElement('img');
+          thumbImg.id = 'ppt-custom-thumb-img';
+          thumbImg.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block; border-radius:2px; position:absolute; top:0; left:0; z-index:2;';
+          activeThumb.style.position = 'relative';
+          activeThumb.appendChild(thumbImg);
+        }
+        thumbImg.src = dataUrl;
+      }
+      const ppt = document.querySelector('.ppt-canvas-viewport');
+      if (ppt) ppt.style.backgroundImage = '';
     }
 
     this.updatePillState(true);
@@ -1014,12 +1500,18 @@ const StealthImageManager = {
         if (svg) svg.style.opacity = '';
       }
     } else if (theme === 'theme-premiere') {
-      const monitor = document.querySelector('.pr-monitor');
-      if (monitor) {
-        monitor.style.backgroundImage = '';
-        const svg = monitor.querySelector('svg');
-        if (svg) svg.style.opacity = '';
+      const frame = document.querySelector('.pr-frame');
+      if (frame) {
+        frame.style.backgroundImage = '';
+        frame.style.backgroundSize = '';
+        frame.style.backgroundPosition = '';
+        frame.style.backgroundRepeat = '';
+        frame.style.backgroundColor = '';
       }
+      const svg = document.querySelector('.pr-scene-svg');
+      if (svg) svg.style.display = '';
+      const monitor = document.querySelector('.pr-monitor');
+      if (monitor) monitor.style.backgroundImage = '';
     } else if (theme === 'theme-blender') {
       const scene = document.querySelector('.b-viewport-scene');
       if (scene) {
@@ -1028,12 +1520,46 @@ const StealthImageManager = {
         if (svg) svg.style.opacity = '';
       }
     } else if (theme === 'theme-canva') {
+      const customBox = document.getElementById('canva-custom-orbit-box');
+      if (customBox) customBox.remove();
+      const bossBox = document.getElementById('canva-custom-boss-box');
+      if (bossBox) bossBox.remove();
+      const thumbImg = document.getElementById('canva-custom-thumb-img');
+      if (thumbImg) thumbImg.remove();
+
+      const orbitContainer = document.querySelector('#canva-story-view .canva-infographic-orbit-container');
+      if (orbitContainer) {
+        const svg = orbitContainer.querySelector('.canva-orbit-svg');
+        if (svg) svg.style.display = '';
+        const milestones = orbitContainer.querySelector('.canva-orbit-milestones-row');
+        if (milestones) milestones.style.display = '';
+      }
+
+      const bossOrbit = document.querySelector('#canva-boss-view .canva-infographic-orbit-container');
+      if (bossOrbit) {
+        const svg = bossOrbit.querySelector('.canva-orbit-svg');
+        if (svg) svg.style.display = '';
+        const milestones = bossOrbit.querySelector('.canva-orbit-milestones-row');
+        if (milestones) milestones.style.display = '';
+      }
+
       const canva = document.querySelector('.canva-canvas-viewport');
       if (canva) canva.style.backgroundImage = '';
     } else if (theme === 'theme-figma') {
       const mockup = document.querySelector('.figma-mockup-canvas');
       if (mockup) mockup.style.backgroundImage = '';
+      const tourImgs = document.querySelectorAll('.btn-card-img-box');
+      tourImgs.forEach(el => {
+        el.style.backgroundImage = '';
+        el.style.backgroundSize = '';
+      });
     } else if (theme === 'theme-powerpoint') {
+      const customCard = document.getElementById('ppt-custom-img-card');
+      if (customCard) customCard.remove();
+      const bossBox = document.getElementById('ppt-custom-boss-box');
+      if (bossBox) bossBox.remove();
+      const thumbImg = document.getElementById('ppt-custom-thumb-img');
+      if (thumbImg) thumbImg.remove();
       const ppt = document.querySelector('.ppt-canvas-viewport');
       if (ppt) ppt.style.backgroundImage = '';
     }
@@ -1079,11 +1605,11 @@ const StealthImageManager = {
     if (theme === 'theme-photoshop') container = document.querySelector('.ps-visual-artboard');
     else if (theme === 'theme-autocad') container = document.querySelector('.cad-canvas-vector-box');
     else if (theme === 'theme-capcut') container = document.querySelector('.cc-monitor-panel');
-    else if (theme === 'theme-premiere') container = document.querySelector('.pr-monitor-panel') || document.querySelector('.pr-monitor');
+    else if (theme === 'theme-premiere') container = document.querySelector('.pr-frame') || document.querySelector('.pr-monitor');
     else if (theme === 'theme-blender') container = document.querySelector('.b-viewport-pane');
-    else if (theme === 'theme-canva') container = document.querySelector('.canva-canvas-viewport');
+    else if (theme === 'theme-canva') container = document.querySelector('.canva-pinned-visual-header') || document.querySelector('.canva-slide-deck-card');
     else if (theme === 'theme-figma') container = document.querySelector('.figma-artboard-frame') || document.querySelector('.figma-mockup-canvas');
-    else if (theme === 'theme-powerpoint') container = document.querySelector('.ppt-canvas-viewport');
+    else if (theme === 'theme-powerpoint') container = document.querySelector('.ppt-slide-sheet') || document.querySelector('.ppt-canvas-viewport');
 
     if (container && !document.getElementById('stealth-img-ctrl-pill')) {
       const pill = document.createElement('div');
@@ -2788,6 +3314,10 @@ function initUniversalNavbar() {
           <svg class="unav-bookmark-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
           <span class="unav-bookmark-text">Đánh dấu</span>
         </button>
+        <button class="unav-btn unav-btn-tools" id="univ-btn-tools" title="Mở thư viện, dấu trang, mục lục và tìm kiếm">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/><path d="M8 11h6M11 8v6"/></svg>
+          <span>Công cụ</span>
+        </button>
       </div>
 
       <div class="unav-section unav-right">
@@ -2857,7 +3387,10 @@ function initUniversalNavbar() {
   if (btnAutoscroll) btnAutoscroll.addEventListener('click', toggleAutoScroll);
 
   const btnBookmark = document.getElementById('univ-btn-bookmark');
-  if (btnBookmark) btnBookmark.addEventListener('click', () => saveCurrentBookmark({ notify: true }));
+  if (btnBookmark) btnBookmark.addEventListener('click', () => addManualBookmark());
+
+  const btnTools = document.getElementById('univ-btn-tools');
+  if (btnTools) btnTools.addEventListener('click', () => openReaderTools('search'));
 
   const btnCustomImg = document.getElementById('univ-btn-custom-img');
   if (btnCustomImg) {
@@ -2897,7 +3430,7 @@ function syncUniversalNavbar() {
   const fileBadge = document.getElementById('univ-file-name');
   if (fileBadge) {
     const fileName = state.pdfFileName || 'KPI_Report_Q3_2026.pdf';
-    fileBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="unav-file-name-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${fileName}</span>`;
+    fileBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="unav-file-name-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(fileName)}</span>`;
     fileBadge.title = `Tài liệu: ${fileName}`;
   }
 
@@ -3659,6 +4192,7 @@ const MAX_DOCUMENT_SIZE = 200 * 1024 * 1024;
 const MAX_EPUB_ENTRIES = 5000;
 const MAX_EPUB_TEXT_LENGTH = 60 * 1024 * 1024;
 const MAX_EPUB_UNCOMPRESSED_SIZE = 300 * 1024 * 1024;
+const LARGE_FILE_WARNING_SIZE = 100 * 1024 * 1024;
 let pdfBackendAvailable = null;
 
 function getDocumentExtension(file) {
@@ -3672,12 +4206,31 @@ function isSupportedDocument(file) {
 }
 
 function prepareDocumentLoad(file) {
+  cancelDocumentLoad(false);
+  previousDocumentSnapshot = {
+    pdfDoc: state.pdfDoc,
+    pdfFileName: state.pdfFileName,
+    documentId: state.documentId,
+    currentPage: state.currentPage,
+    totalPages: state.totalPages,
+    firstStoryPage: state.firstStoryPage,
+    loadedPages: state.loadedPages,
+    allChunks: state.allChunks,
+    pageStartIndices: state.pageStartIndices,
+    documentToc: state.documentToc,
+    currentGlobalIndex: state.currentGlobalIndex
+  };
   const loadToken = ++state.pdfLoadToken;
   state.isPdfProcessing = true;
+  state.pdfDoc = null;
   state.loadedPages = 0;
   state.pdfFileName = file.name;
   state.documentId = createDocumentId(file);
+  state.documentToc = [];
+  state.searchResults = [];
+  state.searchResultCursor = -1;
   showLoading('Đang đồng bộ dữ liệu vào hệ thống...');
+  updateLoadingProgress(0, 'Đang chuẩn bị tài liệu...');
 
   const univFileName = document.getElementById('univ-file-name');
   if (univFileName) univFileName.textContent = file.name;
@@ -3712,17 +4265,76 @@ function validateDocumentFile(file) {
 }
 
 async function processDocumentFile(file) {
+  lastFailedDocumentFile = file;
   try {
     validateDocumentFile(file);
   } catch (error) {
-    alert(error.message);
+    showReaderError('Không thể nạp tài liệu', error.message, error, 'Kiểm tra tệp', file);
     return;
   }
+
+  if (file.size > LARGE_FILE_WARNING_SIZE && !window.confirm(`File ${(file.size / 1048576).toFixed(1)} MB có thể cần nhiều RAM và thời gian xử lý. Tiếp tục mở?`)) return;
 
   const extension = getDocumentExtension(file);
   if (extension === 'pdf') return processPdfFile(file);
   if (extension === 'txt') return processTextFile(file);
   return processEpubFile(file);
+}
+
+function runTextChunkWorker(source, mode = state.chunkMode) {
+  return new Promise((resolve, reject) => {
+    if (!window.Worker) {
+      const text = typeof source === 'string' ? source : new TextDecoder('utf-8').decode(source);
+      resolve(splitTextIntoChunks(text, mode));
+      return;
+    }
+    const worker = new Worker('text-worker.js?v=20261008-08');
+    activeDocumentWorker = worker;
+    worker.onmessage = event => {
+      if (activeDocumentWorker === worker) activeDocumentWorker = null;
+      worker.terminate();
+      if (event.data?.error) reject(new Error(event.data.error));
+      else resolve((event.data?.chunks || []).map(chunk => cleanAndRepairVietnameseText(chunk)));
+    };
+    worker.onerror = event => {
+      if (activeDocumentWorker === worker) activeDocumentWorker = null;
+      worker.terminate();
+      reject(new Error(event.message || 'Web Worker không xử lý được văn bản.'));
+    };
+    if (source instanceof ArrayBuffer) worker.postMessage({ buffer: source, mode }, [source]);
+    else worker.postMessage({ text: String(source || ''), mode });
+  });
+}
+
+function cancelDocumentLoad(notify = true) {
+  const wasProcessing = state.isPdfProcessing;
+  state.pdfLoadToken += 1;
+  state.isPdfProcessing = false;
+  if (activeDocumentAbortController) activeDocumentAbortController.abort();
+  activeDocumentAbortController = null;
+  if (activeDocumentWorker) activeDocumentWorker.terminate();
+  activeDocumentWorker = null;
+  if (activePdfLoadingTask && typeof activePdfLoadingTask.destroy === 'function') activePdfLoadingTask.destroy().catch(() => {});
+  activePdfLoadingTask = null;
+  if (wasProcessing && state.pdfDoc && typeof state.pdfDoc.destroy === 'function') state.pdfDoc.destroy().catch(() => {});
+  if (wasProcessing && previousDocumentSnapshot) {
+    Object.assign(state, previousDocumentSnapshot);
+    previousDocumentSnapshot = null;
+    if (state.allChunks.length) renderContinuousView(true, state.currentGlobalIndex);
+    syncUniversalNavbar();
+    if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
+  } else if (wasProcessing) {
+    state.pdfDoc = null;
+  }
+  hideLoading();
+  updatePaginationUI();
+  if (notify && wasProcessing) showPageFlipToast('Đã hủy xử lý tài liệu.');
+}
+
+function commitDocumentLoad() {
+  const previousPdf = previousDocumentSnapshot?.pdfDoc;
+  if (previousPdf && previousPdf !== state.pdfDoc && typeof previousPdf.destroy === 'function') previousPdf.destroy().catch(() => {});
+  previousDocumentSnapshot = null;
 }
 
 function chunksToPagesData(chunks, chunksPerPage = TEXT_CHUNKS_PER_PAGE) {
@@ -3744,6 +4356,7 @@ function finishTextDocument(chunks, formatLabel) {
   state.loadedPages = totalPages;
   state.isPdfProcessing = false;
   initStoryFromPages(pagesData, totalPages, 1);
+  commitDocumentLoad();
   showBanner(`Đã nạp thành công file ${formatLabel}: <b>${totalPages}</b> phần đọc.`);
 }
 
@@ -3752,15 +4365,18 @@ async function processTextFile(file) {
 
   try {
     showLoading('Đang đọc nội dung file TXT...');
-    const text = await file.text();
+    const buffer = await file.arrayBuffer();
     if (loadToken !== state.pdfLoadToken) return;
-
-    finishTextDocument(splitTextIntoChunks(text, state.chunkMode), 'TXT');
+    updateLoadingProgress(45, 'Đã đọc file, đang chia nội dung thành các đoạn...');
+    const chunks = await runTextChunkWorker(buffer, state.chunkMode);
+    if (loadToken !== state.pdfLoadToken) return;
+    updateLoadingProgress(90, 'Đang dựng nội dung lên giao diện...');
+    finishTextDocument(chunks, 'TXT');
   } catch (error) {
     if (loadToken !== state.pdfLoadToken) return;
     state.isPdfProcessing = false;
     console.error('TXT parsing error:', error);
-    alert('Không thể đọc file TXT: ' + error.message);
+    showReaderError('Không thể đọc file TXT', 'Tệp không thể giải mã hoặc xử lý thành nội dung đọc.', error, 'Đọc và chia văn bản', file);
   } finally {
     if (loadToken === state.pdfLoadToken) hideLoading();
   }
@@ -3817,7 +4433,15 @@ function extractTextFromEpubHtml(htmlText) {
     .map(node => node.textContent.replace(/\s+/g, ' ').trim())
     .filter(Boolean);
 
-  return blocks.length > 0 ? blocks.join('\n\n') : root.textContent.replace(/\s+/g, ' ').trim();
+  const heading = documentNode.querySelector('h1, h2, h3, title');
+  const headings = Array.from(documentNode.querySelectorAll('h1, h2, h3, h4'))
+    .map(node => node.textContent.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+  return {
+    title: heading?.textContent?.replace(/\s+/g, ' ').trim() || '',
+    headings,
+    text: blocks.length > 0 ? blocks.join('\n\n') : root.textContent.replace(/\s+/g, ' ').trim()
+  };
 }
 
 let jsZipLoadPromise = null;
@@ -3935,6 +4559,7 @@ async function processEpubFile(file) {
     if (spinePaths.length === 0) throw new Error('EPUB không có thứ tự chương đọc (spine).');
 
     const pagesData = {};
+    const toc = [];
     let pageNum = 1;
     let totalTextLength = 0;
 
@@ -3945,6 +4570,7 @@ async function processEpubFile(file) {
       if (!chapterEntry) continue;
 
       updateEpubStatus(`Đang đọc chương ${index + 1} / ${spinePaths.length}`);
+      updateLoadingProgress(Math.round(((index + 0.2) / spinePaths.length) * 85), `Chương ${index + 1}/${spinePaths.length}`);
       const chapterHtml = await chapterEntry.async('string');
       totalTextLength += chapterHtml.length;
       if (totalTextLength > MAX_EPUB_TEXT_LENGTH) {
@@ -3953,8 +4579,20 @@ async function processEpubFile(file) {
 
       updateEpubStatus(`Đang tách văn bản chương ${index + 1} / ${spinePaths.length}`);
       await yieldToBrowser();
-      const chapterText = extractTextFromEpubHtml(chapterHtml);
-      const chunks = splitTextIntoChunks(chapterText, state.chunkMode);
+      const chapter = extractTextFromEpubHtml(chapterHtml);
+      const chapterStartPage = pageNum;
+      const chunks = await runTextChunkWorker(chapter.text, state.chunkMode);
+      if (chunks.length) {
+        const chapterHeadings = chapter.headings.length ? chapter.headings : [chapter.title || `Chương ${index + 1}`];
+        let searchFrom = 0;
+        chapterHeadings.forEach(title => {
+          const normalizedTitle = cleanAndRepairVietnameseText(title).toLocaleLowerCase('vi');
+          let offset = chunks.findIndex((chunk, chunkIndex) => chunkIndex >= searchFrom && chunk.toLocaleLowerCase('vi').includes(normalizedTitle));
+          if (offset < 0) offset = searchFrom;
+          searchFrom = Math.min(chunks.length - 1, offset + 1);
+          toc.push({ title, page: chapterStartPage + Math.floor(offset / TEXT_CHUNKS_PER_PAGE) });
+        });
+      }
       for (let start = 0; start < chunks.length; start += TEXT_CHUNKS_PER_PAGE) {
         pagesData[String(pageNum++)] = chunks.slice(start, start + TEXT_CHUNKS_PER_PAGE);
       }
@@ -3970,14 +4608,18 @@ async function processEpubFile(file) {
     await yieldToBrowser();
     state.loadedPages = totalPages;
     state.isPdfProcessing = false;
+    state.documentToc = toc;
     initStoryFromPages(pagesData, totalPages, 1);
+    state.documentToc = toc.map(item => ({ ...item, globalIndex: state.pageStartIndices[item.page] || 0 }));
+    persistDocumentCache().catch(() => {});
+    commitDocumentLoad();
     const elapsedSeconds = ((performance.now() - startedAt) / 1000).toFixed(1);
     showBanner(`Đã nạp thành công EPUB: <b>${totalPages}</b> phần đọc từ ${spinePaths.length} chương trong <b>${elapsedSeconds} giây</b>.`);
   } catch (error) {
     if (loadToken !== state.pdfLoadToken) return;
     state.isPdfProcessing = false;
     console.error('EPUB parsing error:', error);
-    alert(`Không thể đọc file EPUB tại bước "${currentStage}": ${error.message}`);
+    showReaderError('Không thể đọc file EPUB', 'EPUB bị lỗi cấu trúc, quá giới hạn hoặc chứa chương không thể giải mã.', error, currentStage, file);
   } finally {
     clearInterval(statusTimer);
     if (loadToken === state.pdfLoadToken) hideLoading();
@@ -4208,6 +4850,14 @@ async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken
     if (loadToken !== state.pdfLoadToken) return;
 
     appendExtractedPages(pageResults);
+    if (state.documentToc && state.documentToc.length > 0) {
+      state.documentToc.forEach(item => {
+        if ((item.globalIndex === undefined || item.globalIndex === 0) && state.pageStartIndices[item.page] !== undefined) {
+          item.globalIndex = state.pageStartIndices[item.page];
+        }
+      });
+    }
+    updateLoadingProgress(Math.round((state.loadedPages / totalPages) * 100), `${state.loadedPages}/${totalPages} trang đã xử lý`);
     showBanner(`Đã sẵn sàng <b>${state.loadedPages}/${totalPages}</b> trang. Bạn có thể đọc trong khi các trang còn lại đang được xử lý.`);
 
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -4225,6 +4875,57 @@ async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken
   persistDocumentCache().catch(() => {});
 }
 
+async function extractPdfOutline(pdfDoc) {
+  if (!pdfDoc || typeof pdfDoc.getOutline !== 'function') return [];
+  try {
+    const rawOutline = await pdfDoc.getOutline();
+    if (!rawOutline || !rawOutline.length) return [];
+
+    const toc = [];
+
+    async function traverse(items, depth = 0) {
+      if (!Array.isArray(items)) return;
+      for (const item of items) {
+        if (!item || !item.title) continue;
+        let pageNum = null;
+        try {
+          let dest = item.dest;
+          if (typeof dest === 'string') {
+            dest = await pdfDoc.getDestination(dest);
+          }
+          if (Array.isArray(dest) && dest.length > 0) {
+            const ref = dest[0];
+            if (typeof ref === 'object' && ref !== null) {
+              const pageIndex = await pdfDoc.getPageIndex(ref);
+              pageNum = pageIndex + 1;
+            } else if (typeof ref === 'number') {
+              pageNum = ref + 1;
+            }
+          }
+        } catch (_) {}
+
+        const cleanTitle = cleanAndRepairVietnameseText(item.title).replace(/\s+/g, ' ').trim();
+        if (cleanTitle) {
+          const indent = depth > 0 ? '— '.repeat(depth) : '';
+          toc.push({
+            title: indent + cleanTitle,
+            page: pageNum || 1
+          });
+        }
+        if (Array.isArray(item.items) && item.items.length > 0) {
+          await traverse(item.items, depth + 1);
+        }
+      }
+    }
+
+    await traverse(rawOutline);
+    return toc;
+  } catch (err) {
+    console.warn('Không thể đọc outline của PDF:', err);
+    return [];
+  }
+}
+
 async function processPdfFile(file) {
   const loadToken = prepareDocumentLoad(file);
 
@@ -4233,10 +4934,12 @@ async function processPdfFile(file) {
     try {
       const formData = new FormData();
       formData.append('pdf', file, file.name);
+      activeDocumentAbortController = new AbortController();
 
       const res = await fetch('/api/extract-pdf', {
         method: 'POST',
-        body: formData
+        body: formData,
+        signal: activeDocumentAbortController.signal
       });
 
       if (res.ok) {
@@ -4247,9 +4950,18 @@ async function processPdfFile(file) {
           state.firstStoryPage = data.firstStoryPage || 1;
           state.loadedPages = data.totalPages;
           state.isPdfProcessing = false;
+          const backendToc = Array.isArray(data.toc) ? data.toc : [];
 
           showBanner(`Đã nạp thành công toàn bộ <b>${data.totalPages}</b> trang sách!`);
           initStoryFromPages(data.pages, data.totalPages, state.firstStoryPage);
+          if (backendToc.length > 0) {
+            state.documentToc = backendToc.map(item => ({
+              ...item,
+              globalIndex: state.pageStartIndices[item.page] ?? 0
+            }));
+            persistDocumentCache().catch(() => {});
+          }
+          commitDocumentLoad();
           hideLoading();
           return;
         }
@@ -4273,20 +4985,32 @@ async function processPdfFile(file) {
       isEvalSupported: false,
       enableScripting: false
     });
+    activePdfLoadingTask = loadingTask;
 
     state.pdfDoc = await loadingTask.promise;
     if (loadToken !== state.pdfLoadToken) return;
 
     state.totalPages = state.pdfDoc.numPages;
     if (state.totalPages < 1) throw new Error('File PDF không có trang nào');
+    const outlinePromise = extractPdfOutline(state.pdfDoc).catch(() => []);
     const initialPageCount = Math.min(PDF_INITIAL_PAGE_COUNT, state.totalPages);
     const initialPageNumbers = Array.from({ length: initialPageCount }, (_, index) => index + 1);
 
     showLoading(`Đang trích xuất ${initialPageCount} trang đầu tiên...`);
+    updateLoadingProgress(30, `Đang chuẩn bị ${initialPageCount} trang đầu tiên...`);
     const initialPages = await Promise.all(initialPageNumbers.map(pageNum => extractPdfPage(state.pdfDoc, pageNum)));
     if (loadToken !== state.pdfLoadToken) return;
 
     initProgressiveStory(initialPages, state.totalPages);
+    const clientToc = await outlinePromise;
+    if (clientToc && clientToc.length > 0) {
+      state.documentToc = clientToc.map(item => ({
+        ...item,
+        globalIndex: state.pageStartIndices[item.page] ?? 0
+      }));
+      persistDocumentCache().catch(() => {});
+    }
+    commitDocumentLoad();
     hideLoading();
 
     if (initialPageCount < state.totalPages) {
@@ -4308,9 +5032,13 @@ async function processPdfFile(file) {
     if (loadToken !== state.pdfLoadToken) return;
     state.isPdfProcessing = false;
     console.error('PDF parsing error:', err);
-    alert('Không thể trích xuất file PDF: ' + err.message);
+    showReaderError('Không thể đọc file PDF', 'PDF có thể bị khóa, hỏng cấu trúc hoặc không chứa lớp văn bản.', err, 'Trích xuất văn bản PDF', file);
   } finally {
-    if (loadToken === state.pdfLoadToken) hideLoading();
+    if (loadToken === state.pdfLoadToken) {
+      activeDocumentAbortController = null;
+      activePdfLoadingTask = null;
+      hideLoading();
+    }
   }
 }
 
@@ -4920,16 +5648,18 @@ function appendZaloBatch(count) {
 
   const fragment = document.createDocumentFragment();
   const senders = [
-    { name: 'Phong (Tech Lead)', avatar: 'HP', bg: '#0068ff' },
-    { name: 'Nguyễn Văn Hùng (Dev Lead)', avatar: 'VH', bg: '#059669' },
-    { name: 'Lê Thuỳ Trang (PM)', avatar: 'TT', bg: '#7c3aed' },
-    { name: 'Đỗ Hoàng Nam (QA Lead)', avatar: 'HN', bg: '#d97706' }
+    { name: 'Minh Quân (Tech Lead)', avatar: 'MQ', bg: '#0068ff', isOwner: true },
+    { name: 'Thu Hà (BA Lead)', avatar: 'TH', bg: '#059669', isOwner: false },
+    { name: 'Hoàng Long (Dev Lead)', avatar: 'HL', bg: '#7c3aed', isOwner: false },
+    { name: 'Tuấn Anh (DevOps Lead)', avatar: 'TA', bg: '#d97706', isOwner: false },
+    { name: 'Văn Nam (Security)', avatar: 'VN', bg: '#e11d48', isOwner: false },
+    { name: 'Đức Huy (QA Lead)', avatar: 'DH', bg: '#0284c7', isOwner: false }
   ];
 
   for (let i = start; i < end; i++) {
     const chunk = state.allChunks[i];
     const sender = senders[chunk.globalIndex % senders.length];
-    const hour = 9 + Math.floor((chunk.globalIndex * 7) / 60) % 8;
+    const hour = 8 + Math.floor((chunk.globalIndex * 7) / 60) % 10;
     const min = (chunk.globalIndex * 13) % 60;
     const timeStr = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
 
@@ -4939,11 +5669,14 @@ function appendZaloBatch(count) {
     msgItem.dataset.index = chunk.globalIndex;
     msgItem.dataset.page = chunk.page;
 
+    const avatarHtml = `<div class="zalo-msg-avatar" style="position:relative; width:36px; height:36px; border-radius:50%; background:${sender.bg}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px;">${sender.avatar}${sender.isOwner ? '<span class="zavatar-key-badge" title="Trưởng nhóm">🔑</span>' : ''}</div>`;
+
     msgItem.innerHTML = `
-      <div class="zalo-msg-avatar" style="background: ${sender.bg};">${sender.avatar}</div>
+      ${avatarHtml}
       <div class="zalo-msg-content-box">
         <div class="zalo-msg-sender-name">
           <span>${sender.name}</span>
+          ${sender.isOwner ? '<span style="color:#0068ff; font-size:10px;">(Trưởng nhóm)</span>' : ''}
           <span class="zalo-msg-time">${timeStr} • Trang ${chunk.page}</span>
         </div>
         <div class="zalo-msg-bubble">
@@ -5530,8 +6263,32 @@ function showLoading(msg, detailMessage = 'Ứng dụng đang xử lý tài li�
       spinner.querySelector('.loading-box')?.appendChild(detail);
     }
     if (detail) detail.textContent = detailMessage;
+    const box = spinner.querySelector('.loading-box');
+    if (box && !box.querySelector('.reader-loading-progress')) {
+      const progress = document.createElement('div');
+      progress.className = 'reader-loading-progress';
+      progress.innerHTML = '<div class="reader-loading-progress-bar"></div>';
+      box.appendChild(progress);
+      const label = document.createElement('div');
+      label.className = 'reader-loading-progress-label';
+      box.appendChild(label);
+      const cancel = document.createElement('button');
+      cancel.type = 'button';
+      cancel.className = 'reader-loading-cancel';
+      cancel.textContent = 'Hủy xử lý';
+      cancel.addEventListener('click', () => cancelDocumentLoad(true));
+      box.appendChild(cancel);
+    }
     spinner.style.display = 'flex';
   }
+}
+function updateLoadingProgress(percent, label = '') {
+  const spinner = document.getElementById('loading-spinner');
+  const safePercent = Math.min(100, Math.max(0, Number(percent) || 0));
+  const bar = spinner?.querySelector('.reader-loading-progress-bar');
+  const text = spinner?.querySelector('.reader-loading-progress-label');
+  if (bar) bar.style.width = `${safePercent}%`;
+  if (text) text.textContent = label || `${Math.round(safePercent)}%`;
 }
 function hideLoading() {
   const spinner = document.getElementById('loading-spinner');

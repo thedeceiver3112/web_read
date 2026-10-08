@@ -9,6 +9,7 @@ import re
 
 PORT = 8080
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+MAX_UPLOAD_SIZE = 200 * 1024 * 1024
 
 import unicodedata
 
@@ -73,6 +74,9 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
     def end_headers(self):
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Referrer-Policy", "same-origin")
+        self.send_header("X-Frame-Options", "SAMEORIGIN")
         request_path = self.path.split("?", 1)[0].lower()
         if request_path.endswith((".html", ".js", ".css")) or request_path in {"/", "/api/health", "/version.json"}:
             self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
@@ -105,6 +109,9 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 import pypdf
                 content_length = int(self.headers.get('Content-Length', 0))
+                if content_length <= 0 or content_length > MAX_UPLOAD_SIZE:
+                    self.send_error(413, "PDF upload exceeds the 200 MB limit")
+                    return
                 body = self.rfile.read(content_length)
 
                 # Check if multipart or raw binary
@@ -152,12 +159,39 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
                     pages_data[str(page_num)] = chunks
 
+                toc = []
+                try:
+                    def extract_pypdf_outline(outline_items, depth=0):
+                        for item in outline_items:
+                            if isinstance(item, list):
+                                extract_pypdf_outline(item, depth + 1)
+                            else:
+                                title = getattr(item, 'title', None)
+                                if not title and isinstance(item, dict):
+                                    title = item.get('/Title')
+                                if title:
+                                    try:
+                                        page_idx = reader.get_destination_page_number(item)
+                                        p_num = (page_idx + 1) if page_idx is not None else 1
+                                    except Exception:
+                                        p_num = 1
+                                    clean_t = clean_and_repair_vietnamese_text(str(title)).strip()
+                                    if clean_t:
+                                        indent = ('— ' * depth) if depth > 0 else ''
+                                        toc.append({"title": indent + clean_t, "page": p_num})
+
+                    if hasattr(reader, 'outline') and reader.outline:
+                        extract_pypdf_outline(reader.outline)
+                except Exception:
+                    toc = []
+
                 response_payload = {
                     "success": True,
                     "filename": filename,
                     "totalPages": total_pages,
                     "firstStoryPage": first_story_page,
-                    "pages": pages_data
+                    "pages": pages_data,
+                    "toc": toc
                 }
 
                 data_bytes = json.dumps(response_payload, ensure_ascii=False).encode('utf-8')

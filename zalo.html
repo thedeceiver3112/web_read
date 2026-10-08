@@ -6,478 +6,712 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <script src="version-check.js?v=20261008-06" data-app-version="20261008-06"></script>
-  <title>Dự án Sprint Q3 - Tech Lead &amp; Team Sync - Zalo</title>
+  <script src="version-check.js?v=20261008-10" data-app-version="20261008-10"></script>
+  <title>Hệ Thống Quản Lý Kho WMS - Zalo Web</title>
   <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22zg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230091FF%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230058E6%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23zg%29%22/%3E%20%3Cpath%20d%3D%22M12%2018h9L13%2028h8.5v2.8H10.5l8-10H12V18zm13%203.5c0-2%201.5-3.5%203.8-3.5s3.8%201.5%203.8%203.5v8.3h-2.5V28c-.6%201-1.8%201.8-3.2%201.8-2.2%200-3.8-1.5-3.8-3.6%200-2.2%201.6-3.6%203.8-3.6h1.9v-.7c0-.9-.7-1.5-1.7-1.5s-1.7.6-1.7%201.5H25zm5%204.5h-1.6c-1%200-1.8.6-1.8%201.6s.8%201.6%201.8%201.6%201.6-.6%201.6-1.6V26zm3.5-7.5H36v12.3h-2.5V18.5zm5%204.5c0-2.8%202-4.8%204.8-4.8s4.8%202%204.8%204.8-2%204.8-4.8%204.8-4.8-2-4.8-4.8zm7%200c0-1.5-.9-2.6-2.2-2.6s-2.2%201.1-2.2%202.6.9%202.6%202.2%202.6%202.2-1.1%202.2-2.6z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=20261008-06">
+  <link rel="stylesheet" href="style.css?v=20261008-10">
   <script src="static/pdf.min.js" defer></script>
 </head>
 <body class="theme-zalo">
 
-  <div class="zalo-app-container">
-    <!-- 1. CỘT ĐIỀU HƯỚNG BÊN TRÁI (NAV RAIL XANH ĐẶC TRƯNG ZALO - ẢNH 3) -->
-    <nav class="zalo-nav-rail">
-      <div class="zalo-user-avatar-wrap" title="Tài khoản cá nhân: Minh Quân (Online)">
-        <div class="zalo-user-avatar">MQ</div>
-        <div class="zalo-user-status-dot"></div>
-      </div>
-
-      <div class="zalo-rail-items">
-        <div class="zalo-rail-btn active" title="Tin nhắn"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></span>
-          <span class="zalo-badge-count">5</span>
-        </div>
-        <div class="zalo-rail-btn" title="Danh bạ"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
-        </div>
-        <div class="zalo-rail-btn" title="Giao việc / To-Do"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></span>
-        </div>
-        <div class="zalo-rail-btn" title="Cloud của tôi"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg></span>
-        </div>
-        <div class="zalo-rail-btn" title="File / Đa phương tiện"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg></span>
-        </div>
-        <div class="zalo-rail-btn" title="Chụp màn hình"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v4H2v2h4v8H2v2h4v4h2v-4h8v4h2v-4h4v-2h-4V8h4V6h-4V2h-2v4H8V2H6zm2 6h8v8H8V8z"/></svg></span>
-        </div>
-        <div class="zalo-rail-btn" title="Tiện ích &amp; Công cụ"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></span>
-        </div>
-      </div>
-
-      <div class="zalo-rail-bottom">
-        <div class="zalo-rail-btn" title="Cài đặt hệ thống"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></span>
-        </div>
-      </div>
-    </nav>
-
-    <!-- 2. CỘT DANH SÁCH CUỘC TRÒ CHUYỆN (ẢNH 3) -->
-    <aside class="zalo-chat-list-pane">
-      <div class="zalo-search-bar-row">
-        <div class="zalo-search-input-box">
-          <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-          <input type="text" placeholder="Tìm kiếm" readonly>
-        </div>
-        <button class="zalo-icon-btn" title="Thêm bạn"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></button>
-        <button class="zalo-icon-btn" title="Tạo nhóm chat"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 13c-1.2 0-3.07.34-4.5 1-1.43-.66-3.3-1-4.5-1C4.83 13 1 14.42 1 17.25V20h23v-2.75C24 14.42 20.17 13 16.5 13zM7.5 11c1.93 0 3.5-1.57 3.5-3.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm9 0c1.93 0 3.5-1.57 3.5-3.5S18.43 4 16.5 4 13 5.57 13 7.5s1.57 3.5 3.5 3.5z"/></svg></button>
-      </div>
-
-      <!-- Filter tabs: Ưu tiên | Khác | Phân loại v (Ảnh 3) -->
-      <div class="zalo-filter-tabs-row">
-        <div class="zalo-tabs-left">
-          <div class="zalo-filter-tab active">Ưu tiên</div>
-          <div class="zalo-filter-tab">Khác</div>
-        </div>
-        <div class="zalo-tabs-right">
-          <span>Phân loại ▾</span>
-          <span style="font-size: 14px; font-weight: bold;">⋯</span>
-        </div>
-      </div>
-
-      <!-- Scrollable Chat List (Tên và avatar độc lập theo yêu cầu) -->
-      <div class="zalo-conversations-scroll">
-        <!-- Active Chat -->
-        <div class="zalo-conv-item active">
-          <div class="zalo-conv-avatar-box" style="background: #0284c7;">
-            <span>DP</span>
-            <span class="zalo-conv-group-badge">7</span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">Digital Platform Core 2026</span>
-              <span class="zalo-conv-time">1 giờ</span>
+  <div class="flx flx-col default use-system-banner" id="app-page">
+    <!-- SYSTEM BANNER: TẢI ZALO PC -->
+    <div class="system-banner__container --web --main-window">
+      <div class="system-banner__item__wrapper" style="z-index: 1;">
+        <div class="z-banner --emphasis-info --center --closable system-banner-comp">
+          <svg class="z-banner__icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color: #0068ff; flex-shrink: 0;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+          <div class="z-banner__info">
+            <div class="flx flx-col flx-center ovf-hidden">
+              <span class="z-banner__info__content" style="-webkit-line-clamp: 1;">Sử dụng Zalo PC để lưu trữ dài hạn và dễ dàng tìm kiếm đầy đủ dữ liệu trò chuyện của bạn.</span>
             </div>
-            <div class="zalo-conv-preview">Bạn: [Hình ảnh]</div>
-          </div>
-        </div>
-
-        <!-- Chat Item 2 -->
-        <div class="zalo-conv-item">
-          <div class="zalo-conv-avatar-box" style="background: #0d9488;">
-            <span>TO</span>
-            <span class="zalo-conv-online"></span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">DevOps &amp; Cloud Infra</span>
-              <span class="zalo-conv-time">3 giờ</span>
+            <div style="display: grid; grid-template-columns: repeat(1, auto); column-gap: 8px; align-items: center;">
+              <button class="z-banner__action --link ws-no-wrap"><span class="ws-no-wrap">Tải ngay</span></button>
             </div>
-            <div class="zalo-conv-preview"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px; margin-right:2px;"><path d="M16 9V4l1 0V2H7v2l1 0v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></svg> Bảo Trì: Đã gia hạn chứng chỉ SSL</div>
           </div>
-        </div>
-
-        <!-- Chat Item 3 -->
-        <div class="zalo-conv-item">
-          <div class="zalo-conv-avatar-box" style="background: #3b82f6;">
-            <span>☁️</span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">Cloud Cá Nhân (My Storage)</span>
-              <span class="zalo-conv-time">22 giờ</span>
-            </div>
-            <div class="zalo-conv-preview">Bạn: https://storage.enterprise.corp/...</div>
-          </div>
-        </div>
-
-        <!-- Chat Item 4 -->
-        <div class="zalo-conv-item">
-          <div class="zalo-conv-avatar-box" style="background: #e11d48;">
-            <span>AR</span>
-            <span class="zalo-conv-group-badge">9</span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">Kiến Trúc Microservices Q3</span>
-              <span class="zalo-conv-time">Vài giây</span>
-            </div>
-            <div class="zalo-conv-preview">Minh Trí: Đã cập nhật xong API spec...</div>
-          </div>
-        </div>
-
-        <!-- Chat Item 5 -->
-        <div class="zalo-conv-item">
-          <div class="zalo-conv-avatar-box" style="background: #6366f1;">
-            <span>QA</span>
-            <span class="zalo-conv-group-badge">5</span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">QA Automation &amp; Test Lab</span>
-              <span class="zalo-conv-time">4 phút</span>
-            </div>
-            <div class="zalo-conv-preview">Tuấn QA: @Lương chạy suite test 4</div>
-          </div>
-        </div>
-
-        <!-- Chat Item 6 -->
-        <div class="zalo-conv-item">
-          <div class="zalo-conv-avatar-box" style="background: #f59e0b;">
-            <span>KT</span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">Phòng Kế Toán - Chi Phí Q3</span>
-              <span class="zalo-conv-time">17 phút</span>
-            </div>
-            <div class="zalo-conv-preview">Thu Hà: [Tập tin] Hoa_don_AWS.pdf</div>
-          </div>
-        </div>
-
-        <!-- Chat Item 7 -->
-        <div class="zalo-conv-item">
-          <div class="zalo-conv-avatar-box" style="background: #8b5cf6;">
-            <span>IT</span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">IT Helpdesk Support</span>
-              <span class="zalo-conv-time">59 phút</span>
-            </div>
-            <div class="zalo-conv-preview">Kỹ thuật: Đã cấu hình VPN xong</div>
-          </div>
-        </div>
-
-        <!-- Chat Item 8 -->
-        <div class="zalo-conv-item">
-          <div class="zalo-conv-avatar-box" style="background: #16a34a;">
-            <span>BĐ</span>
-          </div>
-          <div class="zalo-conv-info">
-            <div class="zalo-conv-name-row">
-              <span class="zalo-conv-name">Ban Giám Đốc - Báo Cáo Tuần</span>
-              <span class="zalo-conv-time">1 giờ</span>
-            </div>
-            <div class="zalo-conv-preview">Đã phê duyệt ngân sách máy chủ Q3</div>
+          <div class="z--btn--v2 btn-tertiary small z-banner__close --rounded icon-only z-banner__close" title="Đóng" onclick="this.closest('.system-banner__container').style.display='none'">
+            ✕
           </div>
         </div>
       </div>
-    </aside>
+    </div>
 
-    <!-- 3. KHUNG CHAT CHÍNH (ẢNH 3) -->
-    <main class="zalo-chat-main-pane">
-      <header class="zalo-chat-header">
-        <div class="zalo-header-left">
-          <div class="zalo-header-avatar">
-            <span>DP</span>
-            <span class="zalo-header-group-count">7</span>
-          </div>
-          <div class="zalo-header-meta">
-            <div class="zalo-header-title-row">
-              <span class="zalo-header-title" id="zalo-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên nhóm">Digital Platform Core 2026</span>
-            </div>
-            <div class="zalo-header-sub stealth-editable" id="zalo-header-sub" contenteditable="true" spellcheck="false" title="Nhấp để sửa ghi chú nhóm" data-stealth-key="stealth_zalo_group_sub">
-              <span><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px; margin-right:3px;"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg> 7 thành viên</span>
-              <span>•</span>
-              <span class="tag-work">📁 Công việc</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="zalo-header-right">
-          <!-- Action icons matching Image 3 -->
-          <div class="zalo-top-action-icons">
-            <button class="zalo-top-action-btn" title="Thêm bạn vào nhóm">👥+</button>
-            <button class="zalo-top-action-btn" title="Cuộc gọi video">📹</button>
-            <button class="zalo-top-action-btn" title="Cuộc gọi thoại">📞</button>
-            <button class="zalo-top-action-btn" title="Tìm kiếm tin nhắn / Chia đôi">🗂️</button>
-            <button class="zalo-top-action-btn active" title="Thông tin hội thoại">📑</button>
-          </div>
-
-          <!-- Stealth Reading Controls in Zalo Header -->
-
-          <!-- Window buttons matching Image 3 -->
-          <div class="zalo-win-ctrls">
-            <span class="zalo-win-btn" title="Khóa màn hình">🔒</span>
-            <span class="zalo-win-btn" title="Thu nhỏ">─</span>
-            <span class="zalo-win-btn" title="Phóng to">▢</span>
-            <span class="zalo-win-btn" title="Đóng">✕</span>
-          </div>
-        </div>
-      </header>
-
-      <!-- Pinned Message Banner (Khớp 100% Ảnh 3) -->
-      <div class="zalo-pinned-banner">
-        <div class="zalo-pinned-content">
-          <span class="zalo-pinned-badge">💬 Tin nhắn</span>
-          <span class="stealth-editable" id="zalo-pinned-msg-text" contenteditable="true" spellcheck="false" title="Nhấp để sửa tin nhắn ghim" data-stealth-key="stealth_zalo_pinned_msg"><b>Hải Nam:</b> @All http://10.20.15.80/portal/release-v4 tài khoản: admin mật khẩu: Pass@2026</span>
-        </div>
-        <div class="zalo-pinned-actions">
-          <button class="zalo-pinned-btn">+1 ghim ▾</button>
-          <span style="cursor: pointer; color: #94a3b8; font-weight: bold;">⋯</span>
-        </div>
-      </div>
-
-      <!-- Khung đọc truyện chính (Tin nhắn dòng chảy vô tận) -->
-      <div id="zalo-chat-view" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
-        <div class="zalo-messages-scroll" id="zalo-chat-scroll-container">
-          <!-- Date divider matching Image 3 -->
-          <div class="zalo-date-divider">
-            <span>Hôm nay</span>
-          </div>
-
-          <!-- Realistic Prior Message 1 (Incoming - Image 3) -->
-          <div class="zalo-msg-row-incoming">
-            <div class="zalo-msg-avatar-in" style="background: #e11d48;">TH</div>
-            <div>
-              <div class="zalo-msg-sender">Thu Hương</div>
-              <div class="zalo-msg-bubble-in">
-                <div style="font-size: 13px; color: #081c36;">Cái đó em import danh sách tài liệu hàng tháng nhé</div>
-                <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">14:55</div>
-                <div class="zalo-msg-reactions">❤️ 1</div>
+    <!-- MAIN APP CONTAINER -->
+    <div id="container" class="flx WEB">
+      <!-- 1. SIDEBAR NAV RAIL (AUTHENTIC ZALO WEB) -->
+      <nav id="sidebarNav" class="flx h100 show-chat">
+        <div id="main-tab" class="nav__tabs flx flx-col flx-sp-btw WEB" style="z-index: 11;">
+          <div>
+            <div class="nav__tabs__zalo web" title="Tài khoản: Minh Quân (Online)">
+              <div class="rel zavatar-container clickable">
+                <span class="avatar-emoji-status zavatar__avatar-emoji-status" style="right: -4px; top: 0px; width: 24px; height: 24px;"></span>
+                <div class="zavatar zavatar-m zavatar-single flx flx-al-c flx-center rel disableDrag clickable" style="background: linear-gradient(135deg, #0091ff, #0052cc); color: #fff; font-weight: 700; font-size: 15px;">
+                  MQ
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Realistic Prior Message 2 (Incoming with Report Table Screenshot - Image 3) -->
-          <div class="zalo-msg-row-incoming">
-            <div class="zalo-msg-avatar-in" style="background: #0284c7;">HL</div>
-            <div>
-              <div class="zalo-msg-sender">Hoàng Long</div>
-              <div class="zalo-msg-bubble-in" style="max-width: 440px;">
-                <div style="font-size: 13px; color: #081c36; margin-bottom: 6px;">
-                  <span style="color: #0068ff; font-weight: 600;">@Minh Quân</span> em xem lại logic cảnh báo hộ anh nhé
-                </div>
-                <div style="border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; background: #ffffff;">
-                  <div style="background: #f1f5f9; padding: 4px 8px; font-size: 10px; font-weight: bold; color: #475569; display: flex; justify-content: space-between;">
-                    <span>Báo cáo tiến độ phân tích KPI</span>
-                    <span>Q3 - 2026</span>
+            <div class="nav__tabs__top">
+              <div class="clickable leftbar-tab flx flx-col flx-al-c flx-center rel selected" data-id="div_Main_TabMsg" title="Tin nhắn">
+                <div class="mmi-icon-wr">
+                  <div class="z-noti-badge-container">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                   </div>
-                  <table style="width: 100%; font-size: 10px; border-collapse: collapse; text-align: left;">
-                    <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                      <th style="padding: 4px;">Mã</th>
-                      <th style="padding: 4px;">Mục</th>
-                      <th style="padding: 4px;">Trạng thái</th>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #f1f5f9;">
-                      <td style="padding: 4px;">SYS-01</td>
-                      <td style="padding: 4px;">API Gateway E2EE</td>
-                      <td style="padding: 4px; color: #16a34a;">Đạt 99.8%</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 4px;">SYS-02</td>
-                      <td style="padding: 4px;">Queue Pipeline</td>
-                      <td style="padding: 4px; color: #2563eb;">Hoàn tất</td>
-                    </tr>
-                  </table>
                 </div>
-                <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">11:57</div>
-                <div class="zalo-msg-reactions">👍 1</div>
+                <div class="lb-tab-title truncate">Tin nhắn</div>
+              </div>
+              <div class="clickable leftbar-tab flx flx-col flx-al-c flx-center rel" title="Danh bạ">
+                <div class="mmi-icon-wr">
+                  <div class="z-noti-badge-container">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                  </div>
+                </div>
+                <div class="lb-tab-title truncate">Danh bạ</div>
+              </div>
+            </div>
+          </div>
+          <div class="nav__tabs__bottom">
+            <div>
+              <div class="clickable leftbar-tab flx flx-col flx-al-c flx-center rel" title="Zalo Cloud">
+                <div class="mmi-icon-wr">
+                  <div class="z-noti-badge-container">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                  </div>
+                </div>
+                <div class="lb-tab-title truncate">Zalo Cloud</div>
+              </div>
+            </div>
+            <div class="clickable leftbar-tab flx flx-col flx-al-c flx-center rel" title="My Documents">
+              <div class="mmi-icon-wr">
+                <div class="z-noti-badge-container">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                </div>
+              </div>
+              <div class="lb-tab-title truncate">My Documents</div>
+            </div>
+            <div id="mainTabToolBA" class="clickable leftbar-tab flx flx-col flx-al-c flx-center rel" title="Công cụ">
+              <div class="mmi-icon-wr">
+                <div class="z-noti-badge-container">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                </div>
+              </div>
+              <div class="lb-tab-title truncate">Công cụ</div>
+            </div>
+            <div class="clickable leftbar-tab flx flx-col flx-al-c flx-center rel" title="Cài đặt">
+              <div class="mmi-icon-wr">
+                <div class="z-noti-badge-container">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                </div>
+              </div>
+              <div class="lb-tab-title truncate">Cài đặt</div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- 2. CỘT DANH SÁCH CUỘC TRÒ CHUYỆN (DANH SÁCH CÔNG VIỆC MẪU CHÂN THỰC) -->
+      <aside class="zalo-chat-list-pane">
+        <!-- Search bar -->
+        <div id="contact-search" class="zalo-search-bar-row">
+          <div class="zalo-search-input-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input id="contact-search-input" autocomplete="off" type="text" placeholder="Tìm kiếm" readonly>
+          </div>
+          <button class="zalo-icon-btn" title="Thêm bạn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          </button>
+          <button class="zalo-icon-btn" title="Tạo nhóm chat">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </button>
+        </div>
+
+        <!-- Filter tabs: Ưu tiên | Khác | Phân loại ▾ -->
+        <div class="msg-filters-bar flx flx-al-c ver3">
+          <div class="flx flx-al-c tab-main w100 rel small border-bottom" style="padding: 0 16px;">
+            <div class="h100 tab-item selected">
+              <span class="tab-item-text">Ưu tiên</span>
+            </div>
+            <div class="h100 tab-item">
+              <span class="tab-item-text">Khác</span>
+            </div>
+            <div class="flx-1"></div>
+            <div class="flx flx-al-c filter-preview-v2">
+              <span>Phân loại ▾</span>
+            </div>
+            <div class="zalo-icon-btn-small" title="Thêm">⋯</div>
+          </div>
+        </div>
+
+        <!-- Scrollable Chat List -->
+        <div id="conversationListId" class="zalo-conversations-scroll">
+          <!-- 1. Nhóm Kỹ Thuật Dự Án (Pinned) -->
+          <div class="zalo-conv-item pinned">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: #fff;">
+              <span>CT</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Nhóm Kỹ Thuật Dự Án (Core Team)</span>
+                <span class="zalo-conv-time">3 giờ</span>
+              </div>
+              <div class="zalo-conv-preview">Phương Thảo: [Hình ảnh] Sơ đồ kiến trúc microservices v3.2</div>
+            </div>
+            <span class="zalo-pin-icon" title="Đã ghim">📌</span>
+          </div>
+
+          <!-- 2. Cloud Của Tôi (Pinned) -->
+          <div class="zalo-conv-item pinned">
+            <div class="zalo-conv-avatar-box" style="background: #0068ff; color: #fff;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Cloud Của Tôi (My Storage)</span>
+                <span class="zalo-conv-time">3 giờ</span>
+              </div>
+              <div class="zalo-conv-preview">Bạn: [File] Tai_lieu_kien_truc_he_thong_2026.pdf</div>
+            </div>
+            <span class="zalo-pin-icon" title="Đã ghim">📌</span>
+          </div>
+
+          <!-- 3. Nhóm QA Automation & Test Lab -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #059669, #10b981); color: #fff;">
+              <span>QA</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Nhóm QA Automation &amp; Test Lab</span>
+                <span class="zalo-conv-time">Vài giây</span>
+              </div>
+              <div class="zalo-conv-preview">Hải Yến: @Tuấn Anh kết quả chạy suite test regression đã đạt 100%</div>
+            </div>
+            <span class="zalo-mute-icon" title="Tắt thông báo">🔇</span>
+          </div>
+
+          <!-- 4. Phòng Kế Toán & Quản Lý Chi Phí -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #6d28d9, #8b5cf6); color: #fff;">
+              <span>KT</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Phòng Kế Toán &amp; Quản Lý Chi Phí</span>
+                <span class="zalo-conv-time">8 phút</span>
+              </div>
+              <div class="zalo-conv-preview">Đã đối soát xong bảng dự toán ngân sách máy chủ quý 4</div>
+            </div>
+          </div>
+
+          <!-- 5. Tin nhắn từ đối tác kỹ thuật -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box stranger-bg">
+              <span>👤</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Tin nhắn từ đối tác kỹ thuật</span>
+                <span class="zalo-conv-time">2 giờ</span>
+              </div>
+              <div class="zalo-conv-preview">Chưa có trong danh bạ</div>
+            </div>
+          </div>
+
+          <!-- 6. Hệ Thống Quản Lý Kho WMS (ACTIVE / SELECTED CONVERSATION) -->
+          <div class="zalo-conv-item active">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff;">
+              <span>WMS</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Hệ Thống Quản Lý Kho WMS</span>
+                <span class="zalo-conv-time">2 giờ</span>
+              </div>
+              <div class="zalo-conv-preview">Minh Quân: Đã cập nhật xong cấu hình service</div>
+            </div>
+            <span class="zalo-mute-icon" title="Tắt thông báo">🔇</span>
+          </div>
+
+          <!-- 7. DevOps & Hạ Tầng Cloud Infra -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #b45309, #f59e0b); color: #fff;">
+              <span>DO</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">DevOps &amp; Hạ Tầng Cloud Infra</span>
+                <span class="zalo-conv-time">13 giờ</span>
+              </div>
+              <div class="zalo-conv-preview">Quốc Bảo: @Hoàng Long đã mở rộng dung lượng ổ cứng node worker</div>
+            </div>
+            <span class="zalo-mute-icon" title="Tắt thông báo">🔇</span>
+          </div>
+
+          <!-- 8. Trợ lý Quản lý Dự án (PMO Office) -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #be123c, #f43f5e); color: #fff;">
+              <span>PM</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Trợ lý Quản lý Dự án (PMO Office)</span>
+                <span class="zalo-conv-time">20 giờ</span>
+              </div>
+              <div class="zalo-conv-preview">Ngọc Mai: Em đã gửi biên bản cuộc họp giao ban sáng nay ạ</div>
+            </div>
+          </div>
+
+          <!-- 9. Bộ Phận SCM & Chuỗi Cung Ứng API -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #4338ca, #6366f1); color: #fff;">
+              <span>SC</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Bộ Phận SCM &amp; Chuỗi Cung Ứng API</span>
+                <span class="zalo-conv-time">07/10</span>
+              </div>
+              <div class="zalo-conv-preview">Bạn: [Hình ảnh] Biểu đồ phân tích lưu lượng đồng bộ dữ liệu</div>
+            </div>
+            <span class="zalo-mute-icon" title="Tắt thông báo">🔇</span>
+          </div>
+
+          <!-- 10. Thu Hà (BA Lead) -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #0f766e, #14b8a6); color: #fff;">
+              <span>TH</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Thu Hà (BA Lead)</span>
+                <span class="zalo-conv-time">07/10</span>
+              </div>
+              <div class="zalo-conv-preview">Thu Hà: [Nhãn dán]</div>
+            </div>
+          </div>
+
+          <!-- 11. Thông Báo Nội Bộ Công Ty -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #334155, #64748b); color: #fff;">
+              <span>TB</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Thông Báo Nội Bộ Công Ty</span>
+                <span class="zalo-conv-time">07/10</span>
+              </div>
+              <div class="zalo-conv-preview">Ban Điều Hành: Lịch nghỉ lễ và quy định bảo mật thông tin nội bộ</div>
+            </div>
+            <span class="zalo-mute-icon" title="Tắt thông báo">🔇</span>
+          </div>
+
+          <!-- 12. Phòng Nhân Sự & Đào Tạo -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #c2410c, #f97316); color: #fff;">
+              <span>HR</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Phòng Nhân Sự &amp; Đào Tạo</span>
+                <span class="zalo-conv-time">07/10</span>
+              </div>
+              <div class="zalo-conv-preview">Hồng Nhung: @All Khảo sát nhu cầu đào tạo chứng chỉ quý 4</div>
+            </div>
+          </div>
+
+          <!-- 13. Hoàng Long (Dev Lead) -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #0e7490, #06b6d4); color: #fff;">
+              <span>HL</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Hoàng Long (Dev Lead)</span>
+                <span class="zalo-conv-time">06/10</span>
+              </div>
+              <div class="zalo-conv-preview">Bạn: Ok anh, em đã review xong pull request #142</div>
+            </div>
+          </div>
+
+          <!-- 14. Văn Nam (Security Lead) -->
+          <div class="zalo-conv-item">
+            <div class="zalo-conv-avatar-box" style="background: linear-gradient(135deg, #b91c1c, #ef4444); color: #fff;">
+              <span>VN</span>
+            </div>
+            <div class="zalo-conv-info">
+              <div class="zalo-conv-name-row">
+                <span class="zalo-conv-name">Văn Nam (Security Lead)</span>
+                <span class="zalo-conv-time">06/10</span>
+              </div>
+              <div class="zalo-conv-preview">Văn Nam: Đã quét xong mã nguồn SonarQube, không có lỗ hổng cao</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 3. KHUNG CHAT CHÍNH: HỆ THỐNG QUẢN LÝ KHO WMS -->
+      <main class="zalo-chat-main-pane" id="chatViewContainer" tabindex="1">
+        <!-- Chat Header -->
+        <header id="header" class="zalo-chat-header">
+          <div class="zalo-header-left">
+            <div class="zalo-header-avatar" style="background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px;">
+              WMS
+            </div>
+            <div class="zalo-header-meta">
+              <div class="zalo-header-title-row">
+                <span class="zalo-header-title" id="zalo-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên nhóm">Hệ Thống Quản Lý Kho WMS</span>
+                <span class="zalo-header-tag">📁 Công việc</span>
+              </div>
+              <div class="zalo-header-sub stealth-editable" id="zalo-header-sub" contenteditable="true" spellcheck="false" title="Nhấp để sửa ghi chú nhóm" data-stealth-key="stealth_zalo_group_sub">
+                <span>👥 16 thành viên</span>
               </div>
             </div>
           </div>
 
-          <!-- Realistic Prior Message 3 (Outgoing - Light Blue Bubble - Image 3) -->
-          <div class="zalo-msg-row-outgoing">
-            <div class="zalo-msg-bubble-out">
-              <div style="font-size: 13px;">
-                <span style="color: #0068ff; font-weight: 600;">@Hoàng Long</span> này em kiểm tra rồi, chạy rất mượt. Để em update thêm tài liệu chi tiết bên dưới nhé ạ.
+          <div class="zalo-header-right">
+            <!-- Action icons matching Authentic Zalo Web -->
+            <div class="zalo-top-action-icons">
+              <button class="zalo-top-action-btn" title="Thêm bạn vào nhóm">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+              </button>
+              <button class="zalo-top-action-btn" title="Cuộc gọi video">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              </button>
+              <button class="zalo-top-action-btn" title="Cuộc gọi thoại">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </button>
+              <button class="zalo-top-action-btn" title="Tìm kiếm tin nhắn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+              <button class="zalo-top-action-btn" title="Chia đôi màn hình">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+              </button>
+              <button class="zalo-top-action-btn active" title="Thông tin hội thoại">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+              </button>
+            </div>
+
+            <!-- Window buttons (Windows App look) -->
+            <div class="zalo-win-ctrls">
+              <span class="zalo-win-btn" title="Khóa màn hình">🔒</span>
+              <span class="zalo-win-btn" title="Thu nhỏ">─</span>
+              <span class="zalo-win-btn" title="Phóng to">▢</span>
+              <span class="zalo-win-btn" title="Đóng">✕</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Pinned Message Banner -->
+        <div class="zalo-pinned-banner">
+          <div class="zalo-pinned-content">
+            <span class="zalo-pinned-badge">💬 Tin nhắn</span>
+            <span class="stealth-editable" id="zalo-pinned-msg-text" contenteditable="true" spellcheck="false" title="Nhấp để sửa tin nhắn ghim" data-stealth-key="stealth_zalo_pinned_msg"><b>Minh Quân:</b> @All Kế hoạch bảo trì định kỳ cụm máy chủ hệ thống lúc 22h00</span>
+          </div>
+          <div class="zalo-pinned-actions">
+            <button class="zalo-pinned-btn">+1 ghim ▾</button>
+            <span style="cursor: pointer; color: #94a3b8; font-weight: bold;">⋯</span>
+          </div>
+        </div>
+
+        <!-- Khung đọc truyện chính (Dòng chảy tin nhắn Zalo) -->
+        <div id="zalo-chat-view" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+          <div class="zalo-messages-scroll" id="zalo-chat-scroll-container">
+            <!-- Date divider T2 28/09/2026 -->
+            <div class="zalo-date-divider">
+              <span>T2 28/09/2026</span>
+            </div>
+
+            <!-- Prior Message 1: Hoàng Long (Dev Lead) -->
+            <div class="zalo-msg-row-incoming">
+              <div class="zalo-msg-avatar-in" style="background: #7c3aed; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                HL
+              </div>
+              <div class="zalo-msg-bubble-wrap">
+                <div class="zalo-msg-sender">Hoàng Long (Dev Lead)</div>
+                <div class="zalo-msg-bubble-in">
+                  <div class="zalo-msg-content-text">Cần rà soát lại cấu hình timeout kết nối MQTT gateway</div>
+                  <div class="zalo-msg-time-row">11:14</div>
+                </div>
               </div>
             </div>
-            <div class="zalo-msg-meta-out">
-              <span>11:58</span>
-              <span class="zalo-msg-status-check">✓✓ Đã nhận</span>
+
+            <!-- Prior Message 2: Minh Quân (Admin/Owner Key Badge) -->
+            <div class="zalo-msg-row-incoming">
+              <div class="zalo-msg-avatar-in" style="background: #0068ff; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                MQ
+                <span class="zavatar-key-badge" title="Trưởng nhóm">🔑</span>
+              </div>
+              <div class="zalo-msg-bubble-wrap">
+                <div class="zalo-msg-sender">Minh Quân (Tech Lead)</div>
+                <div class="zalo-msg-bubble-in">
+                  <div class="zalo-msg-content-text"><span class="zalo-mention">@All</span> kiểm tra service metrics và log latency trên Grafana nhé</div>
+                  <div class="zalo-msg-time-row">11:15</div>
+                </div>
+                <div class="zalo-msg-bubble-in" style="margin-top: 4px;">
+                  <div class="zalo-msg-content-text"><span class="zalo-mention">@Thu Hà</span> đã cập nhật xong spec API mới chưa em ơi?</div>
+                  <div class="zalo-msg-time-row">11:35</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prior Message 3: Thu Hà (Quote) -->
+            <div class="zalo-msg-row-incoming">
+              <div class="zalo-msg-avatar-in" style="background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                TH
+              </div>
+              <div class="zalo-msg-bubble-wrap">
+                <div class="zalo-msg-sender">Thu Hà (BA Lead)</div>
+                <div class="zalo-msg-bubble-in">
+                  <div class="zalo-quote-box">
+                    <span class="zalo-quote-author">Minh Quân</span>
+                    <span class="zalo-quote-text">@Thu Hà đã cập nhật xong spec API mới chưa em ơi?</span>
+                  </div>
+                  <div class="zalo-msg-content-text"><span class="zalo-mention">@Minh Quân</span> em đã cập nhật tài liệu mô tả yêu cầu kỹ thuật sprint này rồi ạ</div>
+                  <div class="zalo-msg-time-row">11:36</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prior Message 4: Minh Quân -->
+            <div class="zalo-msg-row-incoming">
+              <div class="zalo-msg-avatar-in" style="background: #0068ff; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                MQ
+                <span class="zavatar-key-badge" title="Trưởng nhóm">🔑</span>
+              </div>
+              <div class="zalo-msg-bubble-wrap">
+                <div class="zalo-msg-sender">Minh Quân (Tech Lead)</div>
+                <div class="zalo-msg-bubble-in">
+                  <div class="zalo-msg-content-text">ok em, anh cho chạy kiểm thử pipeline tự động ngay</div>
+                  <div class="zalo-msg-time-row">11:40</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Date divider T4 30/09/2026 -->
+            <div class="zalo-date-divider">
+              <span>T4 30/09/2026</span>
+            </div>
+
+            <!-- Prior Message 5: Tuấn Anh (DevOps) -->
+            <div class="zalo-msg-row-incoming">
+              <div class="zalo-msg-avatar-in" style="background: #d97706; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                TA
+              </div>
+              <div class="zalo-msg-bubble-wrap">
+                <div class="zalo-msg-sender">Tuấn Anh (DevOps Lead)</div>
+                <div class="zalo-msg-bubble-in">
+                  <div class="zalo-msg-content-text">Hệ thống cụm máy chủ staging đã sẵn sàng cho bản release mới</div>
+                  <div class="zalo-msg-time-row">15:45</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Date divider T2 05/10/2026 -->
+            <div class="zalo-date-divider">
+              <span>T2 05/10/2026</span>
+            </div>
+
+            <!-- Prior Message 6: Văn Nam (Security) -->
+            <div class="zalo-msg-row-incoming">
+              <div class="zalo-msg-avatar-in" style="background: #e11d48; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                VN
+              </div>
+              <div class="zalo-msg-bubble-wrap">
+                <div class="zalo-msg-sender">Văn Nam (Security)</div>
+                <div class="zalo-msg-bubble-in">
+                  <div class="zalo-msg-content-text"><span class="zalo-mention">@Thu Hà</span> em kiểm tra lại phân quyền token xác thực cho service nhé</div>
+                  <div class="zalo-msg-time-row">08:11</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prior Message 7: Thu Hà -->
+            <div class="zalo-msg-row-incoming">
+              <div class="zalo-msg-avatar-in" style="background: #059669; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 13px;">
+                TH
+              </div>
+              <div class="zalo-msg-bubble-wrap">
+                <div class="zalo-msg-sender">Thu Hà (BA Lead)</div>
+                <div class="zalo-msg-bubble-in">
+                  <div class="zalo-quote-box">
+                    <span class="zalo-quote-author">Văn Nam</span>
+                    <span class="zalo-quote-text">@Thu Hà em kiểm tra lại phân quyền token xác thực cho service nhé</span>
+                  </div>
+                  <div class="zalo-msg-content-text"><span class="zalo-mention">@Văn Nam</span> em vừa cập nhật xong chính sách truy cập, anh test lại giúp em nhé</div>
+                  <div class="zalo-msg-time-row">08:13</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Prior Message 8: Outgoing (Bạn) -->
+            <div class="zalo-msg-row-outgoing">
+              <div class="zalo-msg-bubble-out">
+                <div class="zalo-msg-content-text">Em đang theo dõi luồng xử lý và log hệ thống, mọi tác vụ đang hoạt động ổn định.</div>
+              </div>
+              <div class="zalo-msg-meta-out">
+                <span>08:15</span>
+                <span class="zalo-msg-status-check">✓✓ Đã nhận</span>
+              </div>
+            </div>
+
+            <!-- CONTAINER CHỨA CÁC ĐOẠN VĂN TRUYỆN NGỤY TRANG TIN NHẮN ZALO -->
+            <div id="zalo-story-stream" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Rendered by app.js appendZaloBatch -->
             </div>
           </div>
 
-          <!-- Container chứa các đoạn văn truyện ngụy trang tin nhắn Zalo -->
-          <div id="zalo-story-stream" style="display: flex; flex-direction: column; gap: 12px;">
-            <!-- Rendered by app.js -->
-          </div>
-        </div>
-
-        <!-- Chat Input Bar (Khớp 100% Ảnh 3) -->
-        <div class="zalo-chat-input-area">
-          <div class="zalo-input-toolbar">
-            <span class="zalo-tool-icon" title="Biểu cảm / Sticker">😀</span>
-            <span class="zalo-tool-icon" title="Gửi ảnh">🖼️</span>
-            <span class="zalo-tool-icon" title="Đính kèm file">📎</span>
-            <span class="zalo-tool-icon" title="Chụp màn hình">✂️</span>
-            <span class="zalo-tool-icon" title="Nhắc tên">@</span>
-            <span class="zalo-tool-icon" title="Định dạng văn bản">𝐀</span>
-            <span class="zalo-tool-icon" title="Hẹn giờ gửi">⏰</span>
-            <span class="zalo-tool-icon" title="Tùy chọn khác">⋯</span>
-          </div>
-          <div class="zalo-textarea-row">
-            <input type="text" class="zalo-chat-input" placeholder="Nhập @, tin nhắn tới Digital Platform Core 2026" readonly>
-            <div class="zalo-right-input-icons">
-              <span title="Mặt cười">😊</span>
-              <span title="Thích">👍</span>
+          <!-- Chat Input Bar -->
+          <div class="zalo-chat-input-area">
+            <div class="zalo-input-toolbar">
+              <span class="zalo-tool-icon" title="Biểu cảm / Sticker">😀</span>
+              <span class="zalo-tool-icon" title="Gửi ảnh">🖼️</span>
+              <span class="zalo-tool-icon" title="Đính kèm file">📎</span>
+              <span class="zalo-tool-icon" title="Chụp màn hình">✂️</span>
+              <span class="zalo-tool-icon" title="Nhắc tên">@</span>
+              <span class="zalo-tool-icon" title="Định dạng văn bản">𝐀</span>
+              <span class="zalo-tool-icon" title="Hẹn giờ gửi">⏰</span>
+              <span class="zalo-tool-icon" title="Tùy chọn khác">⋯</span>
+            </div>
+            <div class="zalo-textarea-row">
+              <input type="text" class="zalo-chat-input" placeholder="Nhập @, tin nhắn tới Hệ Thống Quản Lý Kho WMS" readonly>
+              <div class="zalo-right-input-icons">
+                <span title="Mặt cười">😊</span>
+                <span title="Thích">👍</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Boss Key Mode: Báo cáo công văn khẩn cấp -->
-      <div class="zalo-boss-view" id="zalo-boss-view" style="display: none;">
-        <div class="zalo-boss-header">
-          <h2>THÔNG BÁO NỘI BỘ VỀ KẾ HOẠCH BÀN GIAO SPRINT Q3 &amp; AN TOÀN BẢO MẬT HỆ THỐNG</h2>
-          <div style="font-size: 11px; color: #64748b;">Số: 284/TB-TECH-2026 • Ban Điều Hành Khối Công Nghệ Thông Tin</div>
-        </div>
-        <div class="zalo-boss-body">
-          <p>Kính gửi: Các Trưởng Bộ Phận Kỹ Thuật, Quản Lý Dự Án và Toàn Thể Thành Viên Dự Án.</p>
-          <br>
-          <p>Nhằm đảm bảo tiến độ bàn giao đúng thời hạn theo thỏa thuận cấp độ dịch vụ (SLA) quý 3 năm 2026, Ban Công Nghệ yêu cầu toàn bộ các nhóm thực hiện nghiêm túc các chỉ đạo sau:</p>
-          <br>
-          <p>1. <b>Hoàn tất mã nguồn &amp; Unit Tests:</b> Đóng băng toàn bộ các tính năng mới trước 18h00 ngày thứ Năm. Tập trung 100% nhân lực giải quyết các lỗi tồn đọng mức độ Critical và High.</p>
-          <p>2. <b>Đánh giá an toàn thông tin:</b> Phối hợp cùng đội ngũ Security Audit quét lỗ hổng OWASP trên các microservices API, đảm bảo chứng chỉ SSL/TLS và chữ ký khóa bí mật được mã hóa SHA-256 an toàn.</p>
-          <p>3. <b>Chuẩn bị báo cáo tổng kết:</b> Gửi báo cáo phân tích hiệu năng và số liệu KPI chi tiết về hòm thư điều hành trước phiên họp giao ban đầu tuần tới.</p>
-          <br>
-          <p>Yêu cầu các đồng chí nghiêm túc triển khai thực hiện.</p>
-        </div>
-      </div>
-    </main>
-
-    <!-- 4. CỘT THÔNG TIN HỘI THOẠI BÊN PHẢI (ẢNH 3) -->
-    <aside class="zalo-info-sidebar">
-      <div class="zalo-sidebar-header">
-        Thông tin nhóm
-      </div>
-
-      <div class="zalo-group-profile-card">
-        <div class="zalo-group-big-avatar">
-          <span>DP</span>
-          <span class="zalo-group-big-badge">7</span>
-        </div>
-        <div class="zalo-group-name-edit">
-          <span>Digital Platform Core 2026</span>
-          <span style="font-size: 12px; cursor: pointer; color: #64748b;">✏️</span>
-        </div>
-
-        <div class="zalo-quick-action-row">
-          <div class="zalo-quick-action-btn">
-            <div class="zalo-action-icon-circle">🔔</div>
-            <span>Tắt thông báo</span>
+        <!-- Boss Key Mode: Báo cáo kỹ thuật sự cố khẩn cấp WMS -->
+        <div class="zalo-boss-view" id="zalo-boss-view" style="display: none;">
+          <div class="zalo-boss-header">
+            <h2>BÁO CÁO KỸ THUẬT SỰ CỐ &amp; KẾ HOẠCH BẢO TRÌ HỆ THỐNG WMS SPRINT Q3</h2>
+            <div style="font-size: 11px; color: #64748b;">Mã vụ việc: INC-2026-WMS-04 • Khối Kỹ Thuật Hệ Thống &amp; Tự Động Hóa Kho</div>
           </div>
-          <div class="zalo-quick-action-btn">
-            <div class="zalo-action-icon-circle">📌</div>
-            <span>Ghim hội thoại</span>
-          </div>
-          <div class="zalo-quick-action-btn">
-            <div class="zalo-action-icon-circle">👤+</div>
-            <span>Thêm thành viên</span>
-          </div>
-          <div class="zalo-quick-action-btn">
-            <div class="zalo-action-icon-circle">⚙️</div>
-            <span>Quản lý nhóm</span>
+          <div class="zalo-boss-body">
+            <p>Kính gửi: Ban Giám Đốc Kỹ Thuật, Trưởng Bộ Phận Vận Hành và Đội Ngũ SRE WMS.</p>
+            <br>
+            <p>Sau khi tiến hành kiểm tra và chẩn đoán sự cố mất tín hiệu host định tuyến và rò rỉ tại khu vực đường ray cẩu tự động:</p>
+            <br>
+            <p>1. <b>Kết quả rà soát Gateway Service:</b> Khởi động lại service định tuyến MQTT, kiểm tra lại socket timeout và khôi phục kênh truyền thông PLC cẩu số 4.</p>
+            <p>2. <b>Khắc phục phần cứng cơ khí:</b> Phối hợp đội bảo trì nhà máy cô lập điểm gián đoạn cơ khí trên giàn cẩu, bảo đảm an toàn hệ thống cảm biến quang học.</p>
+            <p>3. <b>Kế hoạch giám sát 24/7:</b> Thiết lập ngưỡng cảnh báo sớm trên hệ thống Prometheus &amp; Grafana, thông báo tức thời qua kênh trực sự cố.</p>
+            <br>
+            <p>Đề nghị các bộ phận liên quan nghiêm túc theo dõi và cập nhật trạng thái liên tục.</p>
           </div>
         </div>
-      </div>
+      </main>
 
-      <!-- Thành viên nhóm -->
-      <div class="zalo-sidebar-section">
-        <div class="zalo-section-title-row">
-          <span>Thành viên nhóm (7 thành viên)</span>
+      <!-- 4. CỘT THÔNG TIN HỘI THOẠI BÊN PHẢI -->
+      <aside class="zalo-info-sidebar">
+        <div class="zalo-sidebar-header">
+          Thông tin nhóm
         </div>
-      </div>
 
-      <!-- Bảng tin nhóm -->
-      <div class="zalo-sidebar-section">
-        <div class="zalo-section-title-row">
-          <span>Bảng tin nhóm</span>
-          <span>▾</span>
-        </div>
-        <div class="zalo-section-sub-item">
-          <span>⏰</span>
-          <span>Danh sách nhắc hẹn</span>
-        </div>
-        <div class="zalo-section-sub-item">
-          <span></span>
-          <span>Ghi chú, ghim, bình chọn</span>
-        </div>
-      </div>
+        <div class="zalo-group-profile-card">
+          <div class="zalo-group-big-avatar" style="background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px;">
+            WMS
+          </div>
+          <div class="zalo-group-name-edit">
+            <span>Hệ Thống Quản Lý Kho WMS</span>
+            <span style="font-size: 12px; cursor: pointer; color: #64748b;">✏️</span>
+          </div>
 
-      <!-- Ảnh/Video -->
-      <div class="zalo-sidebar-section">
-        <div class="zalo-section-title-row">
-          <span>Ảnh/Video</span>
-          <span>▾</span>
-        </div>
-        <div class="zalo-media-grid">
-          <div class="zalo-media-thumb">📊</div>
-          <div class="zalo-media-thumb">📑</div>
-          <div class="zalo-media-thumb">📈</div>
-          <div class="zalo-media-thumb">📋</div>
-          <div class="zalo-media-thumb">📉</div>
-          <div class="zalo-media-thumb">📅</div>
-          <div class="zalo-media-thumb">🗂️</div>
-          <div class="zalo-media-thumb">🖼️</div>
-        </div>
-        <button class="zalo-see-all-btn">Xem tất cả</button>
-      </div>
-
-      <!-- File -->
-      <div class="zalo-sidebar-section" style="border-bottom: none;">
-        <div class="zalo-section-title-row">
-          <span>File</span>
-          <span>▾</span>
-        </div>
-        <div class="zalo-file-row">
-          <div class="zalo-file-badge-green">X</div>
-          <div style="flex: 1; overflow: hidden;">
-            <div style="font-weight: 600; color: #0f172a; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Danh sách phân công Q3.xlsx</div>
-            <div style="color: #94a3b8; font-size: 10px;">15.31 KB • 24/09/2026</div>
+          <div class="zalo-quick-action-row">
+            <div class="zalo-quick-action-btn">
+              <div class="zalo-action-icon-circle">🔔</div>
+              <span>Tắt thông báo</span>
+            </div>
+            <div class="zalo-quick-action-btn">
+              <div class="zalo-action-icon-circle">📌</div>
+              <span>Ghim hội thoại</span>
+            </div>
+            <div class="zalo-quick-action-btn">
+              <div class="zalo-action-icon-circle">👤+</div>
+              <span>Thêm thành viên</span>
+            </div>
+            <div class="zalo-quick-action-btn">
+              <div class="zalo-action-icon-circle">⚙️</div>
+              <span>Quản lý nhóm</span>
+            </div>
           </div>
         </div>
-        <div class="zalo-file-row">
-          <div class="zalo-file-badge-green">X</div>
-          <div style="flex: 1; overflow: hidden;">
-            <div style="font-weight: 600; color: #0f172a; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Bang_tinh_KPI_Core_Platform.xlsx</div>
-            <div style="color: #94a3b8; font-size: 10px;">333 KB • 23/09/2026</div>
+
+        <!-- Thành viên nhóm -->
+        <div class="zalo-sidebar-section">
+          <div class="zalo-section-title-row">
+            <span>Thành viên nhóm (16 thành viên)</span>
           </div>
         </div>
-        <div class="zalo-file-row">
-          <div class="zalo-file-badge-yellow">ZIP</div>
-          <div style="flex: 1; overflow: hidden;">
-            <div style="font-weight: 600; color: #0f172a; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Tai_lieu_spec_Release_v4.2.zip</div>
-            <div style="color: #94a3b8; font-size: 10px;">18.4 MB • 22/09/2026</div>
+
+        <!-- Bảng tin nhóm -->
+        <div class="zalo-sidebar-section">
+          <div class="zalo-section-title-row">
+            <span>Bảng tin nhóm</span>
+            <span>▾</span>
+          </div>
+          <div class="zalo-section-sub-item">
+            <span>⏰</span>
+            <span>Danh sách nhắc hẹn</span>
+          </div>
+          <div class="zalo-section-sub-item">
+            <span>📌</span>
+            <span>Ghi chú, ghim, bình chọn</span>
           </div>
         </div>
-      </div>
-    </aside>
+
+        <!-- Ảnh/Video -->
+        <div class="zalo-sidebar-section">
+          <div class="zalo-section-title-row">
+            <span>Ảnh/Video</span>
+            <span>▾</span>
+          </div>
+          <div class="zalo-media-grid">
+            <div class="zalo-media-thumb">📊</div>
+            <div class="zalo-media-thumb">📑</div>
+            <div class="zalo-media-thumb">📈</div>
+            <div class="zalo-media-thumb">📋</div>
+            <div class="zalo-media-thumb">📉</div>
+            <div class="zalo-media-thumb">📅</div>
+            <div class="zalo-media-thumb">🗂️</div>
+            <div class="zalo-media-thumb">🖼️</div>
+          </div>
+          <button class="zalo-see-all-btn">Xem tất cả</button>
+        </div>
+
+        <!-- File -->
+        <div class="zalo-sidebar-section" style="border-bottom: none;">
+          <div class="zalo-section-title-row">
+            <span>File</span>
+            <span>▾</span>
+          </div>
+          <div class="zalo-file-row">
+            <div class="zalo-file-badge-green">X</div>
+            <div style="flex: 1; overflow: hidden;">
+              <div style="font-weight: 600; color: #0f172a; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Bao_cao_hieu_nang_he_thong_Q3.xlsx</div>
+              <div style="color: #94a3b8; font-size: 10px;">15.31 KB • 28/09/2026</div>
+            </div>
+          </div>
+          <div class="zalo-file-row">
+            <div class="zalo-file-badge-green">X</div>
+            <div style="flex: 1; overflow: hidden;">
+              <div style="font-weight: 600; color: #0f172a; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Tai_lieu_kien_truc_WMS_v2.pdf</div>
+              <div style="color: #94a3b8; font-size: 10px;">4.2 MB • 28/09/2026</div>
+            </div>
+          </div>
+          <div class="zalo-file-row">
+            <div class="zalo-file-badge-yellow">ZIP</div>
+            <div style="flex: 1; overflow: hidden;">
+              <div style="font-weight: 600; color: #0f172a; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Config_Deploy_Cluster.zip</div>
+              <div style="color: #94a3b8; font-size: 10px;">18.4 MB • 30/09/2026</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
   </div>
 
   <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
 
-
-  <!-- =========================================================
-       MODAL 2: STEALTH SETTINGS & HELP
-       ========================================================= -->
+  <!-- MODAL: STEALTH SETTINGS & HELP -->
   <div class="stealth-modal-overlay" id="stealth-modal">
     <div class="stealth-modal-content">
       <div class="modal-header">
@@ -490,7 +724,7 @@
           <p class="guide-text">Chọn file PDF, TXT hoặc EPUB. Nội dung được xử lý trực tiếp trên thiết bị của bạn.</p>
           <div class="file-drop-area" id="modal-drop-area">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="#0F9D58"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-            <p>Kéo & thả file PDF, TXT, EPUB vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
+            <p>Kéo &amp; thả file PDF, TXT, EPUB vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
             <input type="file" id="modal-file-pdf" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip">
           </div>
         </div>
@@ -498,7 +732,6 @@
         <div class="settings-group">
           <h4>2. Tùy Chỉnh Cỡ Chữ &amp; Hiển Thị Đọc Truyện</h4>
           <p class="guide-text">Tăng giảm cỡ chữ và khoảng cách dòng để tối ưu trải nghiệm đọc êm mắt nhất:</p>
-          
           <div class="font-settings-group">
             <div class="font-settings-row">
               <span style="font-weight: 600; width: 90px; color: #3c4043;">Cỡ chữ:</span>
@@ -524,7 +757,7 @@
                 <option value="Arial" selected>Arial (Mặc định chuẩn)</option>
                 <option value="Roboto">Roboto (Google)</option>
                 <option value="Calibri">Calibri (Văn phòng)</option>
-                <option value="Segoe UI">Segoe UI (Hiện đại AutoCAD)</option>
+                <option value="Segoe UI">Segoe UI (Hiện đại Zalo)</option>
                 <option value="Times New Roman">Times New Roman (Cổ điển)</option>
                 <option value="Georgia">Georgia (Truyện chữ)</option>
               </select>
@@ -538,7 +771,7 @@
         <div class="settings-group">
           <h4>3. Phím Tắt Khẩn Cấp (Boss Key) &amp; Điều Khiển</h4>
           <ul class="hotkey-list">
-            <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang bảng số liệu tài chính doanh thu hoặc code backend thuật toán (bấm lại để đọc tiếp).</li>
+            <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang bảng báo cáo kỹ thuật sự cố WMS (bấm lại để đọc tiếp).</li>
             <li><kbd>[</kbd> / <kbd>]</kbd> : Giảm / tăng cỡ chữ nhanh khi đang đọc.</li>
             <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Chuyển sang câu/dòng tiếp theo.</li>
             <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
@@ -555,7 +788,7 @@
             <button class="primary-btn" id="btn-open-feedback-settings" style="padding: 7px 16px; font-size: 12px;">
                Mở Google Form Góp Ý
             </button>
-                        <button class="primary-btn duo-btn-progress-settings" id="btn-open-progress-settings" style="padding: 7px 16px; font-size: 12px;" title="Xem bảng theo dõi tiến độ cập nhật trên Google Sheets">
+            <button class="primary-btn duo-btn-progress-settings" id="btn-open-progress-settings" style="padding: 7px 16px; font-size: 12px;" title="Xem bảng theo dõi tiến độ cập nhật trên Google Sheets">
               📊 Tiến Độ Cập Nhật
             </button>
             <button class="portal-nav-btn" id="btn-config-feedback-url" style="padding: 7px 12px; font-size: 11px;" title="Cài đặt đường link Google Form (dành cho Admin)">
@@ -578,11 +811,6 @@
     </div>
   </div>
 
-    <!-- =========================================================
-       MODAL: TÁC GIẢ & ỦNG HỘ (DONATE)
-       ========================================================= -->
-  
-
   <!-- Floating Quick Controls Visibility Toggle -->
   <button id="btn-toggle-ctrls-floating" class="floating-stealth-toggle" title="Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)">
     <span class="stealth-toggle-icon">👁</span>
@@ -592,7 +820,6 @@
   <!-- Toast Notification for Seamless Page Navigation -->
   <div id="page-flip-toast" class="page-flip-toast"></div>
 
-  <script src="app.js?v=20261008-06" defer></script>
+  <script src="app.js?v=20261008-10" defer></script>
 </body>
 </html>
-

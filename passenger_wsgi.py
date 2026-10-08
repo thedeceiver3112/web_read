@@ -10,6 +10,7 @@ import pypdf
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MAX_UPLOAD_SIZE = 200 * 1024 * 1024
 
 
 import unicodedata
@@ -71,6 +72,8 @@ def split_text_into_chunks(text, max_len=220):
 
 def parse_pdf_upload(environ):
     content_length = int(environ.get("CONTENT_LENGTH") or 0)
+    if content_length <= 0 or content_length > MAX_UPLOAD_SIZE:
+        raise ValueError("PDF upload exceeds the 200 MB limit")
     body = environ["wsgi.input"].read(content_length)
     content_type = environ.get("CONTENT_TYPE", "")
 
@@ -141,6 +144,32 @@ def extract_pdf(environ, start_response):
 
         pages_data[str(page_num)] = chunks
 
+    toc = []
+    try:
+        def extract_pypdf_outline(outline_items, depth=0):
+            for item in outline_items:
+                if isinstance(item, list):
+                    extract_pypdf_outline(item, depth + 1)
+                else:
+                    title = getattr(item, 'title', None)
+                    if not title and isinstance(item, dict):
+                        title = item.get('/Title')
+                    if title:
+                        try:
+                            page_idx = reader.get_destination_page_number(item)
+                            p_num = (page_idx + 1) if page_idx is not None else 1
+                        except Exception:
+                            p_num = 1
+                        clean_t = clean_and_repair_vietnamese_text(str(title)).strip()
+                        if clean_t:
+                            indent = ('— ' * depth) if depth > 0 else ''
+                            toc.append({"title": indent + clean_t, "page": p_num})
+
+        if hasattr(reader, 'outline') and reader.outline:
+            extract_pypdf_outline(reader.outline)
+    except Exception:
+        toc = []
+
     return json_response(
         start_response,
         {
@@ -149,6 +178,7 @@ def extract_pdf(environ, start_response):
             "totalPages": len(reader.pages),
             "firstStoryPage": first_story_page,
             "pages": pages_data,
+            "toc": toc,
         },
     )
 
@@ -161,7 +191,7 @@ def static_response(environ, start_response):
     normalized = posixpath.normpath(raw_path.lstrip("/"))
     file_path = os.path.abspath(os.path.join(BASE_DIR, normalized))
 
-    if not file_path.startswith(BASE_DIR) or not os.path.isfile(file_path):
+    if os.path.commonpath([BASE_DIR, file_path]) != BASE_DIR or not os.path.isfile(file_path):
         start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
         return [b"Not found"]
 
@@ -174,6 +204,9 @@ def static_response(environ, start_response):
         [
             ("Content-Type", content_type),
             ("Content-Length", str(len(data))),
+            ("X-Content-Type-Options", "nosniff"),
+            ("Referrer-Policy", "same-origin"),
+            ("X-Frame-Options", "SAMEORIGIN"),
             ("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
             if file_path.lower().endswith((".html", ".js", ".css")) or normalized == "version.json"
             else ("Cache-Control", "public, max-age=86400"),
@@ -189,6 +222,9 @@ def application(environ, start_response):
     if environ.get("REQUEST_METHOD") == "POST" and environ.get("PATH_INFO") == "/api/extract-pdf":
         try:
             return extract_pdf(environ, start_response)
+        except ValueError as exc:
+            status = "413 Payload Too Large" if "200 MB limit" in str(exc) else "400 Bad Request"
+            return json_response(start_response, {"success": False, "error": str(exc)}, status)
         except Exception as exc:
             return json_response(start_response, {"success": False, "error": str(exc)}, "500 Internal Server Error")
 
