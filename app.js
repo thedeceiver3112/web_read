@@ -260,6 +260,7 @@ let activeDocumentAbortController = null;
 let activePdfLoadingTask = null;
 let lastFailedDocumentFile = null;
 let previousDocumentSnapshot = null;
+let textWorkerAvailabilityPromise = null;
 
 function normalizeBookmarkEntry(raw, documentId = '') {
   if (!raw || typeof raw !== 'object') {
@@ -4281,14 +4282,38 @@ async function processDocumentFile(file) {
   return processEpubFile(file);
 }
 
-function runTextChunkWorker(source, mode = state.chunkMode) {
+async function isTextWorkerAvailable() {
+  if (!window.Worker) return false;
+  if (!textWorkerAvailabilityPromise) {
+    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261008-10', { cache: 'no-store' })
+      .then(response => {
+        const contentType = response.headers.get('content-type') || '';
+        return response.ok && /javascript|ecmascript|text\/plain/i.test(contentType);
+      })
+      .catch(() => false);
+  }
+  return textWorkerAvailabilityPromise;
+}
+
+function splitTextWithoutWorker(source, mode) {
+  const text = typeof source === 'string' ? source : new TextDecoder('utf-8').decode(source);
+  return splitTextIntoChunks(text, mode);
+}
+
+async function runTextChunkWorker(source, mode = state.chunkMode) {
+  if (!await isTextWorkerAvailable()) {
+    console.warn('text-worker.js không khả dụng, chuyển sang xử lý trực tiếp.');
+    return splitTextWithoutWorker(source, mode);
+  }
+
   return new Promise((resolve, reject) => {
-    if (!window.Worker) {
-      const text = typeof source === 'string' ? source : new TextDecoder('utf-8').decode(source);
-      resolve(splitTextIntoChunks(text, mode));
+    let worker;
+    try {
+      worker = new Worker('text-worker.js?v=20261008-10');
+    } catch (error) {
+      resolve(splitTextWithoutWorker(source, mode));
       return;
     }
-    const worker = new Worker('text-worker.js?v=20261008-08');
     activeDocumentWorker = worker;
     worker.onmessage = event => {
       if (activeDocumentWorker === worker) activeDocumentWorker = null;
@@ -4299,7 +4324,12 @@ function runTextChunkWorker(source, mode = state.chunkMode) {
     worker.onerror = event => {
       if (activeDocumentWorker === worker) activeDocumentWorker = null;
       worker.terminate();
-      reject(new Error(event.message || 'Web Worker không xử lý được văn bản.'));
+      if (typeof source === 'string') {
+        console.warn('Web Worker lỗi, chuyển sang xử lý trực tiếp:', event.message || event);
+        resolve(splitTextWithoutWorker(source, mode));
+      } else {
+        reject(new Error(event.message || 'Web Worker không xử lý được văn bản.'));
+      }
     };
     if (source instanceof ArrayBuffer) worker.postMessage({ buffer: source, mode }, [source]);
     else worker.postMessage({ text: String(source || ''), mode });

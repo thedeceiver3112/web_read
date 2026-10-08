@@ -70,6 +70,16 @@ test('EPUB tạo mục lục và điều hướng chương', async ({ page }) =>
   await expect(page.locator('[data-toc-index]').nth(1)).toContainText('Chương Hai');
 });
 
+test('EPUB vẫn mở khi server thiếu text-worker.js', async ({ page }) => {
+  await page.route('**/text-worker.js*', route => route.abort());
+  await openReader(page);
+  await page.locator('#file-pdf-input').setInputFiles(await makeEpubFile());
+  await expect(page.locator('#loading-spinner')).toBeHidden({ timeout: 20000 });
+  await expect(page.locator('#univ-file-name')).toContainText('kiem-thu.epub');
+  await expect(page.locator('#story-tbody')).toContainText('Nội dung EPUB chương đầu tiên');
+  await expect(page.locator('#reader-error-modal.open')).toHaveCount(0);
+});
+
 test('PDF thay thế dữ liệu mẫu bằng nội dung vừa nạp', async ({ page }) => {
   await openReader(page);
   await page.locator('#file-pdf-input').setInputFiles(makePdfFile());
