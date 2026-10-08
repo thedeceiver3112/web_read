@@ -686,6 +686,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadSavedState();
   initUniversalNavbar();
   initThemeSystem();
+  StealthImageManager.init();
   initTitleEditing();
   initStealthEditableElements();
   initEventListeners();
@@ -805,6 +806,387 @@ function saveState() {
     console.error('Error saving state:', e);
   }
 }
+
+// ==========================================================
+// CUSTOM THEME CAMOUFLAGE IMAGE MANAGER (INDEXEDDB + LOCALSTORAGE)
+// ==========================================================
+const StealthImageManager = {
+  dbPromise: null,
+
+  getDB() {
+    if (!this.dbPromise) {
+      this.dbPromise = new Promise((resolve) => {
+        try {
+          if (!window.indexedDB) {
+            resolve(null);
+            return;
+          }
+          const req = window.indexedDB.open('StealthReaderDB', 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains('theme_images')) {
+              db.createObjectStore('theme_images');
+            }
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        } catch (_) {
+          resolve(null);
+        }
+      });
+    }
+    return this.dbPromise;
+  },
+
+  async saveImage(theme, dataUrl) {
+    try {
+      const db = await this.getDB();
+      if (db) {
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction('theme_images', 'readwrite');
+          tx.objectStore('theme_images').put(dataUrl, theme);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      } else {
+        localStorage.setItem(`stealth_custom_img_${theme}`, dataUrl);
+      }
+    } catch (_) {
+      try {
+        localStorage.setItem(`stealth_custom_img_${theme}`, dataUrl);
+      } catch (err) {
+        console.warn('Storage quota reached:', err);
+      }
+    }
+    this.applyImage(theme, dataUrl);
+  },
+
+  async getImage(theme) {
+    try {
+      const db = await this.getDB();
+      if (db) {
+        const val = await new Promise((resolve) => {
+          const tx = db.transaction('theme_images', 'readonly');
+          const req = tx.objectStore('theme_images').get(theme);
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        });
+        if (val) return val;
+      }
+    } catch (_) {}
+    return localStorage.getItem(`stealth_custom_img_${theme}`);
+  },
+
+  async removeImage(theme) {
+    try {
+      const db = await this.getDB();
+      if (db) {
+        await new Promise((resolve, reject) => {
+          const tx = db.transaction('theme_images', 'readwrite');
+          tx.objectStore('theme_images').delete(theme);
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
+      }
+    } catch (_) {}
+    localStorage.removeItem(`stealth_custom_img_${theme}`);
+    this.resetImage(theme);
+  },
+
+  applyImage(theme, dataUrl) {
+    if (!dataUrl) return;
+
+    if (theme === 'theme-photoshop') {
+      const canvas = document.querySelector('.ps-visual-canvas');
+      if (canvas) {
+        canvas.style.backgroundImage = `url("${dataUrl}")`;
+        canvas.style.backgroundSize = 'cover';
+        canvas.style.backgroundPosition = 'center';
+        canvas.style.backgroundRepeat = 'no-repeat';
+      }
+      const bossHero = document.querySelector('.ps-boss-hero-svg');
+      if (bossHero) {
+        let bossImg = document.getElementById('ps-custom-boss-img');
+        if (!bossImg) {
+          bossImg = document.createElement('img');
+          bossImg.id = 'ps-custom-boss-img';
+          bossImg.style.cssText = 'max-width:100%; max-height:280px; object-fit:contain; border-radius:4px; margin:0 auto; display:block;';
+          bossHero.parentNode.insertBefore(bossImg, bossHero);
+        }
+        bossImg.src = dataUrl;
+        bossHero.style.display = 'none';
+      }
+    } else if (theme === 'theme-autocad') {
+      const houseContainer = document.querySelector('.cad-house-img-container');
+      if (houseContainer) {
+        let customImgEl = document.getElementById('cad-custom-viewport-img');
+        if (!customImgEl) {
+          customImgEl = document.createElement('img');
+          customImgEl.id = 'cad-custom-viewport-img';
+          customImgEl.style.cssText = 'width:100%; height:100%; object-fit:contain; display:block;';
+          houseContainer.appendChild(customImgEl);
+        }
+        customImgEl.src = dataUrl;
+        const svg = document.getElementById('cad-fallback-3d-svg');
+        if (svg) svg.style.display = 'none';
+      }
+      const bossImg = document.querySelector('.cad-boss-full-img');
+      if (bossImg) bossImg.src = dataUrl;
+    } else if (theme === 'theme-capcut') {
+      const monitor = document.querySelector('.cc-monitor-scene');
+      if (monitor) {
+        monitor.style.backgroundImage = `url("${dataUrl}")`;
+        monitor.style.backgroundSize = 'contain';
+        monitor.style.backgroundPosition = 'center';
+        monitor.style.backgroundRepeat = 'no-repeat';
+        const svg = monitor.querySelector('.cc-monitor-svg');
+        if (svg) svg.style.opacity = '0';
+      }
+    } else if (theme === 'theme-premiere') {
+      const monitor = document.querySelector('.pr-monitor');
+      if (monitor) {
+        monitor.style.backgroundImage = `url("${dataUrl}")`;
+        monitor.style.backgroundSize = 'contain';
+        monitor.style.backgroundPosition = 'center';
+        monitor.style.backgroundRepeat = 'no-repeat';
+        const svg = monitor.querySelector('svg');
+        if (svg) svg.style.opacity = '0';
+      }
+    } else if (theme === 'theme-blender') {
+      const scene = document.querySelector('.b-viewport-scene');
+      if (scene) {
+        scene.style.backgroundImage = `url("${dataUrl}")`;
+        scene.style.backgroundSize = 'cover';
+        scene.style.backgroundPosition = 'center';
+        scene.style.backgroundRepeat = 'no-repeat';
+        const svg = scene.querySelector('svg');
+        if (svg) svg.style.opacity = '0';
+      }
+    } else if (theme === 'theme-canva') {
+      const canva = document.querySelector('.canva-canvas-viewport');
+      if (canva) {
+        canva.style.backgroundImage = `url("${dataUrl}")`;
+        canva.style.backgroundSize = 'contain';
+        canva.style.backgroundPosition = 'center';
+        canva.style.backgroundRepeat = 'no-repeat';
+      }
+    } else if (theme === 'theme-figma') {
+      const mockup = document.querySelector('.figma-mockup-canvas');
+      if (mockup) {
+        mockup.style.backgroundImage = `url("${dataUrl}")`;
+        mockup.style.backgroundSize = 'contain';
+        mockup.style.backgroundPosition = 'center';
+        mockup.style.backgroundRepeat = 'no-repeat';
+      }
+    } else if (theme === 'theme-powerpoint') {
+      const ppt = document.querySelector('.ppt-canvas-viewport');
+      if (ppt) {
+        ppt.style.backgroundImage = `url("${dataUrl}")`;
+        ppt.style.backgroundSize = 'contain';
+        ppt.style.backgroundPosition = 'center';
+        ppt.style.backgroundRepeat = 'no-repeat';
+      }
+    }
+
+    this.updatePillState(true);
+  },
+
+  resetImage(theme) {
+    if (theme === 'theme-photoshop') {
+      const canvas = document.querySelector('.ps-visual-canvas');
+      if (canvas) canvas.style.backgroundImage = '';
+      const bossHero = document.querySelector('.ps-boss-hero-svg');
+      if (bossHero) bossHero.style.display = '';
+      const bossImg = document.getElementById('ps-custom-boss-img');
+      if (bossImg) bossImg.remove();
+    } else if (theme === 'theme-autocad') {
+      const customImgEl = document.getElementById('cad-custom-viewport-img');
+      if (customImgEl) customImgEl.remove();
+      const svg = document.getElementById('cad-fallback-3d-svg');
+      if (svg) svg.style.display = '';
+      const bossImg = document.querySelector('.cad-boss-full-img');
+      if (bossImg) bossImg.src = '/static/autocad_3d_house.png';
+    } else if (theme === 'theme-capcut') {
+      const monitor = document.querySelector('.cc-monitor-scene');
+      if (monitor) {
+        monitor.style.backgroundImage = '';
+        const svg = monitor.querySelector('.cc-monitor-svg');
+        if (svg) svg.style.opacity = '';
+      }
+    } else if (theme === 'theme-premiere') {
+      const monitor = document.querySelector('.pr-monitor');
+      if (monitor) {
+        monitor.style.backgroundImage = '';
+        const svg = monitor.querySelector('svg');
+        if (svg) svg.style.opacity = '';
+      }
+    } else if (theme === 'theme-blender') {
+      const scene = document.querySelector('.b-viewport-scene');
+      if (scene) {
+        scene.style.backgroundImage = '';
+        const svg = scene.querySelector('svg');
+        if (svg) svg.style.opacity = '';
+      }
+    } else if (theme === 'theme-canva') {
+      const canva = document.querySelector('.canva-canvas-viewport');
+      if (canva) canva.style.backgroundImage = '';
+    } else if (theme === 'theme-figma') {
+      const mockup = document.querySelector('.figma-mockup-canvas');
+      if (mockup) mockup.style.backgroundImage = '';
+    } else if (theme === 'theme-powerpoint') {
+      const ppt = document.querySelector('.ppt-canvas-viewport');
+      if (ppt) ppt.style.backgroundImage = '';
+    }
+
+    this.updatePillState(false);
+  },
+
+  updatePillState(hasCustom) {
+    const resetBtn = document.getElementById('btn-reset-stealth-img');
+    if (resetBtn) resetBtn.style.display = hasCustom ? 'inline-flex' : 'none';
+  },
+
+  async init() {
+    const currentTheme = state.theme || 'theme-googlesheets';
+    const isVisualTheme = [
+      'theme-photoshop',
+      'theme-autocad',
+      'theme-capcut',
+      'theme-premiere',
+      'theme-blender',
+      'theme-canva',
+      'theme-figma',
+      'theme-powerpoint'
+    ].includes(currentTheme);
+
+    const navBtn = document.getElementById('univ-btn-custom-img');
+    if (navBtn) {
+      navBtn.style.display = isVisualTheme ? 'inline-flex' : 'none';
+    }
+
+    if (!isVisualTheme) return;
+
+    const savedImg = await this.getImage(currentTheme);
+    if (savedImg) {
+      this.applyImage(currentTheme, savedImg);
+    }
+
+    this.setupUI(currentTheme, Boolean(savedImg));
+  },
+
+  setupUI(theme, hasCustom) {
+    let container = null;
+    if (theme === 'theme-photoshop') container = document.querySelector('.ps-visual-artboard');
+    else if (theme === 'theme-autocad') container = document.querySelector('.cad-canvas-vector-box');
+    else if (theme === 'theme-capcut') container = document.querySelector('.cc-monitor-panel');
+    else if (theme === 'theme-premiere') container = document.querySelector('.pr-monitor-panel') || document.querySelector('.pr-monitor');
+    else if (theme === 'theme-blender') container = document.querySelector('.b-viewport-pane');
+    else if (theme === 'theme-canva') container = document.querySelector('.canva-canvas-viewport');
+    else if (theme === 'theme-figma') container = document.querySelector('.figma-artboard-frame') || document.querySelector('.figma-mockup-canvas');
+    else if (theme === 'theme-powerpoint') container = document.querySelector('.ppt-canvas-viewport');
+
+    if (container && !document.getElementById('stealth-img-ctrl-pill')) {
+      const pill = document.createElement('div');
+      pill.id = 'stealth-img-ctrl-pill';
+      pill.className = 'stealth-img-ctrl-pill';
+      pill.innerHTML = `
+        <button class="stealth-img-btn" id="btn-upload-stealth-img" title="Tải ảnh ngụy trang của bạn (hoặc kéo thả ảnh trực tiếp)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          <span>Đổi ảnh</span>
+        </button>
+        <button class="stealth-img-btn reset" id="btn-reset-stealth-img" style="display:${hasCustom ? 'inline-flex' : 'none'};" title="Khôi phục ảnh ngụy trang mặc định">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <span>Mặc định</span>
+        </button>
+      `;
+      container.style.position = 'relative';
+      container.appendChild(pill);
+
+      const uploadBtn = pill.querySelector('#btn-upload-stealth-img');
+      if (uploadBtn) {
+        uploadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.triggerFileInput(theme);
+        });
+      }
+
+      const resetBtn = pill.querySelector('#btn-reset-stealth-img');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          await this.removeImage(theme);
+          showPageFlipToast('Đã khôi phục ảnh ngụy trang mặc định!');
+        });
+      }
+    }
+
+    const dropTarget = container || document.body;
+    if (dropTarget && !dropTarget._hasImgDropListener) {
+      dropTarget._hasImgDropListener = true;
+
+      ['dragenter', 'dragover'].forEach(name => {
+        dropTarget.addEventListener(name, (e) => {
+          if (e.dataTransfer && e.dataTransfer.types.includes('Files')) {
+            e.preventDefault();
+            dropTarget.classList.add('stealth-img-dragover');
+          }
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(name => {
+        dropTarget.addEventListener(name, (e) => {
+          dropTarget.classList.remove('stealth-img-dragover');
+        });
+      });
+
+      dropTarget.addEventListener('drop', (e) => {
+        if (!e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files.length) return;
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.processImageFile(file, theme);
+        }
+      });
+    }
+
+    const navBtn = document.getElementById('univ-btn-custom-img');
+    if (navBtn) {
+      navBtn.style.display = 'inline-flex';
+      navBtn.onclick = () => this.triggerFileInput(theme);
+    }
+  },
+
+  triggerFileInput(theme) {
+    let input = document.getElementById('stealth-theme-img-input');
+    if (!input) {
+      input = document.createElement('input');
+      input.type = 'file';
+      input.id = 'stealth-theme-img-input';
+      input.accept = 'image/png, image/jpeg, image/webp, image/gif, image/svg+xml';
+      input.style.display = 'none';
+      document.body.appendChild(input);
+    }
+    input.onchange = (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        this.processImageFile(file, theme);
+        input.value = '';
+      }
+    };
+    input.click();
+  },
+
+  processImageFile(file, theme) {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const dataUrl = e.target.result;
+      await this.saveImage(theme, dataUrl);
+      showPageFlipToast('✓ Đã cập nhật ảnh ngụy trang mới thành công!');
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
 // ==========================================================
 // THEME SYSTEM
@@ -1227,6 +1609,7 @@ function applyTheme(themeName) {
   state.theme = themeName;
   const isHidden = document.body.classList.contains('controls-hidden') || localStorage.getItem('stealth_controls_hidden') === '1';
   document.body.className = `${themeName} has-pinned-navbar ${isHidden ? 'controls-hidden' : ''}`.trim();
+  StealthImageManager.init();
 
   document.querySelectorAll('.theme-card').forEach(card => {
     card.classList.toggle('active', card.getAttribute('data-theme') === themeName);
@@ -2408,6 +2791,10 @@ function initUniversalNavbar() {
       </div>
 
       <div class="unav-section unav-right">
+        <button class="unav-btn unav-btn-custom-img" id="univ-btn-custom-img" style="display:none;" title="Đổi ảnh ngụy trang cho giao diện này (hoặc kéo thả ảnh trực tiếp)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          <span>Đổi ảnh</span>
+        </button>
         <button class="unav-btn unav-btn-theme" id="univ-btn-theme" title="Đổi sang giao diện công sở khác">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
           <span>Giao diện</span>
@@ -2471,6 +2858,13 @@ function initUniversalNavbar() {
 
   const btnBookmark = document.getElementById('univ-btn-bookmark');
   if (btnBookmark) btnBookmark.addEventListener('click', () => saveCurrentBookmark({ notify: true }));
+
+  const btnCustomImg = document.getElementById('univ-btn-custom-img');
+  if (btnCustomImg) {
+    btnCustomImg.addEventListener('click', () => {
+      StealthImageManager.triggerFileInput(state.theme);
+    });
+  }
 
   const btnTheme = document.getElementById('univ-btn-theme');
   if (btnTheme) btnTheme.addEventListener('click', openThemeModal);
