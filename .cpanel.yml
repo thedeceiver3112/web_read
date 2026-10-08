@@ -6,6 +6,6 @@ deployment:
     - /bin/mkdir -p $DEPLOYPATH/static
     - /bin/mkdir -p $DEPLOYPATH/css
     - /bin/cp *.html robots.txt sitemap.xml $DEPLOYPATH/
-    - /bin/cp app.js style.css version-check.js version.json $DEPLOYPATH/
+    - /bin/cp app.js text-worker.js style.css version-check.js version.json $DEPLOYPATH/
     - /bin/cp -R static/. $DEPLOYPATH/static/
     - /bin/cp -R css/. $DEPLOYPATH/css/
