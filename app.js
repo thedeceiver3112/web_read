@@ -23,6 +23,7 @@ const state = {
   theme: 'theme-googlesheets', // 'theme-googlesheets' | 'theme-excel' | 'theme-vscode'
   pdfDoc: null,
   pdfFileName: '',
+  documentId: '',
   currentPage: 1,
   totalPages: 1,
   firstStoryPage: 1,
@@ -248,7 +249,132 @@ const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
 const DOCUMENT_CACHE_STORE_NAME = 'documents';
 const ACTIVE_DOCUMENT_CACHE_KEY = 'active-document';
 const ACTIVE_DOCUMENT_SESSION_KEY = 'stealth_active_document_v2';
+const READING_BOOKMARKS_STORAGE_KEY = 'stealth_reader_bookmarks_v1';
+const MAX_SAVED_BOOKMARKS = 30;
 let documentCacheWritePromise = Promise.resolve();
+
+function hashDocumentIdentity(value) {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index++) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+function createDocumentId(file) {
+  if (!file || !file.name) return '';
+  return `file-${hashDocumentIdentity([
+    file.name.trim().toLowerCase(),
+    Number(file.size) || 0,
+    Number(file.lastModified) || 0
+  ].join('|'))}`;
+}
+
+function getCurrentDocumentId() {
+  if (state.documentId) return state.documentId;
+  if (!state.pdfFileName || !state.allChunks.length) return '';
+
+  const firstText = state.allChunks[0]?.text || '';
+  const lastText = state.allChunks[state.allChunks.length - 1]?.text || '';
+  return `cached-${hashDocumentIdentity([
+    state.pdfFileName.trim().toLowerCase(),
+    state.totalPages,
+    state.allChunks.length,
+    firstText.slice(0, 120),
+    lastText.slice(-120)
+  ].join('|'))}`;
+}
+
+function readSavedBookmarks() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(READING_BOOKMARKS_STORAGE_KEY) || '{}');
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  } catch (error) {
+    console.warn('Không thể đọc danh sách trang đã đánh dấu:', error);
+    return {};
+  }
+}
+
+function getCurrentBookmark() {
+  const documentId = getCurrentDocumentId();
+  if (!documentId) return null;
+  const bookmark = readSavedBookmarks()[documentId];
+  return bookmark && typeof bookmark === 'object' ? bookmark : null;
+}
+
+function saveCurrentBookmark(options = {}) {
+  const { notify = false } = options;
+  if (!hasLoadedDocument()) return false;
+  if (state.isPdfProcessing && state.loadedPages === 0) return false;
+
+  const documentId = getCurrentDocumentId();
+  if (!documentId) return false;
+
+  const globalIndex = Math.min(
+    Math.max(0, Number(state.currentGlobalIndex) || 0),
+    state.allChunks.length - 1
+  );
+  const page = state.allChunks[globalIndex]?.page || state.currentPage || 1;
+
+  try {
+    const bookmarks = readSavedBookmarks();
+    bookmarks[documentId] = {
+      documentId,
+      documentName: state.pdfFileName,
+      page,
+      globalIndex,
+      totalPages: state.totalPages,
+      updatedAt: Date.now()
+    };
+
+    const trimmedBookmarks = Object.fromEntries(
+      Object.entries(bookmarks)
+        .sort(([, left], [, right]) => (right.updatedAt || 0) - (left.updatedAt || 0))
+        .slice(0, MAX_SAVED_BOOKMARKS)
+    );
+    localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(trimmedBookmarks));
+    syncBookmarkButton();
+
+    if (notify) {
+      showPageFlipToast(`Đã đánh dấu <b>trang ${page}</b>, dòng ${globalIndex + 1}.`);
+    }
+    return true;
+  } catch (error) {
+    console.warn('Không thể lưu trang đánh dấu:', error);
+    if (notify) showPageFlipToast('Không thể lưu trang đánh dấu trên trình duyệt này.');
+    return false;
+  }
+}
+
+function getSavedReadingPosition() {
+  if (!state.allChunks.length) return null;
+  const bookmark = getCurrentBookmark();
+  if (!bookmark) return null;
+
+  const requestedIndex = Math.max(0, Number(bookmark.globalIndex) || 0);
+  if (state.isPdfProcessing && requestedIndex >= state.allChunks.length) return null;
+  const globalIndex = Math.min(
+    requestedIndex,
+    state.allChunks.length - 1
+  );
+  return {
+    globalIndex,
+    page: state.allChunks[globalIndex]?.page || Number(bookmark.page) || 1
+  };
+}
+
+function restoreSavedReadingPosition(notify = false) {
+  const position = getSavedReadingPosition();
+  if (!position) return false;
+
+  state.currentGlobalIndex = position.globalIndex;
+  state.currentPage = position.page;
+  if (notify) {
+    showPageFlipToast(`Đã mở lại tại <b>trang ${position.page}</b>, dòng ${position.globalIndex + 1}.`);
+  }
+  return true;
+}
 
 function getThemeForCurrentPage() {
   const path = window.location.pathname.toLowerCase();
@@ -351,6 +477,7 @@ async function readDocumentCache() {
 function applyCachedDocument(cache) {
   if (!cache || !Array.isArray(cache.chunks) || cache.chunks.length === 0) return false;
 
+  const previousDocumentName = state.pdfFileName;
   state.allChunks = cache.chunks.map(chunk => ({
     ...chunk,
     text: cleanAndRepairVietnameseText(chunk.text || '')
@@ -360,11 +487,17 @@ function applyCachedDocument(cache) {
   state.loadedPages = state.totalPages;
   state.isPdfProcessing = false;
   state.pdfFileName = cache.documentName || state.pdfFileName || '';
+  state.documentId = cache.documentId || '';
+  const canUseLegacyPosition = previousDocumentName === state.pdfFileName;
+  const cachedPosition = Number.isFinite(Number(cache.currentGlobalIndex))
+    ? Number(cache.currentGlobalIndex)
+    : (canUseLegacyPosition ? state.currentGlobalIndex : 0);
   state.currentGlobalIndex = Math.min(
-    Math.max(0, state.currentGlobalIndex),
+    Math.max(0, cachedPosition),
     state.allChunks.length - 1
   );
   state.currentPage = state.allChunks[state.currentGlobalIndex]?.page || 1;
+  restoreSavedReadingPosition(false);
 
   const univFileName = document.getElementById('univ-file-name');
   if (univFileName && state.pdfFileName) univFileName.textContent = state.pdfFileName;
@@ -382,9 +515,12 @@ function persistDocumentCache() {
   const payload = {
     id: ACTIVE_DOCUMENT_CACHE_KEY,
     documentName: state.pdfFileName,
+    documentId: getCurrentDocumentId(),
     chunks: state.allChunks,
     pageStartIndices: state.pageStartIndices,
     totalPages: state.totalPages,
+    currentPage: state.currentPage,
+    currentGlobalIndex: state.currentGlobalIndex,
     savedAt: Date.now()
   };
 
@@ -567,9 +703,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (state.allChunks.length === 0) {
     const restored = await restoreDocumentCache();
     if (!restored) {
+      state.pdfFileName = '';
+      state.documentId = '';
       initStoryFromChunks(SAMPLE_STORY_CHUNKS);
     } else {
       renderContinuousView(true);
+      if (getCurrentBookmark()) {
+        setTimeout(() => restoreSavedReadingPosition(true), 0);
+      }
     }
   } else {
     renderContinuousView(true);
@@ -608,6 +749,7 @@ function loadSavedState() {
       state.textDimLevel = data.textDimLevel || 100;
       state.wrapText = data.wrapText !== undefined ? data.wrapText : true;
       state.pdfFileName = data.pdfFileName || '';
+      state.documentId = data.documentId || '';
       if (data.currentGlobalIndex !== undefined) state.currentGlobalIndex = data.currentGlobalIndex;
       if (data.currentPage !== undefined) state.currentPage = data.currentPage;
     }
@@ -621,11 +763,21 @@ let saveStateTimer = null;
 
 function scheduleSaveState() {
   if (saveStateTimer) return;
-  saveStateTimer = setTimeout(saveState, 400);
+  saveStateTimer = setTimeout(() => {
+    saveState();
+    saveCurrentBookmark();
+  }, 400);
 }
 
 window.addEventListener('pagehide', () => {
-  if (saveStateTimer) saveState();
+  saveState();
+  saveCurrentBookmark();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'hidden') return;
+  saveState();
+  saveCurrentBookmark();
 });
 
 function saveState() {
@@ -644,7 +796,8 @@ function saveState() {
       wrapText: state.wrapText,
       currentPage: state.currentPage,
       currentGlobalIndex: state.currentGlobalIndex,
-      pdfFileName: state.pdfFileName
+      pdfFileName: state.pdfFileName,
+      documentId: getCurrentDocumentId()
     };
     localStorage.setItem('excel_reader_state', JSON.stringify(data));
     localStorage.setItem('selected_theme', state.theme);
@@ -656,8 +809,367 @@ function saveState() {
 // ==========================================================
 // THEME SYSTEM
 // ==========================================================
+function getThemePickerModalHTML() {
+  return `
+<div class="stealth-modal-overlay" id="theme-modal">
+      <div class="stealth-modal-content theme-picker-content">
+        <div class="modal-header">
+          <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-3px; margin-right:6px;"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.64 10.56 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>Chọn Giao Diện Ngụy Trang Làm Việc</h3>
+          <button class="modal-close-btn" id="btn-close-theme-modal">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="theme-selection-grid">
+            <!-- Theme 1: Google Sheets -->
+            <div class="theme-card active" data-theme="theme-googlesheets">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path d="M37 45H11C8.8 45 7 43.2 7 41V7C7 4.8 8.8 3 11 3H29L41 15V41C41 43.2 39.2 45 37 45Z" fill="#0F9D58"/>
+                  <path d="M29 3L41 15H29V3Z" fill="#87CEAC"/>
+                  <path d="M14 21H34V39H14V21Z" fill="white"/>
+                  <path d="M14 27H34V29H14V27ZM14 33H34V35H14V33ZM22 21V39H24V21H22Z" fill="#0F9D58"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Google Sheets</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 2: Google Docs -->
+            <div class="theme-card" data-theme="theme-googledocs">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path d="M37 45H11C8.8 45 7 43.2 7 41V7C7 4.8 8.8 3 11 3H29L41 15V41C41 43.2 39.2 45 37 45Z" fill="#4285F4"/>
+                  <path d="M29 3L41 15H29V3Z" fill="#A1C2FA"/>
+                  <rect x="14" y="22" width="20" height="2.5" rx="1.25" fill="white"/>
+                  <rect x="14" y="27.5" width="20" height="2.5" rx="1.25" fill="white"/>
+                  <rect x="14" y="33" width="13" height="2.5" rx="1.25" fill="white"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Google Docs</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 3: Microsoft Excel -->
+            <div class="theme-card" data-theme="theme-excel">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect x="16" y="8" width="26" height="32" rx="3" fill="#107C41"/>
+                  <path d="M22 15H36V33H22V15Z" fill="#21A366"/>
+                  <path d="M22 21H36M22 27H36M28 15V33" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                  <rect x="6" y="12" width="20" height="24" rx="3" fill="#185C37" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"/>
+                  <path d="M11 18L21 30M21 18L11 30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Microsoft Excel</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 4: VS Code -->
+            <div class="theme-card" data-theme="theme-vscode">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path d="M35.5 45.5L45 40.5V7.5L35.5 2.5L16 19.5L8.5 13.5L3 16.5L12 24L3 31.5L8.5 34.5L16 28.5L35.5 45.5Z" fill="#007ACC"/>
+                  <path d="M35.5 45.5L45 40.5V7.5L35.5 2.5L25 17L35.5 24L25 31L35.5 45.5Z" fill="#1F9CF0"/>
+                  <path d="M35.5 2.5L16 19.5L8.5 13.5L3 16.5L12 24L25 17L35.5 2.5Z" fill="#0065A9"/>
+                  <path d="M35.5 45.5L25 31L12 24L3 31.5L8.5 34.5L16 28.5L35.5 45.5Z" fill="#0065A9"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">VS Code</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 5: Photoshop -->
+            <div class="theme-card" data-theme="theme-photoshop">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#001E36"/>
+                  <rect x="2" y="2" width="44" height="44" rx="8" stroke="#31A8FF" stroke-width="2.5" fill="none"/>
+                  <path d="M14 15H21.5C24.5 15 26.5 16.8 26.5 19.8C26.5 22.8 24.5 24.6 21.5 24.6H17.8V33H14V15ZM17.8 21.5H21.2C22.6 21.5 23.5 20.8 23.5 19.8C23.5 18.8 22.6 18.1 21.2 18.1H17.8V21.5Z" fill="#31A8FF"/>
+                  <path d="M28.5 29.2C29.2 30.5 30.8 31.3 32.5 31.3C34.3 31.3 35.3 30.4 35.3 29.2C35.3 26.5 28.8 27.2 28.8 22.5C28.8 20.1 30.8 18.5 33.7 18.5C35.7 18.5 37.3 19.3 38.2 20.7L36 22.3C35.4 21.4 34.5 20.9 33.5 20.9C32.1 20.9 31.3 21.6 31.3 22.4C31.3 24.8 37.8 24.2 37.8 28.8C37.8 31.4 35.6 33.3 32.4 33.3C29.7 33.3 27.6 32 26.5 30.2L28.5 29.2Z" fill="#31A8FF"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Photoshop</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 6: Blender 3D -->
+            <div class="theme-card" data-theme="theme-blender">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="22" fill="#222222"/>
+                  <circle cx="24" cy="27" r="11" fill="#EA7600"/>
+                  <circle cx="24" cy="27" r="5.5" fill="#22578A"/>
+                  <circle cx="24" cy="27" r="2.5" fill="#FFFFFF"/>
+                  <path d="M24 7V16M15 11L21 18M33 11L27 18" stroke="#EA7600" stroke-width="3.8" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Blender 3D</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 7: LinkedIn -->
+            <div class="theme-card" data-theme="theme-linkedin">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#0A66C2"/>
+                  <circle cx="15.5" cy="14.5" r="3" fill="white"/>
+                  <rect x="12.5" y="20" width="6" height="15" rx="1" fill="white"/>
+                  <path d="M23 20H28.5V22.5C29.4 20.9 31.4 20 34 20C38.4 20 40 22.8 40 27.5V35H34V28.5C34 26.5 33.2 25 31.2 25C29.2 25 28.5 26.5 28.5 28.5V35H23V20Z" fill="white"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">LinkedIn</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 8: AutoCAD -->
+            <div class="theme-card" data-theme="theme-autocad">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#1C1E24"/>
+                  <path d="M24 6L8 38H17L21 29H31L26 18L24 6Z" fill="#E51937"/>
+                  <path d="M24 6L33 24H23L24 6Z" fill="#FA465E"/>
+                  <path d="M33 24L40 38H30L26 29L33 24Z" fill="#B81126"/>
+                  <path d="M21 29H31L34 35H18L21 29Z" fill="#850B19"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">AutoCAD</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 9: Zalo PC -->
+            <div class="theme-card" data-theme="theme-zalo">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="12" fill="#0068FF"/>
+                  <path d="M12 18H24L14 30H26M28 20V30M32 18V30M34 24C34 21.8 35.8 20 38 20C40.2 20 42 21.8 42 24V26C42 28.2 40.2 30 38 30C35.8 30 34 28.2 34 26V24Z" stroke="white" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Zalo PC</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 10: Figma -->
+            <div class="theme-card" data-theme="theme-figma">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#18181B"/>
+                  <g transform="translate(10, 4) scale(0.72)">
+                    <path d="M19 28.5C19 23.3 23.3 19 28.5 19C33.7 19 38 23.3 38 28.5C38 33.7 33.7 38 28.5 38C23.3 38 19 33.7 19 28.5Z" fill="#1ABCFE"/>
+                    <path d="M0 47.5C0 42.3 4.3 38 9.5 38H19V47.5C19 52.7 14.7 57 9.5 57C4.3 57 0 52.7 0 47.5Z" fill="#0ACF83"/>
+                    <path d="M19 0V19H28.5C33.7 19 38 14.7 38 9.5C38 4.3 33.7 0 28.5 0H19Z" fill="#FF7262"/>
+                    <path d="M0 9.5C0 14.7 4.3 19 9.5 19H19V0H9.5C4.3 0 0 4.3 0 9.5Z" fill="#F24E1E"/>
+                    <path d="M0 28.5C0 33.7 4.3 38 9.5 38H19V19H9.5C4.3 19 0 23.3 0 28.5Z" fill="#A259FF"/>
+                  </g>
+                </svg>
+              </div>
+              <span class="theme-card-title">Figma</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 11: Canva -->
+            <div class="theme-card" data-theme="theme-canva">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <defs>
+                    <linearGradient id="cg_canva" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#00C4CC"/>
+                      <stop offset="1" stop-color="#7D2AE8"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="24" cy="24" r="22" fill="url(#cg_canva)"/>
+                  <path d="M28.5 16C23 16 16 20.5 16 27C16 31.5 19.5 34 23.5 34C28 34 32.5 30.5 33 27C33.2 25.5 32 25.2 31.2 26C29.5 27.8 26.5 29.5 24 29.5C21 29.5 19.8 27.5 20.2 24.5C20.8 20.5 25.2 18.5 28.2 18.5C30.2 18.5 31.2 19.2 30.8 21C30.5 22.2 29.2 22.8 28.2 22.8C27.5 22.8 27 22.5 27.2 21.8C27.5 21 28.8 20.8 28.5 20C28.2 19.2 26.5 19.5 25.5 20.5C23.5 22.5 22.8 25.8 23.8 27.2C24.2 27.8 25.5 27.8 26.5 27C28.5 25.2 31.5 21 32 18C32.2 16.5 30.5 16 28.5 16Z" fill="white"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Canva</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 12: PowerPoint -->
+            <div class="theme-card" data-theme="theme-powerpoint">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect x="16" y="8" width="26" height="32" rx="3" fill="#D24726"/>
+                  <circle cx="29" cy="24" r="8" fill="#FF8F6B"/>
+                  <path d="M29 16V24H37C37 19.6 33.4 16 29 16Z" fill="#C43E1C"/>
+                  <rect x="6" y="12" width="20" height="24" rx="3" fill="#B73A1B" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"/>
+                  <path d="M12 18H18C20.5 18 22 19.5 22 22C22 24.5 20.5 26 18 26H15V30H12V18ZM15 23.5H18C19 23.5 19.5 23 19.5 22C19.5 21 19 20.5 18 20.5H15V23.5Z" fill="white"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">PowerPoint</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 13: Thư Viện Pháp Luật -->
+            <div class="theme-card" data-theme="theme-thuvienphapluat">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#0C345C"/>
+                  <rect x="3" y="3" width="42" height="42" rx="8" stroke="#D4AF37" stroke-width="1.8" fill="none"/>
+                  <path d="M24 10V36M18 36H30" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M12 16H36" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M12 16L7 26H17L12 16Z" fill="#D4AF37" opacity="0.3"/>
+                  <path d="M12 16L7 26M12 16L17 26M6 26C6 29 18 29 18 26" stroke="#D4AF37" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M36 16L31 26H41L36 16Z" fill="#D4AF37" opacity="0.3"/>
+                  <path d="M36 16L31 26M36 16L41 26M30 26C30 29 42 29 42 26" stroke="#D4AF37" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="24" cy="11" r="2.5" fill="#D4AF37"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Thư Viện Pháp Luật</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 14: Premiere Pro -->
+            <div class="theme-card" data-theme="theme-premiere">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="#00005B"/><rect x="2" y="2" width="44" height="44" rx="8" fill="none" stroke="#9999FF" stroke-width="2.5"/><path fill="#9999FF" d="M11 14h8c4.2 0 7 2.6 7 6.6s-2.8 6.6-7 6.6h-4.2V34H11V14zm3.8 9.8H19c2.2 0 3.4-1.3 3.4-3.2s-1.2-3.2-3.4-3.2h-4.2v6.4z"/><path fill="#9999FF" d="M28.5 19h3.5v2.6c.9-1.8 2.5-2.9 4.9-2.9v3.8c-3-.2-4.7 1.3-4.7 4.6V34h-3.7V19z"/></svg>
+              </div>
+              <span class="theme-card-title">Premiere Pro</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 15: Claude AI -->
+            <div class="theme-card" data-theme="theme-claude">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#D97757"/><g fill="#FFFFFF" transform="translate(24 24)"><rect x="-1.78" y="-15.75" width="3.57" height="13.65" rx="1.78" transform="rotate(7)"/><rect x="-1.78" y="-12.60" width="3.57" height="10.50" rx="1.78" transform="rotate(37)"/><rect x="-1.78" y="-15.23" width="3.57" height="13.13" rx="1.78" transform="rotate(67)"/><rect x="-1.78" y="-11.55" width="3.57" height="9.45" rx="1.78" transform="rotate(97)"/><rect x="-1.78" y="-16.28" width="3.57" height="14.18" rx="1.78" transform="rotate(127)"/><rect x="-1.78" y="-13.12" width="3.57" height="11.03" rx="1.78" transform="rotate(157)"/><rect x="-1.78" y="-14.70" width="3.57" height="12.60" rx="1.78" transform="rotate(187)"/><rect x="-1.78" y="-12.08" width="3.57" height="9.98" rx="1.78" transform="rotate(217)"/><rect x="-1.78" y="-15.75" width="3.57" height="13.65" rx="1.78" transform="rotate(247)"/><rect x="-1.78" y="-12.60" width="3.57" height="10.50" rx="1.78" transform="rotate(277)"/><rect x="-1.78" y="-15.23" width="3.57" height="13.13" rx="1.78" transform="rotate(307)"/><rect x="-1.78" y="-12.08" width="3.57" height="9.98" rx="1.78" transform="rotate(337)"/></g></svg>
+              </div>
+              <span class="theme-card-title">Claude AI</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 16: ChatGPT -->
+            <div class="theme-card" data-theme="theme-chatgpt">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48"><rect width="48" height="48" rx="11" fill="#000000"/><g transform="translate(10 10) scale(1.1667)"><path fill="#FFFFFF" d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></g></svg>
+              </div>
+              <span class="theme-card-title">ChatGPT</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 17: Teams -->
+            <div class="theme-card" data-theme="theme-teams">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48"><rect width="48" height="48" rx="10" fill="#464EB8"/><path d="M28 14C29.65 14 31 15.35 31 17C31 18.65 29.65 20 28 20C26.35 20 25 18.65 25 17C25 15.35 26.35 14 28 14Z" fill="#7B83EB"/><path d="M33 21H23C21.9 21 21 21.9 21 23V27C21 27.5 21.5 28 22 28H23V31L26 28H33C34.1 28 35 27.1 35 26V23C35 21.9 34.1 21 33 21Z" fill="#7B83EB"/><circle cx="19" cy="18" r="4.5" fill="#FFFFFF"/><path d="M12 24C10.9 24 10 24.9 10 26V32C10 32.5 10.5 33 11 33H13V37L17 33H25C26.1 33 27 32.1 27 31V26C27 24.9 26.1 24 25 24H12Z" fill="#FFFFFF"/></svg>
+              </div>
+              <span class="theme-card-title">Teams</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 18: Revit BIM -->
+            <div class="theme-card" data-theme="theme-revit">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#005A9C"/>
+                  <path d="M12 10H25C30 10 34 13.5 34 18C34 21.5 31.5 24.2 27.8 25.4L35 38H27.5L21.2 26.5H18V38H12V10ZM18 21.5H24.5C26.8 21.5 28.5 20.2 28.5 18.2C28.5 16.2 26.8 15 24.5 15H18V21.5Z" fill="white"/>
+                  <path d="M26 26L34 38H28L21 26.5L26 26Z" fill="#70C0E7" opacity="0.7"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Revit BIM</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 19: MISA SME -->
+            <div class="theme-card" data-theme="theme-misa">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path d="M24 3L38 17L28 24L24 16L20 24L10 17L24 3Z" fill="#E51937"/>
+                  <path d="M45 24L31 38L24 28L32 24L24 20L31 10L45 24Z" fill="#FF9800"/>
+                  <path d="M24 45L10 31L20 24L24 32L28 24L38 31L24 45Z" fill="#1976D2"/>
+                  <path d="M3 24L17 10L24 20L16 24L24 28L17 38L3 24Z" fill="#4CAF50"/>
+                  <circle cx="24" cy="24" r="5" fill="#FFFFFF"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">MISA SME</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 20: CapCut Pro -->
+            <div class="theme-card" data-theme="theme-capcut">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#000000"/>
+                  <path d="M10 14L22 22V26L10 34V14Z" fill="#00F2FE"/>
+                  <path d="M38 14L26 22V26L38 34V14Z" fill="#FFFFFF"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">CapCut Pro</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 21: SAP GUI -->
+            <div class="theme-card" data-theme="theme-sap">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="8" fill="#00386B"/>
+                  <path d="M10 12h28l-8 24H2l8-24z" fill="#007DB8"/>
+                  <text x="24" y="31" fill="#FFFFFF" font-family="Arial, sans-serif" font-weight="900" font-size="16" text-anchor="middle" letter-spacing="1">SAP</text>
+                </svg>
+              </div>
+              <span class="theme-card-title">SAP GUI</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <a href="index.html?portal=1" class="portal-nav-btn" id="btn-modal-to-portal" style="border-radius: 6px; padding: 7px 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">🏠 Về Trang Chủ</a>
+          <button class="primary-btn" id="btn-confirm-theme">Áp Dụng Giao Diện Này</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function ensureThemeModalComponent() {
+  let modal = document.getElementById('theme-modal');
+  if (modal) return modal;
+
+  const temp = document.createElement('div');
+  temp.innerHTML = getThemePickerModalHTML().trim();
+  modal = temp.firstElementChild;
+  document.body.appendChild(modal);
+
+  attachThemeModalEvents(modal);
+  return modal;
+}
+
+function attachThemeModalEvents(modal) {
+  if (!modal) return;
+
+  const closeBtn = modal.querySelector('#btn-close-theme-modal');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeThemeModal);
+  }
+
+  const confirmBtn = modal.querySelector('#btn-confirm-theme');
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', () => {
+      closeThemeModal();
+      navigateToThemePage(state.theme);
+    });
+  }
+
+  const portalBtn = modal.querySelector('#btn-modal-to-portal');
+  if (portalBtn) {
+    portalBtn.addEventListener('click', (e) => {
+      const portal = document.getElementById('landing-portal');
+      if (portal) {
+        e.preventDefault();
+        closeThemeModal();
+        openPortal(true);
+        updatePortalThemeUI(state.theme);
+        updatePortalUploadUI();
+      } else {
+        e.preventDefault();
+        closeThemeModal();
+        goToHomePage();
+      }
+    });
+  }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeThemeModal();
+    }
+  });
+
+  modal.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      modal.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const chosenTheme = card.getAttribute('data-theme');
+      state.theme = chosenTheme;
+    });
+
+    card.addEventListener('dblclick', () => {
+      const chosenTheme = card.getAttribute('data-theme');
+      state.theme = chosenTheme;
+      closeThemeModal();
+      navigateToThemePage(chosenTheme);
+    });
+  });
+}
+
 function initThemeSystem() {
   applyTheme(state.theme);
+  ensureThemeModalComponent();
 
   const openButtons = [
     'btn-open-theme-modal',
@@ -672,43 +1184,30 @@ function initThemeSystem() {
     'btn-open-theme-modal-canva',
     'btn-open-theme-modal-powerpoint',
     'btn-open-theme-modal-thuvienphapluat',
+    'btn-open-theme-modal-capcut',
+    'btn-open-theme-modal-sap'
   ];
   openButtons.forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', openThemeModal);
   });
-
-  const closeBtn = document.getElementById('btn-close-theme-modal');
-  if (closeBtn) closeBtn.addEventListener('click', closeThemeModal);
-
-  const confirmBtn = document.getElementById('btn-confirm-theme');
-  if (confirmBtn) {
-    confirmBtn.addEventListener('click', () => {
-      closeThemeModal();
-      navigateToThemePage(state.theme);
-    });
-  }
-
-  document.querySelectorAll('.theme-card').forEach(card => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      const chosenTheme = card.getAttribute('data-theme');
-      state.theme = chosenTheme;
-    });
-
-    card.addEventListener('dblclick', () => {
-      const chosenTheme = card.getAttribute('data-theme');
-      navigateToThemePage(chosenTheme);
-    });
-  });
 }
 
 function openThemeModal() {
-  document.getElementById('theme-modal').classList.add('show');
+  const modal = ensureThemeModalComponent();
+  if (!modal) return;
+
+  modal.querySelectorAll('.theme-card').forEach(card => {
+    const isMatch = card.getAttribute('data-theme') === state.theme;
+    card.classList.toggle('active', isMatch);
+  });
+
+  modal.classList.add('show');
 }
+
 function closeThemeModal() {
-  document.getElementById('theme-modal').classList.remove('show');
+  const modal = document.getElementById('theme-modal');
+  if (modal) modal.classList.remove('show');
 }
 
 function setDocumentTitle(title) {
@@ -1863,21 +2362,28 @@ function initUniversalNavbar() {
     nav.innerHTML = `
       <div class="unav-section unav-left">
         <div class="unav-brand" title="Stealth Reader - Web đọc truyện ngụy trang">
-          <span class="unav-brand-icon">📚</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h7"/></svg>
           <span class="unav-brand-text">Stealth Reader</span>
         </div>
         <label for="file-pdf-input" class="unav-btn unav-btn-upload" title="Nạp file PDF, TXT hoặc EPUB (hoặc kéo thả vào trang)">
-          <span class="unav-icon">📂</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <span>Nạp file</span>
         </label>
-        <div class="unav-file-badge" id="univ-file-name" title="Tên tài liệu đang đọc">KPI_Report_Q3_2026.pdf</div>
+        <div class="unav-file-badge" id="univ-file-name" title="Tên tài liệu đang đọc">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="unav-file-name-text">KPI_Report_Q3_2026.pdf</span>
+        </div>
       </div>
 
       <div class="unav-section unav-center">
         <div class="unav-control-group unav-page-nav">
-          <button class="unav-icon-btn" id="univ-btn-prev" title="Trang trước (PageUp)">◀</button>
+          <button class="unav-icon-btn" id="univ-btn-prev" title="Trang trước (PageUp)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
           <span class="unav-indicator" id="univ-page-indicator" title="Trang hiện tại / Tổng số trang">1 / 1</span>
-          <button class="unav-icon-btn" id="univ-btn-next" title="Trang kế (PageDown)">▶</button>
+          <button class="unav-icon-btn" id="univ-btn-next" title="Trang kế (PageDown)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
           <div class="unav-jump-box" title="Nhập số trang và nhấn Enter để nhảy nhanh">
             <input type="number" id="univ-input-jump" min="1" max="1" placeholder="Trang" />
           </div>
@@ -1890,26 +2396,33 @@ function initUniversalNavbar() {
         </div>
 
         <button class="unav-btn unav-btn-autoscroll" id="univ-btn-autoscroll" title="Tự cuộn đọc rảnh tay (Phím Space)">
-          <span class="unav-autoscroll-icon">▶</span>
+          <span class="unav-autoscroll-icon-box">
+            <svg class="unav-autoscroll-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          </span>
           <span class="unav-autoscroll-text">Tự cuộn</span>
+        </button>
+        <button class="unav-btn unav-btn-bookmark" id="univ-btn-bookmark" title="Lưu vị trí đang đọc trên thiết bị này">
+          <svg class="unav-bookmark-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+          <span class="unav-bookmark-text">Đánh dấu</span>
         </button>
       </div>
 
       <div class="unav-section unav-right">
         <button class="unav-btn unav-btn-theme" id="univ-btn-theme" title="Đổi sang giao diện công sở khác">
-          <span class="unav-icon">🎨</span>
-          <span>Đổi theme</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+          <span>Giao diện</span>
         </button>
-        <button class="unav-btn unav-btn-portal" id="univ-btn-portal" title="Trang chủ & Ủng hộ tác giả">
-          <span class="unav-icon">💖</span>
-          <span>Trang chủ & Donate</span>
+        <button class="unav-btn unav-btn-portal" id="univ-btn-portal" title="Về trang chủ">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Trang chủ</span>
         </button>
         <button class="unav-btn unav-btn-boss boss-key-btn" id="univ-btn-boss" title="Khẩn cấp: Báo cáo nhanh / Quay lại (Phím ESC hoặc F2)">
           <span class="boss-badge">ESC</span>
           <span class="unav-boss-text">Báo cáo nhanh</span>
         </button>
         <button class="unav-btn unav-btn-hide stealth-toggle-btn" id="univ-btn-hide" title="Ẩn thanh điều khiển (Phím tắt: H)">
-          <span>👁 Ẩn (H)</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+          <span>Ẩn (H)</span>
         </button>
       </div>
     `;
@@ -1956,6 +2469,9 @@ function initUniversalNavbar() {
   const btnAutoscroll = document.getElementById('univ-btn-autoscroll');
   if (btnAutoscroll) btnAutoscroll.addEventListener('click', toggleAutoScroll);
 
+  const btnBookmark = document.getElementById('univ-btn-bookmark');
+  if (btnBookmark) btnBookmark.addEventListener('click', () => saveCurrentBookmark({ notify: true }));
+
   const btnTheme = document.getElementById('univ-btn-theme');
   if (btnTheme) btnTheme.addEventListener('click', openThemeModal);
 
@@ -1985,7 +2501,11 @@ function initUniversalNavbar() {
 
 function syncUniversalNavbar() {
   const fileBadge = document.getElementById('univ-file-name');
-  if (fileBadge) fileBadge.textContent = state.pdfFileName || 'KPI_Report_Q3_2026.pdf';
+  if (fileBadge) {
+    const fileName = state.pdfFileName || 'KPI_Report_Q3_2026.pdf';
+    fileBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="unav-file-name-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${fileName}</span>`;
+    fileBadge.title = `Tài liệu: ${fileName}`;
+  }
 
   const pageInd = document.getElementById('univ-page-indicator');
   if (pageInd) pageInd.textContent = `${state.currentPage} / ${state.totalPages}`;
@@ -2011,15 +2531,17 @@ function syncUniversalNavbar() {
     const icon = autoscrollBtn.querySelector('.unav-autoscroll-icon');
     const text = autoscrollBtn.querySelector('.unav-autoscroll-text');
     if (state.isAutoScrolling) {
-      if (icon) icon.textContent = '⏸';
+      if (icon) icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
       if (text) text.textContent = 'Tạm dừng';
       autoscrollBtn.classList.add('playing');
     } else {
-      if (icon) icon.textContent = '▶';
+      if (icon) icon.innerHTML = '<polygon points="6 3 20 12 6 21 6 3"/>';
       if (text) text.textContent = 'Tự cuộn';
       autoscrollBtn.classList.remove('playing');
     }
   }
+
+  syncBookmarkButton();
 
   const bossBtn = document.getElementById('univ-btn-boss');
   if (bossBtn) {
@@ -2032,6 +2554,27 @@ function syncUniversalNavbar() {
       bossBtn.classList.remove('boss-active');
     }
   }
+}
+
+function syncBookmarkButton() {
+  const button = document.getElementById('univ-btn-bookmark');
+  if (!button) return;
+
+  const label = button.querySelector('.unav-bookmark-text');
+  const icon = button.querySelector('.unav-bookmark-icon');
+  const bookmark = getCurrentBookmark();
+  const isCurrentPositionSaved = Boolean(
+    bookmark && Number(bookmark.globalIndex) === Number(state.currentGlobalIndex)
+  );
+
+  button.classList.toggle('saved', isCurrentPositionSaved);
+  if (icon) {
+    icon.setAttribute('fill', isCurrentPositionSaved ? 'currentColor' : 'none');
+  }
+  if (label) label.textContent = isCurrentPositionSaved ? `Đã lưu T.${bookmark.page}` : 'Đánh dấu';
+  button.title = bookmark
+    ? `Vị trí gần nhất: trang ${bookmark.page}, dòng ${Number(bookmark.globalIndex) + 1}. Bấm để cập nhật.`
+    : 'Lưu vị trí đang đọc trên thiết bị này';
 }
 
 // ==========================================================
@@ -2718,10 +3261,10 @@ function handleFileSelect(e) {
 const PDF_INITIAL_PAGE_COUNT = 5;
 const PDF_EXTRACTION_CONCURRENCY = 4;
 const TEXT_CHUNKS_PER_PAGE = 80;
-const MAX_DOCUMENT_SIZE = 100 * 1024 * 1024;
+const MAX_DOCUMENT_SIZE = 200 * 1024 * 1024;
 const MAX_EPUB_ENTRIES = 5000;
-const MAX_EPUB_TEXT_LENGTH = 30 * 1024 * 1024;
-const MAX_EPUB_UNCOMPRESSED_SIZE = 150 * 1024 * 1024;
+const MAX_EPUB_TEXT_LENGTH = 60 * 1024 * 1024;
+const MAX_EPUB_UNCOMPRESSED_SIZE = 300 * 1024 * 1024;
 let pdfBackendAvailable = null;
 
 function getDocumentExtension(file) {
@@ -2739,6 +3282,7 @@ function prepareDocumentLoad(file) {
   state.isPdfProcessing = true;
   state.loadedPages = 0;
   state.pdfFileName = file.name;
+  state.documentId = createDocumentId(file);
   showLoading('Đang đồng bộ dữ liệu vào hệ thống...');
 
   const univFileName = document.getElementById('univ-file-name');
@@ -2769,7 +3313,7 @@ function validateDocumentFile(file) {
     throw new Error('Chỉ hỗ trợ file PDF, TXT hoặc EPUB.');
   }
   if (file.size > MAX_DOCUMENT_SIZE) {
-    throw new Error('File lớn hơn 100 MB. Hãy chọn file nhỏ hơn để tránh trình duyệt bị treo.');
+    throw new Error('File lớn hơn 200 MB. Hãy chọn file nhỏ hơn để tránh trình duyệt bị treo.');
   }
 }
 
@@ -2963,7 +3507,7 @@ async function processEpubFile(file) {
       return total + size;
     }, 0);
     if (knownUncompressedSize > MAX_EPUB_UNCOMPRESSED_SIZE) {
-      throw new Error('Dung lượng EPUB sau giải nén vượt quá giới hạn 150 MB.');
+      throw new Error('Dung lượng EPUB sau giải nén vượt quá giới hạn 300 MB.');
     }
 
     const containerEntry = zip.file('META-INF/container.xml');
@@ -3010,7 +3554,7 @@ async function processEpubFile(file) {
       const chapterHtml = await chapterEntry.async('string');
       totalTextLength += chapterHtml.length;
       if (totalTextLength > MAX_EPUB_TEXT_LENGTH) {
-        throw new Error('Nội dung EPUB sau giải nén vượt quá giới hạn 30 MB.');
+        throw new Error('Nội dung EPUB sau giải nén vượt quá giới hạn 60 MB.');
       }
 
       updateEpubStatus(`Đang tách văn bản chương ${index + 1} / ${spinePaths.length}`);
@@ -3249,9 +3793,10 @@ function initProgressiveStory(initialPages, totalPages) {
   state.firstStoryPage = startPage;
   state.currentPage = startPage;
   state.currentGlobalIndex = startIdx;
+  restoreSavedReadingPosition(false);
 
   applyTheme(state.theme);
-  renderContinuousView(false, startIdx);
+  renderContinuousView(false, state.currentGlobalIndex);
   saveState();
   persistDocumentCache().catch(() => {});
   if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
@@ -3277,6 +3822,10 @@ async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken
   if (loadToken !== state.pdfLoadToken) return;
   state.isPdfProcessing = false;
   updatePaginationUI();
+  if (restoreSavedReadingPosition(false)) {
+    renderContinuousView(false, state.currentGlobalIndex);
+    setTimeout(() => restoreSavedReadingPosition(true), 0);
+  }
   showBanner(`Đã nạp thành công toàn bộ <b>${totalPages}</b> trang sách!`);
   saveState();
   persistDocumentCache().catch(() => {});
@@ -3454,12 +4003,16 @@ function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
   const startIdx = state.pageStartIndices[startPage] || 0;
   state.currentPage = startPage;
   state.currentGlobalIndex = startIdx;
+  const restoredBookmark = restoreSavedReadingPosition(false);
 
   applyTheme(state.theme);
-  renderContinuousView(false, startIdx);
+  renderContinuousView(false, state.currentGlobalIndex);
   saveState();
   persistDocumentCache().catch(() => {});
   if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
+  if (restoredBookmark) {
+    setTimeout(() => restoreSavedReadingPosition(true), 0);
+  }
 }
 
 function initStoryFromChunks(chunks) {
@@ -3530,6 +4083,7 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
   renderNextBatch(initialBatchCount);
 
   // Focus and scroll to active row
+  suppressScrollSyncUntil = Date.now() + 1500;
   setActiveRow(targetIdx, true);
   updatePaginationUI();
 }
@@ -4449,6 +5003,7 @@ function initContinuousScrollListeners() {
         if (!isNaN(idx) && idx !== state.currentGlobalIndex) {
           state.currentGlobalIndex = idx;
           updateReadingProgressStatus(idx);
+          scheduleSaveState();
         }
       }
     });
