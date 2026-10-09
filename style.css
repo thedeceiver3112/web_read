@@ -1249,22 +1249,9 @@ kbd { background-color: #fbf7ee; border: 1.5px solid #c7b79e; border-bottom: 2.5
 /* ==================================================
    CONTINUOUS / INFINITE READING STYLES
    ================================================== */
+tr.section-break-row,
 tr.section-break-row td {
-  background-color: #f1f3f4 !important;
-  color: #5f6368 !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  padding: 4px 12px !important;
-  border-top: 1px dashed #c0c4c9 !important;
-  border-bottom: 1px dashed #c0c4c9 !important;
-  user-select: none;
-  letter-spacing: 0.3px;
-}
-body.theme-excel tr.section-break-row td {
-  background-color: #edebe9 !important;
-  color: #323130 !important;
-  border-top: 1px dashed #a19f9d !important;
-  border-bottom: 1px dashed #a19f9d !important;
+  display: none !important;
 }
 .section-break-content {
   display: flex;

@@ -6336,25 +6336,6 @@ function appendSpreadsheetBatch(count) {
   for (let i = start; i < end; i++) {
     const chunk = state.allChunks[i];
 
-    // Page divider row when entering a new page
-    if (chunk.indexInPage === 0 && chunk.page > 1) {
-      const sepRow = document.createElement('tr');
-      sepRow.className = 'section-break-row';
-      sepRow.id = `page-anchor-${chunk.page}`;
-      sepRow.dataset.page = chunk.page;
-      sepRow.innerHTML = `
-        <td class="row-header">P.${chunk.page}</td>
-        <td colspan="7">
-          <div class="section-break-content">
-            <span class="section-break-badge">TRANG ${chunk.page} / ${state.totalPages}</span>
-            <span>HỆ THỐNG KIỂM TOÁN TẬP TIN DỮ LIỆU — TIẾP TỤC TRANG ${chunk.page}</span>
-            <span style="font-size: 10px; opacity: 0.65; margin-left: auto;">OFFSET #${chunk.globalIndex + 1}</span>
-          </div>
-        </td>
-      `;
-      fragment.appendChild(sepRow);
-    }
-
     const row = document.createElement('tr');
     row.id = `story-row-${chunk.globalIndex}`;
     row.dataset.index = chunk.globalIndex;

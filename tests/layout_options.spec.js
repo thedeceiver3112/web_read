@@ -72,5 +72,12 @@ test.describe('Layout & Line Customizer Options', () => {
 
     await expect(toolsModal.locator('.reader-tools-preview-box')).toBeVisible();
     await page.screenshot({ path: 'tests/reader_tools_layout_tab.png' });
+
+    // 6. Verify section-break-row is never rendered in Google Sheets
+    await expect(page.locator('.section-break-row')).toHaveCount(0);
+
+    // 7. Switch to Excel theme and verify section-break-row is also absent
+    await page.goto('/excel.html');
+    await expect(page.locator('.section-break-row')).toHaveCount(0);
   });
 });
