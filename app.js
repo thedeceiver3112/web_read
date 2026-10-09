@@ -44,7 +44,12 @@ const state = {
   currentGlobalIndex: 0,
   
   readingMode: 'grid', // 'grid' | 'formula'
-  chunkMode: 'paragraph',
+  chunkMode: 'paragraph', // 'line' | 'paragraph' | 'sentence'
+  layoutMode: 'exact', // 'exact' (giữ nguyên dòng gốc) | 'wrap' (tự co giãn) | 'custom' (cố định số chữ)
+  maxCharsPerLine: 80,
+  preserveIndents: true,
+  compactBlankLines: false,
+  rawText: '',
   isAutoScrolling: false,
   autoScrollInterval: null,
   autoScrollDelay: 5000,
@@ -56,7 +61,7 @@ const state = {
   isBold: false,
   isItalic: false,
   textDimLevel: 100,
-  wrapText: true,
+  wrapText: false,
   
   // Stealth disguise titles (persisted in localStorage)
   gsheetTitle: localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3',
@@ -226,7 +231,9 @@ const THEME_PAGES = {
   'theme-revit': 'revit.html',
   'theme-misa': 'misa.html',
   'theme-capcut': 'capcut.html',
-  'theme-sap': 'sap.html'
+  'theme-sap': 'sap.html',
+  'theme-gmail': 'gmail.html',
+  'theme-outlook': 'outlook.html'
 };
 
 // Single source of truth for per-page control id prefixes.
@@ -234,7 +241,7 @@ const THEME_PAGES = {
 // To add a theme, add its prefix here instead of editing every id list.
 const THEME_CONTROL_PREFIXES = [
   'gs', 'gdocs', 'excel', 'vsc', 'ps', 'blender', 'linkedin',
-  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap'
+  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook'
 ];
 
 function themeControlIds(suffix) {
@@ -476,6 +483,8 @@ function getThemeForCurrentPage() {
   if (path.endsWith('misa.html')) return 'theme-misa';
   if (path.endsWith('capcut.html')) return 'theme-capcut';
   if (path.endsWith('sap.html')) return 'theme-sap';
+  if (path.endsWith('gmail.html')) return 'theme-gmail';
+  if (path.endsWith('outlook.html')) return 'theme-outlook';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -546,6 +555,27 @@ async function writeDocumentCache(payload) {
   }
 }
 
+async function setActiveDocumentCache(docId) {
+  const database = await openDocumentCacheDatabase();
+  try {
+    await new Promise((resolve, reject) => {
+      const transaction = database.transaction(DOCUMENT_CACHE_STORE_NAME, 'readwrite');
+      const store = transaction.objectStore(DOCUMENT_CACHE_STORE_NAME);
+      const documentRecordId = `document:${docId}`;
+      store.put({
+        id: ACTIVE_DOCUMENT_CACHE_KEY,
+        documentRecordId,
+        documentId: docId,
+        savedAt: Date.now()
+      });
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error || new Error('Không thể cập nhật tài liệu hoạt động.'));
+    });
+  } finally {
+    database.close();
+  }
+}
+
 async function readDocumentCache() {
   const database = await openDocumentCacheDatabase();
   try {
@@ -583,7 +613,8 @@ async function listDocumentCaches() {
       const existing = unique.get(record.documentId);
       if (!existing || (record.savedAt || 0) > (existing.savedAt || 0)) unique.set(record.documentId, record);
     });
-    return [...unique.values()].sort((left, right) => (right.savedAt || 0) - (left.savedAt || 0));
+    const getOrderTime = (r) => (r.createdAt || r.savedAt || 0);
+    return [...unique.values()].sort((left, right) => getOrderTime(right) - getOrderTime(left));
   } finally {
     database.close();
   }
@@ -641,6 +672,8 @@ function applyCachedDocument(cache) {
     state.allChunks.length - 1
   );
   state.currentPage = state.allChunks[state.currentGlobalIndex]?.page || 1;
+  state.documentCreatedAt = cache.createdAt || cache.savedAt || Date.now();
+  state.rawText = cache.rawText || state.allChunks.map(c => c.text).join('\n');
   restoreSavedReadingPosition(false);
 
   const univFileName = document.getElementById('univ-file-name');
@@ -666,11 +699,13 @@ function persistDocumentCache() {
     documentName: state.pdfFileName,
     documentId: getCurrentDocumentId(),
     chunks: state.allChunks,
+    rawText: state.rawText || state.allChunks.map(c => c.text).join('\n'),
     pageStartIndices: state.pageStartIndices,
     documentToc: state.documentToc,
     totalPages: state.totalPages,
     currentPage: state.currentPage,
     currentGlobalIndex: state.currentGlobalIndex,
+    createdAt: state.documentCreatedAt || Date.now(),
     savedAt: Date.now()
   };
 
@@ -770,6 +805,8 @@ const FAVICONS = {
   'theme-misa': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20d%3D%22M24%203L38%2017L28%2024L24%2016L20%2024L10%2017L24%203Z%22%20fill%3D%22%23E51937%22/%3E%3Cpath%20d%3D%22M45%2024L31%2038L24%2028L32%2024L24%2020L31%2010L45%2024Z%22%20fill%3D%22%23FF9800%22/%3E%3Cpath%20d%3D%22M24%2045L10%2031L20%2024L24%2032L28%2024L38%2031L24%2045Z%22%20fill%3D%22%231976D2%22/%3E%3Cpath%20d%3D%22M3%2024L17%2010L24%2020L16%2024L24%2028L17%2038L3%2024Z%22%20fill%3D%22%234CAF50%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%225%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
   'theme-capcut': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%23000000%22/%3E%3Cpath%20d%3D%22M10%2014L22%2022V26L10%2034V14Z%22%20fill%3D%22%2300F2FE%22/%3E%3Cpath%20d%3D%22M38%2014L26%2022V26L38%2034V14Z%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
   'theme-sap': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%2300386B%22/%3E%3Cpath%20d%3D%22M10%2012h28l-8%2024H2l8-24z%22%20fill%3D%22%23007DB8%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%2231%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2216%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%221%22%3ESAP%3C/text%3E%3C/svg%3E",
+  'theme-gmail': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2038.5V13.8L24%2027.5l19.5-13.7v24.7c0%202.2-1.8%204-4%204H8.5c-2.2%200-4-1.8-4-4z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M43.5%2013.8v24.7c0%202.2-1.8%204-4%204h-5V20.5l9-6.7z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2013.8v24.7c0%202.2%201.8%204%204%204h5V20.5l-9-6.7z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M13.5%205.5L24%2014.5l10.5-9h-21z%22/%3E%3Cpath%20fill%3D%22%23FBBC05%22%20d%3D%22M4.5%209.5C4.5%207.3%206.3%205.5%208.5%205.5h5l-9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23C5221F%22%20d%3D%22M43.5%209.5c0-2.2-1.8-4-4-4h-5l9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M4.5%2013.8L24%2027.5%2043.5%2013.8%2024%2029%204.5%2013.8z%22/%3E%3C/svg%3E",
+  'theme-outlook': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2214%22%20y%3D%228%22%20width%3D%2228%22%20height%3D%2232%22%20rx%3D%224%22%20fill%3D%22%230078D4%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10v22a4%204%200%200%201-4%204H18a4%204%200%200%201-4-4V14z%22%20fill%3D%22%2328A8EA%22%20opacity%3D%220.6%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Crect%20x%3D%226%22%20y%3D%2212%22%20width%3D%2222%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23005A9E%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2224%22%20r%3D%226.5%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223.2%22/%3E%3C/svg%3E",
 };
 
 // ==========================================================
@@ -869,6 +906,7 @@ function initReaderToolsUI() {
         <button data-reader-tab="bookmarks">Dấu trang</button>
         <button data-reader-tab="toc">Mục lục</button>
         <button data-reader-tab="search">Tìm kiếm</button>
+        <button data-reader-tab="layout">Bố cục dòng</button>
       </nav>
       <div class="reader-tools-content" id="reader-tools-content"></div>
     </section>`;
@@ -913,7 +951,205 @@ async function renderReaderToolsPanel(tab = 'search') {
   if (tab === 'library') return renderDocumentLibrary(content);
   if (tab === 'bookmarks') return renderBookmarksPanel(content);
   if (tab === 'toc') return renderTocPanel(content);
+  if (tab === 'layout') return renderLayoutToolsPanel(content);
   renderSearchPanel(content);
+}
+
+function renderLayoutToolsPanel(content) {
+  const isExact = state.layoutMode === 'exact';
+  const isWrap = state.layoutMode === 'wrap';
+  const isCustom = state.layoutMode === 'custom';
+
+  const fonts = ['Arial', 'Calibri', 'Consolas, monospace', 'Roboto', 'Times New Roman'];
+  const lineHeights = [
+    { val: '1.2', label: '1.2x (Chặt)' },
+    { val: '1.5', label: '1.5x (Vừa)' },
+    { val: '1.75', label: '1.75x (Chuẩn)' },
+    { val: '2.0', label: '2.0x (Thưa)' }
+  ];
+
+  const sampleLines = [
+    'Chương 1: Bình minh trên con phố nhỏ tĩnh lặng',
+    'Một cơn gió thu nhè nhẹ thoảng qua từng hàng cây xào xạc trong sớm mai.',
+    'Báo cáo số liệu quý 3 năm 2026 — Kiểm toán hệ thống dữ liệu doanh nghiệp.'
+  ];
+
+  const previewWhiteSpace = (isExact || !state.wrapText) ? (state.preserveIndents ? 'pre' : 'nowrap') : 'normal';
+
+  content.innerHTML = `
+    <div class="reader-tools-toolbar" style="flex-direction:column; align-items:stretch; gap:6px; margin-bottom:12px;">
+      <strong style="font-size:13px; color:#0f172a;">Tùy chỉnh bố cục dòng & ngắt chữ</strong>
+      <small style="color:#64748b;">Chọn chế độ hiển thị phù hợp để chữ không bị xê dịch, nhảy dòng hoặc ngụy trang hoàn hảo.</small>
+    </div>
+
+    <div class="unav-layout-dropdown-content" style="padding:0; max-height:none; background:transparent;">
+      <!-- 1. Chế độ ngắt dòng -->
+      <div class="unav-layout-section">
+        <div class="unav-layout-section-label" style="color:#475569;">1. Chế độ hiển thị & ngắt dòng</div>
+        
+        <div class="unav-layout-card-option ${isExact ? 'active' : ''}" data-tool-layout-mode="exact">
+          <div class="unav-layout-card-title">
+            <span class="unav-dropdown-check">${isExact ? '✓' : '○'}</span>
+            <strong>Giữ nguyên 100% dòng gốc (Khuyên dùng)</strong>
+          </div>
+          <div class="unav-layout-card-desc">1 dòng trong file = đúng 1 dòng đọc. Chữ giữ nguyên hàng, không bao giờ bị xê dịch hay rớt xuống dòng.</div>
+        </div>
+
+        <div class="unav-layout-card-option ${isWrap ? 'active' : ''}" data-tool-layout-mode="wrap">
+          <div class="unav-layout-card-title">
+            <span class="unav-dropdown-check">${isWrap ? '✓' : '○'}</span>
+            <strong>Tự động xuống dòng (Wrap Text)</strong>
+          </div>
+          <div class="unav-layout-card-desc">Tự ngắt dòng khi chạm mép khung/cột để chữ vừa khít chiều rộng màn hình.</div>
+        </div>
+
+        <div class="unav-layout-card-option ${isCustom ? 'active' : ''}" data-tool-layout-mode="custom">
+          <div class="unav-layout-card-title">
+            <span class="unav-dropdown-check">${isCustom ? '✓' : '○'}</span>
+            <strong>Cố định số chữ trên 1 dòng</strong>
+          </div>
+          <div class="unav-layout-card-desc">Ngắt dòng cứng theo giới hạn số ký tự tối đa:</div>
+          <div class="unav-layout-pills-row">
+            ${[50, 70, 80, 100, 120].map(cnt => `
+              <button class="unav-layout-pill-btn ${state.maxCharsPerLine === cnt ? 'active' : ''}" data-tool-max-chars="${cnt}">${cnt} chữ</button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Cơ chế phân dòng -->
+      <div class="unav-layout-section" style="margin-top:10px;">
+        <div class="unav-layout-section-label" style="color:#475569;">2. Phân tách dòng đọc</div>
+        <div class="unav-layout-pills-row" style="margin-left:0;">
+          <button class="unav-layout-pill-btn ${state.chunkMode === 'line' ? 'active' : ''}" data-tool-chunk-mode="line">Từng dòng gốc (Line-by-line)</button>
+          <button class="unav-layout-pill-btn ${state.chunkMode === 'paragraph' ? 'active' : ''}" data-tool-chunk-mode="paragraph">Từng đoạn văn</button>
+          <button class="unav-layout-pill-btn ${state.chunkMode === 'sentence' ? 'active' : ''}" data-tool-chunk-mode="sentence">Từng câu</button>
+        </div>
+      </div>
+
+      <!-- 3. Khoảng cách & Thụt lề -->
+      <div class="unav-layout-section" style="margin-top:10px;">
+        <div class="unav-layout-section-label" style="color:#475569;">3. Khoảng cách & Thụt lề</div>
+        <label class="unav-layout-checkbox-item" style="color:#334155;">
+          <input type="checkbox" id="tool-chk-indents" ${state.preserveIndents ? 'checked' : ''} />
+          <span>Giữ nguyên thụt lề đầu dòng (Indents / Tabs / Khoảng trắng gốc)</span>
+        </label>
+        <label class="unav-layout-checkbox-item" style="color:#334155;">
+          <input type="checkbox" id="tool-chk-compact-blanks" ${state.compactBlankLines ? 'checked' : ''} />
+          <span>Lược bỏ dòng trống liên tiếp</span>
+        </label>
+      </div>
+
+      <!-- 4. Typography -->
+      <div class="unav-layout-section" style="margin-top:10px;">
+        <div class="unav-layout-section-label" style="color:#475569;">4. Font chữ & Giãn dòng</div>
+        <div class="unav-layout-grid-select">
+          <div class="unav-layout-select-group">
+            <span class="unav-layout-select-label" style="color:#64748b;">Phông chữ:</span>
+            <select class="unav-layout-select" id="tool-sel-font">
+              ${fonts.map(f => `<option value="${f}" ${state.fontFamily === f ? 'selected' : ''}>${f.includes('monospace') ? 'Monospace (Thẳng cột)' : f}</option>`).join('')}
+            </select>
+          </div>
+          <div class="unav-layout-select-group">
+            <span class="unav-layout-select-label" style="color:#64748b;">Giãn dòng:</span>
+            <select class="unav-layout-select" id="tool-sel-lineheight">
+              ${lineHeights.map(lh => `<option value="${lh.val}" ${state.lineHeight === lh.val ? 'selected' : ''}>${lh.label}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Live preview -->
+      <div class="unav-layout-section" style="margin-top:12px;">
+        <div class="unav-layout-section-label" style="color:#475569;">Vùng xem trước (Live Preview)</div>
+        <div class="reader-tools-preview-box" style="white-space: ${previewWhiteSpace}; font-family: ${state.fontFamily}; font-size: ${state.fontSize}pt; line-height: ${state.lineHeight};">
+          ${sampleLines.map(l => `<div>${escapeHtml(l)}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Attach handlers
+  content.querySelectorAll('[data-tool-layout-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.toolLayoutMode;
+      state.layoutMode = mode;
+      state.wrapText = (mode === 'wrap');
+      if (mode === 'custom' || state.chunkMode === 'line') rechunkActiveDocument();
+      applyStyles();
+      saveState();
+      syncUniversalNavbar();
+      renderLayoutToolsPanel(content);
+      showPageFlipToast(mode === 'exact' ? 'Đã bật: Giữ nguyên 100% dòng gốc' : (mode === 'wrap' ? 'Đã bật: Tự động xuống dòng' : `Đã đặt: ${state.maxCharsPerLine} chữ/dòng`));
+    });
+  });
+
+  content.querySelectorAll('[data-tool-max-chars]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.layoutMode = 'custom';
+      state.maxCharsPerLine = Number(btn.dataset.toolMaxChars);
+      state.wrapText = false;
+      rechunkActiveDocument();
+      applyStyles();
+      saveState();
+      syncUniversalNavbar();
+      renderLayoutToolsPanel(content);
+    });
+  });
+
+  content.querySelectorAll('[data-tool-chunk-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.toolChunkMode;
+      state.chunkMode = mode;
+      rechunkActiveDocument();
+      applyStyles();
+      saveState();
+      syncUniversalNavbar();
+      renderLayoutToolsPanel(content);
+      showPageFlipToast(`Đã chuyển sang phân đoạn: ${mode === 'line' ? 'Từng dòng' : (mode === 'sentence' ? 'Từng câu' : 'Từng đoạn')}`);
+    });
+  });
+
+  const chkIndents = content.querySelector('#tool-chk-indents');
+  if (chkIndents) {
+    chkIndents.addEventListener('change', () => {
+      state.preserveIndents = chkIndents.checked;
+      applyStyles();
+      saveState();
+      renderLayoutToolsPanel(content);
+    });
+  }
+
+  const chkCompact = content.querySelector('#tool-chk-compact-blanks');
+  if (chkCompact) {
+    chkCompact.addEventListener('change', () => {
+      state.compactBlankLines = chkCompact.checked;
+      rechunkActiveDocument();
+      saveState();
+      renderLayoutToolsPanel(content);
+    });
+  }
+
+  const selFont = content.querySelector('#tool-sel-font');
+  if (selFont) {
+    selFont.addEventListener('change', () => {
+      state.fontFamily = selFont.value;
+      applyStyles();
+      saveState();
+      renderLayoutToolsPanel(content);
+    });
+  }
+
+  const selLineHeight = content.querySelector('#tool-sel-lineheight');
+  if (selLineHeight) {
+    selLineHeight.addEventListener('change', () => {
+      state.lineHeight = selLineHeight.value;
+      applyStyles();
+      saveState();
+      renderLayoutToolsPanel(content);
+    });
+  }
 }
 
 async function renderDocumentLibrary(content) {
@@ -1131,7 +1367,12 @@ function loadSavedState() {
       state.readingMode = (state.theme === 'theme-googlesheets') ? 'grid' : (data.readingMode || 'grid');
       state.autoScrollDelay = data.autoScrollDelay || 5000;
       state.textDimLevel = data.textDimLevel || 100;
-      state.wrapText = data.wrapText !== undefined ? data.wrapText : true;
+      state.wrapText = data.wrapText !== undefined ? data.wrapText : false;
+      state.layoutMode = data.layoutMode || (state.wrapText ? 'wrap' : 'exact');
+      state.chunkMode = data.chunkMode || 'paragraph';
+      state.maxCharsPerLine = data.maxCharsPerLine || 80;
+      state.preserveIndents = data.preserveIndents !== undefined ? data.preserveIndents : true;
+      state.compactBlankLines = data.compactBlankLines !== undefined ? data.compactBlankLines : false;
       state.pdfFileName = data.pdfFileName || '';
       state.documentId = data.documentId || '';
       if (data.currentGlobalIndex !== undefined) state.currentGlobalIndex = data.currentGlobalIndex;
@@ -1177,7 +1418,12 @@ function saveState() {
       readingMode: state.readingMode,
       autoScrollDelay: state.autoScrollDelay,
       textDimLevel: state.textDimLevel,
-      wrapText: state.wrapText,
+      wrapText: state.layoutMode === 'wrap',
+      layoutMode: state.layoutMode,
+      chunkMode: state.chunkMode,
+      maxCharsPerLine: state.maxCharsPerLine,
+      preserveIndents: state.preserveIndents,
+      compactBlankLines: state.compactBlankLines,
       currentPage: state.currentPage,
       currentGlobalIndex: state.currentGlobalIndex,
       pdfFileName: state.pdfFileName,
@@ -1995,6 +2241,36 @@ function getThemePickerModalHTML() {
               <span class="theme-card-title">SAP GUI</span>
               <div class="theme-card-check">✓</div>
             </div>
+            <!-- Theme 22: Gmail -->
+            <div class="theme-card" data-theme="theme-gmail">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48">
+                  <path fill="#4285F4" d="M4.5 38.5V13.8L24 27.5l19.5-13.7v24.7c0 2.2-1.8 4-4 4H8.5c-2.2 0-4-1.8-4-4z"/>
+                  <path fill="#34A853" d="M43.5 13.8v24.7c0 2.2-1.8 4-4 4h-5V20.5l9-6.7z"/>
+                  <path fill="#4285F4" d="M4.5 13.8v24.7c0 2.2 1.8 4 4 4h5V20.5l-9-6.7z"/>
+                  <path fill="#EA4335" d="M13.5 5.5L24 14.5l10.5-9h-21z"/>
+                  <path fill="#FBBC05" d="M4.5 9.5C4.5 7.3 6.3 5.5 8.5 5.5h5l-9 8.3v-4.3z"/>
+                  <path fill="#C5221F" d="M43.5 9.5c0-2.2-1.8-4-4-4h-5l9 8.3v-4.3z"/>
+                  <path fill="#EA4335" d="M4.5 13.8L24 27.5 43.5 13.8 24 29 4.5 13.8z"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Gmail</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+            <!-- Theme 23: Outlook -->
+            <div class="theme-card" data-theme="theme-outlook">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48">
+                  <rect x="14" y="8" width="28" height="32" rx="4" fill="#0078D4"/>
+                  <path d="M14 14l14 10 14-10v22a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V14z" fill="#28A8EA" opacity="0.6"/>
+                  <path d="M14 14l14 10 14-10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="6" y="12" width="22" height="24" rx="4" fill="#005A9E"/>
+                  <circle cx="17" cy="24" r="6.5" fill="none" stroke="#FFFFFF" stroke-width="3.2"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Outlook</span>
+              <div class="theme-card-check">✓</div>
+            </div>
           </div>
         </div>
         <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
@@ -2267,6 +2543,16 @@ function applyTheme(themeName) {
     setDocumentTitle(`SAP GUI for Windows 8.0 - [ME23N - ${docTitle}]`);
     const spTitle = document.getElementById('sap-doc-title');
     if (spTitle) spTitle.textContent = docTitle;
+  } else if (themeName === 'theme-gmail') {
+    const docTitle = state.gmailTitle || '[Kế hoạch Sprint Q3] Báo cáo tiến độ phân tích & đặc tả yêu cầu hệ thống';
+    setDocumentTitle(`Hộp thư đến (14) - minhquan.techlead@gmail.com - Gmail`);
+    const gmTitle = document.getElementById('gmail-doc-title');
+    if (gmTitle) gmTitle.textContent = docTitle;
+  } else if (themeName === 'theme-outlook') {
+    const docTitle = state.outlookTitle || '[Dự án 2026] Báo cáo tiến độ phân tích hệ thống & tài liệu đặc tả';
+    setDocumentTitle(`Hộp thư đến - minhquan@outlook.com - Outlook`);
+    const olTitle = document.getElementById('outlook-doc-title');
+    if (olTitle) olTitle.textContent = docTitle;
   }
 
   applyStyles();
@@ -2764,65 +3050,316 @@ function shakePortalUpload() {
   }, 500);
 }
 
-function updatePortalUploadUI() {
-  const uploadCard = document.getElementById('portal-upload-card') || document.querySelector('.duo-upload-quest');
-  const badgeText = document.getElementById('portal-upload-badge-text');
-  const nameLabel = document.getElementById('portal-pdf-filename');
-  const statusPill = document.getElementById('portal-upload-status-pill');
-  const hintLabel = document.getElementById('portal-upload-hint');
-  const btnText = document.getElementById('portal-upload-btn-text');
+function showPortalUploadProgress(title, detail = 'Đang đọc dữ liệu...', percent = 0) {
+  const progressBox = document.getElementById('portal-upload-progress');
+  const titleEl = document.getElementById('portal-progress-title');
+  const detailEl = document.getElementById('portal-progress-detail');
+  const percentEl = document.getElementById('portal-progress-percent');
+  const fillEl = document.getElementById('portal-progress-fill');
   const enterBtn = document.getElementById('btn-portal-enter');
 
-  const hasDoc = hasLoadedDocument();
+  if (progressBox) progressBox.style.display = 'flex';
+  if (titleEl) titleEl.textContent = title;
+  if (detailEl) detailEl.textContent = detail;
+  const safePercent = Math.min(100, Math.max(0, Number(percent) || 0));
+  if (percentEl) percentEl.textContent = `${Math.round(safePercent)}%`;
+  if (fillEl) fillEl.style.width = `${safePercent}%`;
+
+  if (enterBtn) {
+    enterBtn.classList.remove('ready');
+    enterBtn.classList.add('disabled-need-file');
+    enterBtn.innerHTML = `<div class="portal-btn-spinner"></div> <span>Đang nạp truyện (${Math.round(safePercent)}%)...</span>`;
+  }
+}
+
+function updatePortalUploadProgress(percent, detail = '') {
+  const percentEl = document.getElementById('portal-progress-percent');
+  const fillEl = document.getElementById('portal-progress-fill');
+  const detailEl = document.getElementById('portal-progress-detail');
+  const enterBtn = document.getElementById('btn-portal-enter');
+
+  const safePercent = Math.min(100, Math.max(0, Number(percent) || 0));
+  if (percentEl) percentEl.textContent = `${Math.round(safePercent)}%`;
+  if (fillEl) fillEl.style.width = `${safePercent}%`;
+  if (detail && detailEl) detailEl.textContent = detail;
+
+  if (enterBtn && enterBtn.querySelector('.portal-btn-spinner')) {
+    const span = enterBtn.querySelector('span');
+    if (span) span.textContent = `Đang nạp truyện (${Math.round(safePercent)}%)...`;
+  }
+}
+
+function hidePortalUploadProgress() {
+  const progressBox = document.getElementById('portal-upload-progress');
+  if (progressBox) progressBox.style.display = 'none';
+}
+
+async function selectPortalBook(docId) {
+  if (docId === getCurrentDocumentId()) return;
+  try {
+    const cache = await readDocumentCacheById(docId);
+    if (!cache || !isValidCachedDocument(cache)) {
+      showReaderError('Không thể mở truyện', 'Dữ liệu truyện trong bộ nhớ bị lỗi hoặc không đầy đủ.');
+      return;
+    }
+    applyCachedDocument(cache);
+    await setActiveDocumentCache(docId);
+    saveState();
+
+    // Cập nhật giao diện tại chỗ (in-place) để giữ nguyên vị trí, không đảo lộn danh sách
+    const container = document.getElementById('portal-upload-content');
+    if (container) {
+      container.querySelectorAll('.portal-book-item').forEach(item => {
+        const itemId = item.getAttribute('data-doc-id');
+        const isCurrent = itemId === docId;
+        item.classList.toggle('selected', isCurrent);
+
+        const radio = item.querySelector('.portal-book-radio');
+        if (radio) {
+          radio.innerHTML = isCurrent
+            ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+            : '';
+        }
+
+        const pill = item.querySelector('.portal-book-pill');
+        if (pill) {
+          pill.classList.toggle('active', isCurrent);
+          pill.textContent = isCurrent ? 'Đang chọn' : 'Chọn đọc';
+        }
+      });
+    }
+
+    const enterBtn = document.getElementById('btn-portal-enter');
+    if (enterBtn) {
+      enterBtn.classList.remove('disabled-need-file');
+      enterBtn.classList.add('ready');
+      enterBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 1 3-3h7z"/></svg> <span>Bắt Đầu Đọc Ngay</span>`;
+      enterBtn.title = `Bắt đầu đọc: ${state.pdfFileName || 'Truyện đã chọn'}`;
+    }
+
+    const portalNameLabel = document.getElementById('portal-pdf-filename');
+    if (portalNameLabel) {
+      portalNameLabel.textContent = state.pdfFileName || '';
+    }
+
+    showPageFlipToast(`Đã chọn: ${state.pdfFileName}`);
+  } catch (err) {
+    console.error('Lỗi khi chuyển truyện:', err);
+    showReaderError('Lỗi', 'Không thể chuyển sang truyện đã chọn.');
+  }
+}
+
+async function deletePortalBook(docId, docTitle) {
+  if (!window.confirm(`Bạn có chắc muốn xóa truyện "${docTitle || 'này'}" khỏi danh sách?`)) {
+    return;
+  }
+  try {
+    await deleteDocumentCache(docId);
+    showPageFlipToast('Đã xóa truyện khỏi danh sách.');
+
+    if (docId === getCurrentDocumentId()) {
+      const remaining = await listDocumentCaches();
+      if (remaining.length > 0) {
+        const nextCache = await readDocumentCacheById(remaining[0].documentId);
+        if (nextCache && isValidCachedDocument(nextCache)) {
+          applyCachedDocument(nextCache);
+          await persistDocumentCache();
+          saveState();
+        }
+      } else {
+        state.documentId = '';
+        state.pdfFileName = '';
+        state.allChunks = [];
+        state.totalPages = 0;
+        state.documentToc = [];
+        state.pageStartIndices = { 1: 0 };
+        sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
+        saveState();
+      }
+    }
+  } catch (err) {
+    console.error('Lỗi khi xóa truyện:', err);
+    showPageFlipToast('⚠️ Không thể xóa truyện.');
+  } finally {
+    await updatePortalUploadUI();
+  }
+}
+
+async function updatePortalUploadUI() {
+  const uploadCard = document.getElementById('portal-upload-card') || document.querySelector('.duo-upload-quest');
+  const enterBtn = document.getElementById('btn-portal-enter');
+  if (!uploadCard && !enterBtn) return;
+
+  let records = [];
+  try {
+    records = await listDocumentCaches();
+  } catch (e) {
+    console.warn('Không thể đọc danh sách truyện:', e);
+  }
+
+  // If there are cached records, but no active document loaded in state, load latest
+  if (records.length > 0 && !hasLoadedDocument()) {
+    try {
+      const activeCache = await readDocumentCacheById(records[0].documentId);
+      if (activeCache && isValidCachedDocument(activeCache)) {
+        applyCachedDocument(activeCache);
+      }
+    } catch (e) {
+      console.warn('Lỗi khi tải truyện gần nhất:', e);
+    }
+  }
+
+  const hasDoc = hasLoadedDocument() || records.length > 0;
+  const currentDocId = getCurrentDocumentId();
 
   if (uploadCard) {
     uploadCard.classList.toggle('has-doc', hasDoc);
     uploadCard.classList.toggle('no-doc', !hasDoc);
   }
 
-  if (hasDoc) {
-    if (badgeText) badgeText.textContent = 'ĐÃ NẠP TRUYỆN THÀNH CÔNG';
-    if (nameLabel) {
-      nameLabel.textContent = state.pdfFileName || 'Tài liệu đã nạp';
-      nameLabel.title = state.pdfFileName || '';
-    }
-    if (statusPill) {
-      statusPill.textContent = 'Sẵn sàng đọc';
-    }
-    if (hintLabel) {
-      const pageInfo = state.totalPages > 1 ? ` (${state.totalPages} trang)` : '';
-      hintLabel.textContent = `Đã lưu trên máy${pageInfo} • Nhấn "Bắt đầu đọc" để vào giao diện`;
-    }
-    if (btnText) {
-      btnText.textContent = 'Đổi truyện khác';
-    }
-    if (enterBtn) {
+  if (enterBtn) {
+    if (hasDoc) {
       enterBtn.classList.remove('disabled-need-file');
       enterBtn.classList.add('ready');
-      enterBtn.innerHTML = `Bắt Đầu Đọc Ngay`;
-      enterBtn.title = `Bắt đầu đọc: ${state.pdfFileName}`;
-    }
-  } else {
-    if (badgeText) badgeText.textContent = '⚠️ BƯỚC 1: NẠP FILE TRUYỆN ĐỂ BẮT ĐẦU';
-    if (nameLabel) {
-      nameLabel.textContent = 'Chưa chọn file truyện';
-      nameLabel.title = '';
-    }
-    if (statusPill) {
-      statusPill.textContent = '⚠️ Cần nạp file';
-    }
-    if (hintLabel) {
-      hintLabel.textContent = 'Hỗ trợ .PDF, .TXT, .EPUB • Đọc hoàn toàn offline trên máy tính';
-    }
-    if (btnText) {
-      btnText.textContent = 'Tải truyện lên';
-    }
-    if (enterBtn) {
+      enterBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> <span>Bắt Đầu Đọc Ngay</span>`;
+      enterBtn.title = `Bắt đầu đọc: ${state.pdfFileName || 'Truyện đã chọn'}`;
+    } else {
       enterBtn.classList.add('disabled-need-file');
       enterBtn.classList.remove('ready');
-      enterBtn.innerHTML = `⚠️ Cần nạp file truyện để bắt đầu đọc`;
+      enterBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <span>Cần nạp file truyện để bắt đầu đọc</span>`;
       enterBtn.title = 'Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc';
     }
+  }
+
+  const container = document.getElementById('portal-upload-content');
+  if (!container) return;
+
+  if (records.length === 0 && !hasLoadedDocument()) {
+    container.innerHTML = `
+      <div class="duo-upload-badge-tag" id="portal-upload-badge">
+        <span class="badge-icon" id="portal-upload-badge-icon">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </span>
+        <span class="badge-text" id="portal-upload-badge-text">BƯỚC 1: NẠP FILE TRUYỆN ĐỂ BẮT ĐẦU</span>
+      </div>
+      <div class="duo-upload-main">
+        <div class="duo-upload-left">
+          <div class="duo-upload-icon-box" id="portal-upload-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <div class="duo-upload-text-group">
+            <div class="duo-upload-title-row">
+              <span class="duo-upload-name" id="portal-pdf-filename">Chưa chọn file truyện</span>
+              <span class="duo-upload-status-pill" id="portal-upload-status-pill">Chưa có truyện</span>
+            </div>
+            <span class="duo-upload-hint" id="portal-upload-hint">Bấm nút bên cạnh để tải file .PDF, .TXT hoặc .EPUB từ máy (hỗ trợ chọn nhiều file)</span>
+          </div>
+        </div>
+        <label for="portal-file-input" class="portal-file-change-btn" id="portal-upload-btn-label">
+          <span class="btn-icon" id="portal-upload-btn-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </span>
+          <span id="portal-upload-btn-text">Tải truyện lên</span>
+        </label>
+      </div>
+    `;
+  } else {
+    let displayList = records;
+    if (displayList.length === 0 && hasLoadedDocument()) {
+      displayList = [{
+        documentId: currentDocId || 'temp-doc',
+        documentName: state.pdfFileName || 'Tài liệu đã nạp',
+        totalPages: state.totalPages || 1,
+        chunks: state.allChunks || [],
+        savedAt: Date.now()
+      }];
+    }
+
+    container.innerHTML = `
+      <div class="duo-upload-header-row">
+        <div class="duo-upload-badge-tag" id="portal-upload-badge">
+          <span class="badge-icon" id="portal-upload-badge-icon">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span class="badge-text" id="portal-upload-badge-text">TRUYỆN ĐÃ NẠP (${displayList.length})</span>
+        </div>
+        <label for="portal-file-input" class="portal-file-add-btn" title="Nạp thêm truyện mới vào thư viện">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Thêm truyện mới</span>
+        </label>
+      </div>
+      <div class="portal-books-list">
+        ${displayList.map(rec => {
+          const isSelected = rec.documentId === currentDocId || (displayList.length === 1 && !currentDocId);
+          const pagesInfo = rec.totalPages && rec.totalPages > 1 ? `${rec.totalPages} trang` : '';
+          const chunksCount = (rec.chunks || []).length;
+          const chunksInfo = chunksCount ? `${chunksCount} đoạn` : '';
+          const metaParts = [pagesInfo, chunksInfo].filter(Boolean);
+          const timeText = rec.savedAt ? new Date(rec.savedAt).toLocaleDateString('vi-VN') : '';
+          if (timeText) metaParts.push(timeText);
+          const fullMeta = metaParts.join(' • ');
+          return `
+            <div class="portal-book-item ${isSelected ? 'selected' : ''}" data-doc-id="${escapeHtml(rec.documentId)}">
+              <div class="portal-book-select-indicator">
+                <div class="portal-book-radio">
+                  ${isSelected ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+                </div>
+              </div>
+              <div class="portal-book-icon-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+              <div class="portal-book-details">
+                <div class="portal-book-title-row">
+                  <span class="portal-book-title" title="${escapeHtml(rec.documentName || '')}">${escapeHtml(rec.documentName || 'Không tên')}</span>
+                  <span class="portal-book-pill ${isSelected ? 'active' : ''}">${isSelected ? 'Đang chọn' : 'Chọn đọc'}</span>
+                </div>
+                <span class="portal-book-meta">${escapeHtml(fullMeta || 'Đã lưu trên máy')}</span>
+              </div>
+              <button class="portal-book-delete-btn" data-delete-id="${escapeHtml(rec.documentId)}" title="Xóa truyện khỏi danh sách">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <span id="portal-pdf-filename" style="display: none">${escapeHtml(state.pdfFileName || '')}</span>
+    `;
+
+    container.querySelectorAll('.portal-book-item').forEach(item => {
+      item.addEventListener('click', async (e) => {
+        if (e.target.closest('.portal-book-delete-btn')) return;
+        const docId = item.getAttribute('data-doc-id');
+        if (!docId || docId === currentDocId) return;
+        await selectPortalBook(docId);
+      });
+    });
+
+    container.querySelectorAll('.portal-book-delete-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const docId = btn.getAttribute('data-delete-id');
+        const item = btn.closest('.portal-book-item');
+        const title = item ? item.querySelector('.portal-book-title')?.textContent : '';
+        if (!docId) return;
+        await deletePortalBook(docId, title);
+      });
+    });
   }
 }
 
@@ -2948,21 +3485,32 @@ function initLandingPortal() {
     copyBtn.addEventListener('click', copyAccountNumber);
   }
 
-  // Portal document file input
+  // Portal document file input (supports multiple files)
   if (portalFileInput) {
-    portalFileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const nameLabel = document.getElementById('portal-pdf-filename');
-        if (nameLabel) nameLabel.textContent = file.name;
-        processDocumentFile(file);
-        updatePortalUploadUI();
+    portalFileInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const fileIndexText = files.length > 1 ? ` (${i + 1}/${files.length})` : '';
+          showPortalUploadProgress(`Đang nạp: ${file.name}${fileIndexText}`, 'Đang chuẩn bị đọc tài liệu...', 0);
+          showPageFlipToast(`Đang nạp: ${file.name}${fileIndexText}`);
+          const nameLabel = document.getElementById('portal-pdf-filename');
+          if (nameLabel) nameLabel.textContent = file.name;
+          await processDocumentFile(file);
+        }
+        updatePortalUploadProgress(100, 'Đã hoàn tất nạp truyện!');
+        setTimeout(() => {
+          hidePortalUploadProgress();
+          hideLoading();
+        }, 400);
+        await updatePortalUploadUI();
         e.target.value = '';
       }
     });
   }
 
-  // Drag & drop support on the portal upload card
+  // Drag & drop support on the portal upload card (supports multiple files)
   const uploadCard = document.getElementById('portal-upload-card') || document.querySelector('.duo-upload-quest');
   if (uploadCard) {
     ['dragenter', 'dragover'].forEach(eventName => {
@@ -2979,12 +3527,23 @@ function initLandingPortal() {
         uploadCard.classList.remove('is-dragover');
       });
     });
-    uploadCard.addEventListener('drop', (e) => {
+    uploadCard.addEventListener('drop', async (e) => {
       const dt = e.dataTransfer;
-      const files = dt?.files;
-      if (files && files.length > 0) {
-        processDocumentFile(files[0]);
-        updatePortalUploadUI();
+      const files = Array.from(dt?.files || []);
+      if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const fileIndexText = files.length > 1 ? ` (${i + 1}/${files.length})` : '';
+          showPortalUploadProgress(`Đang nạp: ${file.name}${fileIndexText}`, 'Đang chuẩn bị đọc tài liệu...', 0);
+          showPageFlipToast(`Đang nạp: ${file.name}${fileIndexText}`);
+          await processDocumentFile(file);
+        }
+        updatePortalUploadProgress(100, 'Đã hoàn tất nạp truyện!');
+        setTimeout(() => {
+          hidePortalUploadProgress();
+          hideLoading();
+        }, 400);
+        await updatePortalUploadUI();
       }
     });
   }
@@ -3279,9 +3838,17 @@ function initUniversalNavbar() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <span>Nạp file</span>
         </label>
-        <div class="unav-file-badge" id="univ-file-name" title="Tên tài liệu đang đọc">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span class="unav-file-name-text">KPI_Report_Q3_2026.pdf</span>
+        <div class="unav-dropdown-wrapper" id="univ-books-dropdown-wrap">
+          <button class="unav-btn unav-btn-switch-book" id="univ-btn-switch-book" title="Đổi truyện khác từ thư viện">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Đổi truyện</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="unav-file-badge clickable" id="univ-file-name" title="Tên tài liệu đang đọc • Nhấn để đổi truyện">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="unav-file-name-text">KPI_Report_Q3_2026.pdf</span>
+          </div>
+          <div class="unav-books-dropdown-menu" id="univ-books-dropdown-menu" style="display: none;"></div>
         </div>
       </div>
 
@@ -3305,6 +3872,15 @@ function initUniversalNavbar() {
           <button class="unav-btn-sm" id="univ-btn-font-inc" title="Tăng cỡ chữ ( ] )">A+</button>
         </div>
 
+        <div class="unav-dropdown-wrapper" id="univ-layout-dropdown-wrap">
+          <button class="unav-btn unav-btn-layout" id="univ-btn-layout-options" title="Tùy chỉnh bố cục dòng & ngắt chữ (Giữ nguyên dòng gốc, cố định số chữ, giãn dòng...)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+            <span id="univ-layout-mode-label">Dòng gốc</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="unav-layout-dropdown-menu" id="univ-layout-dropdown-menu" style="display: none;"></div>
+        </div>
+
         <button class="unav-btn unav-btn-autoscroll" id="univ-btn-autoscroll" title="Tự cuộn đọc rảnh tay (Phím Space)">
           <span class="unav-autoscroll-icon-box">
             <svg class="unav-autoscroll-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
@@ -3315,7 +3891,7 @@ function initUniversalNavbar() {
           <svg class="unav-bookmark-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
           <span class="unav-bookmark-text">Đánh dấu</span>
         </button>
-        <button class="unav-btn unav-btn-tools" id="univ-btn-tools" title="Mở thư viện, dấu trang, mục lục và tìm kiếm">
+        <button class="unav-btn unav-btn-tools" id="univ-btn-tools" title="Mở thư viện, dấu trang, mục lục, bố cục dòng và tìm kiếm">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/><path d="M8 11h6M11 8v6"/></svg>
           <span>Công cụ</span>
         </button>
@@ -3424,7 +4000,419 @@ function initUniversalNavbar() {
   const btnHide = document.getElementById('univ-btn-hide');
   if (btnHide) btnHide.addEventListener('click', toggleControlsVisibility);
 
+  // Book Switcher dropdown on universal navbar
+  const btnSwitchBook = document.getElementById('univ-btn-switch-book');
+  const fileBadgeEl = document.getElementById('univ-file-name');
+
+  if (btnSwitchBook) {
+    btnSwitchBook.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const layoutMenu = document.getElementById('univ-layout-dropdown-menu');
+      if (layoutMenu) layoutMenu.style.display = 'none';
+      toggleUniversalBooksDropdown();
+    });
+  }
+  if (fileBadgeEl) {
+    fileBadgeEl.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const layoutMenu = document.getElementById('univ-layout-dropdown-menu');
+      if (layoutMenu) layoutMenu.style.display = 'none';
+      toggleUniversalBooksDropdown();
+    });
+  }
+
+  // Layout & Line Customizer dropdown
+  const btnLayoutOptions = document.getElementById('univ-btn-layout-options');
+  if (btnLayoutOptions) {
+    btnLayoutOptions.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const booksMenu = document.getElementById('univ-books-dropdown-menu');
+      if (booksMenu) booksMenu.style.display = 'none';
+      toggleUniversalLayoutDropdown();
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    const booksWrap = document.getElementById('univ-books-dropdown-wrap');
+    const booksMenu = document.getElementById('univ-books-dropdown-menu');
+    if (booksMenu && booksMenu.style.display !== 'none') {
+      if (!booksWrap || !booksWrap.contains(e.target)) {
+        booksMenu.style.display = 'none';
+      }
+    }
+    const layoutWrap = document.getElementById('univ-layout-dropdown-wrap');
+    const layoutMenu = document.getElementById('univ-layout-dropdown-menu');
+    if (layoutMenu && layoutMenu.style.display !== 'none') {
+      if (!layoutWrap || !layoutWrap.contains(e.target)) {
+        layoutMenu.style.display = 'none';
+      }
+    }
+  });
+
   syncUniversalNavbar();
+}
+
+async function renderUniversalBooksDropdown() {
+  const menu = document.getElementById('univ-books-dropdown-menu');
+  if (!menu) return;
+
+  let records = [];
+  try {
+    records = await listDocumentCaches();
+  } catch (err) {
+    console.warn('Lỗi đọc thư viện truyện:', err);
+  }
+
+  const currentDocId = getCurrentDocumentId();
+
+  if (records.length === 0) {
+    menu.innerHTML = `
+      <div class="unav-dropdown-header">
+        <span class="unav-dropdown-title">Thư viện truyện (0)</span>
+      </div>
+      <div class="unav-dropdown-empty">
+        <span>Chưa có truyện nào trong thư viện.</span>
+      </div>
+      <label for="file-pdf-input" class="unav-dropdown-add-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span>Nạp file truyện mới</span>
+      </label>
+    `;
+    return;
+  }
+
+  menu.innerHTML = `
+    <div class="unav-dropdown-header">
+      <span class="unav-dropdown-title">Thư viện truyện (${records.length})</span>
+      <label for="file-pdf-input" class="unav-dropdown-add-mini" title="Nạp thêm truyện">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        <span>Nạp thêm</span>
+      </label>
+    </div>
+    <div class="unav-dropdown-list">
+      ${records.map(rec => {
+        const isCurrent = rec.documentId === currentDocId;
+        const pageText = rec.totalPages && rec.totalPages > 1 ? `${rec.totalPages} trang` : '';
+        const chunkText = (rec.chunks || []).length ? `${(rec.chunks || []).length} đoạn` : '';
+        const meta = [pageText, chunkText].filter(Boolean).join(' • ');
+        return `
+          <div class="unav-dropdown-item ${isCurrent ? 'selected' : ''}" data-doc-id="${escapeHtml(rec.documentId)}">
+            <div class="unav-dropdown-item-left">
+              <span class="unav-dropdown-check">${isCurrent ? '✓' : ''}</span>
+              <div class="unav-dropdown-item-text">
+                <span class="unav-dropdown-item-title" title="${escapeHtml(rec.documentName || '')}">${escapeHtml(rec.documentName || 'Không tên')}</span>
+                <span class="unav-dropdown-item-meta">${escapeHtml(meta || 'Đã lưu trên máy')}</span>
+              </div>
+            </div>
+            <div class="unav-dropdown-item-actions">
+              ${isCurrent ? '<span class="unav-dropdown-pill">Đang đọc</span>' : ''}
+              <button class="unav-dropdown-del-btn" data-delete-id="${escapeHtml(rec.documentId)}" title="Xóa truyện khỏi thư viện">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  // Click on item to switch book
+  menu.querySelectorAll('.unav-dropdown-item').forEach(item => {
+    item.addEventListener('click', async (e) => {
+      if (e.target.closest('.unav-dropdown-del-btn')) return;
+      const docId = item.getAttribute('data-doc-id');
+      if (!docId || docId === currentDocId) {
+        menu.style.display = 'none';
+        return;
+      }
+      menu.style.display = 'none';
+      await switchReaderBook(docId);
+    });
+  });
+
+  // Click delete button
+  menu.querySelectorAll('.unav-dropdown-del-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const docId = btn.getAttribute('data-delete-id');
+      const item = btn.closest('.unav-dropdown-item');
+      const title = item ? item.querySelector('.unav-dropdown-item-title')?.textContent : '';
+      if (!docId) return;
+      if (!window.confirm(`Bạn có chắc muốn xóa truyện "${title || 'này'}"?`)) return;
+
+      await deleteDocumentCache(docId);
+      showPageFlipToast('Đã xóa truyện khỏi thư viện.');
+      if (docId === currentDocId) {
+        const remaining = await listDocumentCaches();
+        if (remaining.length > 0) {
+          await switchReaderBook(remaining[0].documentId);
+        } else {
+          location.reload();
+        }
+      } else {
+        await renderUniversalBooksDropdown();
+      }
+    });
+  });
+}
+
+async function toggleUniversalBooksDropdown() {
+  const menu = document.getElementById('univ-books-dropdown-menu');
+  if (!menu) return;
+  if (menu.style.display === 'none' || !menu.style.display) {
+    await renderUniversalBooksDropdown();
+    menu.style.display = 'flex';
+  } else {
+    menu.style.display = 'none';
+  }
+}
+
+async function switchReaderBook(docId) {
+  try {
+    showLoading('Đang mở truyện...');
+    const cache = await readDocumentCacheById(docId);
+    if (!cache || !isValidCachedDocument(cache)) {
+      showReaderError('Không thể mở truyện', 'Dữ liệu truyện trong bộ nhớ bị lỗi hoặc không đầy đủ.');
+      return;
+    }
+    applyCachedDocument(cache);
+    await setActiveDocumentCache(docId);
+    saveState();
+    renderContinuousView(true, state.currentGlobalIndex);
+    syncUniversalNavbar();
+    showPageFlipToast(`Đã chuyển sang: ${state.pdfFileName}`);
+  } catch (err) {
+    console.error('Lỗi khi đổi truyện:', err);
+    showReaderError('Lỗi', 'Không thể chuyển sang truyện đã chọn.');
+  } finally {
+    hideLoading();
+  }
+}
+
+function rechunkActiveDocument() {
+  if (!state.allChunks || state.allChunks.length === 0) return;
+  const raw = state.rawText || state.allChunks.map(c => c.text).join('\n');
+  const chunks = splitTextIntoChunks(raw, state.chunkMode, {
+    preserveIndents: state.preserveIndents,
+    compactBlankLines: state.compactBlankLines,
+    maxCharsPerLine: state.layoutMode === 'custom' ? state.maxCharsPerLine : 0
+  });
+
+  if (!chunks.length) return;
+
+  const currentIdx = state.currentGlobalIndex;
+  const pagesData = chunksToPagesData(chunks);
+  const totalPages = Object.keys(pagesData).length;
+  state.loadedPages = totalPages;
+  initStoryFromPages(pagesData, totalPages, Math.min(state.currentPage, totalPages));
+  renderContinuousView(true, Math.min(currentIdx, state.allChunks.length - 1));
+  persistDocumentCache();
+  saveState();
+  syncUniversalNavbar();
+}
+
+async function toggleUniversalLayoutDropdown() {
+  const menu = document.getElementById('univ-layout-dropdown-menu');
+  if (!menu) return;
+  if (menu.style.display === 'none' || !menu.style.display) {
+    renderUniversalLayoutDropdown();
+    menu.style.display = 'flex';
+  } else {
+    menu.style.display = 'none';
+  }
+}
+
+function renderUniversalLayoutDropdown() {
+  const menu = document.getElementById('univ-layout-dropdown-menu');
+  if (!menu) return;
+
+  const isExact = state.layoutMode === 'exact';
+  const isWrap = state.layoutMode === 'wrap';
+  const isCustom = state.layoutMode === 'custom';
+
+  const fonts = ['Arial', 'Calibri', 'Consolas, monospace', 'Roboto', 'Times New Roman'];
+  const lineHeights = [
+    { val: '1.2', label: '1.2x (Chặt)' },
+    { val: '1.5', label: '1.5x (Vừa)' },
+    { val: '1.75', label: '1.75x (Chuẩn)' },
+    { val: '2.0', label: '2.0x (Thưa)' }
+  ];
+
+  menu.innerHTML = `
+    <div class="unav-dropdown-header">
+      <span class="unav-dropdown-title">Bố cục & Định dạng dòng</span>
+    </div>
+    <div class="unav-layout-dropdown-content">
+      <!-- 1. Chế độ ngắt dòng -->
+      <div class="unav-layout-section">
+        <div class="unav-layout-section-label">1. Chế độ hiển thị & ngắt dòng</div>
+        
+        <div class="unav-layout-card-option ${isExact ? 'active' : ''}" data-layout-mode="exact">
+          <div class="unav-layout-card-title">
+            <span class="unav-dropdown-check">${isExact ? '✓' : '○'}</span>
+            <strong>Giữ nguyên 100% dòng gốc (Khuyên dùng)</strong>
+          </div>
+          <div class="unav-layout-card-desc">1 dòng file = 1 dòng đọc. Chữ giữ nguyên hàng, không bao giờ bị xê dịch hay rớt xuống dòng.</div>
+        </div>
+
+        <div class="unav-layout-card-option ${isWrap ? 'active' : ''}" data-layout-mode="wrap">
+          <div class="unav-layout-card-title">
+            <span class="unav-dropdown-check">${isWrap ? '✓' : '○'}</span>
+            <strong>Tự động xuống dòng (Wrap Text)</strong>
+          </div>
+          <div class="unav-layout-card-desc">Tự ngắt dòng khi chạm mép khung/cột để chữ vừa khít chiều rộng màn hình.</div>
+        </div>
+
+        <div class="unav-layout-card-option ${isCustom ? 'active' : ''}" data-layout-mode="custom">
+          <div class="unav-layout-card-title">
+            <span class="unav-dropdown-check">${isCustom ? '✓' : '○'}</span>
+            <strong>Cố định số chữ trên 1 dòng</strong>
+          </div>
+          <div class="unav-layout-card-desc">Ngắt dòng cứng theo giới hạn số ký tự tối đa:</div>
+          <div class="unav-layout-pills-row">
+            ${[50, 70, 80, 100, 120].map(cnt => `
+              <button class="unav-layout-pill-btn ${state.maxCharsPerLine === cnt ? 'active' : ''}" data-max-chars="${cnt}">${cnt} chữ</button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Cơ chế tách nội dung khi nạp -->
+      <div class="unav-layout-section">
+        <div class="unav-layout-section-label">2. Phân tách dòng đọc</div>
+        <div class="unav-layout-pills-row" style="margin-left:0;">
+          <button class="unav-layout-pill-btn ${state.chunkMode === 'line' ? 'active' : ''}" data-chunk-mode="line">Từng dòng gốc (Line-by-line)</button>
+          <button class="unav-layout-pill-btn ${state.chunkMode === 'paragraph' ? 'active' : ''}" data-chunk-mode="paragraph">Từng đoạn văn</button>
+          <button class="unav-layout-pill-btn ${state.chunkMode === 'sentence' ? 'active' : ''}" data-chunk-mode="sentence">Từng câu</button>
+        </div>
+      </div>
+
+      <!-- 3. Khoảng cách & Thụt lề -->
+      <div class="unav-layout-section">
+        <div class="unav-layout-section-label">3. Khoảng cách & Thụt lề</div>
+        <label class="unav-layout-checkbox-item">
+          <input type="checkbox" id="unav-chk-indents" ${state.preserveIndents ? 'checked' : ''} />
+          <span>Giữ nguyên thụt lề đầu dòng (Indents / Tabs / Khoảng trắng gốc)</span>
+        </label>
+        <label class="unav-layout-checkbox-item">
+          <input type="checkbox" id="unav-chk-compact-blanks" ${state.compactBlankLines ? 'checked' : ''} />
+          <span>Lược bỏ dòng trống liên tiếp</span>
+        </label>
+      </div>
+
+      <!-- 4. Typography -->
+      <div class="unav-layout-section">
+        <div class="unav-layout-section-label">4. Font chữ & Giãn dòng</div>
+        <div class="unav-layout-grid-select">
+          <div class="unav-layout-select-group">
+            <span class="unav-layout-select-label">Phông chữ:</span>
+            <select class="unav-layout-select" id="unav-sel-font">
+              ${fonts.map(f => `<option value="${f}" ${state.fontFamily === f ? 'selected' : ''}>${f.includes('monospace') ? 'Monospace (Thẳng cột)' : f}</option>`).join('')}
+            </select>
+          </div>
+          <div class="unav-layout-select-group">
+            <span class="unav-layout-select-label">Giãn dòng:</span>
+            <select class="unav-layout-select" id="unav-sel-lineheight">
+              ${lineHeights.map(lh => `<option value="${lh.val}" ${state.lineHeight === lh.val ? 'selected' : ''}>${lh.label}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="unav-layout-footer">
+      <span class="unav-layout-status-tip">✓ Tự động áp dụng & lưu</span>
+      <button class="unav-layout-apply-btn" id="unav-btn-apply-layout">Đóng</button>
+    </div>
+  `;
+
+  // Handlers
+  menu.querySelectorAll('[data-layout-mode]').forEach(el => {
+    el.addEventListener('click', () => {
+      const mode = el.dataset.layoutMode;
+      state.layoutMode = mode;
+      state.wrapText = (mode === 'wrap');
+      if (mode === 'custom' || state.chunkMode === 'line') rechunkActiveDocument();
+      applyStyles();
+      saveState();
+      syncUniversalNavbar();
+      renderUniversalLayoutDropdown();
+      showPageFlipToast(mode === 'exact' ? 'Đã bật: Giữ nguyên 100% dòng gốc (không bẻ chữ)' : (mode === 'wrap' ? 'Đã bật: Tự động xuống dòng (Wrap text)' : `Đã đặt: Cố định ${state.maxCharsPerLine} chữ/dòng`));
+    });
+  });
+
+  menu.querySelectorAll('[data-max-chars]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      state.layoutMode = 'custom';
+      state.maxCharsPerLine = Number(btn.dataset.maxChars);
+      state.wrapText = false;
+      rechunkActiveDocument();
+      applyStyles();
+      saveState();
+      syncUniversalNavbar();
+      renderUniversalLayoutDropdown();
+      showPageFlipToast(`Đã cố định tối đa ${state.maxCharsPerLine} chữ trên 1 dòng.`);
+    });
+  });
+
+  menu.querySelectorAll('[data-chunk-mode]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.chunkMode;
+      state.chunkMode = mode;
+      rechunkActiveDocument();
+      applyStyles();
+      saveState();
+      syncUniversalNavbar();
+      renderUniversalLayoutDropdown();
+      showPageFlipToast(`Đã chuyển sang phân đoạn: ${mode === 'line' ? 'Từng dòng' : (mode === 'sentence' ? 'Từng câu' : 'Từng đoạn')}`);
+    });
+  });
+
+  const chkIndents = menu.querySelector('#unav-chk-indents');
+  if (chkIndents) {
+    chkIndents.addEventListener('change', () => {
+      state.preserveIndents = chkIndents.checked;
+      applyStyles();
+      saveState();
+      renderUniversalLayoutDropdown();
+    });
+  }
+
+  const chkCompact = menu.querySelector('#unav-chk-compact-blanks');
+  if (chkCompact) {
+    chkCompact.addEventListener('change', () => {
+      state.compactBlankLines = chkCompact.checked;
+      rechunkActiveDocument();
+      saveState();
+      renderUniversalLayoutDropdown();
+    });
+  }
+
+  const selFont = menu.querySelector('#unav-sel-font');
+  if (selFont) {
+    selFont.addEventListener('change', () => {
+      state.fontFamily = selFont.value;
+      applyStyles();
+      saveState();
+    });
+  }
+
+  const selLineHeight = menu.querySelector('#unav-sel-lineheight');
+  if (selLineHeight) {
+    selLineHeight.addEventListener('change', () => {
+      state.lineHeight = selLineHeight.value;
+      applyStyles();
+      saveState();
+    });
+  }
+
+  const applyBtn = menu.querySelector('#unav-btn-apply-layout');
+  if (applyBtn) {
+    applyBtn.addEventListener('click', () => {
+      menu.style.display = 'none';
+    });
+  }
 }
 
 function syncUniversalNavbar() {
@@ -3433,6 +4421,13 @@ function syncUniversalNavbar() {
     const fileName = state.pdfFileName || 'KPI_Report_Q3_2026.pdf';
     fileBadge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="unav-file-name-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(fileName)}</span>`;
     fileBadge.title = `Tài liệu: ${fileName}`;
+  }
+
+  const layoutLabel = document.getElementById('univ-layout-mode-label');
+  if (layoutLabel) {
+    if (state.layoutMode === 'exact') layoutLabel.textContent = 'Dòng gốc';
+    else if (state.layoutMode === 'custom') layoutLabel.textContent = `${state.maxCharsPerLine} ký tự`;
+    else layoutLabel.textContent = 'Tự ngắt';
   }
 
   const pageInd = document.getElementById('univ-page-indicator');
@@ -3944,7 +4939,7 @@ function applyStyles() {
 
   // Per-element pass: skip elements already styled with the current settings,
   // so appending a batch doesn't re-style (and re-layout) every rendered row.
-  const styleKey = `${state.fontFamily}|${state.fontSize}|${state.lineHeight}|${state.isBold}|${state.isItalic}|${state.wrapText}`;
+  const styleKey = `${state.fontFamily}|${state.fontSize}|${state.lineHeight}|${state.isBold}|${state.isItalic}|${state.layoutMode}|${state.preserveIndents}|${state.wrapText}`;
   const restyle = (selector, apply) => {
     document.querySelectorAll(selector).forEach(el => {
       if (el._styleKey === styleKey) return;
@@ -3953,24 +4948,31 @@ function applyStyles() {
     });
   };
 
+  const isNowrap = (state.layoutMode === 'exact' || !state.wrapText);
+  const whiteSpaceVal = isNowrap ? (state.preserveIndents ? 'pre' : 'nowrap') : 'normal';
+  const wordBreakVal = isNowrap ? 'normal' : 'break-word';
+
   restyle('.story-cell', cell => {
     cell.style.fontWeight = state.isBold ? 'bold' : 'normal';
     cell.style.fontStyle = state.isItalic ? 'italic' : 'normal';
-    cell.style.whiteSpace = state.wrapText ? 'normal' : 'nowrap';
+    cell.style.whiteSpace = whiteSpaceVal;
+    cell.style.wordBreak = wordBreakVal;
     if (state.fontFamily) cell.style.fontFamily = state.fontFamily;
     if (state.fontSize) cell.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) cell.style.lineHeight = state.lineHeight;
   });
 
-  restyle('.gdocs-story-paragraph', p => {
-    p.style.fontWeight = state.isBold ? 'bold' : 'normal';
-    p.style.fontStyle = state.isItalic ? 'italic' : 'normal';
-    if (state.fontFamily) p.style.fontFamily = state.fontFamily;
-    if (state.fontSize) p.style.fontSize = `${state.fontSize}pt`;
-    if (state.lineHeight) p.style.lineHeight = state.lineHeight;
-  });
-
-  restyle('.ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .zalo-msg-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text, .sap-item-desc', el => {
+  restyle('.gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text, .sap-item-desc', el => {
+    el.style.whiteSpace = whiteSpaceVal;
+    el.style.wordBreak = wordBreakVal;
+    if (isNowrap && !el.classList.contains('vsc-gutter-num')) {
+      el.style.overflowX = 'auto';
+    } else {
+      el.style.overflowX = 'visible';
+    }
+    if (state.fontFamily && (el.classList.contains('gdocs-story-paragraph') || el.classList.contains('gmail-story-para') || el.classList.contains('outlook-story-para'))) {
+      el.style.fontFamily = state.fontFamily;
+    }
     if (state.fontSize) el.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) el.style.lineHeight = state.lineHeight;
   });
@@ -4083,7 +5085,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = '';
     if (tvBoss) tvBoss.style.display = 'none';
 
-    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = '';
@@ -4163,7 +5165,7 @@ function toggleBossKey() {
     if (tvStory) tvStory.style.display = 'none';
     if (tvBoss) tvBoss.style.display = 'block';
 
-    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap'].forEach(p => {
+    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook'].forEach(p => {
       const s = document.getElementById(`${p}-story-view`);
       const b = document.getElementById(`${p}-boss-view`);
       if (s) s.style.display = 'none';
@@ -4227,6 +5229,7 @@ function prepareDocumentLoad(file) {
   state.loadedPages = 0;
   state.pdfFileName = file.name;
   state.documentId = createDocumentId(file);
+  state.documentCreatedAt = Date.now();
   state.documentToc = [];
   state.searchResults = [];
   state.searchResultCursor = -1;
@@ -4295,23 +5298,29 @@ async function isTextWorkerAvailable() {
   return textWorkerAvailabilityPromise;
 }
 
-function splitTextWithoutWorker(source, mode) {
+function splitTextWithoutWorker(source, mode = state.chunkMode, options = {}) {
   const text = typeof source === 'string' ? source : new TextDecoder('utf-8').decode(source);
-  return splitTextIntoChunks(text, mode);
+  return splitTextIntoChunks(text, mode, options);
 }
 
-async function runTextChunkWorker(source, mode = state.chunkMode) {
+async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) {
+  const workerOptions = {
+    preserveIndents: options.preserveIndents !== undefined ? options.preserveIndents : state.preserveIndents,
+    compactBlankLines: options.compactBlankLines !== undefined ? options.compactBlankLines : state.compactBlankLines,
+    maxCharsPerLine: options.maxCharsPerLine !== undefined ? options.maxCharsPerLine : (state.layoutMode === 'custom' ? state.maxCharsPerLine : 0)
+  };
+
   if (!await isTextWorkerAvailable()) {
     console.warn('text-worker.js không khả dụng, chuyển sang xử lý trực tiếp.');
-    return splitTextWithoutWorker(source, mode);
+    return splitTextWithoutWorker(source, mode, workerOptions);
   }
 
   return new Promise((resolve, reject) => {
     let worker;
     try {
-      worker = new Worker('text-worker.js?v=20261008-10');
+      worker = new Worker('text-worker.js?v=20261009-12');
     } catch (error) {
-      resolve(splitTextWithoutWorker(source, mode));
+      resolve(splitTextWithoutWorker(source, mode, workerOptions));
       return;
     }
     activeDocumentWorker = worker;
@@ -4326,13 +5335,13 @@ async function runTextChunkWorker(source, mode = state.chunkMode) {
       worker.terminate();
       if (typeof source === 'string') {
         console.warn('Web Worker lỗi, chuyển sang xử lý trực tiếp:', event.message || event);
-        resolve(splitTextWithoutWorker(source, mode));
+        resolve(splitTextWithoutWorker(source, mode, workerOptions));
       } else {
         reject(new Error(event.message || 'Web Worker không xử lý được văn bản.'));
       }
     };
-    if (source instanceof ArrayBuffer) worker.postMessage({ buffer: source, mode }, [source]);
-    else worker.postMessage({ text: String(source || ''), mode });
+    if (source instanceof ArrayBuffer) worker.postMessage({ buffer: source, mode, options: workerOptions }, [source]);
+    else worker.postMessage({ text: String(source || ''), mode, options: workerOptions });
   });
 }
 
@@ -4397,8 +5406,13 @@ async function processTextFile(file) {
     showLoading('Đang đọc nội dung file TXT...');
     const buffer = await file.arrayBuffer();
     if (loadToken !== state.pdfLoadToken) return;
+    state.rawText = new TextDecoder('utf-8').decode(buffer);
     updateLoadingProgress(45, 'Đã đọc file, đang chia nội dung thành các đoạn...');
-    const chunks = await runTextChunkWorker(buffer, state.chunkMode);
+    const chunks = await runTextChunkWorker(buffer, state.chunkMode, {
+      preserveIndents: state.preserveIndents,
+      compactBlankLines: state.compactBlankLines,
+      maxCharsPerLine: state.layoutMode === 'custom' ? state.maxCharsPerLine : 0
+    });
     if (loadToken !== state.pdfLoadToken) return;
     updateLoadingProgress(90, 'Đang dựng nội dung lên giao diện...');
     finishTextDocument(chunks, 'TXT');
@@ -5072,12 +6086,55 @@ async function processPdfFile(file) {
   }
 }
 
-function splitTextIntoChunks(text, mode) {
-  const cleanText = cleanAndRepairVietnameseText(text || '')
+function splitTextIntoChunks(text, mode = state.chunkMode, options = {}) {
+  const preserveIndents = options.preserveIndents !== undefined ? options.preserveIndents : state.preserveIndents;
+  const compactBlankLines = options.compactBlankLines !== undefined ? options.compactBlankLines : state.compactBlankLines;
+  const maxCharsPerLine = Number(options.maxCharsPerLine) || (state.layoutMode === 'custom' ? state.maxCharsPerLine : 0);
+
+  let cleanText = cleanAndRepairVietnameseText(text || '')
     .replace(/\r\n/g, '\n')
-    .replace(/\t/g, ' ')
-    .replace(/ +/g, ' ');
-  
+    .replace(/\r/g, '\n');
+
+  if (!preserveIndents) {
+    cleanText = cleanText.replace(/\t/g, ' ').replace(/ +/g, ' ');
+  }
+
+  function applyMaxChars(str, limit) {
+    if (!limit || limit <= 0 || str.length <= limit) return [str];
+    const words = str.split(' ');
+    const res = [];
+    let cur = '';
+    for (const w of words) {
+      if (!cur) {
+        cur = w;
+      } else if ((cur + ' ' + w).length <= limit) {
+        cur += ' ' + w;
+      } else {
+        res.push(cur);
+        cur = w;
+      }
+    }
+    if (cur) res.push(cur);
+    return res.length ? res : [str];
+  }
+
+  // 1. Line-by-Line: 1 dòng gốc = đúng 1 dòng hiển thị
+  if (mode === 'line') {
+    const rawLines = cleanText.split('\n');
+    const result = [];
+    rawLines.forEach(line => {
+      const lineText = preserveIndents ? line : line.trim();
+      if (compactBlankLines && !lineText.trim()) return;
+      if (maxCharsPerLine > 0) {
+        applyMaxChars(lineText, maxCharsPerLine).forEach(w => result.push(w));
+      } else {
+        result.push(lineText);
+      }
+    });
+    return result.length > 0 ? result : [cleanText];
+  }
+
+  // 2. Sentence-by-sentence
   if (mode === 'sentence') {
     const rawSentences = cleanText.split(/([.!?…\n]+)/);
     const sentences = [];
@@ -5085,38 +6142,54 @@ function splitTextIntoChunks(text, mode) {
     for (let i = 0; i < rawSentences.length; i++) {
       cur += rawSentences[i];
       if (cur.trim().length > 20 || rawSentences[i].includes('\n')) {
-        const s = cur.trim();
-        if (s.length > 0) sentences.push(s);
+        const s = preserveIndents ? cur : cur.trim();
+        if (s.trim().length > 0) {
+          if (maxCharsPerLine > 0) {
+            applyMaxChars(s, maxCharsPerLine).forEach(w => sentences.push(w));
+          } else {
+            sentences.push(s);
+          }
+        }
         cur = '';
       }
     }
-    if (cur.trim().length > 0) sentences.push(cur.trim());
-    return sentences;
-  } else {
-    const paragraphs = cleanText.split(/\n\s*\n|\n/);
-    const result = [];
-    paragraphs.forEach(p => {
-      const trimmed = p.trim();
-      if (trimmed.length > 0) {
-        if (trimmed.length > 250) {
-          const parts = trimmed.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [trimmed];
-          let buffer = '';
-          parts.forEach(pt => {
-            if ((buffer + pt).length > 220 && buffer.length > 0) {
-              result.push(buffer.trim());
-              buffer = pt;
-            } else {
-              buffer += ' ' + pt;
-            }
-          });
-          if (buffer.trim().length > 0) result.push(buffer.trim());
-        } else {
-          result.push(trimmed);
-        }
+    if (cur.trim().length > 0) {
+      const s = preserveIndents ? cur : cur.trim();
+      if (maxCharsPerLine > 0) {
+        applyMaxChars(s, maxCharsPerLine).forEach(w => sentences.push(w));
+      } else {
+        sentences.push(s);
       }
-    });
-    return result;
+    }
+    return sentences;
   }
+
+  // 3. Paragraph mode
+  const paragraphs = cleanText.split(/\n\s*\n|\n/);
+  const result = [];
+  paragraphs.forEach(p => {
+    const trimmed = preserveIndents ? p : p.trim();
+    if (trimmed.length > 0) {
+      if (maxCharsPerLine > 0) {
+        applyMaxChars(trimmed, maxCharsPerLine).forEach(w => result.push(w));
+      } else if (trimmed.length > 250) {
+        const parts = trimmed.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [trimmed];
+        let buffer = '';
+        parts.forEach(pt => {
+          if ((buffer + pt).length > 220 && buffer.length > 0) {
+            result.push(buffer.trim());
+            buffer = pt;
+          } else {
+            buffer += ' ' + pt;
+          }
+        });
+        if (buffer.trim().length > 0) result.push(buffer.trim());
+      } else {
+        result.push(trimmed);
+      }
+    }
+  });
+  return result;
 }
 
 // Build unified continuous stream across all pages
@@ -5213,6 +6286,8 @@ const THEME_RENDERERS = {
   'theme-misa': { append: appendMisaBatch, streams: ['misa-story-stream'] },
   'theme-capcut': { append: appendCapCutBatch, streams: ['capcut-story-stream'] },
   'theme-sap': { append: appendSAPBatch, streams: ['sap-story-stream'] },
+  'theme-gmail': { append: appendGmailBatch, streams: ['gmail-story-stream'] },
+  'theme-outlook': { append: appendOutlookBatch, streams: ['outlook-story-stream'] },
   // Google Sheets / Excel (spreadsheet table) is the default
   default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
 };
@@ -5888,7 +6963,9 @@ const ACTIVE_ROW_SPECS = {
   'theme-revit': { id: 'revit-clause-', cls: 'active-clause' },
   'theme-misa': { id: 'misa-order-', cls: 'selected-order-row' },
   'theme-capcut': { id: 'capcut-cap-', cls: 'active-caption' },
-  'theme-sap': { id: 'sap-item-', cls: 'selected-sap-row' }
+  'theme-sap': { id: 'sap-item-', cls: 'selected-sap-row' },
+  'theme-gmail': { id: 'gmail-para-', cls: 'active-email-para' },
+  'theme-outlook': { id: 'outlook-para-', cls: 'active-outlook-para' }
 };
 
 // Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
@@ -6093,6 +7170,8 @@ function getActiveScrollContainer() {
     'theme-misa': 'misa-orders-scroll-container',
     'theme-capcut': 'capcut-scroll-container',
     'theme-sap': 'sap-scroll-container',
+    'theme-gmail': 'gmail-scroll-container',
+    'theme-outlook': 'outlook-scroll-container',
   };
   const id = containerMap[state.theme];
   if (id) {
@@ -6319,6 +7398,10 @@ function updateLoadingProgress(percent, label = '') {
   const text = spinner?.querySelector('.reader-loading-progress-label');
   if (bar) bar.style.width = `${safePercent}%`;
   if (text) text.textContent = label || `${Math.round(safePercent)}%`;
+
+  if (typeof updatePortalUploadProgress === 'function') {
+    updatePortalUploadProgress(safePercent, label);
+  }
 }
 function hideLoading() {
   const spinner = document.getElementById('loading-spinner');
@@ -6585,6 +7668,28 @@ function appendCapCutBatch(count) {
 }
 
 // 21. SAP GUI 8.0 / S/4HANA Purchase Order ALV Grid Batch Renderer
+function appendGmailBatch(count) {
+  appendSimpleThemeBatch(count, 'gmail-story-stream', chunk => {
+    const el = document.createElement('div');
+    el.className = 'gmail-story-para';
+    el.id = `gmail-para-${chunk.globalIndex}`;
+    const heading = (chunk.indexInPage === 0) ? `<div class="gmail-section-heading">§ Phần ${chunk.page} — Phân đoạn tài liệu kỹ thuật</div>` : '';
+    el.innerHTML = `${heading}<div class="gmail-para-text">${escapeHtml(chunk.text)}</div><span class="gmail-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
+    return el;
+  });
+}
+
+function appendOutlookBatch(count) {
+  appendSimpleThemeBatch(count, 'outlook-story-stream', chunk => {
+    const el = document.createElement('div');
+    el.className = 'outlook-story-para';
+    el.id = `outlook-para-${chunk.globalIndex}`;
+    const heading = (chunk.indexInPage === 0) ? `<div class="outlook-section-heading">Mục ${chunk.page}: Đặc tả yêu cầu kỹ thuật &amp; phân tích</div>` : '';
+    el.innerHTML = `${heading}<div class="outlook-para-text">${escapeHtml(chunk.text)}</div><span class="outlook-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
+    return el;
+  });
+}
+
 function appendSAPBatch(count) {
   const stream = document.getElementById('sap-story-stream');
   if (!stream || state.allChunks.length === 0) return;

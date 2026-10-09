@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script src="version-check.js?v=20261008-11" data-app-version="20261008-11"></script>
+  <title>Hộp thư đến - minhquan@outlook.com - Outlook</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2214%22%20y%3D%228%22%20width%3D%2228%22%20height%3D%2232%22%20rx%3D%224%22%20fill%3D%22%230078D4%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10v22a4%204%200%200%201-4%204H18a4%204%200%200%201-4-4V14z%22%20fill%3D%22%2328A8EA%22%20opacity%3D%220.6%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Crect%20x%3D%226%22%20y%3D%2212%22%20width%3D%2222%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23005A9E%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2224%22%20r%3D%226.5%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223.2%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=20261008-11">
+  <link rel="stylesheet" href="css/outlook.css?v=20261008-11">
+  <script src="static/pdf.min.js" defer></script>
+</head>
+<body class="theme-outlook">
+  <div class="outlook-app-container">
+    <!-- 1. TOP MICROSOFT 365 RIBBON BAR -->
+    <header class="outlook-header">
+      <div class="outlook-header-left">
+        <!-- 9-dots waffle app launcher -->
+        <button class="outlook-waffle-btn" title="Trình khởi chạy ứng dụng">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="4" cy="4" r="2.2"/><circle cx="12" cy="4" r="2.2"/><circle cx="20" cy="4" r="2.2"/>
+            <circle cx="4" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="20" cy="12" r="2.2"/>
+            <circle cx="4" cy="20" r="2.2"/><circle cx="12" cy="20" r="2.2"/><circle cx="20" cy="20" r="2.2"/>
+          </svg>
+        </button>
+        <span class="outlook-title">Outlook</span>
+      </div>
+
+      <div class="outlook-header-center">
+        <div class="outlook-search-bar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="outlook-search-input" placeholder="Tìm kiếm (Ctrl+E)" readonly>
+        </div>
+      </div>
+
+      <div class="outlook-header-right">
+        <button class="outlook-icon-btn" title="Gặp gỡ ngay">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </button>
+        <button class="outlook-icon-btn" title="OneNote Feed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        </button>
+        <button class="outlook-icon-btn" title="Thông báo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        </button>
+        <button class="outlook-icon-btn" title="Cài đặt">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        </button>
+        <div class="outlook-avatar-wrap" title="Tài khoản: Nguyễn Minh Quân (minhquan@outlook.com)">
+          <div class="outlook-avatar">MQ</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. MAIN 3-PANE WORKSPACE: APP RAIL + FOLDERS + MESSAGES + READING PANE -->
+    <div class="outlook-body">
+      <!-- 2A. LEFTMOST APP RAIL -->
+      <nav class="outlook-app-rail">
+        <div class="outlook-rail-item active" title="Thư">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div class="outlook-rail-item" title="Lịch">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+        </div>
+        <div class="outlook-rail-item" title="Mọi người">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        </div>
+        <div class="outlook-rail-item" title="To Do">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <div class="outlook-rail-item" title="OneDrive">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+        </div>
+      </nav>
+
+      <!-- 2B. FOLDER PANE -->
+      <aside class="outlook-folder-pane">
+        <div class="outlook-new-mail-wrap">
+          <button class="outlook-new-mail-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <span>Thư mới</span>
+          </button>
+        </div>
+
+        <nav class="outlook-folder-list">
+          <div class="outlook-folder-item active" title="Hộp thư đến">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H4.99c-1.11 0-1.98.89-1.98 2L3 19c0 1.1.88 2 1.99 2H19c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H4.99V5H19v10z"/></svg>
+            <span class="outlook-folder-name">Hộp thư đến</span>
+            <span class="outlook-folder-badge">9</span>
+          </div>
+
+          <div class="outlook-folder-item" title="Thư rác">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3zM12 17.3c-.72 0-1.3-.58-1.3-1.3 0-.72.58-1.3 1.3-1.3.72 0 1.3.58 1.3 1.3 0 .72-.58 1.3-1.3 1.3zm1-4.3h-2V7h2v6z"/></svg>
+            <span class="outlook-folder-name">Thư rác</span>
+          </div>
+
+          <div class="outlook-folder-item" title="Bản nháp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            <span class="outlook-folder-name">Bản nháp</span>
+          </div>
+
+          <div class="outlook-folder-item" title="Mục đã gửi">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <span class="outlook-folder-name">Mục đã gửi</span>
+          </div>
+
+          <div class="outlook-folder-item" title="Mục đã xóa">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            <span class="outlook-folder-name">Mục đã xóa</span>
+          </div>
+
+          <div class="outlook-folder-item" title="Lưu trữ">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/></svg>
+            <span class="outlook-folder-name">Lưu trữ</span>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- 2C. MIDDLE MESSAGE LIST PANE -->
+      <aside class="outlook-message-list-pane">
+        <!-- Message Filter Tabs -->
+        <div class="outlook-filter-tabs">
+          <span class="outlook-filter-tab active">Ưu tiên</span>
+          <span class="outlook-filter-tab">Khác</span>
+        </div>
+
+        <div class="outlook-messages-scroll">
+          <!-- Active Email Item (Currently Reading) -->
+          <div class="outlook-msg-card active">
+            <div class="outlook-msg-card-top">
+              <span class="outlook-msg-sender">Nguyễn Minh Quân</span>
+              <span class="outlook-msg-time">08:30</span>
+            </div>
+            <div class="outlook-msg-subject">[Dự án 2026] Báo cáo tiến độ phân tích hệ thống</div>
+            <div class="outlook-msg-preview">Kính gửi ban quản trị, đính kèm dưới đây là nội dung chi tiết...</div>
+          </div>
+
+          <!-- Message 2 -->
+          <div class="outlook-msg-card">
+            <div class="outlook-msg-card-top">
+              <span class="outlook-msg-sender">Microsoft Security</span>
+              <span class="outlook-msg-time">Hôm qua</span>
+            </div>
+            <div class="outlook-msg-subject">Cập nhật chính sách xác thực đa yếu tố MFA</div>
+            <div class="outlook-msg-preview">Thông báo bắt buộc rà soát phương thức xác thực Microsoft Authenticator...</div>
+          </div>
+
+          <!-- Message 3 -->
+          <div class="outlook-msg-card">
+            <div class="outlook-msg-card-top">
+              <span class="outlook-msg-sender">Ban Quản Trị Dự Án</span>
+              <span class="outlook-msg-time">T3</span>
+            </div>
+            <div class="outlook-msg-subject">Biên bản họp rà soát kiến trúc quý 3</div>
+            <div class="outlook-msg-preview">Gửi các thành viên dự án tài liệu tổng kết các đầu việc tuần này...</div>
+          </div>
+
+          <!-- Message 4 -->
+          <div class="outlook-msg-card">
+            <div class="outlook-msg-card-top">
+              <span class="outlook-msg-sender">DevOps &amp; SRE Team</span>
+              <span class="outlook-msg-time">T2</span>
+            </div>
+            <div class="outlook-msg-subject">Thông báo bảo trì máy chủ CI/CD</div>
+            <div class="outlook-msg-preview">Dự kiến bảo trì cụm runner Kubernetes vào đêm thứ 7 tuần này...</div>
+          </div>
+
+          <!-- Message 5 -->
+          <div class="outlook-msg-card">
+            <div class="outlook-msg-card-top">
+              <span class="outlook-msg-sender">Phòng Tài Chính Kế Toán</span>
+              <span class="outlook-msg-time">02/10</span>
+            </div>
+            <div class="outlook-msg-subject">Xác nhận ngân sách bản quyền phần mềm</div>
+            <div class="outlook-msg-preview">Đã phê duyệt chi phí gia hạn tài khoản đám mây doanh nghiệp...</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 2D. RIGHT READING PANE -->
+      <main class="outlook-reading-pane">
+        <!-- Reading Pane Command Bar -->
+        <div class="outlook-command-bar">
+          <button class="outlook-cmd-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/></svg>
+            <span>Trả lời</span>
+          </button>
+          <button class="outlook-cmd-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/><path d="M14 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/></svg>
+            <span>Trả lời tất cả</span>
+          </button>
+          <button class="outlook-cmd-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 9V5l7 7-7 7v-4.1c-5 0-8.5 1.6-11 5.1 1-5 4-10 11-11z"/></svg>
+            <span>Chuyển tiếp</span>
+          </button>
+          <span class="outlook-cmd-sep"></span>
+          <button class="outlook-cmd-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+            <span>Xóa</span>
+          </button>
+          <button class="outlook-cmd-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.63 5.84C17.27 5.33 16.67 5 16 5L5 5.01C3.9 5.01 3 5.9 3 7v10c0 1.1.9 1.99 2 1.99L16 19c.67 0 1.27-.33 1.63-.84L22 12l-4.37-6.16z"/></svg>
+            <span>Phân loại</span>
+          </button>
+        </div>
+
+        <!-- Reading Content View -->
+        <div id="outlook-story-view" class="outlook-email-view">
+          <div class="outlook-email-scroll" id="outlook-scroll-container">
+            <!-- Email Subject -->
+            <div class="outlook-subject-header">
+              <h1 class="outlook-subject-text" id="outlook-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tiêu đề email">
+                [Dự án 2026] Báo cáo tiến độ phân tích hệ thống &amp; tài liệu đặc tả
+              </h1>
+            </div>
+
+            <!-- Email Sender Card -->
+            <div class="outlook-sender-row">
+              <div class="outlook-sender-avatar">MQ</div>
+              <div class="outlook-sender-info">
+                <div class="outlook-sender-name-line">
+                  <span class="outlook-sender-name">Nguyễn Minh Quân</span>
+                  <span class="outlook-sender-addr">&lt;minhquan@outlook.com&gt;</span>
+                </div>
+                <div class="outlook-to-line">
+                  <span>Tới: tôi &lt;user@company.corp&gt;</span>
+                  <span class="outlook-email-date">• Hôm nay, 08:30</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email Body Stream Container -->
+            <div class="outlook-body-text-pane">
+              <div class="outlook-intro-notice">
+                Kính gửi quý anh/chị và các thành viên phụ trách dự án,<br><br>
+                Dưới đây là nội dung toàn văn của tài liệu phân tích kỹ thuật và đặc tả yêu cầu chức năng. Xin vui lòng theo dõi các đề mục bên dưới:
+              </div>
+
+              <!-- Stream Chunks Container -->
+              <div id="outlook-story-stream" class="outlook-stream-wrapper">
+                <!-- Rendered by app.js appendOutlookBatch -->
+              </div>
+
+              <div class="outlook-signoff">
+                Trân trọng,<br>
+                <b>Nguyễn Minh Quân</b><br>
+                <span style="color: #605e5c; font-size: 12px;">Phụ trách Kiến trúc Kỹ thuật • Enterprise Technology Team</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOSS KEY MODE: BÁO CÁO BẢO MẬT MICROSOFT 365 DEFENDER -->
+        <div id="outlook-boss-view" class="outlook-boss-container" style="display: none;">
+          <div class="outlook-boss-header">
+            <h2>MICROSOFT 365 DEFENDER — BÁO CÁO ĐÁNH GIÁ TUÂN THỦ BẢO MẬT &amp; GIÁM SÁT ĐIỂM YẾU</h2>
+            <div style="font-size: 12px; color: #605e5c; margin-top: 6px;">
+              Tạo bởi: <b>Microsoft Security &amp; Compliance Center</b> • Mã kiểm toán: MS-AUDIT-2026-X812
+            </div>
+          </div>
+          <div class="outlook-boss-body">
+            <p>Kính gửi: Ban Giám Đốc An Ninh Thông Tin (CISO) và Trưởng Các Bộ Phận Kỹ Thuật,</p>
+            <br>
+            <p>Hệ thống Microsoft 365 Defender đã hoàn tất đợt rà soát an toàn thông tin tự động toàn diện trên hạ tầng Azure Active Directory / Microsoft Entra ID:</p>
+            <br>
+            <p>1. <b>Điểm số an toàn định lượng (Secure Score):</b> Đạt 89.4/100, tăng 4.2% so với kỳ đánh giá tháng trước.</p>
+            <p>2. <b>Rà soát truy cập có điều kiện (Conditional Access):</b> 100% tài khoản nội bộ đã áp dụng quy tắc chặn truy cập từ các địa chỉ IP ngoài danh sách an toàn.</p>
+            <p>3. <b>Ngăn ngừa rò rỉ dữ liệu (Data Loss Prevention - DLP):</b> Cơ chế mã hóa tự động Azure Information Protection (AIP) đang hoạt động ổn định trên toàn bộ luồng email và lưu trữ đám mây.</p>
+            <br>
+            <p>Báo cáo chi tiết đã được gửi tới hội đồng quản trị an ninh thông tin.</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
+
+  <!-- MODAL: STEALTH SETTINGS & HELP -->
+  <div class="stealth-modal-overlay" id="stealth-modal">
+    <div class="stealth-modal-content">
+      <div class="modal-header">
+        <h3>⚙️ Cài Đặt Bộ Đọc Truyện</h3>
+        <button class="modal-close-btn" id="btn-close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-group">
+          <h4>1. Nạp tài liệu đọc</h4>
+          <p class="guide-text">Chọn file PDF, TXT hoặc EPUB. Nội dung được xử lý trực tiếp trên thiết bị của bạn.</p>
+          <div class="file-drop-area" id="modal-drop-area">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#0078D4"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <p>Kéo &amp; thả file PDF, TXT, EPUB vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
+            <input type="file" id="modal-file-pdf" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip">
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h4>2. Tùy Chỉnh Cỡ Chữ &amp; Hiển Thị Đọc Truyện</h4>
+          <p class="guide-text">Tăng giảm cỡ chữ và khoảng cách dòng để tối ưu trải nghiệm đọc êm mắt nhất:</p>
+          <div class="font-settings-group">
+            <div class="font-settings-row">
+              <span style="font-weight: 600; width: 90px; color: #323130;">Cỡ chữ:</span>
+              <button class="font-step-ctrl-btn" id="modal-btn-font-dec" title="Giảm cỡ chữ (hoặc nhấn phím [)">A−</button>
+              <span class="font-size-badge" id="modal-badge-font-size">11pt</span>
+              <button class="font-step-ctrl-btn" id="modal-btn-font-inc" title="Tăng cỡ chữ (hoặc nhấn phím ])">A+</button>
+              <input type="range" id="modal-slider-font-size" class="font-slider" min="8" max="28" step="1" value="11" title="Kéo để đổi cỡ chữ nhanh">
+            </div>
+
+            <div class="font-settings-row">
+              <span style="font-weight: 600; width: 90px; color: #323130;">Giãn dòng:</span>
+              <select id="modal-select-line-height" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #8a8886;">
+                <option value="1.4">1.4 (Gọn gàng)</option>
+                <option value="1.6">1.6 (Tiêu chuẩn)</option>
+                <option value="1.75" selected>1.75 (Tối ưu êm mắt - Tỷ lệ vàng)</option>
+                <option value="2.0">2.0 (Thông thoáng)</option>
+              </select>
+            </div>
+
+            <div class="font-settings-row">
+              <span style="font-weight: 600; width: 90px; color: #323130;">Phông chữ:</span>
+              <select id="modal-select-font-family" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #8a8886;">
+                <option value="Segoe UI" selected>Segoe UI (Chuẩn Microsoft)</option>
+                <option value="Calibri">Calibri (Office)</option>
+                <option value="Arial">Arial (Phổ biến)</option>
+                <option value="Roboto">Roboto (Google)</option>
+                <option value="Times New Roman">Times New Roman (Cổ điển)</option>
+                <option value="Georgia">Georgia (Truyện chữ)</option>
+              </select>
+            </div>
+          </div>
+          <p class="guide-text" style="margin-top: 8px; font-size: 11px; color: #605e5c;">
+             <b>Mẹo đọc nhanh:</b> Nhấn phím <kbd style="padding: 1px 5px; font-size: 11px;">[</kbd> để giảm cỡ chữ, phím <kbd style="padding: 1px 5px; font-size: 11px;">]</kbd> để tăng cỡ chữ trực tiếp khi đang đọc!
+          </p>
+        </div>
+
+        <div class="settings-group">
+          <h4>3. Phím Tắt Khẩn Cấp (Boss Key) &amp; Điều Khiển</h4>
+          <ul class="hotkey-list">
+            <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang báo cáo Microsoft 365 Defender (bấm lại để đọc tiếp).</li>
+            <li><kbd>[</kbd> / <kbd>]</kbd> : Giảm / tăng cỡ chữ nhanh khi đang đọc.</li>
+            <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Chuyển sang câu/dòng tiếp theo.</li>
+            <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
+            <li><kbd>PageDown</kbd> / <kbd>PageUp</kbd> : Sang phần đọc tiếp theo / phần trước.</li>
+            <li><kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).</li>
+            <li><kbd>H</kbd> : Ẩn / hiện toàn bộ thanh điều khiển đọc.</li>
+          </ul>
+        </div>
+
+        <div class="settings-group">
+          <h4>4. Đóng góp ý kiến &amp; Báo lỗi (Google Form)</h4>
+          <p class="guide-text">Bạn muốn đề xuất tính năng mới hoặc gặp lỗi trong quá trình sử dụng? Hãy gửi ý kiến cho tác giả qua biểu mẫu Google Form:</p>
+          <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
+            <button class="primary-btn" id="btn-open-feedback-settings" style="padding: 7px 16px; font-size: 12px; background: #0078d4;">
+               Mở Google Form Góp Ý
+            </button>
+            <button class="primary-btn duo-btn-progress-settings" id="btn-open-progress-settings" style="padding: 7px 16px; font-size: 12px; background: #107c41;" title="Xem bảng theo dõi tiến độ cập nhật trên Google Sheets">
+              📊 Tiến Độ Cập Nhật
+            </button>
+            <button class="portal-nav-btn" id="btn-config-feedback-url" style="padding: 7px 12px; font-size: 11px;" title="Cài đặt đường link Google Form (dành cho Admin)">
+              ⚙️ Cài đặt link
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" id="btn-save-settings" style="background: #0078d4;">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-spinner" style="display: none;">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p id="loading-status-text">Đang trích xuất nội dung tài liệu...</p>
+    </div>
+  </div>
+
+  <!-- Floating Quick Controls Visibility Toggle -->
+  <button id="btn-toggle-ctrls-floating" class="floating-stealth-toggle" title="Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)">
+    <span class="stealth-toggle-icon">👁</span>
+    <span class="stealth-toggle-text">Điều khiển (H)</span>
+  </button>
+
+  <!-- Toast Notification for Seamless Page Navigation -->
+  <div id="page-flip-toast" class="page-flip-toast"></div>
+
+  <script src="app.js?v=20261008-11" defer></script>
+</body>
+</html>

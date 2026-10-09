@@ -9,7 +9,7 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <script src="version-check.js?v=20261008-10" data-app-version="20261008-10"></script>
+    <script src="version-check.js?v=20261008-11" data-app-version="20261008-11"></script>
     <script>
       (function() {
         try {
@@ -41,7 +41,9 @@
             'theme-revit': 'revit.html',
             'theme-misa': 'misa.html',
             'theme-capcut': 'capcut.html',
-            'theme-sap': 'sap.html'
+            'theme-sap': 'sap.html',
+            'theme-gmail': 'gmail.html',
+            'theme-outlook': 'outlook.html'
           };
           if (skipPortal && savedTheme && themePages[savedTheme]) {
             window.location.replace(themePages[savedTheme]);
@@ -63,7 +65,7 @@
     <meta name="twitter:title" content="web ngụy trang đọc truyện trong giờ làm việc" />
     <meta name="twitter:description" content="web ngụy trang đọc truyện trong giờ làm việc - Công cụ đọc truyện ngụy trang giao diện văn phòng an toàn tuyệt đối." />
     <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M37%2045H11c-2.2%200-4-1.8-4-4V7c0-2.2%201.8-4%204-4h18l12%2012v26c0%202.2-1.8%204-4%204z%22/%3E%20%3Cpath%20fill%3D%22%2387CEAC%22%20d%3D%22M29%203l12%2012H29V3z%22/%3E%20%3Cpath%20fill%3D%22%230B8043%22%20d%3D%22M29%2015h12l-12-12v12z%22%20opacity%3D%220.2%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2221%22%20width%3D%2220%22%20height%3D%2218%22%20rx%3D%221.5%22/%3E%20%3Cpath%20fill%3D%22%230F9D58%22%20d%3D%22M14%2026.5h20v2H14zm0%205.5h20v2H14zm8-11h2.5v18H22z%22/%3E%20%3C/svg%3E" />
-    <link rel="stylesheet" href="style.css?v=20261008-10" />
+    <link rel="stylesheet" href="style.css?v=20261008-11" />
     <script src="static/pdf.min.js" defer></script>
   </head>
   <body class="theme-googlesheets">
@@ -717,8 +719,8 @@
               </svg>
             </div>
             <div class="duo-brand-titles">
-              <h1>Stealth Reader</h1>
-              <h2>Đọc tài liệu ngụy trang công sở — Nếu gặp lỗi tải lại: <kbd style="font-family: var(--portal-font-mono); font-size: 18px;">Ctrl+F5</kbd></h2>
+              <h1>Stealth Reader  </h1>
+              <h2>Đọc tài liệu ngụy trang công sở — Nếu gặp lỗi ấn tải lại: <kbd style="font-family: var(--portal-font-mono); font-size: 18px;">Ctrl+F5</kbd></h2>
               <br />
 
             </div>
@@ -1150,79 +1152,112 @@
               </div>
               <div class="duo-mission-check">✓</div>
             </div>
+
+            <!-- Theme 22: Gmail -->
+            <div class="duo-mission-item" data-theme="theme-gmail">
+              <div class="duo-mission-icon-box gmail" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <path fill="#4285F4" d="M4.5 38.5V13.8L24 27.5l19.5-13.7v24.7c0 2.2-1.8 4-4 4H8.5c-2.2 0-4-1.8-4-4z"/>
+                  <path fill="#34A853" d="M43.5 13.8v24.7c0 2.2-1.8 4-4 4h-5V20.5l9-6.7z"/>
+                  <path fill="#4285F4" d="M4.5 13.8v24.7c0 2.2 1.8 4 4 4h5V20.5l-9-6.7z"/>
+                  <path fill="#EA4335" d="M13.5 5.5L24 14.5l10.5-9h-21z"/>
+                  <path fill="#FBBC05" d="M4.5 9.5C4.5 7.3 6.3 5.5 8.5 5.5h5l-9 8.3v-4.3z"/>
+                  <path fill="#C5221F" d="M43.5 9.5c0-2.2-1.8-4-4-4h-5l9 8.3v-4.3z"/>
+                  <path fill="#EA4335" d="M4.5 13.8L24 27.5 43.5 13.8 24 29 4.5 13.8z"/>
+                </svg>
+              </div>
+              <div class="duo-mission-info">
+                <span class="duo-mission-title">Gmail</span>
+              </div>
+              <div class="duo-mission-check">✓</div>
+            </div>
+
+            <!-- Theme 23: Outlook -->
+            <div class="duo-mission-item" data-theme="theme-outlook">
+              <div class="duo-mission-icon-box outlook" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect x="14" y="8" width="28" height="32" rx="4" fill="#0078D4"/>
+                  <path d="M14 14l14 10 14-10v22a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V14z" fill="#28A8EA" opacity="0.6"/>
+                  <path d="M14 14l14 10 14-10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="6" y="12" width="22" height="24" rx="4" fill="#005A9E"/>
+                  <circle cx="17" cy="24" r="6.5" fill="none" stroke="#FFFFFF" stroke-width="3.2"/>
+                </svg>
+              </div>
+              <div class="duo-mission-info">
+                <span class="duo-mission-title">Outlook</span>
+              </div>
+              <div class="duo-mission-check">✓</div>
+            </div>
           </div>
 
           <!-- Nạp tài liệu (Nổi bật & Bắt buộc có truyện mới bắt đầu đọc) -->
             <div class="duo-upload-quest" id="portal-upload-card">
-              <div class="duo-upload-badge-tag" id="portal-upload-badge">
-                <span class="badge-icon">📂</span>
-                <span class="badge-text" id="portal-upload-badge-text"
-                  >BƯỚC 1: NẠP FILE TRUYỆN ĐỂ BẮT ĐẦU</span
-                >
-              </div>
-              <div class="duo-upload-main">
-                <div class="duo-upload-left">
-                  <div class="duo-upload-icon-box" id="portal-upload-icon-box">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path
-                        d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
-                      />
-                    </svg>
-                  </div>
-                  <div class="duo-upload-text-group">
-                    <div class="duo-upload-title-row">
-                      <span class="duo-upload-name" id="portal-pdf-filename"
-                        >Chưa chọn file truyện</span
-                      >
-                      <span
-                        class="duo-upload-status-pill"
-                        id="portal-upload-status-pill"
-                        >Chưa có truyện</span
-                      >
+              <input type="file" id="portal-file-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" multiple style="display: none">
+              <div class="portal-upload-progress-container" id="portal-upload-progress" style="display: none;">
+                <div class="portal-progress-header">
+                  <div class="portal-progress-info">
+                    <div class="portal-progress-spinner"></div>
+                    <div class="portal-progress-text-group">
+                      <span class="portal-progress-title" id="portal-progress-title">Đang nạp file...</span>
+                      <span class="portal-progress-detail" id="portal-progress-detail">Đang đọc dữ liệu...</span>
                     </div>
-                    <span class="duo-upload-hint" id="portal-upload-hint"
-                      >Bấm nút bên cạnh để tải file .PDF, .TXT hoặc .EPUB từ
-                      máy</span
-                    >
                   </div>
+                  <span class="portal-progress-percent" id="portal-progress-percent">0%</span>
                 </div>
-                <label
-                  for="portal-file-input"
-                  class="portal-file-change-btn"
-                  id="portal-upload-btn-label"
-                >
-                  <span class="btn-icon">📁</span>
-                  <span id="portal-upload-btn-text">Tải truyện lên</span>
-                </label>
-                <input
-                  type="file"
-                  id="portal-file-input"
-                  accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip"
-                  style="display: none"
-                />
+                <div class="portal-progress-track">
+                  <div class="portal-progress-fill" id="portal-progress-fill" style="width: 0%;"></div>
+                </div>
               </div>
-              <div
-                class="duo-upload-alert"
-                id="portal-upload-alert"
-                style="display: none"
-              >
-                ⚠️ Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu
-                đọc!
+              <div id="portal-upload-content">
+                <div class="duo-upload-badge-tag" id="portal-upload-badge">
+                  <span class="badge-icon" id="portal-upload-badge-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                  </span>
+                  <span class="badge-text" id="portal-upload-badge-text">BƯỚC 1: NẠP FILE TRUYỆN ĐỂ BẮT ĐẦU</span>
+                </div>
+                <div class="duo-upload-main">
+                  <div class="duo-upload-left">
+                    <div class="duo-upload-icon-box" id="portal-upload-icon-box">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                    </div>
+                    <div class="duo-upload-text-group">
+                      <div class="duo-upload-title-row">
+                        <span class="duo-upload-name" id="portal-pdf-filename">Chưa chọn file truyện</span>
+                        <span class="duo-upload-status-pill" id="portal-upload-status-pill">Chưa có truyện</span>
+                      </div>
+                      <span class="duo-upload-hint" id="portal-upload-hint">Bấm nút bên cạnh để tải file .PDF, .TXT hoặc .EPUB từ máy (hỗ trợ chọn nhiều file)</span>
+                    </div>
+                  </div>
+                  <label for="portal-file-input" class="portal-file-change-btn" id="portal-upload-btn-label">
+                    <span class="btn-icon" id="portal-upload-btn-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                    </span>
+                    <span id="portal-upload-btn-text">Tải truyện lên</span>
+                  </label>
+                </div>
+              </div>
+              <div class="duo-upload-alert" id="portal-upload-alert" style="display: none">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <span>Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc!</span>
               </div>
             </div>
 
             <!-- Enter Button -->
-            <button
-              class="duo-btn-primary disabled-need-file"
-              id="btn-portal-enter"
-              title="Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc"
-            >
-              ⚠️ Cần nạp file truyện để bắt đầu đọc
+            <button class="duo-btn-primary disabled-need-file" id="btn-portal-enter" title="Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Cần nạp file truyện để bắt đầu đọc</span>
             </button>
 
             <!-- <label class="duo-chk-label">
@@ -1287,7 +1322,7 @@
             <!-- QR Code Frame -->
             <div class="duo-qr-frame">
               <img
-                src="static/donate_qr_card.png?v=20261008-10"
+                src="static/donate_qr_card.png?v=20261008-11"
                 alt="Mã QR Vietcombank NGUYEN TRAN HAI PHONG"
                 class="duo-qr-img"
                 id="portal-qr-img"
@@ -1348,7 +1383,7 @@
     <!-- Toast Notification for Seamless Page Navigation -->
     <div id="page-flip-toast" class="page-flip-toast"></div>
 
-    <script src="app.js?v=20261008-10" defer></script>
+    <script src="app.js?v=20261008-11" defer></script>
   </body>
 </html>
 

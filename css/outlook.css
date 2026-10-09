@@ -1,0 +1,582 @@
+/* ==========================================================================
+   OUTLOOK THEME STYLES - AUTHENTIC MICROSOFT 365 REPLICA
+   ========================================================================== */
+
+body.theme-outlook {
+  margin: 0;
+  padding: 0;
+  background-color: #f3f2f1;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  color: #201f1e;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+body.theme-outlook *,
+body.theme-outlook *::before,
+body.theme-outlook *::after {
+  box-sizing: border-box;
+}
+
+.outlook-app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #f3f2f1;
+}
+
+/* 1. TOP HEADER (MICROSOFT 365 RIBBON) */
+.outlook-header {
+  height: 48px;
+  flex: 0 0 48px;
+  background-color: #0078d4;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  user-select: none;
+}
+
+.outlook-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.outlook-waffle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.outlook-waffle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.outlook-title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.outlook-header-center {
+  flex: 1 1 480px;
+  max-width: 480px;
+  margin: 0 16px;
+}
+
+.outlook-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+  height: 32px;
+  padding: 0 12px;
+  color: #ffffff;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.outlook-search-bar:focus-within,
+.outlook-search-bar:hover {
+  background-color: #ffffff;
+  color: #242424;
+}
+
+.outlook-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: inherit;
+  outline: none;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+.outlook-search-input::placeholder {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.outlook-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.outlook-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.outlook-icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.outlook-avatar-wrap {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.outlook-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #107c41;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 2. BODY LAYOUT */
+.outlook-body {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+/* 2A. LEFT APP RAIL */
+.outlook-app-rail {
+  width: 48px;
+  flex: 0 0 48px;
+  background-color: #f0f0f0;
+  border-right: 1px solid #e1dfdd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 12px;
+  user-select: none;
+}
+
+.outlook-rail-item {
+  width: 38px;
+  height: 38px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #605e5c;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.outlook-rail-item:hover {
+  background-color: #e1dfdd;
+  color: #201f1e;
+}
+
+.outlook-rail-item.active {
+  background-color: #ffffff;
+  color: #0078d4;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* 2B. FOLDER PANE */
+.outlook-folder-pane {
+  width: 190px;
+  flex: 0 0 190px;
+  background-color: #faf9f8;
+  border-right: 1px solid #edebe9;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 8px;
+  user-select: none;
+}
+
+.outlook-new-mail-wrap {
+  margin-bottom: 12px;
+}
+
+.outlook-new-mail-btn {
+  width: 100%;
+  height: 36px;
+  border-radius: 4px;
+  border: none;
+  background-color: #0078d4;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.outlook-new-mail-btn:hover {
+  background-color: #106ebe;
+}
+
+.outlook-folder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.outlook-folder-item {
+  height: 32px;
+  border-radius: 4px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #323130;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.outlook-folder-item:hover {
+  background-color: #edebe9;
+}
+
+.outlook-folder-item.active {
+  background-color: #e1dfdd;
+  color: #0078d4;
+  font-weight: 600;
+}
+
+.outlook-folder-name {
+  flex: 1;
+}
+
+.outlook-folder-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0078d4;
+}
+
+/* 2C. MIDDLE MESSAGE LIST PANE */
+.outlook-message-list-pane {
+  width: 320px;
+  flex: 0 0 320px;
+  background-color: #ffffff;
+  border-right: 1px solid #edebe9;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.outlook-filter-tabs {
+  height: 40px;
+  flex: 0 0 40px;
+  border-bottom: 1px solid #edebe9;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 20px;
+  user-select: none;
+}
+
+.outlook-filter-tab {
+  font-size: 13px;
+  font-weight: 600;
+  color: #605e5c;
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.outlook-filter-tab.active {
+  color: #201f1e;
+  border-bottom-color: #0078d4;
+}
+
+.outlook-messages-scroll {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.outlook-msg-card {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f2f1;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.outlook-msg-card:hover {
+  background-color: #f8f9fa;
+}
+
+.outlook-msg-card.active {
+  background-color: #eff6fc;
+  border-left: 3px solid #0078d4;
+  padding-left: 13px;
+}
+
+.outlook-msg-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.outlook-msg-sender {
+  font-size: 13px;
+  font-weight: 600;
+  color: #201f1e;
+}
+
+.outlook-msg-time {
+  font-size: 11px;
+  color: #605e5c;
+}
+
+.outlook-msg-subject {
+  font-size: 13px;
+  font-weight: 500;
+  color: #323130;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.outlook-msg-preview {
+  font-size: 12px;
+  color: #605e5c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 2D. READING PANE */
+.outlook-reading-pane {
+  flex: 1 1 0%;
+  min-width: 0;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.outlook-command-bar {
+  height: 44px;
+  flex: 0 0 44px;
+  border-bottom: 1px solid #edebe9;
+  background-color: #faf9f8;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 6px;
+  user-select: none;
+}
+
+.outlook-cmd-btn {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 2px;
+  border: none;
+  background: transparent;
+  color: #323130;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.outlook-cmd-btn:hover {
+  background-color: #edebe9;
+}
+
+.outlook-cmd-sep {
+  width: 1px;
+  height: 18px;
+  background-color: #edebe9;
+  margin: 0 4px;
+}
+
+.outlook-email-view {
+  flex: 1 1 0%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.outlook-email-scroll {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 36px 60px;
+}
+
+.outlook-subject-header {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #edebe9;
+  padding-bottom: 14px;
+}
+
+.outlook-subject-text {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #201f1e;
+  line-height: 1.35;
+  outline: none;
+  cursor: text;
+}
+
+.outlook-subject-text:focus {
+  background-color: #f8fafd;
+  border-radius: 4px;
+}
+
+.outlook-sender-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.outlook-sender-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #0078d4;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.outlook-sender-info {
+  flex: 1;
+}
+
+.outlook-sender-name-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.outlook-sender-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #201f1e;
+}
+
+.outlook-sender-addr {
+  font-size: 12px;
+  color: #605e5c;
+}
+
+.outlook-to-line {
+  font-size: 12px;
+  color: #605e5c;
+  margin-top: 2px;
+}
+
+.outlook-body-text-pane {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #242424;
+  max-width: 900px;
+}
+
+.outlook-intro-notice {
+  margin-bottom: 20px;
+  color: #444746;
+  font-style: italic;
+  padding: 10px 14px;
+  background-color: #f8f9fa;
+  border-left: 3px solid #0078d4;
+  border-radius: 0 4px 4px 0;
+}
+
+.outlook-stream-wrapper {
+  margin: 16px 0;
+}
+
+.outlook-story-para {
+  margin: 0 0 12px 0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-left-color 0.15s ease;
+  line-height: 1.75;
+}
+
+.outlook-story-para:hover {
+  background-color: #f3f2f1;
+}
+
+.outlook-story-para.active-outlook-para,
+.outlook-story-para.active-chunk {
+  background-color: #deecf9 !important;
+  border-left: 3px solid #0078d4;
+  padding-left: 9px;
+}
+
+.outlook-signoff {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px dashed #edebe9;
+  line-height: 1.6;
+}
+
+/* BOSS VIEW */
+.outlook-boss-container {
+  padding: 32px 36px;
+  background-color: #ffffff;
+  flex: 1 1 0%;
+  overflow-y: auto;
+}
+
+.outlook-boss-banner {
+  background-color: #fff4ce;
+  border-left: 4px solid #ffb900;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #323130;
+}
+
+.outlook-boss-title {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #201f1e;
+}
+
+.outlook-boss-body {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #323130;
+}
