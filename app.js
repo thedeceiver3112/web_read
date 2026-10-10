@@ -24,6 +24,8 @@ const state = {
   pdfDoc: null,
   pdfFileName: '',
   documentId: '',
+  documentFileSize: 0,
+  documentFileType: '',
   currentPage: 1,
   totalPages: 1,
   firstStoryPage: 1,
@@ -260,6 +262,8 @@ const DOCUMENT_CACHE_STORE_NAME = 'documents';
 const ACTIVE_DOCUMENT_CACHE_KEY = 'active-document';
 const ACTIVE_DOCUMENT_SESSION_KEY = 'stealth_active_document_v2';
 const READING_BOOKMARKS_STORAGE_KEY = 'stealth_reader_bookmarks_v1';
+const HYBRID_SETTINGS_UPDATED_KEY = 'stealth_sync_settings_updated_v1';
+const HYBRID_SETTINGS_SIGNATURE_KEY = 'stealth_sync_settings_signature_v1';
 const MAX_SAVED_BOOKMARKS = 30;
 let documentCacheWritePromise = Promise.resolve();
 let activeDocumentWorker = null;
@@ -306,13 +310,34 @@ function hashDocumentIdentity(value) {
   return (hash >>> 0).toString(36);
 }
 
-function createDocumentId(file) {
+function createLegacyDocumentId(file) {
   if (!file || !file.name) return '';
   return `file-${hashDocumentIdentity([
     file.name.trim().toLowerCase(),
     Number(file.size) || 0,
     Number(file.lastModified) || 0
   ].join('|'))}`;
+}
+
+async function createDocumentFingerprint(file) {
+  if (!file || !file.name) return '';
+  if (!window.crypto?.subtle || typeof file.slice !== 'function') return createLegacyDocumentId(file);
+  try {
+    const sampleSize = 1024 * 1024;
+    const first = new Uint8Array(await file.slice(0, Math.min(sampleSize, file.size)).arrayBuffer());
+    const lastStart = Math.max(first.byteLength, file.size - sampleSize);
+    const last = new Uint8Array(await file.slice(lastStart, file.size).arrayBuffer());
+    const metadata = new TextEncoder().encode(`${file.size}|${getDocumentExtension(file)}|`);
+    const sample = new Uint8Array(metadata.byteLength + first.byteLength + last.byteLength);
+    sample.set(metadata, 0);
+    sample.set(first, metadata.byteLength);
+    sample.set(last, metadata.byteLength + first.byteLength);
+    const digest = await window.crypto.subtle.digest('SHA-256', sample);
+    return `sha256-${Array.from(new Uint8Array(digest), byte => byte.toString(16).padStart(2, '0')).join('')}`;
+  } catch (error) {
+    console.warn('Không thể tạo fingerprint SHA-256, dùng định danh local:', error);
+    return createLegacyDocumentId(file);
+  }
 }
 
 function getCurrentDocumentId() {
@@ -423,6 +448,7 @@ function addManualBookmark(note = '') {
     localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(bookmarks));
     syncBookmarkButton();
     renderReaderToolsPanel('bookmarks');
+    scheduleHybridSync();
     showPageFlipToast(`Đã thêm dấu trang tại <b>trang ${page}</b>.`);
     return true;
   } catch (error) {
@@ -459,6 +485,242 @@ function restoreSavedReadingPosition(notify = false) {
     showPageFlipToast(`Đã mở lại tại <b>trang ${position.page}</b>, dòng ${position.globalIndex + 1}.`);
   }
   return true;
+}
+
+const hybridSyncState = {
+  enabled: false,
+  authenticated: false,
+  csrfToken: '',
+  user: null,
+  pushTimer: null,
+  pushing: false,
+  pending: false
+};
+
+function getHybridSettingsValues() {
+  return {
+    theme: state.theme,
+    fontSize: state.fontSize,
+    lineHeight: state.lineHeight,
+    fontFamily: state.fontFamily,
+    readingMode: state.readingMode,
+    autoScrollDelay: state.autoScrollDelay,
+    textDimLevel: state.textDimLevel,
+    layoutMode: state.layoutMode,
+    chunkMode: state.chunkMode,
+    maxCharsPerLine: state.maxCharsPerLine,
+    preserveIndents: state.preserveIndents,
+    compactBlankLines: state.compactBlankLines
+  };
+}
+
+function updateHybridSettingsVersion() {
+  const signature = JSON.stringify(getHybridSettingsValues());
+  if (localStorage.getItem(HYBRID_SETTINGS_SIGNATURE_KEY) !== signature) {
+    localStorage.setItem(HYBRID_SETTINGS_SIGNATURE_KEY, signature);
+    localStorage.setItem(HYBRID_SETTINGS_UPDATED_KEY, String(Date.now()));
+  }
+}
+
+function buildHybridSyncPayload() {
+  const documentId = getCurrentDocumentId();
+  if (!documentId || !state.pdfFileName || !state.allChunks.length) return null;
+  const saved = readSavedBookmarks();
+  const entry = normalizeBookmarkEntry(saved[documentId], documentId);
+  const position = entry.lastPosition || {
+    page: state.currentPage,
+    globalIndex: state.currentGlobalIndex,
+    totalPages: state.totalPages,
+    updatedAt: Date.now()
+  };
+  const progressPercent = state.allChunks.length > 1
+    ? (Math.max(0, Number(position.globalIndex) || 0) / (state.allChunks.length - 1)) * 100
+    : 100;
+  return {
+    document: {
+      documentId,
+      title: state.pdfFileName,
+      fileType: state.documentFileType || getDocumentExtension({ name: state.pdfFileName }),
+      fileSize: Number(state.documentFileSize) || 0,
+      pageCount: Number(state.totalPages) || 0,
+      chapterCount: state.documentToc.length
+    },
+    progress: {
+      location: {
+        page: Number(position.page) || 1,
+        globalIndex: Number(position.globalIndex) || 0,
+        totalPages: Number(position.totalPages) || state.totalPages
+      },
+      progressPercent,
+      updatedAt: Number(position.updatedAt) || Date.now()
+    },
+    bookmarks: entry.marks.map(mark => ({
+      id: mark.id,
+      location: { page: Number(mark.page) || 1, globalIndex: Number(mark.globalIndex) || 0 },
+      label: mark.note || '',
+      note: mark.note || '',
+      excerpt: mark.excerpt || '',
+      updatedAt: Number(mark.updatedAt || mark.createdAt) || Date.now()
+    })),
+    settings: {
+      values: getHybridSettingsValues(),
+      updatedAt: Number(localStorage.getItem(HYBRID_SETTINGS_UPDATED_KEY)) || Date.now()
+    }
+  };
+}
+
+function renderHybridAuthButton() {
+  const button = document.getElementById('hybrid-auth-button');
+  if (!button) return;
+  button.style.display = 'inline-flex';
+  button.classList.toggle('signed-in', hybridSyncState.authenticated);
+  if (!hybridSyncState.authenticated) {
+    button.innerHTML = '<span class="hybrid-google-mark">G</span><span>Đăng nhập Google</span>';
+    button.title = hybridSyncState.enabled
+      ? 'Đăng nhập Google để đồng bộ tiến độ và dấu trang'
+      : 'Google Sync chưa được cấu hình trên server';
+    button.classList.toggle('needs-setup', !hybridSyncState.enabled);
+    return;
+  }
+  button.classList.remove('needs-setup');
+  const name = hybridSyncState.user?.displayName || hybridSyncState.user?.email || 'Tài khoản';
+  const initial = name.trim().charAt(0).toUpperCase() || 'U';
+  button.innerHTML = `<span class="hybrid-user-avatar">${escapeHtml(initial)}</span><span class="hybrid-user-name">${escapeHtml(name)}</span>`;
+  button.title = 'Đã đồng bộ với Google. Nhấn để đăng xuất.';
+}
+
+async function initializeHybridSync() {
+  renderHybridAuthButton();
+  try {
+    const authButton = document.getElementById('hybrid-auth-button');
+    if (authButton) authButton.addEventListener('click', handleHybridAuthClick, { once: false });
+    const response = await fetch('/api/auth/status', { credentials: 'same-origin', cache: 'no-store' });
+    if (!response.ok) return;
+    const data = await response.json();
+    hybridSyncState.enabled = Boolean(data.enabled);
+    hybridSyncState.authenticated = Boolean(data.authenticated);
+    hybridSyncState.csrfToken = data.csrfToken || '';
+    hybridSyncState.user = data.user || null;
+    renderHybridAuthButton();
+    if (hybridSyncState.authenticated && getCurrentDocumentId()) await pullHybridDocument();
+  } catch (error) {
+    console.info('Đồng bộ cloud không khả dụng, tiếp tục dùng dữ liệu local.', error);
+  }
+}
+
+async function handleHybridAuthClick() {
+  if (!hybridSyncState.enabled) {
+    window.alert('Google Login chưa được cấu hình trên server. Cần khai báo GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_SESSION_SECRET và thông tin MySQL trong cPanel.');
+    return;
+  }
+  if (!hybridSyncState.authenticated) {
+    const returnPath = `${window.location.pathname}${window.location.search}`;
+    window.location.href = `/api/auth/google/start?return=${encodeURIComponent(returnPath)}`;
+    return;
+  }
+  if (!window.confirm('Đăng xuất tài khoản đồng bộ? File truyện và dữ liệu local vẫn được giữ trên máy này.')) return;
+  const response = await fetch('/api/auth/logout', {
+    method: 'POST', credentials: 'same-origin', headers: { 'X-CSRF-Token': hybridSyncState.csrfToken }
+  });
+  if (response.ok) {
+    hybridSyncState.authenticated = false;
+    hybridSyncState.csrfToken = '';
+    hybridSyncState.user = null;
+    renderHybridAuthButton();
+  }
+}
+
+function scheduleHybridSync(delay = 3000) {
+  if (!hybridSyncState.authenticated) return;
+  if (hybridSyncState.pushTimer) clearTimeout(hybridSyncState.pushTimer);
+  hybridSyncState.pushTimer = setTimeout(() => pushHybridDocument(), delay);
+}
+
+async function pushHybridDocument(options = {}) {
+  if (!hybridSyncState.authenticated) return false;
+  const payload = buildHybridSyncPayload();
+  if (!payload) return false;
+  if (hybridSyncState.pushing) {
+    hybridSyncState.pending = true;
+    return false;
+  }
+  hybridSyncState.pushing = true;
+  hybridSyncState.pending = false;
+  try {
+    const response = await fetch('/api/sync/document', {
+      method: 'PUT',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      keepalive: Boolean(options.keepalive),
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': hybridSyncState.csrfToken },
+      body: JSON.stringify(payload)
+    });
+    if (response.status === 401) {
+      hybridSyncState.authenticated = false;
+      renderHybridAuthButton();
+    }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return true;
+  } catch (error) {
+    console.warn('Chưa đồng bộ được, dữ liệu vẫn an toàn trên máy:', error);
+    return false;
+  } finally {
+    hybridSyncState.pushing = false;
+    if (hybridSyncState.pending) scheduleHybridSync(500);
+  }
+}
+
+async function pullHybridDocument() {
+  const documentId = getCurrentDocumentId();
+  if (!hybridSyncState.authenticated || !documentId) return false;
+  try {
+    const response = await fetch(`/api/sync/document?documentId=${encodeURIComponent(documentId)}`, {
+      credentials: 'same-origin', cache: 'no-store'
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const remote = await response.json();
+    const all = readSavedBookmarks();
+    const entry = normalizeBookmarkEntry(all[documentId], documentId);
+    const remoteProgress = remote.progress;
+    if (remoteProgress?.location && Number(remoteProgress.updatedAt) > Number(entry.lastPosition?.updatedAt || 0)) {
+      entry.lastPosition = { ...remoteProgress.location, updatedAt: Number(remoteProgress.updatedAt) };
+      entry.updatedAt = Number(remoteProgress.updatedAt);
+    }
+    const marks = new Map(entry.marks.map(mark => [mark.id, mark]));
+    (remote.bookmarks || []).forEach(mark => {
+      const existing = marks.get(mark.id);
+      if (!existing || Number(mark.updatedAt) > Number(existing.updatedAt || existing.createdAt || 0)) {
+        marks.set(mark.id, {
+          id: mark.id,
+          page: Number(mark.location?.page) || 1,
+          globalIndex: Number(mark.location?.globalIndex) || 0,
+          note: mark.note || mark.label || '',
+          excerpt: mark.excerpt || '',
+          createdAt: Number(mark.updatedAt) || Date.now(),
+          updatedAt: Number(mark.updatedAt) || Date.now()
+        });
+      }
+    });
+    entry.marks = [...marks.values()].sort((a, b) => Number(b.updatedAt) - Number(a.updatedAt)).slice(0, 100);
+    all[documentId] = entry;
+    localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(all));
+
+    const remoteSettings = remote.settings;
+    if (remoteSettings?.values && Number(remoteSettings.updatedAt) > Number(localStorage.getItem(HYBRID_SETTINGS_UPDATED_KEY) || 0)) {
+      const allowed = ['fontSize', 'lineHeight', 'fontFamily', 'readingMode', 'autoScrollDelay', 'textDimLevel', 'layoutMode', 'chunkMode', 'maxCharsPerLine', 'preserveIndents', 'compactBlankLines'];
+      allowed.forEach(key => {
+        if (Object.prototype.hasOwnProperty.call(remoteSettings.values, key)) state[key] = remoteSettings.values[key];
+      });
+      localStorage.setItem(HYBRID_SETTINGS_UPDATED_KEY, String(remoteSettings.updatedAt));
+      localStorage.setItem(HYBRID_SETTINGS_SIGNATURE_KEY, JSON.stringify(getHybridSettingsValues()));
+    }
+    if (restoreSavedReadingPosition(false)) renderContinuousView(true, state.currentGlobalIndex);
+    syncBookmarkButton();
+    return true;
+  } catch (error) {
+    console.warn('Không tải được dữ liệu đồng bộ, tiếp tục dùng bản local:', error);
+    return false;
+  }
 }
 
 function getThemeForCurrentPage() {
@@ -663,6 +925,8 @@ function applyCachedDocument(cache) {
   state.isPdfProcessing = false;
   state.pdfFileName = cache.documentName || state.pdfFileName || '';
   state.documentId = cache.documentId || '';
+  state.documentFileSize = Number(cache.fileSize) || 0;
+  state.documentFileType = cache.fileType || getDocumentExtension({ name: state.pdfFileName });
   const canUseLegacyPosition = previousDocumentName === state.pdfFileName;
   const cachedPosition = Number.isFinite(Number(cache.currentGlobalIndex))
     ? Number(cache.currentGlobalIndex)
@@ -698,6 +962,8 @@ function persistDocumentCache() {
     processingComplete: !state.isPdfProcessing,
     documentName: state.pdfFileName,
     documentId: getCurrentDocumentId(),
+    fileSize: state.documentFileSize,
+    fileType: state.documentFileType,
     chunks: state.allChunks,
     rawText: state.rawText || state.allChunks.map(c => c.text).join('\n'),
     pageStartIndices: state.pageStartIndices,
@@ -1221,12 +1487,14 @@ function renderBookmarksPanel(content) {
     entry.updatedAt = Date.now();
     all[documentId] = entry;
     localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(all));
+    scheduleHybridSync();
   }));
   content.querySelectorAll('[data-mark-delete]').forEach(button => button.addEventListener('click', () => {
     entry.marks = entry.marks.filter(item => item.id !== button.dataset.markDelete);
     entry.updatedAt = Date.now();
     all[documentId] = entry;
     localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(all));
+    scheduleHybridSync();
     renderBookmarksPanel(content);
   }));
 }
@@ -1337,6 +1605,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderContinuousView(true);
   }
 
+  initializeHybridSync();
+
 });
 
 function loadSavedState() {
@@ -1398,6 +1668,7 @@ function scheduleSaveState() {
 window.addEventListener('pagehide', () => {
   saveState();
   saveCurrentBookmark();
+  pushHybridDocument({ keepalive: true });
 });
 
 document.addEventListener('visibilitychange', () => {
@@ -1432,6 +1703,8 @@ function saveState() {
     };
     localStorage.setItem('excel_reader_state', JSON.stringify(data));
     localStorage.setItem('selected_theme', state.theme);
+    updateHybridSettingsVersion();
+    scheduleHybridSync();
   } catch (e) {
     console.error('Error saving state:', e);
   }
@@ -4096,6 +4369,9 @@ function initUniversalNavbar() {
       </div>
 
       <div class="unav-section unav-right">
+        <button class="unav-btn hybrid-auth-button" id="hybrid-auth-button" title="Đăng nhập Google để đồng bộ">
+          <span class="hybrid-google-mark">G</span><span>Đăng nhập Google</span>
+        </button>
         <button class="unav-btn unav-btn-custom-img" id="univ-btn-custom-img" style="display:none;" title="Đổi ảnh ngụy trang cho giao diện này (hoặc kéo thả ảnh trực tiếp)">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
           <span>Đổi ảnh</span>
@@ -4378,6 +4654,7 @@ async function switchReaderBook(docId) {
     saveState();
     renderContinuousView(true, state.currentGlobalIndex);
     syncUniversalNavbar();
+    await pullHybridDocument();
     showPageFlipToast(`Đã chuyển sang: ${state.pdfFileName}`);
   } catch (err) {
     console.error('Lỗi khi đổi truyện:', err);
@@ -5306,12 +5583,14 @@ function isSupportedDocument(file) {
   return ['pdf', 'txt', 'epub'].includes(getDocumentExtension(file));
 }
 
-function prepareDocumentLoad(file) {
+function prepareDocumentLoad(file, documentId = '') {
   cancelDocumentLoad(false);
   previousDocumentSnapshot = {
     pdfDoc: state.pdfDoc,
     pdfFileName: state.pdfFileName,
     documentId: state.documentId,
+    documentFileSize: state.documentFileSize,
+    documentFileType: state.documentFileType,
     currentPage: state.currentPage,
     totalPages: state.totalPages,
     firstStoryPage: state.firstStoryPage,
@@ -5326,7 +5605,9 @@ function prepareDocumentLoad(file) {
   state.pdfDoc = null;
   state.loadedPages = 0;
   state.pdfFileName = file.name;
-  state.documentId = createDocumentId(file);
+  state.documentId = documentId || createLegacyDocumentId(file);
+  state.documentFileSize = Number(file.size) || 0;
+  state.documentFileType = getDocumentExtension(file);
   state.documentCreatedAt = Date.now();
   state.documentToc = [];
   state.searchResults = [];
@@ -5377,10 +5658,11 @@ async function processDocumentFile(file) {
 
   if (file.size > LARGE_FILE_WARNING_SIZE && !window.confirm(`File ${(file.size / 1048576).toFixed(1)} MB có thể cần nhiều RAM và thời gian xử lý. Tiếp tục mở?`)) return;
 
+  const documentId = await createDocumentFingerprint(file);
   const extension = getDocumentExtension(file);
-  if (extension === 'pdf') return processPdfFile(file);
-  if (extension === 'txt') return processTextFile(file);
-  return processEpubFile(file);
+  if (extension === 'pdf') return processPdfFile(file, documentId);
+  if (extension === 'txt') return processTextFile(file, documentId);
+  return processEpubFile(file, documentId);
 }
 
 async function isTextWorkerAvailable() {
@@ -5497,8 +5779,8 @@ function finishTextDocument(chunks, formatLabel) {
   showBanner(`Đã nạp thành công file ${formatLabel}: <b>${totalPages}</b> phần đọc.`);
 }
 
-async function processTextFile(file) {
-  const loadToken = prepareDocumentLoad(file);
+async function processTextFile(file, documentId = '') {
+  const loadToken = prepareDocumentLoad(file, documentId);
 
   try {
     showLoading('Đang đọc nội dung file TXT...');
@@ -5622,8 +5904,8 @@ function ensureJsZipLoaded() {
   return jsZipLoadPromise;
 }
 
-async function processEpubFile(file) {
-  const loadToken = prepareDocumentLoad(file);
+async function processEpubFile(file, documentId = '') {
+  const loadToken = prepareDocumentLoad(file, documentId);
   const startedAt = performance.now();
   let currentStage = 'Đang chuẩn bị đọc EPUB';
 
@@ -6068,8 +6350,8 @@ async function extractPdfOutline(pdfDoc) {
   }
 }
 
-async function processPdfFile(file) {
-  const loadToken = prepareDocumentLoad(file);
+async function processPdfFile(file, documentId = '') {
+  const loadToken = prepareDocumentLoad(file, documentId);
 
   // Only upload the PDF when a real parser endpoint is available.
   if (await hasPdfBackend()) {

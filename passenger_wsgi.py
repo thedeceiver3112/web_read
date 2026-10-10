@@ -6,6 +6,7 @@ import re
 from urllib.parse import unquote
 
 from document_processing import extract_pdf_payload
+from hybrid_sync import handle_api_request, status_line
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -103,8 +104,35 @@ def static_response(environ, start_response):
 
 
 def application(environ, start_response):
+    request_method = environ.get("REQUEST_METHOD", "GET").upper()
+    request_path = environ.get("PATH_INFO") or "/"
+    query_string = environ.get("QUERY_STRING") or ""
+    raw_path = f"{request_path}?{query_string}" if query_string else request_path
+    request_headers = {
+        key[5:].replace("_", "-").lower(): value
+        for key, value in environ.items()
+        if key.startswith("HTTP_")
+    }
+    if environ.get("CONTENT_TYPE"):
+        request_headers["content-type"] = environ["CONTENT_TYPE"]
+    api_body = b""
+    if request_method in {"POST", "PUT", "PATCH"} and request_path != "/api/extract-pdf":
+        api_body = environ["wsgi.input"].read(int(environ.get("CONTENT_LENGTH") or 0))
+    api_response = handle_api_request(request_method, raw_path, request_headers, api_body)
+    if api_response is not None:
+        data = api_response.body()
+        response_headers = list(api_response.headers or [])
+        response_headers.append(("Content-Length", str(len(data))))
+        response_headers.extend([
+            ("X-Content-Type-Options", "nosniff"),
+            ("Referrer-Policy", "same-origin"),
+            ("Cache-Control", "no-store"),
+        ])
+        start_response(status_line(api_response.status), response_headers)
+        return [data]
+
     if environ.get("REQUEST_METHOD") == "GET" and environ.get("PATH_INFO") == "/api/health":
-        return json_response(start_response, {"ok": True, "pdfExtraction": True})
+        return json_response(start_response, {"ok": True, "pdfExtraction": True, "hybridSync": True})
 
     if environ.get("REQUEST_METHOD") == "POST" and environ.get("PATH_INFO") == "/api/extract-pdf":
         try:

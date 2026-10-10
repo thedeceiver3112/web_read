@@ -11,6 +11,7 @@ DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 MAX_UPLOAD_SIZE = 200 * 1024 * 1024
 
 from document_processing import extract_pdf_payload
+from hybrid_sync import handle_api_request
 
 class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -40,8 +41,10 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.close_connection = True
 
     def do_GET(self):
+        if self._handle_hybrid_api():
+            return
         if self.path == '/api/health':
-            data_bytes = json.dumps({"ok": True, "pdfExtraction": True}).encode('utf-8')
+            data_bytes = json.dumps({"ok": True, "pdfExtraction": True, "hybridSync": True}).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.send_header('Content-Length', str(len(data_bytes)))
@@ -52,6 +55,8 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):
+        if self.path.split('?', 1)[0] != '/api/extract-pdf' and self._handle_hybrid_api():
+            return
         if self.path == '/api/extract-pdf':
             try:
                 content_length = int(self.headers.get('Content-Length', 0))
@@ -104,6 +109,36 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 return
         
         return super().do_POST()
+
+    def do_PUT(self):
+        if self._handle_hybrid_api():
+            return
+        self.send_error(404, "API not found")
+
+    def _handle_hybrid_api(self):
+        path = self.path.split('?', 1)[0]
+        if not path.startswith('/api/') or path in {'/api/health', '/api/extract-pdf'}:
+            return False
+
+        content_length = int(self.headers.get('Content-Length', 0) or 0)
+        body = self.rfile.read(content_length) if content_length else b''
+        headers = {key.lower(): value for key, value in self.headers.items()}
+        if self.server.server_address[0] in {'127.0.0.1', 'localhost'} or self.headers.get('Host', '').startswith(('localhost', '127.0.0.1')):
+            headers.setdefault('x-forwarded-proto', 'http')
+        response = handle_api_request(self.command, self.path, headers, body)
+        if response is None:
+            return False
+
+        data_bytes = response.body()
+        self.send_response(response.status)
+        for name, value in response.headers or []:
+            self.send_header(name, value)
+        self.send_header('Content-Length', str(len(data_bytes)))
+        self.send_header('Cache-Control', 'no-store')
+        self.end_headers()
+        if self.command != 'HEAD' and data_bytes:
+            self.wfile.write(data_bytes)
+        return True
 
 def find_free_port(start_port=8080, max_tries=20):
     import socket

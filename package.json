@@ -1,6 +1,6 @@
 {
   "name": "stealth-reader-web",
-  "version": "20261010.13.0",
+  "version": "20261010.15.0",
   "private": true,
   "scripts": {
     "test": "playwright test",
