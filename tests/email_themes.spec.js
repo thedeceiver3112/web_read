@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Email Themes - Gmail and Outlook', () => {
-  test('Gmail theme loads authentic UI, streams novel text, and toggles boss key', async ({ page }) => {
+  test('Gmail theme loads authentic UI, streams novel text, and toggles boss key', async ({ page }, testInfo) => {
     await page.goto('/gmail.html');
     await page.waitForLoadState('domcontentloaded');
 
@@ -52,6 +52,21 @@ test.describe('Email Themes - Gmail and Outlook', () => {
     // Click chunk to activate
     await paras.first().click();
     await expect(paras.first()).toHaveClass(/active-email-para/);
+
+    // Verify paragraphs wrap naturally without horizontal scrolling
+    const firstPara = paras.first();
+    const paraStyles = await firstPara.evaluate(el => {
+      const cs = window.getComputedStyle(el);
+      return {
+        overflowX: cs.overflowX,
+        scrollWidth: el.scrollWidth,
+        clientWidth: el.clientWidth
+      };
+    });
+    expect(paraStyles.overflowX).not.toBe('auto');
+    expect(paraStyles.scrollWidth).toBeLessThanOrEqual(paraStyles.clientWidth + 2);
+
+    await page.screenshot({ path: testInfo.outputPath('gmail_fixed_scroll.png') });
 
     // 4. Test Boss Key (Escape)
     const storyView = page.locator('#gmail-story-view');
@@ -113,6 +128,19 @@ test.describe('Email Themes - Gmail and Outlook', () => {
     await paras.first().click();
     await expect(paras.first()).toHaveClass(/active-outlook-para/);
 
+    // Verify paragraphs wrap naturally without horizontal scrolling
+    const firstPara = paras.first();
+    const paraStyles = await firstPara.evaluate(el => {
+      const cs = window.getComputedStyle(el);
+      return {
+        overflowX: cs.overflowX,
+        scrollWidth: el.scrollWidth,
+        clientWidth: el.clientWidth
+      };
+    });
+    expect(paraStyles.overflowX).not.toBe('auto');
+    expect(paraStyles.scrollWidth).toBeLessThanOrEqual(paraStyles.clientWidth + 2);
+
     // 4. Test Boss Key (Escape)
     const storyView = page.locator('#outlook-story-view');
     const bossView = page.locator('#outlook-boss-view');
@@ -130,7 +158,7 @@ test.describe('Email Themes - Gmail and Outlook', () => {
     await expect(bossView).toBeHidden();
   });
 
-  test('Index home page displays Gmail and Outlook in portal theme selector', async ({ page }) => {
+  test('Index home page displays Gmail and Outlook in portal theme selector', async ({ page }, testInfo) => {
     await page.goto('/index.html?portal=1');
     await page.waitForLoadState('domcontentloaded');
 
@@ -168,6 +196,6 @@ test.describe('Email Themes - Gmail and Outlook', () => {
     await expect(enterBtn).toHaveClass(/ready/);
     await expect(enterBtn).toContainText('Bắt Đầu Đọc Ngay');
 
-    await page.locator('.portal-col-main').screenshot({ path: 'tests/portal_redesigned.png' });
+    await page.locator('.portal-col-main').screenshot({ path: testInfo.outputPath('portal_redesigned.png') });
   });
 });

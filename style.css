@@ -1615,6 +1615,18 @@ body.theme-excel .section-break-badge {
   transform: scale(1.005);
 }
 
+.duo-upload-quest.shake {
+  animation: uploadShakeAnim 0.45s ease-in-out;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3) !important;
+}
+
+@keyframes uploadShakeAnim {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-7px); }
+  40%, 80% { transform: translateX(7px); }
+}
+
 .duo-upload-quest.has-doc {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -13508,6 +13520,32 @@ body.theme-gmail *::after {
   cursor: pointer;
   transition: background-color 0.15s ease, border-left-color 0.15s ease;
   line-height: 1.75;
+  overflow-x: hidden !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+.gmail-para-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.gmail-para-meta {
+  display: block;
+  font-size: 11px;
+  color: #5f6368;
+  margin-top: 4px;
+  user-select: none;
+}
+
+.gmail-section-heading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a73e8;
+  padding: 6px 0 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed #e0e0e0;
 }
 
 .gmail-story-para:hover {
@@ -14116,6 +14154,32 @@ body.theme-outlook *::after {
   cursor: pointer;
   transition: background-color 0.15s ease, border-left-color 0.15s ease;
   line-height: 1.75;
+  overflow-x: hidden !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+.outlook-para-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.outlook-para-meta {
+  display: block;
+  font-size: 11px;
+  color: #605e5c;
+  margin-top: 4px;
+  user-select: none;
+}
+
+.outlook-section-heading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0078d4;
+  padding: 6px 0 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed #edebe9;
 }
 
 .outlook-story-para:hover {

@@ -551,6 +551,32 @@ body.theme-gmail *::after {
   cursor: pointer;
   transition: background-color 0.15s ease, border-left-color 0.15s ease;
   line-height: 1.75;
+  overflow-x: hidden !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+.gmail-para-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.gmail-para-meta {
+  display: block;
+  font-size: 11px;
+  color: #5f6368;
+  margin-top: 4px;
+  user-select: none;
+}
+
+.gmail-section-heading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a73e8;
+  padding: 6px 0 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed #e0e0e0;
 }
 
 .gmail-story-para:hover {

@@ -16,7 +16,7 @@ function makeRawLineTextFile() {
 }
 
 test.describe('Layout & Line Customizer Options', () => {
-  test('allows switching layout modes and toggling exact line layout from universal navbar', async ({ page }) => {
+  test('allows switching layout modes and toggling exact line layout from universal navbar', async ({ page }, testInfo) => {
     await page.goto('/googlesheets.html');
     await expect(page.locator('#universal-reader-navbar')).toBeVisible();
 
@@ -33,7 +33,7 @@ test.describe('Layout & Line Customizer Options', () => {
     await expect(menu).toBeVisible();
 
     // Take screenshot of open layout menu
-    await page.screenshot({ path: 'tests/layout_dropdown_open.png' });
+    await page.screenshot({ path: testInfo.outputPath('layout_dropdown_open.png') });
 
     // 3. Switch to exact layout mode (Giữ nguyên dòng gốc)
     const exactOpt = menu.locator('[data-layout-mode="exact"]');
@@ -71,7 +71,7 @@ test.describe('Layout & Line Customizer Options', () => {
     await layoutTab.click();
 
     await expect(toolsModal.locator('.reader-tools-preview-box')).toBeVisible();
-    await page.screenshot({ path: 'tests/reader_tools_layout_tab.png' });
+    await page.screenshot({ path: testInfo.outputPath('reader_tools_layout_tab.png') });
 
     // 6. Verify section-break-row is never rendered in Google Sheets
     await expect(page.locator('.section-break-row')).toHaveCount(0);

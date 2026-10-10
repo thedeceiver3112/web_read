@@ -6,10 +6,10 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <script src="version-check.js?v=20261008-11" data-app-version="20261008-11"></script>
+  <script src="version-check.js?v=20261010-12" data-app-version="20261010-12"></script>
   <title>cyberpunk_city_scene_v4.blend - Blender 4.2.0</title>
   <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2222%22%20fill%3D%22%23222222%22/%3E%20%3Cpath%20d%3D%22M24%206c1.2%200%202.2%201%202.2%202.2v9.6c0%201.2-1%202.2-2.2%202.2s-2.2-1-2.2-2.2V8.2c0-1.2%201-2.2%202.2-2.2zm-12.7%205.2c.9-.9%202.3-.9%203.1%200l6.8%206.8c.9.9.9%202.3%200%203.1s-2.3.9-3.1%200l-6.8-6.8c-.9-.8-.9-2.2%200-3.1zm25.4%200c.9.9.9%202.3%200%203.1l-6.8%206.8c-.9.9-2.3.9-3.1%200s-.9-2.3%200-3.1l6.8-6.8c.8-.9%202.2-.9%203.1%200z%22%20fill%3D%22%23EA7600%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%2212%22%20fill%3D%22%23EA7600%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%226%22%20fill%3D%22%2322578A%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%222.8%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E">
-  <link rel="stylesheet" href="style.css?v=20261008-11">
+  <link rel="stylesheet" href="style.css?v=20261010-12">
   <script src="static/pdf.min.js" defer></script>
 </head>
 <body class="theme-blender">
@@ -517,100 +517,6 @@
   
 
 
-  <!-- =========================================================
-       MODAL 2: STEALTH SETTINGS & HELP
-       ========================================================= -->
-  <div class="stealth-modal-overlay" id="stealth-modal">
-    <div class="stealth-modal-content">
-      <div class="modal-header">
-        <h3>⚙️ Cài Đặt Bộ Đọc Truyện</h3>
-        <button class="modal-close-btn" id="btn-close-modal">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="settings-group">
-          <h4>1. Nạp tài liệu đọc</h4>
-          <p class="guide-text">Chọn file PDF, TXT hoặc EPUB. Nội dung được xử lý trực tiếp trên thiết bị của bạn.</p>
-          <div class="file-drop-area" id="modal-drop-area">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="#0F9D58"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-            <p>Kéo & thả file PDF, TXT, EPUB vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
-            <input type="file" id="modal-file-pdf" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip">
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h4>2. Tùy Chỉnh Cỡ Chữ &amp; Hiển Thị Đọc Truyện</h4>
-          <p class="guide-text">Tăng giảm cỡ chữ và khoảng cách dòng để tối ưu trải nghiệm đọc êm mắt nhất:</p>
-          
-          <div class="font-settings-group">
-            <div class="font-settings-row">
-              <span style="font-weight: 600; width: 90px; color: #3c4043;">Cỡ chữ:</span>
-              <button class="font-step-ctrl-btn" id="modal-btn-font-dec" title="Giảm cỡ chữ (hoặc nhấn phím [)">A−</button>
-              <span class="font-size-badge" id="modal-badge-font-size">11pt</span>
-              <button class="font-step-ctrl-btn" id="modal-btn-font-inc" title="Tăng cỡ chữ (hoặc nhấn phím ])">A+</button>
-              <input type="range" id="modal-slider-font-size" class="font-slider" min="8" max="28" step="1" value="11" title="Kéo để đổi cỡ chữ nhanh">
-            </div>
-
-            <div class="font-settings-row">
-              <span style="font-weight: 600; width: 90px; color: #3c4043;">Giãn dòng:</span>
-              <select id="modal-select-line-height" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #dadce0;">
-                <option value="1.4">1.4 (Gọn gàng)</option>
-                <option value="1.6">1.6 (Tiêu chuẩn)</option>
-                <option value="1.75" selected>1.75 (Tối ưu êm mắt - Tỷ lệ vàng)</option>
-                <option value="2.0">2.0 (Thông thoáng)</option>
-              </select>
-            </div>
-
-            <div class="font-settings-row">
-              <span style="font-weight: 600; width: 90px; color: #3c4043;">Phông chữ:</span>
-              <select id="modal-select-font-family" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #dadce0;">
-                <option value="Arial" selected>Arial (Mặc định chuẩn)</option>
-                <option value="Roboto">Roboto (Google)</option>
-                <option value="Calibri">Calibri (Văn phòng)</option>
-                <option value="Segoe UI">Segoe UI (Hiện đại)</option>
-                <option value="Times New Roman">Times New Roman (Cổ điển)</option>
-                <option value="Georgia">Georgia (Truyện chữ)</option>
-              </select>
-            </div>
-          </div>
-          <p class="guide-text" style="margin-top: 8px; font-size: 11px; color: #5f6368;">
-             <b>Mẹo đọc nhanh:</b> Nhấn phím <kbd style="padding: 1px 5px; font-size: 11px;">[</kbd> để giảm cỡ chữ, phím <kbd style="padding: 1px 5px; font-size: 11px;">]</kbd> để tăng cỡ chữ trực tiếp khi đang đọc!
-          </p>
-        </div>
-
-        <div class="settings-group">
-          <h4>3. Phím Tắt Khẩn Cấp (Boss Key) &amp; Điều Khiển</h4>
-          <ul class="hotkey-list">
-            <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang bảng số liệu tài chính doanh thu hoặc code backend thuật toán (bấm lại để đọc tiếp).</li>
-            <li><kbd>[</kbd> / <kbd>]</kbd> : Giảm / tăng cỡ chữ nhanh khi đang đọc.</li>
-            <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Chuyển sang câu/dòng tiếp theo.</li>
-            <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
-            <li><kbd>PageDown</kbd> / <kbd>PageUp</kbd> : Sang phần đọc tiếp theo / phần trước.</li>
-            <li><kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).</li>
-            <li><kbd>H</kbd> : Ẩn / hiện toàn bộ thanh điều khiển đọc.</li>
-          </ul>
-        </div>
-
-        <div class="settings-group">
-          <h4>4. Đóng góp ý kiến &amp; Báo lỗi (Google Form)</h4>
-          <p class="guide-text">Bạn muốn đề xuất tính năng mới hoặc gặp lỗi trong quá trình sử dụng? Hãy gửi ý kiến cho tác giả qua biểu mẫu Google Form:</p>
-          <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
-            <button class="primary-btn" id="btn-open-feedback-settings" style="padding: 7px 16px; font-size: 12px;">
-               Mở Google Form Góp Ý
-            </button>
-                        <button class="primary-btn duo-btn-progress-settings" id="btn-open-progress-settings" style="padding: 7px 16px; font-size: 12px;" title="Xem bảng theo dõi tiến độ cập nhật trên Google Sheets">
-              📊 Tiến Độ Cập Nhật
-            </button>
-            <button class="portal-nav-btn" id="btn-config-feedback-url" style="padding: 7px 12px; font-size: 11px;" title="Cài đặt đường link Google Form (dành cho Admin)">
-              ⚙️ Cài đặt link
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="primary-btn" id="btn-save-settings">Đóng</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Loading Overlay -->
   <div class="loading-overlay" id="loading-spinner" style="display: none;">
@@ -634,7 +540,7 @@
   <!-- Toast Notification for Seamless Page Navigation -->
   <div id="page-flip-toast" class="page-flip-toast"></div>
 
-  <script src="app.js?v=20261008-11" defer></script>
+  <script src="app.js?v=20261010-12" defer></script>
 </body>
 </html>
 

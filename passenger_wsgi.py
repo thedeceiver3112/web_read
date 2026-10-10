@@ -1,4 +1,3 @@
-import io
 import json
 import mimetypes
 import os
@@ -6,68 +5,12 @@ import posixpath
 import re
 from urllib.parse import unquote
 
-import pypdf
+from document_processing import extract_pdf_payload
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MAX_UPLOAD_SIZE = 200 * 1024 * 1024
 
-
-import unicodedata
-
-def clean_and_repair_vietnamese_text(text):
-    if not text:
-        return ''
-    # Normalize to precomposed Unicode NFC
-    s = unicodedata.normalize('NFC', text)
-    # Fix decomposed combining diacritical marks with a space in front
-    s = re.sub(r'([a-zA-ZáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ])\s+([\u0300-\u036f\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f])', r'\1\2', s)
-    s = unicodedata.normalize('NFC', s)
-    
-    # Merge broken syllable fragments (e.g. 'c ử a' -> 'cửa', 'm ộ t' -> 'một')
-    for _ in range(5):
-        orig = s
-        s = re.sub(r'(^|[\s(„"\'\-–—])(b|c|d|đ|g|h|k|l|m|n|p|r|s|t|v|x|ch|gh|gi|kh|nh|ng|ngh|ph|qu|th|tr|B|C|D|Đ|G|H|K|L|M|N|P|R|S|T|V|X|Ch|Gh|Gi|Kh|Nh|Ng|Ngh|Ph|Qu|Th|Tr)\s+([áàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ][a-zA-Zà-ỹ]*)', r'\1\2\3', s)
-        s = re.sub(r'([aăâeêioôơuưyáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]+)\s+(c|m|n|p|t|ch|ng|nh|a|i|u|o|y)(?=[\s,.;:!?)]|$)', r'\1\2', s, flags=re.IGNORECASE)
-        if s == orig:
-            break
-    s = re.sub(r'\s+([,.;:!?])', r'\1', s)
-    s = re.sub(r' {2,}', ' ', s)
-    return s
-
-def split_text_into_chunks(text, max_len=220):
-    clean_text = clean_and_repair_vietnamese_text(text).replace("\r\n", "\n").replace("\t", " ")
-    clean_text = re.sub(r" +", " ", clean_text)
-    paragraphs = re.split(r"\n\s*\n|\n", clean_text)
-    chunks = []
-
-    for paragraph in paragraphs:
-        paragraph = paragraph.strip()
-        if not paragraph:
-            continue
-
-        if len(paragraph) > max_len:
-            sentences = re.split(r"([.!?…]+)", paragraph)
-            buffer = ""
-            for i in range(0, len(sentences), 2):
-                sentence = sentences[i]
-                delimiter = sentences[i + 1] if i + 1 < len(sentences) else ""
-                combined = (sentence + delimiter).strip()
-                if not combined:
-                    continue
-
-                if len(buffer) + len(combined) > max_len and buffer:
-                    chunks.append(buffer.strip())
-                    buffer = combined
-                else:
-                    buffer = (buffer + " " + combined).strip()
-
-            if buffer:
-                chunks.append(buffer.strip())
-        else:
-            chunks.append(paragraph)
-
-    return chunks
 
 
 def parse_pdf_upload(environ):
@@ -125,63 +68,7 @@ def extract_pdf(environ, start_response):
     if not pdf_data:
         return json_response(start_response, {"success": False, "error": "No PDF data provided"}, "400 Bad Request")
 
-    reader = pypdf.PdfReader(io.BytesIO(pdf_data))
-    pages_data = {}
-    first_story_page = 1
-
-    for index, page in enumerate(reader.pages):
-        page_num = index + 1
-        try:
-            raw_text = page.extract_text() or ""
-        except Exception:
-            raw_text = ""
-
-        chunks = split_text_into_chunks(raw_text)
-        if not chunks:
-            chunks = [f"[Trang {page_num}: Trang bia hoac hinh anh scan, khong co van ban]"]
-        elif len(raw_text.strip()) > 80 and first_story_page == 1 and page_num > 1:
-            first_story_page = page_num
-
-        pages_data[str(page_num)] = chunks
-
-    toc = []
-    try:
-        def extract_pypdf_outline(outline_items, depth=0):
-            for item in outline_items:
-                if isinstance(item, list):
-                    extract_pypdf_outline(item, depth + 1)
-                else:
-                    title = getattr(item, 'title', None)
-                    if not title and isinstance(item, dict):
-                        title = item.get('/Title')
-                    if title:
-                        try:
-                            page_idx = reader.get_destination_page_number(item)
-                            p_num = (page_idx + 1) if page_idx is not None else 1
-                        except Exception:
-                            p_num = 1
-                        clean_t = clean_and_repair_vietnamese_text(str(title)).strip()
-                        if clean_t:
-                            indent = ('— ' * depth) if depth > 0 else ''
-                            toc.append({"title": indent + clean_t, "page": p_num})
-
-        if hasattr(reader, 'outline') and reader.outline:
-            extract_pypdf_outline(reader.outline)
-    except Exception:
-        toc = []
-
-    return json_response(
-        start_response,
-        {
-            "success": True,
-            "filename": filename,
-            "totalPages": len(reader.pages),
-            "firstStoryPage": first_story_page,
-            "pages": pages_data,
-            "toc": toc,
-        },
-    )
-
+    return json_response(start_response, extract_pdf_payload(pdf_data, filename))
 
 def static_response(environ, start_response):
     raw_path = unquote(environ.get("PATH_INFO") or "/")

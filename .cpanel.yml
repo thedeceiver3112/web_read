@@ -5,6 +5,7 @@ deployment:
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/static
     - /bin/mkdir -p $DEPLOYPATH/css
+    - /bin/rm -f $DEPLOYPATH/css/autocad.css $DEPLOYPATH/css/blender.css $DEPLOYPATH/css/canva.css $DEPLOYPATH/css/common.css $DEPLOYPATH/css/excel.css $DEPLOYPATH/css/figma.css $DEPLOYPATH/css/googledocs.css $DEPLOYPATH/css/googlesheets.css $DEPLOYPATH/css/linkedin.css $DEPLOYPATH/css/photoshop.css $DEPLOYPATH/css/powerpoint.css $DEPLOYPATH/css/vscode.css $DEPLOYPATH/css/zalo.css
     - /bin/cp *.html robots.txt sitemap.xml $DEPLOYPATH/
     - /bin/cp app.js text-worker.js style.css version-check.js version.json $DEPLOYPATH/
     - /bin/cp -R static/. $DEPLOYPATH/static/

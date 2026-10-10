@@ -1,7 +1,20 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Portal Multi-Book Library & Selector', () => {
-  test('lists uploaded stories, allows selecting among them, and supports deletion', async ({ page }) => {
+  test('warns and shakes the upload card when reading starts without a document', async ({ page }) => {
+    await page.goto('/index.html?portal=1');
+
+    const uploadCard = page.locator('#portal-upload-card');
+    await expect(uploadCard).toBeVisible();
+
+    await page.evaluate(() => document.getElementById('btn-portal-enter').click());
+
+    await expect(uploadCard).toHaveClass(/shake/);
+    await expect(uploadCard).toHaveCSS('animation-name', 'uploadShakeAnim');
+    await expect(page.locator('#portal-upload-alert')).toBeVisible();
+  });
+
+  test('lists uploaded stories, allows selecting among them, and supports deletion', async ({ page }, testInfo) => {
     await page.goto('/index.html?portal=1');
     await page.waitForLoadState('domcontentloaded');
 
@@ -79,14 +92,14 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     await expect(bookKiemHiep).toHaveClass(/selected/);
 
     // 6. Screenshot the beautiful UI
-    await page.locator('.portal-col-main').screenshot({ path: 'tests/portal_multi_books.png' });
+    await page.locator('.portal-col-main').screenshot({ path: testInfo.outputPath('portal_multi_books.png') });
 
     // 7. Click "Bắt Đầu Đọc Ngay" to enter reading view
     await enterBtn.click();
     await expect(page).toHaveURL(/googlesheets\.html/);
   });
 
-  test('displays loading progress bar with percentage and detail status during upload', async ({ page }) => {
+  test('displays loading progress bar with percentage and detail status during upload', async ({ page }, testInfo) => {
     await page.goto('/index.html?portal=1');
     await page.waitForLoadState('domcontentloaded');
 
@@ -102,7 +115,7 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     await expect(page.locator('#portal-progress-percent')).toHaveText('45%');
 
     // Take screenshot of loading state for visual inspection
-    await page.locator('.portal-col-main').screenshot({ path: 'tests/portal_upload_loading.png' });
+    await page.locator('.portal-col-main').screenshot({ path: testInfo.outputPath('portal_upload_loading.png') });
 
     // Update progress dynamically via updateLoadingProgress
     await page.evaluate(() => {
@@ -118,7 +131,7 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     await expect(progressBox).toBeHidden();
   });
 
-  test('allows switching books directly from universal navbar', async ({ page }) => {
+  test('allows switching books directly from universal navbar', async ({ page }, testInfo) => {
     await page.goto('/googlesheets.html');
     await page.waitForLoadState('domcontentloaded');
 
@@ -156,6 +169,6 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     // 6. Screenshot navbar dropdown
     await btnSwitch.click();
     await expect(dropdown).toBeVisible();
-    await dropdown.screenshot({ path: 'tests/navbar_book_switcher.png' });
+    await dropdown.screenshot({ path: testInfo.outputPath('navbar_book_switcher.png') });
   });
 });

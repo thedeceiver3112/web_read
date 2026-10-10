@@ -531,6 +531,32 @@ body.theme-outlook *::after {
   cursor: pointer;
   transition: background-color 0.15s ease, border-left-color 0.15s ease;
   line-height: 1.75;
+  overflow-x: hidden !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+.outlook-para-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.outlook-para-meta {
+  display: block;
+  font-size: 11px;
+  color: #605e5c;
+  margin-top: 4px;
+  user-select: none;
+}
+
+.outlook-section-heading {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0078d4;
+  padding: 6px 0 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px dashed #edebe9;
 }
 
 .outlook-story-para:hover {

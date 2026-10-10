@@ -1301,6 +1301,7 @@ function showReaderError(title, summary, error = null, stage = '', file = lastFa
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  ensureSharedReaderComponents();
   loadSavedState();
   initUniversalNavbar();
   initReaderToolsUI();
@@ -2352,6 +2353,156 @@ function attachThemeModalEvents(modal) {
   });
 }
 
+function getStealthSettingsModalHTML() {
+  return `
+  <div class="stealth-modal-overlay" id="stealth-modal">
+    <div class="stealth-modal-content">
+      <div class="modal-header">
+        <h3>⚙️ Cài Đặt Bộ Đọc Truyện</h3>
+        <button class="modal-close-btn" id="btn-close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-group">
+          <h4>1. Nạp tài liệu đọc</h4>
+          <p class="guide-text">Chọn file PDF, TXT hoặc EPUB. Nội dung được xử lý trực tiếp trên thiết bị của bạn.</p>
+          <div class="file-drop-area" id="modal-drop-area">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#0F9D58"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+            <p>Kéo & thả file PDF, TXT, EPUB vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
+            <input type="file" id="modal-file-pdf" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip">
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <h4>2. Tùy Chỉnh Cỡ Chữ &amp; Hiển Thị Đọc Truyện</h4>
+          <p class="guide-text">Tăng giảm cỡ chữ và khoảng cách dòng để tối ưu trải nghiệm đọc êm mắt nhất:</p>
+
+          <div class="font-settings-group">
+            <div class="font-settings-row">
+              <span style="font-weight: 600; width: 90px; color: #3c4043;">Cỡ chữ:</span>
+              <button class="font-step-ctrl-btn" id="modal-btn-font-dec" title="Giảm cỡ chữ (hoặc nhấn phím [)">A−</button>
+              <span class="font-size-badge" id="modal-badge-font-size">11pt</span>
+              <button class="font-step-ctrl-btn" id="modal-btn-font-inc" title="Tăng cỡ chữ (hoặc nhấn phím ])">A+</button>
+              <input type="range" id="modal-slider-font-size" class="font-slider" min="8" max="28" step="1" value="11" title="Kéo để đổi cỡ chữ nhanh">
+            </div>
+
+            <div class="font-settings-row">
+              <span style="font-weight: 600; width: 90px; color: #3c4043;">Giãn dòng:</span>
+              <select id="modal-select-line-height" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #dadce0;">
+                <option value="1.4">1.4 (Gọn gàng)</option>
+                <option value="1.6">1.6 (Tiêu chuẩn)</option>
+                <option value="1.75" selected>1.75 (Tối ưu êm mắt - Tỷ lệ vàng)</option>
+                <option value="2.0">2.0 (Thông thoáng)</option>
+              </select>
+            </div>
+
+            <div class="font-settings-row">
+              <span style="font-weight: 600; width: 90px; color: #3c4043;">Phông chữ:</span>
+              <select id="modal-select-font-family" class="gd-select" style="padding: 4px 8px; border-radius: 4px; border: 1px solid #dadce0;">
+                <option value="Arial">Arial (Mặc định chuẩn)</option>
+                <option value="Roboto">Roboto (Google)</option>
+                <option value="Calibri" selected>Calibri (Văn phòng Excel)</option>
+                <option value="Segoe UI">Segoe UI (Hiện đại)</option>
+                <option value="Times New Roman">Times New Roman (Cổ điển)</option>
+                <option value="Georgia">Georgia (Truyện chữ)</option>
+              </select>
+            </div>
+          </div>
+          <p class="guide-text" style="margin-top: 8px; font-size: 11px; color: #5f6368;">
+            <b>Mẹo đọc nhanh:</b> Nhấn phím <kbd style="padding: 1px 5px; font-size: 11px;">[</kbd> để giảm cỡ chữ, phím <kbd style="padding: 1px 5px; font-size: 11px;">]</kbd> để tăng cỡ chữ trực tiếp khi đang đọc!
+          </p>
+        </div>
+
+        <div class="settings-group">
+          <h4>3. Phím Tắt Khẩn Cấp (Boss Key) &amp; Điều Khiển</h4>
+          <ul class="hotkey-list">
+            <li><kbd>ESC</kbd> hoặc <kbd>F2</kbd> : Chuyển ngay sang bảng số liệu tài chính doanh thu hoặc code backend thuật toán (bấm lại để đọc tiếp).</li>
+            <li><kbd>[</kbd> / <kbd>]</kbd> : Giảm / tăng cỡ chữ nhanh khi đang đọc.</li>
+            <li><kbd>↓</kbd> hoặc <kbd>J</kbd> : Chuyển sang câu/dòng tiếp theo.</li>
+            <li><kbd>↑</kbd> hoặc <kbd>K</kbd> : Lùi lại dòng trước.</li>
+            <li><kbd>PageDown</kbd> / <kbd>PageUp</kbd> : Sang phần đọc tiếp theo / phần trước.</li>
+            <li><kbd>Space</kbd> : Bật / tắt chế độ tự động cuộn (Auto-advance).</li>
+            <li><kbd>H</kbd> : Ẩn / hiện toàn bộ thanh điều khiển đọc.</li>
+          </ul>
+        </div>
+
+        <div class="settings-group">
+          <h4>4. Đóng góp ý kiến &amp; Báo lỗi (Google Form)</h4>
+          <p class="guide-text">Bạn muốn đề xuất tính năng mới hoặc gặp lỗi trong quá trình sử dụng? Hãy gửi ý kiến cho tác giả qua biểu mẫu Google Form:</p>
+          <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
+            <button class="primary-btn" id="btn-open-feedback-settings" style="padding: 7px 16px; font-size: 12px;">
+              💬 Mở Google Form Góp Ý
+            </button>
+            <button class="primary-btn duo-btn-progress-settings" id="btn-open-progress-settings" style="padding: 7px 16px; font-size: 12px;" title="Xem bảng theo dõi tiến độ cập nhật trên Google Sheets">
+              📊 Tiến Độ Cập Nhật
+            </button>
+            <button class="portal-nav-btn" id="btn-config-feedback-url" style="padding: 7px 12px; font-size: 11px;" title="Cài đặt đường link Google Form (dành cho Admin)">
+              ⚙️ Cài đặt link
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-btn" id="btn-save-settings">Đóng</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function ensureSharedReaderComponents() {
+  if (!document.body) return;
+
+  // 1. Hidden File Input for PDF / TXT / EPUB
+  if (!document.getElementById('file-pdf-input')) {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.id = 'file-pdf-input';
+    fileInput.accept = '.pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip';
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+  }
+
+  // 2. Page Flip Toast
+  if (!document.getElementById('page-flip-toast')) {
+    const toast = document.createElement('div');
+    toast.id = 'page-flip-toast';
+    toast.className = 'page-flip-toast';
+    document.body.appendChild(toast);
+  }
+
+  // 3. Floating Controls Visibility Toggle
+  if (!document.getElementById('btn-toggle-ctrls-floating')) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.id = 'btn-toggle-ctrls-floating';
+    toggleBtn.className = 'floating-stealth-toggle';
+    toggleBtn.title = 'Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)';
+    toggleBtn.innerHTML = '<span class="stealth-toggle-icon">👁</span><span class="stealth-toggle-text">Điều khiển (H)</span>';
+    document.body.appendChild(toggleBtn);
+  }
+
+  // 4. Loading Spinner Overlay
+  if (!document.getElementById('loading-spinner')) {
+    const spinner = document.createElement('div');
+    spinner.id = 'loading-spinner';
+    spinner.className = 'loading-overlay';
+    spinner.style.display = 'none';
+    spinner.innerHTML = `
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <p id="loading-status-text">Đang trích xuất nội dung tài liệu...</p>
+      </div>`;
+    document.body.appendChild(spinner);
+  }
+
+  // 5. Stealth Settings & Help Modal
+  if (!document.getElementById('stealth-modal')) {
+    const temp = document.createElement('div');
+    temp.innerHTML = getStealthSettingsModalHTML().trim();
+    if (temp.firstElementChild) {
+      document.body.appendChild(temp.firstElementChild);
+    }
+  }
+}
+
 function initThemeSystem() {
   applyTheme(state.theme);
   ensureThemeModalComponent();
@@ -2435,124 +2586,171 @@ function applyTheme(themeName) {
     document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
   }
 
-  if (themeName === 'theme-googlesheets') {
-    state.readingMode = 'grid';
-    const docTitle = state.gsheetTitle || 'Báo cáo số liệu & Phân tích KPI Q3';
-    setDocumentTitle(`${docTitle} - Google Trang tính`);
-    const gTitle = document.getElementById('gsheet-doc-title');
-    if (gTitle) gTitle.textContent = docTitle;
-    if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_gsheet_0') || 'Trang tính1';
-    if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_gsheet') || 'Log Description & Execution Details';
-  } else if (themeName === 'theme-googledocs') {
-    const docTitle = state.gdocsTitle || 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3';
-    setDocumentTitle(`${docTitle} - Google Tài liệu`);
-    const gdTitle = document.getElementById('gdocs-doc-title');
-    if (gdTitle) gdTitle.textContent = docTitle;
-  } else if (themeName === 'theme-excel') {
-    const docTitle = state.excelTitle || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
-    setDocumentTitle(`${docTitle} - Excel`);
-    const eTitle = document.getElementById('excel-doc-title');
-    if (eTitle) eTitle.textContent = docTitle;
-    if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_excel_0') || 'Audit_Finding_Q3';
-    if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_excel') || 'Audit Log Finding & Notes (Story Text)';
-  } else if (themeName === 'theme-vscode') {
-    const docTitle = state.vscodeTitle || 'stream_pipeline_processor.py';
-    setDocumentTitle(`${docTitle} - dev_workspace - Visual Studio Code`);
-    const vTitle = document.getElementById('vsc-title-doc');
-    if (vTitle) vTitle.textContent = `${docTitle} - dev_workspace - Visual Studio Code`;
-    const tabName = document.getElementById('vsc-tab-filename');
-    if (tabName) tabName.textContent = docTitle;
-  } else if (themeName === 'theme-photoshop') {
-    const docTitle = state.photoshopTitle || 'Brand_Campaign_KeyVisual_v2.psd';
-    setDocumentTitle(`${docTitle} @ 66.7% (RGB/8#*) - Adobe Photoshop 2026`);
-    const psTitle = document.getElementById('ps-doc-title');
-    if (psTitle) psTitle.textContent = docTitle;
-  } else if (themeName === 'theme-blender') {
-    const docTitle = state.blenderTitle || 'cyberpunk_city_scene_v4.blend';
-    setDocumentTitle(`${docTitle} - Blender 4.2.0`);
-    const bTitle = document.getElementById('blender-doc-title');
-    if (bTitle) bTitle.textContent = docTitle;
-  } else if (themeName === 'theme-linkedin') {
-    setDocumentTitle('Feed | LinkedIn');
-  } else if (themeName === 'theme-autocad') {
-    const docTitle = state.autocadTitle || 'LAYOUT_MASTER_PLAN_Q3.dwg';
-    setDocumentTitle(`${docTitle} - Autodesk AutoCAD 2026`);
-    const cadTitle = document.getElementById('autocad-doc-title');
-    if (cadTitle) cadTitle.textContent = docTitle;
-  } else if (themeName === 'theme-zalo') {
-    const docTitle = state.zaloTitle || 'Dự án Sprint Q3 - Tech Lead & Team Sync';
-    setDocumentTitle(`${docTitle} - Zalo`);
-    const zTitle = document.getElementById('zalo-doc-title');
-    if (zTitle) zTitle.textContent = docTitle;
-  } else if (themeName === 'theme-figma') {
-    const docTitle = state.figmaTitle || 'Mobile_Banking_Design_System_v4.2';
-    setDocumentTitle(`${docTitle} – Figma`);
-    const fTitle = document.getElementById('figma-doc-title');
-    if (fTitle) fTitle.textContent = docTitle;
-  } else if (themeName === 'theme-canva') {
-    const docTitle = state.canvaTitle || 'Báo Cáo Chiến Lược Thương Hiệu 2026';
-    setDocumentTitle(`${docTitle} - Canva`);
-    const cTitle = document.getElementById('canva-doc-title');
-    if (cTitle) cTitle.textContent = docTitle;
-  } else if (themeName === 'theme-powerpoint') {
-    const docTitle = state.powerpointTitle || 'Q3_Business_Review_Strategic_Plan.pptx';
-    setDocumentTitle(`${docTitle} - PowerPoint`);
-    const pTitle = document.getElementById('ppt-doc-title');
-    if (pTitle) pTitle.textContent = docTitle;
-  } else if (themeName === 'theme-thuvienphapluat') {
-    const docTitle = state.tvplTitle || 'SỬA ĐỔI, BỔ SUNG MỘT SỐ ĐIỀU CỦA CÁC NGHỊ ĐỊNH QUY ĐỊNH CHI TIẾT MỘT SỐ ĐIỀU VÀ BIỆN PHÁP THI HÀNH LUẬT ĐẤU THẦU VỀ LỰA CHỌN NHÀ THẦU';
-    setDocumentTitle(`Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT`);
-    const tvTitle = document.getElementById('tvpl-doc-title');
-    if (tvTitle) tvTitle.textContent = docTitle;
-  } else if (themeName === 'theme-premiere') {
-    const docTitle = state.premiereTitle || 'Adobe Premiere Pro 2026 - D:\\Projects\\Brand_Film_Q3\\Brand_Film_Q3.prproj *';
-    setDocumentTitle(docTitle);
-    const prTitle = document.getElementById('premiere-doc-title');
-    if (prTitle) prTitle.textContent = docTitle;
-    const prProj = document.getElementById('premiere-proj-name');
-    if (prProj) prProj.textContent = localStorage.getItem('stealth_premiere_proj_name') || 'Brand_Film_Q3';
-  } else if (themeName === 'theme-claude') {
-    const docTitle = state.claudeTitle || 'Phân tích báo cáo tài chính Q3';
-    setDocumentTitle(`${docTitle} - Claude`);
-    const clTitle = document.getElementById('claude-doc-title');
-    if (clTitle) clTitle.textContent = docTitle;
-  } else if (themeName === 'theme-chatgpt') {
-    const docTitle = state.chatgptTitle || 'ChatGPT 5';
-    setDocumentTitle(`${docTitle} - ChatGPT`);
-    const gptTitle = document.getElementById('chatgpt-doc-title');
-    if (gptTitle) gptTitle.textContent = docTitle;
-  } else if (themeName === 'theme-teams') {
-    const docTitle = state.teamsTitle || 'Dong Mia';
-    setDocumentTitle(`${docTitle} | Chat | Microsoft Teams`);
-    const tTitle = document.getElementById('teams-doc-title');
-    if (tTitle) tTitle.textContent = docTitle;
-  } else if (themeName === 'theme-revit') {
-    const docTitle = state.revitTitle || 'arch_buildinga1_144104999.rvt';
-    setDocumentTitle(`${docTitle} - 3D View: 3D - West Facade Room Detail - Autodesk Revit 2025`);
-    const rTitle = document.getElementById('revit-doc-title');
-    if (rTitle) rTitle.textContent = docTitle;
-  } else if (themeName === 'theme-misa') {
-    setDocumentTitle('MISA SME.NET 2021 - [Bán hàng - Đơn đặt hàng]');
-  } else if (themeName === 'theme-capcut') {
-    const docTitle = state.capcutTitle || 'CapCut Pro - Draft_Project_0928_Vlog';
-    setDocumentTitle(docTitle);
-    const ccTitle = document.getElementById('capcut-doc-title');
-    if (ccTitle) ccTitle.textContent = docTitle;
-  } else if (themeName === 'theme-sap') {
-    const docTitle = state.sapTitle || 'Display Purchase Order 4500192834';
-    setDocumentTitle(`SAP GUI for Windows 8.0 - [ME23N - ${docTitle}]`);
-    const spTitle = document.getElementById('sap-doc-title');
-    if (spTitle) spTitle.textContent = docTitle;
-  } else if (themeName === 'theme-gmail') {
-    const docTitle = state.gmailTitle || '[Kế hoạch Sprint Q3] Báo cáo tiến độ phân tích & đặc tả yêu cầu hệ thống';
-    setDocumentTitle(`Hộp thư đến (14) - minhquan.techlead@gmail.com - Gmail`);
-    const gmTitle = document.getElementById('gmail-doc-title');
-    if (gmTitle) gmTitle.textContent = docTitle;
-  } else if (themeName === 'theme-outlook') {
-    const docTitle = state.outlookTitle || '[Dự án 2026] Báo cáo tiến độ phân tích hệ thống & tài liệu đặc tả';
-    setDocumentTitle(`Hộp thư đến - minhquan@outlook.com - Outlook`);
-    const olTitle = document.getElementById('outlook-doc-title');
-    if (olTitle) olTitle.textContent = docTitle;
+const THEME_DOC_CONFIGS = {
+  'theme-googlesheets': {
+    prop: 'gsheetTitle',
+    defaultTitle: 'Báo cáo số liệu & Phân tích KPI Q3',
+    formatTabTitle: t => `${t} - Google Trang tính`,
+    titleId: 'gsheet-doc-title',
+    init: () => {
+      state.readingMode = 'grid';
+      const storyLabel = document.getElementById('tab-story-label');
+      const headerTitle = document.getElementById('story-header-title');
+      if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_gsheet_0') || 'Trang tính1';
+      if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_gsheet') || 'Log Description & Execution Details';
+    }
+  },
+  'theme-googledocs': {
+    prop: 'gdocsTitle',
+    defaultTitle: 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3',
+    formatTabTitle: t => `${t} - Google Tài liệu`,
+    titleId: 'gdocs-doc-title'
+  },
+  'theme-excel': {
+    prop: 'excelTitle',
+    defaultTitle: 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx',
+    formatTabTitle: t => `${t} - Excel`,
+    titleId: 'excel-doc-title',
+    init: () => {
+      const storyLabel = document.getElementById('tab-story-label');
+      const headerTitle = document.getElementById('story-header-title');
+      if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_excel_0') || 'Audit_Finding_Q3';
+      if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_excel') || 'Audit Log Finding & Notes (Story Text)';
+    }
+  },
+  'theme-vscode': {
+    prop: 'vscodeTitle',
+    defaultTitle: 'stream_pipeline_processor.py',
+    formatTabTitle: t => `${t} - dev_workspace - Visual Studio Code`,
+    titleId: 'vsc-title-doc',
+    init: t => {
+      const tabName = document.getElementById('vsc-tab-filename');
+      if (tabName) tabName.textContent = t;
+    }
+  },
+  'theme-photoshop': {
+    prop: 'photoshopTitle',
+    defaultTitle: 'Brand_Campaign_KeyVisual_v2.psd',
+    formatTabTitle: t => `${t} @ 66.7% (RGB/8#*) - Adobe Photoshop 2026`,
+    titleId: 'ps-doc-title'
+  },
+  'theme-blender': {
+    prop: 'blenderTitle',
+    defaultTitle: 'cyberpunk_city_scene_v4.blend',
+    formatTabTitle: t => `${t} - Blender 4.2.0`,
+    titleId: 'blender-doc-title'
+  },
+  'theme-linkedin': {
+    formatTabTitle: () => 'Feed | LinkedIn'
+  },
+  'theme-autocad': {
+    prop: 'autocadTitle',
+    defaultTitle: 'LAYOUT_MASTER_PLAN_Q3.dwg',
+    formatTabTitle: t => `${t} - Autodesk AutoCAD 2026`,
+    titleId: 'autocad-doc-title'
+  },
+  'theme-zalo': {
+    prop: 'zaloTitle',
+    defaultTitle: 'Dự án Sprint Q3 - Tech Lead & Team Sync',
+    formatTabTitle: t => `${t} - Zalo`,
+    titleId: 'zalo-doc-title'
+  },
+  'theme-figma': {
+    prop: 'figmaTitle',
+    defaultTitle: 'Mobile_Banking_Design_System_v4.2',
+    formatTabTitle: t => `${t} – Figma`,
+    titleId: 'figma-doc-title'
+  },
+  'theme-canva': {
+    prop: 'canvaTitle',
+    defaultTitle: 'Báo Cáo Chiến Lược Thương Hiệu 2026',
+    formatTabTitle: t => `${t} - Canva`,
+    titleId: 'canva-doc-title'
+  },
+  'theme-powerpoint': {
+    prop: 'powerpointTitle',
+    defaultTitle: 'Q3_Business_Review_Strategic_Plan.pptx',
+    formatTabTitle: t => `${t} - PowerPoint`,
+    titleId: 'ppt-doc-title'
+  },
+  'theme-thuvienphapluat': {
+    prop: 'tvplTitle',
+    defaultTitle: 'SỬA ĐỔI, BỔ SUNG MỘT SỐ ĐIỀU CỦA CÁC NGHỊ ĐỊNH QUY ĐỊNH CHI TIẾT MỘT SỐ ĐIỀU VÀ BIỆN PHÁP THI HÀNH LUẬT ĐẤU THẦU VỀ LỰA CHỌN NHÀ THẦU',
+    formatTabTitle: () => 'Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT',
+    titleId: 'tvpl-doc-title'
+  },
+  'theme-premiere': {
+    prop: 'premiereTitle',
+    defaultTitle: 'Adobe Premiere Pro 2026 - D:\\Projects\\Brand_Film_Q3\\Brand_Film_Q3.prproj *',
+    formatTabTitle: t => t,
+    titleId: 'premiere-doc-title',
+    init: () => {
+      const prProj = document.getElementById('premiere-proj-name');
+      if (prProj) prProj.textContent = localStorage.getItem('stealth_premiere_proj_name') || 'Brand_Film_Q3';
+    }
+  },
+  'theme-claude': {
+    prop: 'claudeTitle',
+    defaultTitle: 'Phân tích báo cáo tài chính Q3',
+    formatTabTitle: t => `${t} - Claude`,
+    titleId: 'claude-doc-title'
+  },
+  'theme-chatgpt': {
+    prop: 'chatgptTitle',
+    defaultTitle: 'ChatGPT 5',
+    formatTabTitle: t => `${t} - ChatGPT`,
+    titleId: 'chatgpt-doc-title'
+  },
+  'theme-teams': {
+    prop: 'teamsTitle',
+    defaultTitle: 'Dong Mia',
+    formatTabTitle: t => `${t} | Chat | Microsoft Teams`,
+    titleId: 'teams-doc-title'
+  },
+  'theme-revit': {
+    prop: 'revitTitle',
+    defaultTitle: 'arch_buildinga1_144104999.rvt',
+    formatTabTitle: t => `${t} - 3D View: 3D - West Facade Room Detail - Autodesk Revit 2025`,
+    titleId: 'revit-doc-title'
+  },
+  'theme-misa': {
+    formatTabTitle: () => 'MISA SME.NET 2021 - [Bán hàng - Đơn đặt hàng]'
+  },
+  'theme-capcut': {
+    prop: 'capcutTitle',
+    defaultTitle: 'CapCut Pro - Draft_Project_0928_Vlog',
+    formatTabTitle: t => t,
+    titleId: 'capcut-doc-title'
+  },
+  'theme-sap': {
+    prop: 'sapTitle',
+    defaultTitle: 'Display Purchase Order 4500192834',
+    formatTabTitle: t => `SAP GUI for Windows 8.0 - [ME23N - ${t}]`,
+    titleId: 'sap-doc-title'
+  },
+  'theme-gmail': {
+    prop: 'gmailTitle',
+    defaultTitle: '[Kế hoạch Sprint Q3] Báo cáo tiến độ phân tích & đặc tả yêu cầu hệ thống',
+    formatTabTitle: () => 'Hộp thư đến (14) - minhquan.techlead@gmail.com - Gmail',
+    titleId: 'gmail-doc-title'
+  },
+  'theme-outlook': {
+    prop: 'outlookTitle',
+    defaultTitle: '[Dự án 2026] Báo cáo tiến độ phân tích hệ thống & tài liệu đặc tả',
+    formatTabTitle: () => 'Hộp thư đến - minhquan@outlook.com - Outlook',
+    titleId: 'outlook-doc-title'
+  }
+};
+
+  const docCfg = THEME_DOC_CONFIGS[themeName];
+  if (docCfg) {
+    const docTitle = docCfg.prop ? (state[docCfg.prop] || docCfg.defaultTitle) : '';
+    if (docCfg.formatTabTitle) setDocumentTitle(docCfg.formatTabTitle(docTitle));
+    if (docCfg.titleId) {
+      const el = document.getElementById(docCfg.titleId);
+      if (el) el.textContent = docTitle;
+    }
+    if (docCfg.init) docCfg.init(docTitle);
   }
 
   applyStyles();
@@ -4962,7 +5160,8 @@ function applyStyles() {
     if (state.lineHeight) cell.style.lineHeight = state.lineHeight;
   });
 
-  restyle('.gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .b-code-content, .cad-note-text, .vsc-code-line, .vsc-gutter-num, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text, .sap-item-desc', el => {
+  // 2. Code editors & table columns with possible horizontal code scrolling (VS Code, Blender console, SAP grid)
+  restyle('.vsc-code-line, .b-code-content, .sap-item-desc', el => {
     el.style.whiteSpace = whiteSpaceVal;
     el.style.wordBreak = wordBreakVal;
     if (isNowrap && !el.classList.contains('vsc-gutter-num')) {
@@ -4970,6 +5169,17 @@ function applyStyles() {
     } else {
       el.style.overflowX = 'visible';
     }
+    if (state.fontSize) el.style.fontSize = `${state.fontSize}pt`;
+    if (state.lineHeight) el.style.lineHeight = state.lineHeight;
+  });
+
+  // 3. Document, Email, Chat & Prose reading themes (Gmail, Outlook, Google Docs, Zalo, LinkedIn, Figma, Canva, PPT, Captions, Notes)
+  // Text in these themes MUST ALWAYS wrap naturally within their containers and NEVER produce horizontal scrollbars.
+  const proseWhiteSpace = isNowrap ? (state.preserveIndents ? 'pre-wrap' : 'normal') : 'normal';
+  restyle('.gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .cad-note-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text', el => {
+    el.style.whiteSpace = proseWhiteSpace;
+    el.style.wordBreak = 'break-word';
+    el.style.overflowX = 'hidden';
     if (state.fontFamily && (el.classList.contains('gdocs-story-paragraph') || el.classList.contains('gmail-story-para') || el.classList.contains('outlook-story-para'))) {
       el.style.fontFamily = state.fontFamily;
     }
@@ -5013,168 +5223,56 @@ function updateBossButton(btn, bossModeActive) {
   btn.style.backgroundColor = bossModeActive ? '#0F9D58' : '#d93025';
 }
 
+const BOSS_VIEW_CONFIGS = [
+  { story: 'gdocs-story-view', boss: 'gdocs-boss-view', storyDisplay: 'block', bossDisplay: 'block' },
+  { story: 'ps-artboard-view', boss: 'ps-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
+  { story: 'blender-story-view', boss: 'blender-boss-view', storyDisplay: 'block', bossDisplay: 'flex' },
+  { story: 'linkedin-story-stream', boss: 'linkedin-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
+  { story: 'autocad-story-view', boss: 'autocad-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
+  { story: 'zalo-chat-view', boss: 'zalo-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
+  { story: 'figma-story-view', boss: 'figma-boss-view', storyDisplay: '', bossDisplay: 'block' },
+  { story: 'canva-story-view', boss: 'canva-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
+  { story: 'ppt-story-view', boss: 'ppt-boss-view', storyDisplay: 'flex', bossDisplay: 'flex' },
+  { story: 'tvpl-story-view', boss: 'tvpl-boss-view', storyDisplay: '', bossDisplay: 'block' },
+  ...['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook'].map(p => ({
+    story: `${p}-story-view`,
+    boss: `${p}-boss-view`,
+    storyDisplay: '',
+    bossDisplay: 'block'
+  }))
+];
+
 function toggleBossKey() {
+  const isBossActive = !state.bossModeActive;
+  state.bossModeActive = isBossActive;
+
   const bossButtons = BOSS_KEY_BUTTON_IDS.map(id => document.getElementById(id));
-    const univBoss = document.getElementById('univ-btn-boss');
-    if (univBoss) bossButtons.push(univBoss);
+  const univBoss = document.getElementById('univ-btn-boss');
+  if (univBoss) bossButtons.push(univBoss);
+  bossButtons.forEach(btn => {
+    if (btn) updateBossButton(btn, isBossActive);
+  });
 
-  if (state.bossModeActive) {
-    state.bossModeActive = false;
-    switchSheet(state.previousSheetId || 'view-sheet-story');
-    bossButtons.forEach(btn => {
-      if (btn) updateBossButton(btn, false);
-    });
-
-    // Google Docs toggle
-    const gdStory = document.getElementById('gdocs-story-view');
-    const gdBoss = document.getElementById('gdocs-boss-view');
-    if (gdStory) gdStory.style.display = 'block';
-    if (gdBoss) gdBoss.style.display = 'none';
-
-    // Photoshop toggle
-    const psArtboard = document.getElementById('ps-artboard-view');
-    const psBoss = document.getElementById('ps-boss-view');
-    if (psArtboard) psArtboard.style.display = 'flex';
-    if (psBoss) psBoss.style.display = 'none';
-
-    // Blender toggle
-    const bStory = document.getElementById('blender-story-view');
-    const bBoss = document.getElementById('blender-boss-view');
-    if (bStory) bStory.style.display = 'block';
-    if (bBoss) bBoss.style.display = 'none';
-
-    // LinkedIn toggle
-    const lnStory = document.getElementById('linkedin-story-stream');
-    const lnBoss = document.getElementById('linkedin-boss-view');
-    if (lnStory) lnStory.style.display = 'flex';
-    if (lnBoss) lnBoss.style.display = 'none';
-
-    // AutoCAD toggle
-    const cadStory = document.getElementById('autocad-story-view');
-    const cadBoss = document.getElementById('autocad-boss-view');
-    if (cadStory) cadStory.style.display = 'flex';
-    if (cadBoss) cadBoss.style.display = 'none';
-
-    // Zalo toggle
-    const zStory = document.getElementById('zalo-chat-view');
-    const zBoss = document.getElementById('zalo-boss-view');
-    if (zStory) zStory.style.display = 'flex';
-    if (zBoss) zBoss.style.display = 'none';
-
-    // Figma toggle
-    const fStory = document.getElementById('figma-story-view');
-    const fBoss = document.getElementById('figma-boss-view');
-    if (fStory) fStory.style.display = '';
-    if (fBoss) fBoss.style.display = 'none';
-
-    // Canva toggle
-    const cStory = document.getElementById('canva-story-view');
-    const cBoss = document.getElementById('canva-boss-view');
-    if (cStory) cStory.style.display = 'flex';
-    if (cBoss) cBoss.style.display = 'none';
-
-    // PowerPoint toggle
-    const pStory = document.getElementById('ppt-story-view');
-    const pBoss = document.getElementById('ppt-boss-view');
-    if (pStory) pStory.style.display = 'flex';
-    if (pBoss) pBoss.style.display = 'none';
-
-    // Thư Viện Pháp Luật toggle
-    const tvStory = document.getElementById('tvpl-story-view');
-    const tvBoss = document.getElementById('tvpl-boss-view');
-    if (tvStory) tvStory.style.display = '';
-    if (tvBoss) tvBoss.style.display = 'none';
-
-    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook'].forEach(p => {
-      const s = document.getElementById(`${p}-story-view`);
-      const b = document.getElementById(`${p}-boss-view`);
-      if (s) s.style.display = '';
-      if (b) b.style.display = 'none';
-    });
-
-    // In VS Code, re-render the novel code
-    if (state.theme === 'theme-vscode') {
-      renderContinuousView(true);
-    }
-  } else {
-    state.bossModeActive = true;
+  if (isBossActive) {
     state.previousSheetId = document.querySelector('.sheet-content.active')?.id || 'view-sheet-story';
     stopAutoScroll();
     switchSheet('view-sheet-financial');
-    bossButtons.forEach(btn => {
-      if (btn) updateBossButton(btn, true);
-    });
+  } else {
+    switchSheet(state.previousSheetId || 'view-sheet-story');
+  }
 
-    // Google Docs toggle
-    const gdStory = document.getElementById('gdocs-story-view');
-    const gdBoss = document.getElementById('gdocs-boss-view');
-    if (gdStory) gdStory.style.display = 'none';
-    if (gdBoss) gdBoss.style.display = 'block';
+  BOSS_VIEW_CONFIGS.forEach(cfg => {
+    const s = document.getElementById(cfg.story);
+    const b = document.getElementById(cfg.boss);
+    if (s) s.style.display = isBossActive ? 'none' : (cfg.storyDisplay || '');
+    if (b) b.style.display = isBossActive ? (cfg.bossDisplay || 'block') : 'none';
+  });
 
-    // Photoshop toggle
-    const psArtboard = document.getElementById('ps-artboard-view');
-    const psBoss = document.getElementById('ps-boss-view');
-    if (psArtboard) psArtboard.style.display = 'none';
-    if (psBoss) psBoss.style.display = 'block';
-
-    // Blender toggle
-    const bStory = document.getElementById('blender-story-view');
-    const bBoss = document.getElementById('blender-boss-view');
-    if (bStory) bStory.style.display = 'none';
-    if (bBoss) bBoss.style.display = 'flex';
-
-    // LinkedIn toggle
-    const lnStory = document.getElementById('linkedin-story-stream');
-    const lnBoss = document.getElementById('linkedin-boss-view');
-    if (lnStory) lnStory.style.display = 'none';
-    if (lnBoss) lnBoss.style.display = 'block';
-
-    // AutoCAD toggle
-    const cadStory = document.getElementById('autocad-story-view');
-    const cadBoss = document.getElementById('autocad-boss-view');
-    if (cadStory) cadStory.style.display = 'none';
-    if (cadBoss) cadBoss.style.display = 'block';
-
-    // Zalo toggle
-    const zStory = document.getElementById('zalo-chat-view');
-    const zBoss = document.getElementById('zalo-boss-view');
-    if (zStory) zStory.style.display = 'none';
-    if (zBoss) zBoss.style.display = 'block';
-
-    // Figma toggle
-    const fStory = document.getElementById('figma-story-view');
-    const fBoss = document.getElementById('figma-boss-view');
-    if (fStory) fStory.style.display = 'none';
-    if (fBoss) fBoss.style.display = 'block';
-
-    // Canva toggle
-    const cStory = document.getElementById('canva-story-view');
-    const cBoss = document.getElementById('canva-boss-view');
-    if (cStory) cStory.style.display = 'none';
-    if (cBoss) cBoss.style.display = 'block';
-
-    // PowerPoint toggle
-    const pStory = document.getElementById('ppt-story-view');
-    const pBoss = document.getElementById('ppt-boss-view');
-    if (pStory) pStory.style.display = 'none';
-    if (pBoss) pBoss.style.display = 'flex';
-
-    // Thư Viện Pháp Luật toggle
-    const tvStory = document.getElementById('tvpl-story-view');
-    const tvBoss = document.getElementById('tvpl-boss-view');
-    if (tvStory) tvStory.style.display = 'none';
-    if (tvBoss) tvBoss.style.display = 'block';
-
-    ['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook'].forEach(p => {
-      const s = document.getElementById(`${p}-story-view`);
-      const b = document.getElementById(`${p}-boss-view`);
-      if (s) s.style.display = 'none';
-      if (b) b.style.display = 'block';
-    });
-
-    // In VS Code, render pure algorithm code for Boss Key
-    if (state.theme === 'theme-vscode') {
+  if (state.theme === 'theme-vscode') {
+    if (isBossActive) {
       renderVSCodeBossCode();
+    } else {
+      renderContinuousView(true);
     }
   }
 }
@@ -6493,71 +6591,54 @@ function renderVSCodeBossCode() {
   });
 }
 
-// 4. Adobe Photoshop Artboard Typography Batch Renderer
-function appendPhotoshopBatch(count) {
-  const stream = document.getElementById('ps-story-stream');
+// Shared Simple Theme Batch Generator
+function appendSimpleThemeBatch(count, streamId, makeItem) {
+  const stream = document.getElementById(streamId);
   if (!stream || state.allChunks.length === 0) return;
-
   const start = state.renderedCount;
   const end = Math.min(start + count, state.allChunks.length);
   if (start >= end) return;
-
   const fragment = document.createDocumentFragment();
-
   for (let i = start; i < end; i++) {
     const chunk = state.allChunks[i];
-    const p = document.createElement('div');
-    p.className = 'ps-story-paragraph';
-    p.id = `ps-story-para-${chunk.globalIndex}`;
-    p.dataset.index = chunk.globalIndex;
-    p.dataset.page = chunk.page;
-
-    p.innerHTML = `
-      <span class="ps-chunk-meta">T&nbsp;&nbsp;Editorial_Copy_${String(chunk.globalIndex + 1).padStart(4, '0')} &nbsp;•&nbsp; Artboard ${chunk.page}</span>
-      <div class="ps-chunk-body">${escapeHtml(chunk.text)}</div>
-    `;
-
+    const el = makeItem(chunk);
+    el.dataset.index = chunk.globalIndex;
+    el.dataset.page = chunk.page;
     const gIdx = chunk.globalIndex;
-    p.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(p);
+    el.addEventListener('click', () => setActiveRow(gIdx, true));
+    fragment.appendChild(el);
   }
-
   stream.appendChild(fragment);
   state.renderedCount = end;
 }
 
+// 4. Adobe Photoshop Artboard Typography Batch Renderer
+function appendPhotoshopBatch(count) {
+  appendSimpleThemeBatch(count, 'ps-story-stream', chunk => {
+    const p = document.createElement('div');
+    p.className = 'ps-story-paragraph';
+    p.id = `ps-story-para-${chunk.globalIndex}`;
+    p.innerHTML = `
+      <span class="ps-chunk-meta">T&nbsp;&nbsp;Editorial_Copy_${String(chunk.globalIndex + 1).padStart(4, '0')} &nbsp;•&nbsp; Artboard ${chunk.page}</span>
+      <div class="ps-chunk-body">${escapeHtml(chunk.text)}</div>
+    `;
+    return p;
+  });
+}
+
 // 5. Blender Text Editor Batch Renderer
 function appendBlenderBatch(count) {
-  const stream = document.getElementById('blender-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
+  appendSimpleThemeBatch(count, 'blender-story-stream', chunk => {
     const line = document.createElement('div');
     line.className = 'blender-code-line';
     line.id = `blender-story-line-${chunk.globalIndex}`;
-    line.dataset.index = chunk.globalIndex;
-    line.dataset.page = chunk.page;
-
     const variableName = `copy_block_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
     line.innerHTML = `
       <span class="b-line-number">${chunk.globalIndex + 12}</span>
       <span class="b-code-content"><span class="b-code-var">${variableName}</span> <span class="b-code-op">=</span> <span class="b-story-text">"""${escapeHtml(chunk.text)}"""</span></span>
     `;
-
-    const gIdx = chunk.globalIndex;
-    line.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(line);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return line;
+  });
 }
 
 // 6. LinkedIn Feed Post Batch Renderer (Grouped multi-chunk posts)
@@ -6579,7 +6660,6 @@ function appendLinkedInBatch(count) {
 
   let currentIdx = start;
   while (currentIdx < targetEnd) {
-    // Group 4 to 5 chunks together into 1 cohesive post
     const postChunkBatch = [];
     const batchSize = 4;
     const postEnd = Math.min(currentIdx + batchSize, state.allChunks.length);
@@ -6604,9 +6684,8 @@ function appendLinkedInBatch(count) {
 
     const pageSpan = firstChunk.page === lastChunk.page ? `Trang ${firstChunk.page}` : `Trang ${firstChunk.page} - ${lastChunk.page}`;
 
-    // Generate paragraphs
     let paragraphsHtml = '';
-    postChunkBatch.forEach((chunk, pIdx) => {
+    postChunkBatch.forEach((chunk) => {
       paragraphsHtml += `
         <div class="ln-post-paragraph" id="ln-para-${chunk.globalIndex}" data-index="${chunk.globalIndex}" data-page="${chunk.page}">
           <span class="ln-paragraph-seq">§${chunk.globalIndex + 1}</span>
@@ -6634,7 +6713,6 @@ function appendLinkedInBatch(count) {
       </div>
     `;
 
-    // Click on individual paragraphs selects that chunk
     post.querySelectorAll('.ln-post-paragraph').forEach(para => {
       para.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -6657,94 +6735,48 @@ function appendLinkedInBatch(count) {
 
 // 7. AutoCAD General Notes Batch Renderer
 function appendAutoCADBatch(count) {
-  const stream = document.getElementById('autocad-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
+  appendSimpleThemeBatch(count, 'autocad-story-stream', chunk => {
     const note = document.createElement('div');
     note.className = 'cad-note-item';
     note.id = `autocad-note-${chunk.globalIndex}`;
-    note.dataset.index = chunk.globalIndex;
-    note.dataset.page = chunk.page;
-
     const noteTag = `GN-${String(chunk.page).padStart(2, '0')}.${String(chunk.indexInPage + 1).padStart(2, '0')}`;
     note.innerHTML = `
       <span class="cad-note-tag">${noteTag}:</span>
       <span class="cad-note-text">${escapeHtml(chunk.text)}</span>
     `;
-
-    const gIdx = chunk.globalIndex;
-    note.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(note);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return note;
+  });
 }
 
 // 8. Google Docs Manuscript Paragraph Batch Renderer
 function appendGoogleDocsBatch(count) {
-  const stream = document.getElementById('gdocs-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
+  appendSimpleThemeBatch(count, 'gdocs-story-stream', chunk => {
     const p = document.createElement('p');
     p.className = 'gdocs-story-paragraph';
     p.id = `gdocs-story-para-${chunk.globalIndex}`;
-    p.dataset.index = chunk.globalIndex;
-    p.dataset.page = chunk.page;
     p.textContent = chunk.text;
     if (state.fontFamily) p.style.fontFamily = state.fontFamily;
     if (state.fontSize) p.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) p.style.lineHeight = state.lineHeight;
     if (state.isBold) p.style.fontWeight = 'bold';
     if (state.isItalic) p.style.fontStyle = 'italic';
-
-    const gIdx = chunk.globalIndex;
-    p.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(p);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return p;
+  });
 }
 
 // 9. Zalo PC Chat Stream Batch Renderer
+const ZALO_SENDERS = [
+  { name: 'Minh Quân (Tech Lead)', avatar: 'MQ', bg: '#0068ff', isOwner: true },
+  { name: 'Thu Hà (BA Lead)', avatar: 'TH', bg: '#059669', isOwner: false },
+  { name: 'Hoàng Long (Dev Lead)', avatar: 'HL', bg: '#7c3aed', isOwner: false },
+  { name: 'Tuấn Anh (DevOps Lead)', avatar: 'TA', bg: '#d97706', isOwner: false },
+  { name: 'Văn Nam (Security)', avatar: 'VN', bg: '#e11d48', isOwner: false },
+  { name: 'Đức Huy (QA Lead)', avatar: 'DH', bg: '#0284c7', isOwner: false }
+];
+
 function appendZaloBatch(count) {
-  const stream = document.getElementById('zalo-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-  const senders = [
-    { name: 'Minh Quân (Tech Lead)', avatar: 'MQ', bg: '#0068ff', isOwner: true },
-    { name: 'Thu Hà (BA Lead)', avatar: 'TH', bg: '#059669', isOwner: false },
-    { name: 'Hoàng Long (Dev Lead)', avatar: 'HL', bg: '#7c3aed', isOwner: false },
-    { name: 'Tuấn Anh (DevOps Lead)', avatar: 'TA', bg: '#d97706', isOwner: false },
-    { name: 'Văn Nam (Security)', avatar: 'VN', bg: '#e11d48', isOwner: false },
-    { name: 'Đức Huy (QA Lead)', avatar: 'DH', bg: '#0284c7', isOwner: false }
-  ];
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
-    const sender = senders[chunk.globalIndex % senders.length];
+  appendSimpleThemeBatch(count, 'zalo-story-stream', chunk => {
+    const sender = ZALO_SENDERS[chunk.globalIndex % ZALO_SENDERS.length];
     const hour = 8 + Math.floor((chunk.globalIndex * 7) / 60) % 10;
     const min = (chunk.globalIndex * 13) % 60;
     const timeStr = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
@@ -6752,8 +6784,6 @@ function appendZaloBatch(count) {
     const msgItem = document.createElement('div');
     msgItem.className = 'zalo-msg-item';
     msgItem.id = `zalo-msg-${chunk.globalIndex}`;
-    msgItem.dataset.index = chunk.globalIndex;
-    msgItem.dataset.page = chunk.page;
 
     const avatarHtml = `<div class="zalo-msg-avatar" style="position:relative; width:36px; height:36px; border-radius:50%; background:${sender.bg}; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px;">${sender.avatar}${sender.isOwner ? '<span class="zavatar-key-badge" title="Trưởng nhóm">🔑</span>' : ''}</div>`;
 
@@ -6771,35 +6801,16 @@ function appendZaloBatch(count) {
         </div>
       </div>
     `;
-
-    const gIdx = chunk.globalIndex;
-    msgItem.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(msgItem);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return msgItem;
+  });
 }
 
 // 10. Figma UI/UX Design System Typography Batch Renderer
 function appendFigmaBatch(count) {
-  const stream = document.getElementById('figma-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
+  appendSimpleThemeBatch(count, 'figma-story-stream', chunk => {
     const layer = document.createElement('div');
     layer.className = 'figma-layer-item';
     layer.id = `figma-layer-${chunk.globalIndex}`;
-    layer.dataset.index = chunk.globalIndex;
-    layer.dataset.page = chunk.page;
-
     const layerName = `T Body_Copy_Block_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
     layer.innerHTML = `
       <div class="figma-layer-meta">
@@ -6808,117 +6819,52 @@ function appendFigmaBatch(count) {
       </div>
       <div class="figma-text-layer">${escapeHtml(chunk.text)}</div>
     `;
-
-    const gIdx = chunk.globalIndex;
-    layer.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(layer);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return layer;
+  });
 }
 
 // 11. Canva Presentation Slide Text Box Batch Renderer
 function appendCanvaBatch(count) {
-  const stream = document.getElementById('canva-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
+  appendSimpleThemeBatch(count, 'canva-story-stream', chunk => {
     const box = document.createElement('div');
     box.className = 'canva-block-item';
     box.id = `canva-block-${chunk.globalIndex}`;
-    box.dataset.index = chunk.globalIndex;
-    box.dataset.page = chunk.page;
-
     box.innerHTML = `
       <div class="canva-block-header">
         <span class="canva-block-label">Mục ${chunk.globalIndex + 1} • Trang ${chunk.page}</span>
       </div>
       <div class="canva-text-box">${escapeHtml(chunk.text)}</div>
     `;
-
-    const gIdx = chunk.globalIndex;
-    box.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(box);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return box;
+  });
 }
 
 // 12. Microsoft PowerPoint Bullet Paragraph Batch Renderer
 function appendPowerPointBatch(count) {
-  const stream = document.getElementById('ppt-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
+  appendSimpleThemeBatch(count, 'ppt-story-stream', chunk => {
     const para = document.createElement('div');
     para.className = 'ppt-para-item';
     para.id = `ppt-para-${chunk.globalIndex}`;
-    para.dataset.index = chunk.globalIndex;
-    para.dataset.page = chunk.page;
-
     para.innerHTML = `
       <span class="ppt-bullet-icon">■</span>
       <div class="ppt-bullet-text">${escapeHtml(chunk.text)}</div>
     `;
-
-    const gIdx = chunk.globalIndex;
-    para.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(para);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return para;
+  });
 }
 
 // 13. Thư Viện Pháp Luật (TVPL) Administrative Article & Clause Batch Renderer
 function appendTVPLBatch(count) {
-  const stream = document.getElementById('tvpl-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
+  appendSimpleThemeBatch(count, 'tvpl-story-stream', chunk => {
     const item = document.createElement('div');
     item.className = 'tvpl-clause-item';
     item.id = `tvpl-clause-${chunk.globalIndex}`;
-    item.dataset.index = chunk.globalIndex;
-    item.dataset.page = chunk.page;
-
-    // Formatting as official decree articles: Điều 1., Điều 2., ...
-    const clauseNum = `Điều ${chunk.globalIndex + 1}.`;
     item.innerHTML = `
-      <div class="tvpl-clause-num">${clauseNum}</div>
+      <div class="tvpl-clause-num">Điều ${chunk.globalIndex + 1}.</div>
       <div class="tvpl-clause-text">${escapeHtml(chunk.text)}</div>
     `;
-
-    const gIdx = chunk.globalIndex;
-    item.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(item);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return item;
+  });
 }
 
 
@@ -7415,26 +7361,6 @@ function showPageFlipToast(msg) {
 // ==========================================================
 // 14-16. PREMIERE PRO / CLAUDE / CHATGPT RENDERERS
 // ==========================================================
-function appendSimpleThemeBatch(count, streamId, makeItem) {
-  const stream = document.getElementById(streamId);
-  if (!stream || state.allChunks.length === 0) return;
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-  const fragment = document.createDocumentFragment();
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
-    const el = makeItem(chunk);
-    el.dataset.index = chunk.globalIndex;
-    el.dataset.page = chunk.page;
-    const gIdx = chunk.globalIndex;
-    el.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(el);
-  }
-  stream.appendChild(fragment);
-  state.renderedCount = end;
-}
-
 function premiereTimecode(i) {
   const total = i * 7 + 3;
   const pad = n => String(n).padStart(2, '0');
@@ -7475,114 +7401,54 @@ function appendChatGPTBatch(count) {
 }
 
 function appendTeamsBatch(count) {
-  const stream = document.getElementById('teams-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
-
+  appendSimpleThemeBatch(count, 'teams-story-stream', chunk => {
     const cardEl = document.createElement('div');
     cardEl.className = 'teams-doc-paragraph-card';
     cardEl.id = `teams-msg-${chunk.globalIndex}`;
-    cardEl.dataset.index = chunk.globalIndex;
-    cardEl.dataset.page = chunk.page;
-
-    let headingHtml = '';
-    if (chunk.indexInPage === 0) {
-      headingHtml = `<div class="teams-doc-heading">Phần ${chunk.page}: Báo cáo tiến độ &amp; Hợp đồng dự án</div>`;
-    }
-
+    const headingHtml = (chunk.indexInPage === 0) ? `<div class="teams-doc-heading">Phần ${chunk.page}: Báo cáo tiến độ &amp; Hợp đồng dự án</div>` : '';
     cardEl.innerHTML = `
       ${headingHtml}
       <div class="teams-doc-body">${escapeHtml(chunk.text)}</div>
       <div class="teams-doc-meta">&bull; Trang ${chunk.page} - Đoạn #${chunk.globalIndex + 1}</div>
     `;
-
-    const gIdx = chunk.globalIndex;
-    cardEl.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(cardEl);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return cardEl;
+  });
 }
 
 function appendRevitBatch(count) {
-  const stream = document.getElementById('revit-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
-
+  appendSimpleThemeBatch(count, 'revit-story-stream', chunk => {
     const note = document.createElement('div');
     note.className = 'rvt-note-item';
     note.id = `revit-clause-${chunk.globalIndex}`;
-    note.dataset.index = chunk.globalIndex;
-    note.dataset.page = chunk.page;
-
     const specTag = `SPEC-A${chunk.page}.${String(chunk.indexInPage + 1).padStart(2, '0')}`;
-
     note.innerHTML = `
       <span class="rvt-note-tag">${specTag}</span>
       <span class="rvt-note-text">${escapeHtml(chunk.text)}</span>
     `;
-
-    const gIdx = chunk.globalIndex;
-    note.addEventListener('click', () => setActiveRow(gIdx, true));
-    fragment.appendChild(note);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return note;
+  });
 }
 
 // 19. MISA SME.NET 2021 Batch Renderer (Orders Master Grid)
+const MISA_CUSTOMERS = [
+  'Công ty TNHH Ánh Dương',
+  'Tập đoàn VinaTech',
+  'Cty CP Đầu tư Phát Đạt',
+  'DNTN Thương Mại Minh Long',
+  'Cty Cổ phần Dịch vụ Đại Dương',
+  'TNHH Sản xuất & TMDV Hồng Phúc',
+  'Chi nhánh Miền Nam - Cty Á Châu',
+  'Cty TNHH Giải pháp Phần mềm An Phát'
+];
+
 function appendMisaBatch(count) {
-  const stream = document.getElementById('misa-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  // Fake accounting customer names for high fidelity disguise
-  const customers = [
-    'Công ty TNHH Ánh Dương',
-    'Tập đoàn VinaTech',
-    'Cty CP Đầu tư Phát Đạt',
-    'DNTN Thương Mại Minh Long',
-    'Cty Cổ phần Dịch vụ Đại Dương',
-    'TNHH Sản xuất & TMDV Hồng Phúc',
-    'Chi nhánh Miền Nam - Cty Á Châu',
-    'Cty TNHH Giải pháp Phần mềm An Phát'
-  ];
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
-
+  appendSimpleThemeBatch(count, 'misa-story-stream', chunk => {
     const tr = document.createElement('tr');
     tr.className = 'misa-order-row';
     tr.id = `misa-order-${chunk.globalIndex}`;
-    tr.dataset.index = chunk.globalIndex;
-    tr.dataset.page = chunk.page;
-
     const orderNum = `DH2026-${String(chunk.globalIndex + 1).padStart(5, '0')}`;
     const orderDate = `0${(chunk.globalIndex % 28) + 1}/10/2026`.replace('00', '0');
-    const custName = customers[chunk.globalIndex % customers.length];
+    const custName = MISA_CUSTOMERS[chunk.globalIndex % MISA_CUSTOMERS.length];
     const amountVal = ((chunk.globalIndex + 1) * 1250000).toLocaleString('vi-VN') + ',00';
 
     tr.innerHTML = `
@@ -7596,22 +7462,12 @@ function appendMisaBatch(count) {
       <td style="text-align:right; font-family:Consolas, monospace;">${amountVal}</td>
       <td style="text-align:right; font-family:Consolas, monospace;">0,00</td>
     `;
+    return tr;
+  });
 
-    const gIdx = chunk.globalIndex;
-    tr.addEventListener('click', () => {
-      setActiveRow(gIdx, true);
-    });
-
-    fragment.appendChild(tr);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
-
-  // Update row count indicator
   const rowCountEl = document.getElementById('misa-row-count');
   if (rowCountEl) {
-    rowCountEl.textContent = `Số dòng = ${end}`;
+    rowCountEl.textContent = `Số dòng = ${state.renderedCount}`;
   }
 }
 
@@ -7672,24 +7528,10 @@ function appendOutlookBatch(count) {
 }
 
 function appendSAPBatch(count) {
-  const stream = document.getElementById('sap-story-stream');
-  if (!stream || state.allChunks.length === 0) return;
-
-  const start = state.renderedCount;
-  const end = Math.min(start + count, state.allChunks.length);
-  if (start >= end) return;
-
-  const fragment = document.createDocumentFragment();
-
-  for (let i = start; i < end; i++) {
-    const chunk = state.allChunks[i];
-
+  appendSimpleThemeBatch(count, 'sap-story-stream', chunk => {
     const tr = document.createElement('tr');
     tr.className = 'sap-item-row';
     tr.id = `sap-item-${chunk.globalIndex}`;
-    tr.dataset.index = chunk.globalIndex;
-    tr.dataset.page = chunk.page;
-
     const itemNum = String((chunk.globalIndex + 1) * 10).padStart(5, '0');
     const matNum = `MAT-${String(100000 + (chunk.globalIndex % 450))}`;
     const poQty = ((chunk.globalIndex % 15) + 1) * 10;
@@ -7712,21 +7554,12 @@ function appendSAPBatch(count) {
       <td style="text-align:center;">1000</td>
       <td style="text-align:center;">0001</td>
     `;
-
-    const gIdx = chunk.globalIndex;
-    tr.addEventListener('click', () => {
-      setActiveRow(gIdx, true);
-    });
-
-    fragment.appendChild(tr);
-  }
-
-  stream.appendChild(fragment);
-  state.renderedCount = end;
+    return tr;
+  });
 
   const countEl = document.getElementById('sap-row-count-badge');
   if (countEl) {
-    countEl.textContent = `Hiển thị ${end} hạng mục · SAP ALV Grid ME23N`;
+    countEl.textContent = `Hiển thị ${state.renderedCount} hạng mục · SAP ALV Grid ME23N`;
   }
 }
 
