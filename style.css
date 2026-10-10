@@ -107,53 +107,60 @@ body.theme-googlesheets {
 
 .gsheet-top-bar {
   background-color: #ffffff;
-  height: 60px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px 4px 14px;
-  border-bottom: 1px solid #f1f3f4;
+  padding: 7px 14px 5px 12px;
+  border-bottom: 1px solid transparent;
 }
-.gsheet-top-left { display: flex; align-items: center; gap: 12px; }
+.gsheet-top-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .gsheet-logo-btn { display: flex; align-items: center; cursor: pointer; }
-.gsheet-title-and-menu { display: flex; flex-direction: column; gap: 2px; }
-.gsheet-title-row { display: flex; align-items: center; gap: 8px; }
+.gsheet-title-and-menu { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.gsheet-title-row { display: flex; align-items: center; gap: 4px; min-width: 0; }
 
 .gsheet-doc-title {
   font-size: 18px;
   color: #1f1f1f;
   font-weight: 400;
-  padding: 1px 6px;
+  line-height: 22px;
+  padding: 0 5px;
   border-radius: 4px;
   white-space: nowrap;
 }
 .gsheet-doc-title:hover { outline: 1px solid #dadce0; }
-.gsheet-doc-icons { display: flex; align-items: center; gap: 4px; }
+.gsheet-doc-icons { display: flex; align-items: center; gap: 1px; }
 .gsheet-icon-btn {
   background: transparent;
   border: none;
-  font-size: 15px;
   color: #5f6368;
   cursor: pointer;
-  padding: 2px 4px;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
   border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
+.gsheet-icon-btn svg { width: 18px; height: 18px; }
 .gsheet-icon-btn:hover { background-color: #f1f3f4; }
 .gsheet-cloud-status {
   display: flex;
   align-items: center;
   gap: 4px;
   color: #5f6368;
-  font-size: 12px;
-  margin-left: 6px;
+  font-size: 11px;
+  margin-left: 4px;
 }
 
-.gsheet-menu-bar { display: flex; align-items: center; gap: 2px; margin-left: 2px; }
+.gsheet-menu-bar { display: flex; align-items: center; gap: 0; margin-left: 0; }
 .gsheet-menu-item {
   background: transparent;
   border: none;
-  padding: 2px 7px;
-  font-size: 14px;
+  padding: 3px 6px;
+  font-size: 13px;
+  line-height: 18px;
   color: #202124;
   border-radius: 4px;
   cursor: pointer;
@@ -161,7 +168,7 @@ body.theme-googlesheets {
 }
 .gsheet-menu-item:hover { background-color: #f1f3f4; }
 
-.gsheet-top-right { display: flex; align-items: center; gap: 8px; }
+.gsheet-top-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
 
 .theme-switch-pill {
   background-color: #edf2fa;
@@ -200,16 +207,16 @@ body.theme-googlesheets {
 .gsheet-circle-btn {
   background: transparent;
   border: none;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #444746;
-  font-size: 15px;
 }
+.gsheet-circle-btn svg { width: 18px; height: 18px; }
 .gsheet-circle-btn:hover { background-color: #f1f3f4; }
 
 .gsheet-share-btn {
@@ -246,10 +253,10 @@ body.theme-googlesheets {
 /* Google Sheets Toolbar */
 .gsheet-toolbar {
   background-color: var(--gs-toolbar-bg);
-  height: 38px;
-  border-radius: 20px;
-  margin: 0 14px 4px 14px;
-  padding: 2px 10px;
+  height: 36px;
+  border-radius: 18px;
+  margin: 0 8px 3px;
+  padding: 2px 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -268,10 +275,12 @@ body.theme-googlesheets {
   justify-content: center;
   color: #444746;
   font-size: 13px;
+  flex: 0 0 28px;
 }
+.gs-tool-btn svg { width: 16px; height: 16px; }
 .gs-tool-btn:hover { background-color: rgba(68, 71, 70, 0.08); }
 .gs-tool-btn.active-toggle { background-color: #d3e3fd; color: #041e49; }
-.gs-tool-divider { width: 1px; height: 18px; background-color: #c4c7c5; margin: 0 5px; }
+.gs-tool-divider { width: 1px; height: 18px; background-color: #c4c7c5; margin: 0 4px; }
 
 .gs-select {
   background: transparent;
@@ -805,6 +814,36 @@ body.theme-vscode {
   text-overflow: ellipsis;
 }
 
+body.theme-googlesheets .excel-formula-bar-container {
+  height: 30px;
+  border-top: 1px solid #f1f3f4;
+  border-bottom-color: #dadce0;
+  color: #3c4043;
+}
+body.theme-googlesheets .name-box {
+  width: 74px;
+  justify-content: flex-start;
+  padding-left: 12px;
+  background: #ffffff;
+  border-right-color: #dadce0;
+  color: #3c4043;
+  font-weight: 500;
+}
+body.theme-googlesheets .formula-actions {
+  gap: 1px;
+  padding: 0 7px;
+  border-right-color: #dadce0;
+}
+body.theme-googlesheets .formula-btn {
+  color: #5f6368;
+  font-size: 11px;
+}
+body.theme-googlesheets .formula-input {
+  padding: 0 8px;
+  color: #202124;
+  font-size: 13px;
+}
+
 /* Status banner */
 .status-banner {
   background-color: #e6f4ea;
@@ -921,10 +960,25 @@ body.theme-excel .header-titles-row th {
 tr.selected-story-row td { background-color: #e8f0fe !important; }
 body.theme-excel tr.selected-story-row td { background-color: #e8f4ec !important; }
 
+body.theme-googlesheets tr.selected-story-row td { background-color: #ffffff !important; }
+body.theme-googlesheets tr.selected-story-row .row-header {
+  background-color: #d3e3fd !important;
+  color: #185abc;
+  font-weight: 600;
+}
+body.theme-googlesheets .story-col-header {
+  background-color: #d3e3fd;
+  color: #185abc;
+}
+
 .story-cell.cell-focused {
   outline: 2px solid var(--gs-blue);
   outline-offset: -2px;
   position: relative;
+}
+body.theme-googlesheets .story-cell.cell-focused {
+  background-color: #ffffff !important;
+  z-index: 1;
 }
 body.theme-excel .story-cell.cell-focused { outline-color: var(--excel-green); }
 
@@ -953,6 +1007,24 @@ body.theme-excel .story-cell.cell-focused::after { background-color: var(--excel
 .badge-status.review { background-color: #fef7e0; color: #b06000; }
 .badge-status.audit { background-color: #f1f3f4; color: #5f6368; }
 
+body.theme-googlesheets .badge-status {
+  border-radius: 2px;
+  padding: 1px 5px;
+  font-size: 9px;
+  line-height: 14px;
+}
+body.theme-googlesheets .table-container {
+  scrollbar-color: #bdc1c6 #f8f9fa;
+  scrollbar-width: thin;
+}
+body.theme-googlesheets .table-container::-webkit-scrollbar { width: 12px; height: 12px; }
+body.theme-googlesheets .table-container::-webkit-scrollbar-track { background: #f8f9fa; }
+body.theme-googlesheets .table-container::-webkit-scrollbar-thumb {
+  background: #bdc1c6;
+  border: 3px solid #f8f9fa;
+  border-radius: 8px;
+}
+
 
 /* ==================================================
    BOTTOM SHEETS BAR (GSHEET & EXCEL)
@@ -967,6 +1039,11 @@ body.theme-excel .story-cell.cell-focused::after { background-color: var(--excel
   padding: 0 10px;
   flex-shrink: 0;
   font-size: 11px;
+}
+body.theme-googlesheets .excel-sheets-bar {
+  height: 34px;
+  padding: 0 8px;
+  border-top-color: #dadce0;
 }
 body.theme-excel .excel-sheets-bar {
   height: 32px;
@@ -1017,6 +1094,16 @@ body.theme-vscode .excel-sheets-bar {
   color: #0F9D58;
   border-color: #e0e0e0;
   border-bottom: 2px solid #0F9D58;
+}
+body.theme-googlesheets .sheet-tab {
+  height: 30px;
+  border-radius: 3px 3px 0 0;
+  padding: 0 12px;
+}
+body.theme-googlesheets .sheet-tab.active {
+  color: #188038;
+  border-color: transparent;
+  border-bottom: 3px solid #188038;
 }
 body.theme-excel .sheet-tab {
   border-radius: 2px 2px 0 0;
