@@ -13,6 +13,18 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MAX_UPLOAD_SIZE = 200 * 1024 * 1024
 
 
+def normalized_request_path(environ):
+    request_path = environ.get("PATH_INFO") or "/"
+    script_name = (environ.get("SCRIPT_NAME") or "").rstrip("/")
+
+    # When Passenger is mounted at /api, WSGI strips that prefix from
+    # PATH_INFO and exposes it through SCRIPT_NAME instead.
+    if script_name == "/api" and not request_path.startswith("/api/"):
+        return "/api" + (request_path if request_path.startswith("/") else "/" + request_path)
+
+    return request_path
+
+
 
 def parse_pdf_upload(environ):
     content_length = int(environ.get("CONTENT_LENGTH") or 0)
@@ -105,7 +117,7 @@ def static_response(environ, start_response):
 
 def application(environ, start_response):
     request_method = environ.get("REQUEST_METHOD", "GET").upper()
-    request_path = environ.get("PATH_INFO") or "/"
+    request_path = normalized_request_path(environ)
     query_string = environ.get("QUERY_STRING") or ""
     raw_path = f"{request_path}?{query_string}" if query_string else request_path
     request_headers = {
@@ -131,10 +143,10 @@ def application(environ, start_response):
         start_response(status_line(api_response.status), response_headers)
         return [data]
 
-    if environ.get("REQUEST_METHOD") == "GET" and environ.get("PATH_INFO") == "/api/health":
+    if request_method == "GET" and request_path == "/api/health":
         return json_response(start_response, {"ok": True, "pdfExtraction": True, "hybridSync": True})
 
-    if environ.get("REQUEST_METHOD") == "POST" and environ.get("PATH_INFO") == "/api/extract-pdf":
+    if request_method == "POST" and request_path == "/api/extract-pdf":
         try:
             return extract_pdf(environ, start_response)
         except ValueError as exc:
@@ -143,7 +155,7 @@ def application(environ, start_response):
         except Exception as exc:
             return json_response(start_response, {"success": False, "error": str(exc)}, "500 Internal Server Error")
 
-    if environ.get("REQUEST_METHOD") in {"GET", "HEAD"}:
+    if request_method in {"GET", "HEAD"}:
         return static_response(environ, start_response)
 
     start_response("405 Method Not Allowed", [("Content-Type", "text/plain; charset=utf-8")])
