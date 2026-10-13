@@ -9,7 +9,11 @@ import re
 PORT = 8080
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 MAX_UPLOAD_SIZE = 200 * 1024 * 1024
+LOCAL_AUTH_MOCK = "--mock-auth" in sys.argv
+LOCAL_MOCK_CSRF = "local-dev-csrf"
 
+import importlib
+import document_processing
 from document_processing import extract_pdf_payload
 from hybrid_sync import handle_api_request
 
@@ -90,7 +94,8 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_error(400, "No PDF data provided")
                     return
 
-                response_payload = extract_pdf_payload(pdf_data, filename)
+                importlib.reload(document_processing)
+                response_payload = document_processing.extract_pdf_payload(pdf_data, filename)
                 data_bytes = json.dumps(response_payload, ensure_ascii=False).encode('utf-8')
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -120,6 +125,9 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         if not path.startswith('/api/') or path in {'/api/health', '/api/extract-pdf'}:
             return False
 
+        if LOCAL_AUTH_MOCK and self._handle_local_auth_mock(path):
+            return True
+
         content_length = int(self.headers.get('Content-Length', 0) or 0)
         body = self.rfile.read(content_length) if content_length else b''
         headers = {key.lower(): value for key, value in self.headers.items()}
@@ -140,6 +148,51 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(data_bytes)
         return True
 
+    def _handle_local_auth_mock(self, path):
+        if path == '/api/auth/status' and self.command == 'GET':
+            return self._send_mock_json({
+                "enabled": True,
+                "authenticated": True,
+                "csrfToken": LOCAL_MOCK_CSRF,
+                "user": {
+                    "email": "local.dev@example.test",
+                    "displayName": "Local Test User",
+                    "avatarUrl": "",
+                },
+            })
+
+        if path == '/api/sync/document' and self.command == 'GET':
+            return self._send_mock_json({
+                "ok": True,
+                "document": None,
+                "progress": None,
+                "bookmarks": [],
+                "settings": None,
+            })
+
+        if path == '/api/sync/document' and self.command == 'PUT':
+            content_length = int(self.headers.get('Content-Length', 0) or 0)
+            if content_length:
+                self.rfile.read(content_length)
+            if self.headers.get('X-CSRF-Token', '') != LOCAL_MOCK_CSRF:
+                return self._send_mock_json({"error": "CSRF token không hợp lệ"}, 403)
+            return self._send_mock_json({"ok": True, "mock": True})
+
+        if path == '/api/auth/logout' and self.command == 'POST':
+            return self._send_mock_json({"ok": True, "mock": True})
+
+        return False
+
+    def _send_mock_json(self, payload, status=200):
+        data_bytes = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(data_bytes)))
+        self.send_header('Cache-Control', 'no-store')
+        self.end_headers()
+        self.wfile.write(data_bytes)
+        return True
+
 def find_free_port(start_port=8080, max_tries=20):
     import socket
     for port in range(start_port, start_port + max_tries):
@@ -158,10 +211,13 @@ def main():
     print("=" * 60)
     print(f"[*] Server dang chay tai: {url}")
     print("[*] Da tich hop bo phan giai PDF toc do cao (pypdf).")
+    if LOCAL_AUTH_MOCK:
+        print("[DEV] Mock Google Login dang bat - khong ket noi database.")
     print("[*] Nhan Ctrl+C de dung.")
     print("=" * 60)
 
-    webbrowser.open(url)
+    if "--no-browser" not in sys.argv:
+        webbrowser.open(url)
 
     with http.server.ThreadingHTTPServer(("", port), StealthHTTPRequestHandler) as httpd:
         try:

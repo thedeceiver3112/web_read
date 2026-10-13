@@ -12,7 +12,7 @@ module.exports = defineConfig({
     trace: 'retain-on-failure'
   },
   webServer: {
-    command: 'python run.py',
+    command: 'python run.py --no-browser',
     url: 'http://127.0.0.1:8080/version.json',
     reuseExistingServer: true,
     timeout: 15000

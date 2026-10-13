@@ -205,3 +205,153 @@ test('modal mục lục dài cuộn được hoàn toàn đến mục cuối cù
   expect(lastItemBox.y + lastItemBox.height).toBeLessThanOrEqual(dialogBox.y + dialogBox.height);
 });
 
+test('EPUB có hình ảnh hiển thị thành 1 dòng link và bấm vào mở modal xem ảnh', async ({ page }) => {
+  const zip = new JSZip();
+  zip.file('mimetype', 'application/epub+zip');
+  zip.file('META-INF/container.xml', '<?xml version="1.0"?><container xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>');
+  zip.file('OEBPS/content.opf', '<?xml version="1.0"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0"><manifest><item id="c1" href="chapter1.xhtml" media-type="application/xhtml+xml"/><item id="img1" href="images/illust1.png" media-type="image/png"/></manifest><spine><itemref idref="c1"/></spine></package>');
+  // 1x1 transparent PNG
+  const tinyPngBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+  zip.file('OEBPS/images/illust1.png', Buffer.from(tinyPngBase64, 'base64'));
+  zip.file('OEBPS/chapter1.xhtml', '<html xmlns="http://www.w3.org/1999/xhtml"><body><h1>Chương Có Ảnh</h1><p>Đoạn văn trước hình ảnh minh họa.</p><p><img src="images/illust1.png" alt="Bản đồ cổ đại"/></p><p>Đoạn văn sau hình ảnh minh họa.</p></body></html>');
+  const buffer = await zip.generateAsync({ type: 'nodebuffer' });
+
+  await openReader(page);
+  await page.locator('#file-pdf-input').setInputFiles({ name: 'truyen-co-anh.epub', mimeType: 'application/epub+zip', buffer });
+  await expect(page.locator('#loading-spinner')).toBeHidden({ timeout: 20000 });
+
+  const imgLink = page.locator('.stealth-inline-img-link').first();
+  await expect(imgLink).toBeVisible();
+  await expect(imgLink).toContainText('Bản đồ cổ đại');
+
+  // Click the 1-line image link to open the viewer modal
+  await imgLink.click();
+  const modal = page.locator('#stealth-image-viewer-modal');
+  await expect(modal).toHaveClass(/show/);
+  const previewImg = page.locator('#stealth-img-modal-preview');
+  await expect(previewImg).toBeVisible();
+  await expect(previewImg).toHaveAttribute('src', /^data:image\/png;base64,/);
+
+  // Press Escape to close the image modal without triggering Boss Mode
+  await page.keyboard.press('Escape');
+  await expect(modal).not.toHaveClass(/show/);
+  const bossActive = await page.evaluate(() => state.bossModeActive);
+  expect(bossActive).toBe(false);
+});
+
+function makePdfWithImagesFile() {
+  const jpegHex = 'ffd8ffe000104a46494600010101004800480000ffdb004300030202020202030202020303030304060404040404080606050609080a0a090809090a0c0f0c0a0b0e0b09090d110d0e0f101011100a0c12131210130f101010ffc9000b080001000101011100ffcc000600101005ffda0008010100003f00d2cf20ffd9';
+  const jpegBuf = Buffer.from(jpegHex, 'hex');
+  const stream1 = Buffer.from('q 100 0 0 100 50 500 cm /Im0 Do Q', 'ascii');
+  const stream2 = Buffer.from('q 100 0 0 100 50 500 cm /Im1 Do Q BT /F1 18 Tf 72 720 Td (Ban do dia ly chuong 1) Tj ET', 'ascii');
+
+  const objBuffers = [
+    Buffer.from('<< /Type /Catalog /Pages 2 0 R >>', 'ascii'),
+    Buffer.from('<< /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>', 'ascii'),
+    Buffer.from('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /XObject << /Im0 6 0 R >> >> /Contents 7 0 R >>', 'ascii'),
+    Buffer.from('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> /XObject << /Im1 6 0 R >> >> /Contents 8 0 R >>', 'ascii'),
+    Buffer.from('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>', 'ascii'),
+    Buffer.concat([
+      Buffer.from(`<< /Type /XObject /Subtype /Image /Width 1 /Height 1 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBuf.length} >>\nstream\n`, 'ascii'),
+      jpegBuf,
+      Buffer.from('\nendstream', 'ascii')
+    ]),
+    Buffer.concat([
+      Buffer.from(`<< /Length ${stream1.length} >>\nstream\n`, 'ascii'),
+      stream1,
+      Buffer.from('\nendstream', 'ascii')
+    ]),
+    Buffer.concat([
+      Buffer.from(`<< /Length ${stream2.length} >>\nstream\n`, 'ascii'),
+      stream2,
+      Buffer.from('\nendstream', 'ascii')
+    ])
+  ];
+
+  const chunks = [Buffer.from('%PDF-1.4\n', 'ascii')];
+  let currentOffset = chunks[0].length;
+  const offsets = [0];
+
+  objBuffers.forEach((objBuf, idx) => {
+    offsets.push(currentOffset);
+    const header = Buffer.from(`${idx + 1} 0 obj\n`, 'ascii');
+    const footer = Buffer.from('\nendobj\n', 'ascii');
+    chunks.push(header, objBuf, footer);
+    currentOffset += header.length + objBuf.length + footer.length;
+  });
+
+  const xrefOffset = currentOffset;
+  let xrefStr = `xref\n0 ${objBuffers.length + 1}\n0000000000 65535 f \n`;
+  offsets.slice(1).forEach(off => {
+    xrefStr += `${String(off).padStart(10, '0')} 00000 n \n`;
+  });
+  xrefStr += `trailer\n<< /Size ${objBuffers.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  chunks.push(Buffer.from(xrefStr, 'ascii'));
+
+  return {
+    name: 'nhung-tu-nhan-dia-ly.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.concat(chunks)
+  };
+}
+
+test('PDF có ảnh bìa ở trang 1 và ảnh minh họa nội dung đều hiển thị thành dòng link xem ảnh', async ({ page }) => {
+  await openReader(page);
+  await page.locator('#file-pdf-input').setInputFiles(makePdfWithImagesFile());
+  await expect(page.locator('#loading-spinner')).toBeHidden({ timeout: 20000 });
+
+  const imgLinks = page.locator('.stealth-inline-img-link');
+  await expect(imgLinks).toHaveCount(2);
+  await expect(imgLinks.nth(0)).toContainText('Xem hình ảnh trang 1 — Ảnh bìa');
+  await expect(imgLinks.nth(1)).toContainText('Xem hình ảnh minh họa — Trang 2');
+
+  // Ensure Page 1 is not skipped (currentGlobalIndex === 0)
+  const firstIndex = await page.evaluate(() => state.currentGlobalIndex);
+  expect(firstIndex).toBe(0);
+
+  // Clicking the Page 1 cover image link opens the modal with the extracted JPEG
+  await imgLinks.nth(0).click();
+  const modal = page.locator('#stealth-image-viewer-modal');
+  await expect(modal).toHaveClass(/show/);
+  await expect(page.locator('#stealth-img-modal-preview')).toHaveAttribute('src', /^data:image\/jpeg;base64,/);
+});
+
+test('nhấn ESC bật Boss Mode ẩn nội dung truyện trên thanh Formula ở cả Google Sheets và Excel', async ({ page }) => {
+  await openReader(page);
+  await page.locator('#file-pdf-input').setInputFiles({
+    name: 'truyen-bi-mat.txt',
+    mimeType: 'text/plain',
+    buffer: Buffer.from('Đoạn văn mật không được lộ trên thanh công thức khi sếp đi ngang qua.\n\nĐoạn văn thứ hai của chương.', 'utf-8')
+  });
+  await expect(page.locator('#loading-spinner')).toBeHidden({ timeout: 20000 });
+
+  const formulaInput = page.locator('#formula-input');
+  const cellAddress = page.locator('#active-cell-address');
+  await expect(formulaInput).toHaveValue(/Đoạn văn mật không được lộ/);
+  await expect(cellAddress).toHaveText('D2');
+
+  // Press ESC in Google Sheets -> formula bar must show dummy formula, not story text
+  await page.keyboard.press('Escape');
+  await expect(formulaInput).toHaveValue('=SUM(C2:E2)');
+  await expect(cellAddress).toHaveText('F2');
+
+  // Press ESC again -> restores story text
+  await page.keyboard.press('Escape');
+  await expect(formulaInput).toHaveValue(/Đoạn văn mật không được lộ/);
+  await expect(cellAddress).toHaveText('D2');
+
+  // Switch to Excel theme and verify ESC in Excel as well
+  await page.evaluate(() => applyTheme('theme-excel'));
+  await expect(page.locator('#formula-input')).toHaveValue(/Đoạn văn mật không được lộ/);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#formula-input')).toHaveValue('=SUM(C2:E2)');
+  await expect(page.locator('#active-cell-address')).toHaveText('F2');
+
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#formula-input')).toHaveValue(/Đoạn văn mật không được lộ/);
+  await expect(page.locator('#active-cell-address')).toHaveText('D2');
+});
+
+
+
+

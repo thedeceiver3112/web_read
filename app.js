@@ -37,6 +37,7 @@ const state = {
   allChunks: [], // Array of { text, page, indexInPage, globalIndex }
   pageStartIndices: {}, // pageNum -> globalIndex
   documentToc: [], // Array of { title, page, globalIndex }
+  documentImages: {}, // Map of imgKey -> { src, label, fileName, page }
   searchResults: [],
   searchResultCursor: -1,
   
@@ -569,31 +570,170 @@ function buildHybridSyncPayload() {
   };
 }
 
+const GOOGLE_G_SVG = `<svg class="hybrid-google-svg" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>`;
+
 function renderHybridAuthButton() {
-  const button = document.getElementById('hybrid-auth-button');
-  if (!button) return;
-  button.style.display = 'inline-flex';
-  button.classList.toggle('signed-in', hybridSyncState.authenticated);
-  if (!hybridSyncState.authenticated) {
-    button.innerHTML = '<span class="hybrid-google-mark">G</span><span>Đăng nhập Google</span>';
-    button.title = hybridSyncState.enabled
-      ? 'Đăng nhập Google để đồng bộ tiến độ và dấu trang'
-      : 'Google Sync chưa được cấu hình trên server';
-    button.classList.toggle('needs-setup', !hybridSyncState.enabled);
+  const buttons = document.querySelectorAll('.hybrid-auth-button, #hybrid-auth-button');
+  if (!buttons.length) return;
+  buttons.forEach(button => {
+    button.style.display = 'inline-flex';
+    button.classList.toggle('signed-in', hybridSyncState.authenticated);
+    if (!button._hasAuthListener) {
+      button._hasAuthListener = true;
+      button.addEventListener('click', handleHybridAuthClick);
+    }
+    if (!hybridSyncState.authenticated) {
+      button.innerHTML = `${GOOGLE_G_SVG}<span>Đăng nhập Google</span>`;
+      button.title = hybridSyncState.enabled
+        ? 'Đăng nhập Google để đồng bộ tiến độ và dấu trang'
+        : 'Google Sync chưa được cấu hình trên server';
+      button.classList.toggle('needs-setup', !hybridSyncState.enabled);
+      button.classList.remove('dropdown-open');
+      return;
+    }
+    button.classList.remove('needs-setup');
+    const name = hybridSyncState.user?.displayName || hybridSyncState.user?.email || 'Tài khoản';
+    const initial = name.trim().charAt(0).toUpperCase() || 'U';
+    button.innerHTML = `
+      <span class="hybrid-user-avatar">${escapeHtml(initial)}</span>
+      <span class="hybrid-user-name">${escapeHtml(name)}</span>
+      <svg class="hybrid-dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    `;
+    button.title = `Tài khoản: ${name}. Nhấp để xem thông tin và đăng xuất.`;
+  });
+}
+
+function toggleHybridAccountDropdown(button) {
+  const dropdown = document.getElementById('hybrid-account-dropdown');
+  if (dropdown && dropdown.classList.contains('show')) {
+    closeHybridAccountDropdown();
     return;
   }
-  button.classList.remove('needs-setup');
-  const name = hybridSyncState.user?.displayName || hybridSyncState.user?.email || 'Tài khoản';
-  const initial = name.trim().charAt(0).toUpperCase() || 'U';
-  button.innerHTML = `<span class="hybrid-user-avatar">${escapeHtml(initial)}</span><span class="hybrid-user-name">${escapeHtml(name)}</span>`;
-  button.title = 'Đã đồng bộ với Google. Nhấn để đăng xuất.';
+  openHybridAccountDropdown(button);
 }
+
+function openHybridAccountDropdown(button) {
+  let dropdown = document.getElementById('hybrid-account-dropdown');
+  if (!dropdown) {
+    dropdown = document.createElement('div');
+    dropdown.id = 'hybrid-account-dropdown';
+    dropdown.className = 'hybrid-account-dropdown';
+    document.body.appendChild(dropdown);
+  }
+
+  const name = hybridSyncState.user?.displayName || 'Tài khoản';
+  const email = hybridSyncState.user?.email || '';
+  const initial = (name || email).trim().charAt(0).toUpperCase() || 'U';
+
+  dropdown.innerHTML = `
+    <div class="hybrid-dropdown-header">
+      <div class="hybrid-dropdown-avatar">${escapeHtml(initial)}</div>
+      <div class="hybrid-dropdown-user-info">
+        <div class="hybrid-dropdown-name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
+        ${email ? `<div class="hybrid-dropdown-email" title="${escapeHtml(email)}">${escapeHtml(email)}</div>` : ''}
+      </div>
+    </div>
+    <div class="hybrid-dropdown-sync-card">
+      <div class="hybrid-dropdown-sync-status">
+        <span class="hybrid-sync-dot"></span>
+        <span class="hybrid-sync-status-text">Đã kết nối Google Cloud</span>
+      </div>
+      <div class="hybrid-dropdown-sync-sub">Tự động đồng bộ tiến độ đọc và dấu trang</div>
+    </div>
+    <div class="hybrid-dropdown-actions">
+      <button class="hybrid-dropdown-logout-btn" id="btn-hybrid-logout" type="button" title="Đăng xuất tài khoản khỏi thiết bị này">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Đăng xuất</span>
+      </button>
+    </div>
+  `;
+
+  const logoutBtn = dropdown.querySelector('#btn-hybrid-logout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      performHybridLogout();
+    });
+  }
+
+  // Positioning relative to button
+  const rect = button.getBoundingClientRect();
+  const dropdownWidth = 280;
+  let left = rect.right - dropdownWidth;
+  if (left < 10) left = 10;
+  if (left + dropdownWidth > window.innerWidth - 10) {
+    left = window.innerWidth - dropdownWidth - 10;
+  }
+  let top = rect.bottom + 8;
+  if (top + 220 > window.innerHeight) {
+    top = Math.max(10, rect.top - 210);
+  }
+
+  dropdown.style.top = `${Math.round(top)}px`;
+  dropdown.style.left = `${Math.round(left)}px`;
+  dropdown.classList.add('show');
+  button.classList.add('dropdown-open');
+}
+
+function closeHybridAccountDropdown() {
+  const dropdown = document.getElementById('hybrid-account-dropdown');
+  if (dropdown) {
+    dropdown.classList.remove('show');
+  }
+  document.querySelectorAll('.hybrid-auth-button, #hybrid-auth-button').forEach(btn => {
+    btn.classList.remove('dropdown-open');
+  });
+}
+
+async function performHybridLogout() {
+  closeHybridAccountDropdown();
+  try {
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST', credentials: 'same-origin', headers: { 'X-CSRF-Token': hybridSyncState.csrfToken }
+    });
+    if (response.ok) {
+      hybridSyncState.authenticated = false;
+      hybridSyncState.csrfToken = '';
+      hybridSyncState.user = null;
+      renderHybridAuthButton();
+      showPageFlipToast('Đã đăng xuất tài khoản Google');
+    }
+  } catch (err) {
+    console.error('Logout error:', err);
+    hybridSyncState.authenticated = false;
+    hybridSyncState.csrfToken = '';
+    hybridSyncState.user = null;
+    renderHybridAuthButton();
+  }
+}
+
+// Global click and keydown handlers to dismiss dropdown
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('hybrid-account-dropdown');
+  if (!dropdown || !dropdown.classList.contains('show')) return;
+  if (!dropdown.contains(e.target) && !e.target.closest('.hybrid-auth-button, #hybrid-auth-button')) {
+    closeHybridAccountDropdown();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeHybridAccountDropdown();
+  }
+});
+
+window.addEventListener('resize', closeHybridAccountDropdown);
 
 async function initializeHybridSync() {
   renderHybridAuthButton();
   try {
-    const authButton = document.getElementById('hybrid-auth-button');
-    if (authButton) authButton.addEventListener('click', handleHybridAuthClick, { once: false });
+    document.querySelectorAll('.hybrid-auth-button, #hybrid-auth-button').forEach(authButton => {
+      authButton.addEventListener('click', handleHybridAuthClick, { once: false });
+    });
     const response = await fetch('/api/auth/status', { credentials: 'same-origin', cache: 'no-store' });
     if (!response.ok) return;
     const data = await response.json();
@@ -608,7 +748,11 @@ async function initializeHybridSync() {
   }
 }
 
-async function handleHybridAuthClick() {
+async function handleHybridAuthClick(e) {
+  if (e) {
+    if (e.preventDefault) e.preventDefault();
+    if (e.stopPropagation) e.stopPropagation();
+  }
   if (!hybridSyncState.enabled) {
     window.alert('Google Login chưa được cấu hình trên server. Cần khai báo GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_SESSION_SECRET và thông tin MySQL trong cPanel.');
     return;
@@ -618,15 +762,9 @@ async function handleHybridAuthClick() {
     window.location.href = `/api/auth/google/start?return=${encodeURIComponent(returnPath)}`;
     return;
   }
-  if (!window.confirm('Đăng xuất tài khoản đồng bộ? File truyện và dữ liệu local vẫn được giữ trên máy này.')) return;
-  const response = await fetch('/api/auth/logout', {
-    method: 'POST', credentials: 'same-origin', headers: { 'X-CSRF-Token': hybridSyncState.csrfToken }
-  });
-  if (response.ok) {
-    hybridSyncState.authenticated = false;
-    hybridSyncState.csrfToken = '';
-    hybridSyncState.user = null;
-    renderHybridAuthButton();
+  const button = (e && e.currentTarget) ? e.currentTarget : document.querySelector('.hybrid-auth-button');
+  if (button) {
+    toggleHybridAccountDropdown(button);
   }
 }
 
@@ -920,6 +1058,11 @@ function applyCachedDocument(cache) {
   }));
   state.pageStartIndices = cache.pageStartIndices || {};
   state.documentToc = Array.isArray(cache.documentToc) ? cache.documentToc : [];
+  if (cache.documentImages && typeof cache.documentImages === 'object') {
+    state.documentImages = cache.documentImages;
+  } else if (previousDocumentName !== cache.documentName) {
+    state.documentImages = {};
+  }
   state.totalPages = Math.max(1, Number(cache.totalPages) || 1);
   state.loadedPages = state.totalPages;
   state.isPdfProcessing = false;
@@ -940,6 +1083,18 @@ function applyCachedDocument(cache) {
   state.rawText = cache.rawText || state.allChunks.map(c => c.text).join('\n');
   restoreSavedReadingPosition(false);
 
+  // If upgrading from an older cache version where Page 1 cover image was auto-skipped to Page 2, reset to Page 1
+  if (
+    (!cache.cacheVersion || cache.cacheVersion < 3) &&
+    state.currentPage === 2 &&
+    state.currentGlobalIndex <= 2 &&
+    state.allChunks[0]?.page === 1 &&
+    String(state.allChunks[0]?.text || '').includes('[[STEALTH_IMG:')
+  ) {
+    state.currentGlobalIndex = 0;
+    state.currentPage = 1;
+  }
+
   const univFileName = document.getElementById('univ-file-name');
   if (univFileName && state.pdfFileName) univFileName.textContent = state.pdfFileName;
   const portalNameLabel = document.getElementById('portal-pdf-filename');
@@ -958,7 +1113,7 @@ function persistDocumentCache() {
 
   const payload = {
     id: `document:${getCurrentDocumentId()}`,
-    cacheVersion: 2,
+    cacheVersion: 3,
     processingComplete: !state.isPdfProcessing,
     documentName: state.pdfFileName,
     documentId: getCurrentDocumentId(),
@@ -968,6 +1123,7 @@ function persistDocumentCache() {
     rawText: state.rawText || state.allChunks.map(c => c.text).join('\n'),
     pageStartIndices: state.pageStartIndices,
     documentToc: state.documentToc,
+    documentImages: state.documentImages || {},
     totalPages: state.totalPages,
     currentPage: state.currentPage,
     currentGlobalIndex: state.currentGlobalIndex,
@@ -978,8 +1134,13 @@ function persistDocumentCache() {
   try {
     sessionStorage.setItem(ACTIVE_DOCUMENT_SESSION_KEY, JSON.stringify(payload));
   } catch (error) {
-    sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
-    console.info('Tài liệu vượt giới hạn sessionStorage, chuyển sang IndexedDB.', error);
+    try {
+      const lightPayload = { ...payload, documentImages: {} };
+      sessionStorage.setItem(ACTIVE_DOCUMENT_SESSION_KEY, JSON.stringify(lightPayload));
+    } catch (innerError) {
+      sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
+      console.info('Tài liệu vượt giới hạn sessionStorage, chuyển sang IndexedDB.', innerError);
+    }
   }
 
   documentCacheWritePromise = documentCacheWritePromise
@@ -1029,9 +1190,17 @@ function restoreChunksFromLegacySession() {
 }
 
 async function restoreDocumentCache() {
+  let restoredFromSession = false;
   try {
     const sessionCache = JSON.parse(sessionStorage.getItem(ACTIVE_DOCUMENT_SESSION_KEY) || 'null');
-    if (applyCachedDocument(sessionCache)) return true;
+    if (applyCachedDocument(sessionCache)) {
+      restoredFromSession = true;
+      const hasImagesInSession = sessionCache?.documentImages && Object.keys(sessionCache.documentImages).length > 0;
+      const needsImages = state.allChunks.some(c => typeof c.text === 'string' && c.text.includes('[[STEALTH_IMG:'));
+      if (hasImagesInSession || !needsImages) {
+        return true;
+      }
+    }
   } catch (error) {
     sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
     console.warn('Không thể khôi phục tài liệu từ sessionStorage:', error);
@@ -1039,8 +1208,15 @@ async function restoreDocumentCache() {
 
   try {
     const cache = await readDocumentCache();
+    if (restoredFromSession) {
+      if (cache?.documentImages && typeof cache.documentImages === 'object') {
+        state.documentImages = cache.documentImages;
+      }
+      return true;
+    }
     if (applyCachedDocument(cache)) return true;
   } catch (error) {
+    if (restoredFromSession) return true;
     console.warn('Không thể khôi phục tài liệu từ IndexedDB:', error);
   }
 
@@ -1073,6 +1249,7 @@ const FAVICONS = {
   'theme-sap': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%2300386B%22/%3E%3Cpath%20d%3D%22M10%2012h28l-8%2024H2l8-24z%22%20fill%3D%22%23007DB8%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%2231%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2216%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%221%22%3ESAP%3C/text%3E%3C/svg%3E",
   'theme-gmail': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2038.5V13.8L24%2027.5l19.5-13.7v24.7c0%202.2-1.8%204-4%204H8.5c-2.2%200-4-1.8-4-4z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M43.5%2013.8v24.7c0%202.2-1.8%204-4%204h-5V20.5l9-6.7z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2013.8v24.7c0%202.2%201.8%204%204%204h5V20.5l-9-6.7z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M13.5%205.5L24%2014.5l10.5-9h-21z%22/%3E%3Cpath%20fill%3D%22%23FBBC05%22%20d%3D%22M4.5%209.5C4.5%207.3%206.3%205.5%208.5%205.5h5l-9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23C5221F%22%20d%3D%22M43.5%209.5c0-2.2-1.8-4-4-4h-5l9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M4.5%2013.8L24%2027.5%2043.5%2013.8%2024%2029%204.5%2013.8z%22/%3E%3C/svg%3E",
   'theme-outlook': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2214%22%20y%3D%228%22%20width%3D%2228%22%20height%3D%2232%22%20rx%3D%224%22%20fill%3D%22%230078D4%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10v22a4%204%200%200%201-4%204H18a4%204%200%200%201-4-4V14z%22%20fill%3D%22%2328A8EA%22%20opacity%3D%220.6%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Crect%20x%3D%226%22%20y%3D%2212%22%20width%3D%2222%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23005A9E%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2224%22%20r%3D%226.5%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223.2%22/%3E%3C/svg%3E",
+  'portal': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E",
 };
 
 // ==========================================================
@@ -1136,13 +1313,13 @@ function configProgressSheetUrl() {
 
 function initFeedbackListeners() {
   document.querySelectorAll(
-    '#btn-open-feedback-nav, #btn-open-feedback-portal, #btn-open-feedback-updates, #btn-open-feedback-settings, .duo-btn-feedback-nav, .portal-link-feedback, .duo-btn-feedback'
+    '#btn-open-feedback-nav, #btn-open-feedback-portal, #btn-open-feedback-updates, #btn-open-feedback-settings, #btn-footer-feedback, .duo-btn-feedback-nav, .portal-link-feedback, .duo-btn-feedback'
   ).forEach(btn => {
     btn.addEventListener('click', openFeedbackForm);
   });
 
   document.querySelectorAll(
-    '#btn-open-progress-nav, #btn-open-progress-portal, #btn-open-progress-updates, #btn-open-progress-settings, .duo-btn-sheet-nav, .portal-link-sheet, .duo-btn-progress, .duo-btn-progress-settings'
+    '#btn-open-progress-nav, #btn-open-progress-portal, #btn-open-progress-updates, #btn-open-progress-settings, #btn-footer-progress, .duo-btn-sheet-nav, .portal-link-sheet, .duo-btn-progress, .duo-btn-progress-settings'
   ).forEach(btn => {
     btn.addEventListener('click', openProgressSheet);
   });
@@ -2842,18 +3019,22 @@ function applyTheme(themeName) {
     card.classList.toggle('active', card.getAttribute('data-theme') === themeName);
   });
 
-  const favicon = document.getElementById('app-favicon');
-  if (favicon && FAVICONS[themeName]) {
-    favicon.href = FAVICONS[themeName];
-  }
-
-  const storyLabel = document.getElementById('tab-story-label');
-  const headerTitle = document.getElementById('story-header-title');
-
   const path = window.location.pathname.toLowerCase();
   const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
   const portal = document.getElementById('landing-portal');
   const isPortalVisible = portal ? !portal.classList.contains('hidden') : isIndexPage;
+
+  const favicon = document.getElementById('app-favicon');
+  if (favicon) {
+    if (isIndexPage && isPortalVisible && FAVICONS['portal']) {
+      favicon.href = FAVICONS['portal'];
+    } else if (FAVICONS[themeName]) {
+      favicon.href = FAVICONS[themeName];
+    }
+  }
+
+  const storyLabel = document.getElementById('tab-story-label');
+  const headerTitle = document.getElementById('story-header-title');
 
   if (isIndexPage && isPortalVisible) {
     document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
@@ -3848,6 +4029,10 @@ function openPortal(showCloseButton = true) {
   const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
   if (isIndexPage) {
     document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+    const favicon = document.getElementById('app-favicon');
+    if (favicon && FAVICONS['portal']) {
+      favicon.href = FAVICONS['portal'];
+    }
   }
   updatePortalThemeUI(state.theme);
   updatePortalUploadUI();
@@ -4061,6 +4246,15 @@ function initPortalTriggers() {
       });
     }
   });
+
+  const portalScrollTopBtn = document.getElementById('btn-footer-scroll-top');
+  if (portalScrollTopBtn) {
+    portalScrollTopBtn.addEventListener('click', () => {
+      const portal = document.getElementById('landing-portal');
+      if (portal) portal.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 }
 
 function updatePortalThemeUI(themeName) {
@@ -4081,12 +4275,12 @@ function copyAccountNumber() {
 
   const showFeedback = () => {
     if (copyBtn) {
-      const orig = copyBtn.getAttribute('data-orig') || copyBtn.textContent;
+      const orig = copyBtn.getAttribute('data-orig') || copyBtn.innerHTML;
       copyBtn.setAttribute('data-orig', orig);
-      copyBtn.textContent = 'Đã sao chép số tài khoản!';
+      copyBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Đã sao chép số tài khoản!</span>';
       copyBtn.classList.add('copied');
       setTimeout(() => {
-        copyBtn.textContent = orig;
+        copyBtn.innerHTML = orig;
         copyBtn.classList.remove('copied');
       }, 2500);
     }
@@ -4666,20 +4860,46 @@ async function switchReaderBook(docId) {
 
 function rechunkActiveDocument() {
   if (!state.allChunks || state.allChunks.length === 0) return;
-  const raw = state.rawText || state.allChunks.map(c => c.text).join('\n');
-  const chunks = splitTextIntoChunks(raw, state.chunkMode, {
+  const currentPage = state.currentPage || 1;
+  const currentIdx = state.currentGlobalIndex;
+  const splitOpts = {
     preserveIndents: state.preserveIndents,
     compactBlankLines: state.compactBlankLines,
     maxCharsPerLine: state.layoutMode === 'custom' ? state.maxCharsPerLine : 0
-  });
+  };
+
+  if (state.documentFileType === 'pdf' && state.totalPages > 1) {
+    const byPage = new Map();
+    state.allChunks.forEach(chunk => {
+      const p = Number(chunk.page) || 1;
+      if (!byPage.has(p)) byPage.set(p, []);
+      byPage.get(p).push(chunk.text || '');
+    });
+    const pagesData = {};
+    for (let p = 1; p <= state.totalPages; p++) {
+      const pageLines = byPage.get(p) || [];
+      const pageRaw = pageLines.join('\n');
+      pagesData[String(p)] = pageRaw ? splitTextIntoChunks(pageRaw, state.chunkMode, splitOpts) : [];
+    }
+    state.loadedPages = state.totalPages;
+    initStoryFromPages(pagesData, state.totalPages, 1);
+    const targetIdx = state.pageStartIndices[currentPage] ?? Math.min(currentIdx, state.allChunks.length - 1);
+    renderContinuousView(true, Math.min(targetIdx, state.allChunks.length - 1));
+    persistDocumentCache();
+    saveState();
+    syncUniversalNavbar();
+    return;
+  }
+
+  const raw = state.rawText || state.allChunks.map(c => c.text).join('\n');
+  const chunks = splitTextIntoChunks(raw, state.chunkMode, splitOpts);
 
   if (!chunks.length) return;
 
-  const currentIdx = state.currentGlobalIndex;
   const pagesData = chunksToPagesData(chunks);
   const totalPages = Object.keys(pagesData).length;
   state.loadedPages = totalPages;
-  initStoryFromPages(pagesData, totalPages, Math.min(state.currentPage, totalPages));
+  initStoryFromPages(pagesData, totalPages, Math.min(currentPage, totalPages));
   renderContinuousView(true, Math.min(currentIdx, state.allChunks.length - 1));
   persistDocumentCache();
   saveState();
@@ -4986,6 +5206,12 @@ function initEventListeners() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      const imgViewerModal = document.getElementById('stealth-image-viewer-modal');
+      if (imgViewerModal && imgViewerModal.classList.contains('show')) {
+        e.preventDefault();
+        closeStoryImageViewer();
+        return;
+      }
       const themeModal = document.getElementById('theme-modal');
       const stealthModal = document.getElementById('stealth-modal');
       if (themeModal && themeModal.classList.contains('show')) {
@@ -5468,11 +5694,86 @@ function applyStyles() {
 // ==========================================================
 // EXCEL & GOOGLE SHEETS TABS & BOSS KEY (EMERGENCY)
 // ==========================================================
+function syncFormulaBarForSheet(sheetId) {
+  const formulaInput = document.getElementById('formula-input');
+  const cellAddr = document.getElementById('active-cell-address');
+  if (!formulaInput && !cellAddr) return;
+
+  const activeSheetId = sheetId || document.querySelector('.sheet-content.active')?.id || 'view-sheet-story';
+  const isStorySheet = !state.bossModeActive && activeSheetId === 'view-sheet-story';
+
+  if (!isStorySheet) {
+    if (activeSheetId === 'view-sheet-balance') {
+      if (cellAddr) cellAddr.textContent = 'E2';
+      if (formulaInput) formulaInput.value = '=(D2-C2)/C2';
+    } else {
+      if (cellAddr) cellAddr.textContent = 'F2';
+      if (formulaInput) formulaInput.value = '=SUM(C2:E2)';
+    }
+    return;
+  }
+
+  const index = Math.max(0, state.currentGlobalIndex || 0);
+  const chunk = state.allChunks[index];
+  const storyText = chunk ? formatPlainTextChunk(chunk.text) : '';
+  if (formulaInput) {
+    if (state.theme !== 'theme-googlesheets' && state.readingMode === 'formula') {
+      formulaInput.value = storyText ? `=PROSE("${storyText}")` : '';
+    } else {
+      formulaInput.value = storyText;
+    }
+  }
+  if (cellAddr) {
+    cellAddr.textContent = `D${index + 2}`;
+  }
+}
+
 function initSheetTabs() {
   document.querySelectorAll('.sheet-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const targetId = tab.getAttribute('data-target');
+      if (state.bossModeActive && targetId === 'view-sheet-story') {
+        state.bossModeActive = false;
+        const bossButtons = BOSS_KEY_BUTTON_IDS.map(id => document.getElementById(id));
+        const univBoss = document.getElementById('univ-btn-boss');
+        if (univBoss) bossButtons.push(univBoss);
+        bossButtons.forEach(btn => {
+          if (btn) updateBossButton(btn, false);
+        });
+      }
       switchSheet(targetId);
+    });
+  });
+
+  document.querySelectorAll('.dummy-financial-table tbody').forEach(tbody => {
+    if (tbody.dataset.formulaBound === '1') return;
+    tbody.dataset.formulaBound = '1';
+    tbody.addEventListener('click', (e) => {
+      const cell = e.target.closest('td');
+      if (!cell || cell.classList.contains('row-header')) return;
+      const row = cell.parentElement;
+      const rowHeader = row ? row.querySelector('.row-header') : null;
+      const rowNum = rowHeader ? rowHeader.textContent.trim() : '2';
+      const cells = Array.from(row.children);
+      const colIdx = cells.indexOf(cell);
+      const colLetter = colIdx > 0 ? String.fromCharCode(64 + colIdx) : 'B';
+
+      const cellAddr = document.getElementById('active-cell-address');
+      const formulaInput = document.getElementById('formula-input');
+      if (cellAddr) cellAddr.textContent = `${colLetter}${rowNum}`;
+      if (formulaInput) {
+        const sheetEl = tbody.closest('.sheet-content');
+        const isBalance = sheetEl && sheetEl.id === 'view-sheet-balance';
+        if (!isBalance && colLetter === 'F') {
+          formulaInput.value = `=SUM(C${rowNum}:E${rowNum})`;
+        } else if (!isBalance && colLetter === 'H') {
+          formulaInput.value = `=(F${rowNum}-G${rowNum})/G${rowNum}`;
+        } else if (isBalance && colLetter === 'E') {
+          formulaInput.value = `=(D${rowNum}-C${rowNum})/C${rowNum}`;
+        } else {
+          formulaInput.value = cell.textContent.trim();
+        }
+      }
     });
   });
 }
@@ -5484,6 +5785,7 @@ function switchSheet(targetId) {
   document.querySelectorAll('.sheet-content').forEach(s => {
     s.classList.toggle('active', s.id === targetId);
   });
+  syncFormulaBarForSheet(targetId);
 }
 
 function updateBossButton(btn, bossModeActive) {
@@ -5520,6 +5822,9 @@ const BOSS_VIEW_CONFIGS = [
 ];
 
 function toggleBossKey() {
+  if (typeof closeStoryImageViewer === 'function') {
+    closeStoryImageViewer();
+  }
   const isBossActive = !state.bossModeActive;
   state.bossModeActive = isBossActive;
 
@@ -5572,6 +5877,7 @@ const MAX_EPUB_TEXT_LENGTH = 60 * 1024 * 1024;
 const MAX_EPUB_UNCOMPRESSED_SIZE = 300 * 1024 * 1024;
 const LARGE_FILE_WARNING_SIZE = 100 * 1024 * 1024;
 let pdfBackendAvailable = null;
+let lastUploadedPdfFile = null;
 
 function getDocumentExtension(file) {
   const name = file && file.name ? file.name.toLowerCase() : '';
@@ -5598,6 +5904,7 @@ function prepareDocumentLoad(file, documentId = '') {
     allChunks: state.allChunks,
     pageStartIndices: state.pageStartIndices,
     documentToc: state.documentToc,
+    documentImages: state.documentImages,
     currentGlobalIndex: state.currentGlobalIndex
   };
   const loadToken = ++state.pdfLoadToken;
@@ -5608,10 +5915,24 @@ function prepareDocumentLoad(file, documentId = '') {
   state.documentId = documentId || createLegacyDocumentId(file);
   state.documentFileSize = Number(file.size) || 0;
   state.documentFileType = getDocumentExtension(file);
+  lastUploadedPdfFile = state.documentFileType === 'pdf' ? file : null;
   state.documentCreatedAt = Date.now();
   state.documentToc = [];
+  state.documentImages = {};
   state.searchResults = [];
   state.searchResultCursor = -1;
+
+  // Reset automatic lastPosition when a file is freshly uploaded so Page 1 is always shown first
+  try {
+    const bookmarks = readSavedBookmarks();
+    if (state.documentId && bookmarks[state.documentId]) {
+      const entry = normalizeBookmarkEntry(bookmarks[state.documentId], state.documentId);
+      entry.lastPosition = null;
+      bookmarks[state.documentId] = entry;
+      localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(bookmarks));
+    }
+  } catch (_) {}
+
   showLoading('Đang đồng bộ dữ liệu vào hệ thống...');
   updateLoadingProgress(0, 'Đang chuẩn bị tài liệu...');
 
@@ -5668,7 +5989,7 @@ async function processDocumentFile(file) {
 async function isTextWorkerAvailable() {
   if (!window.Worker) return false;
   if (!textWorkerAvailabilityPromise) {
-    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261008-10', { cache: 'no-store' })
+    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261013-1', { cache: 'no-store' })
       .then(response => {
         const contentType = response.headers.get('content-type') || '';
         return response.ok && /javascript|ecmascript|text\/plain/i.test(contentType);
@@ -5698,7 +6019,7 @@ async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) 
   return new Promise((resolve, reject) => {
     let worker;
     try {
-      worker = new Worker('text-worker.js?v=20261009-12');
+      worker = new Worker('text-worker.js?v=20261013-1');
     } catch (error) {
       resolve(splitTextWithoutWorker(source, mode, workerOptions));
       return;
@@ -5846,25 +6167,91 @@ function normalizeEpubPath(baseDirectory, href) {
   return normalized.join('/');
 }
 
-function extractTextFromEpubHtml(htmlText) {
+function getEpubImageMimeType(path) {
+  const lower = String(path || '').toLowerCase();
+  if (lower.endsWith('.png')) return 'image/png';
+  if (lower.endsWith('.gif')) return 'image/gif';
+  if (lower.endsWith('.webp')) return 'image/webp';
+  if (lower.endsWith('.svg')) return 'image/svg+xml';
+  if (lower.endsWith('.bmp')) return 'image/bmp';
+  if (lower.endsWith('.avif')) return 'image/avif';
+  return 'image/jpeg';
+}
+
+function extractTextFromEpubHtml(htmlText, resolveImageToken = null) {
   const documentNode = new DOMParser().parseFromString(htmlText, 'text/html');
-  documentNode.querySelectorAll('script, style, noscript, template, svg').forEach(node => node.remove());
+
+  // Convert <svg><image .../></svg> (commonly used for EPUB covers & full-page illustrations) into <img>
+  documentNode.querySelectorAll('svg').forEach(svgNode => {
+    const svgImg = svgNode.querySelector('image');
+    if (svgImg) {
+      const href = svgImg.getAttribute('href') || svgImg.getAttribute('xlink:href') || svgImg.getAttributeNS('http://www.w3.org/1999/xlink', 'href') || '';
+      if (href) {
+        const replacementImg = documentNode.createElement('img');
+        replacementImg.setAttribute('src', href);
+        const svgTitle = svgNode.querySelector('title, desc')?.textContent?.trim() || '';
+        if (svgTitle) replacementImg.setAttribute('alt', svgTitle);
+        svgNode.replaceWith(replacementImg);
+        return;
+      }
+    }
+    svgNode.remove();
+  });
+
+  documentNode.querySelectorAll('script, style, noscript, template').forEach(node => node.remove());
 
   const root = documentNode.body || documentNode.documentElement;
   const blockSelector = 'h1, h2, h3, h4, h5, h6, p, li, blockquote, pre';
-  const blocks = Array.from(root.querySelectorAll(blockSelector))
-    .filter(node => !Array.from(node.children).some(child => child.matches(blockSelector)))
-    .map(node => node.textContent.replace(/\s+/g, ' ').trim())
-    .filter(Boolean);
 
+  // Extract heading titles BEFORE replacing images so image tokens never leak into TOC
   const heading = documentNode.querySelector('h1, h2, h3, title');
+  const cleanHeadingTitle = heading?.textContent?.replace(/\s+/g, ' ').trim() || '';
   const headings = Array.from(documentNode.querySelectorAll('h1, h2, h3, h4'))
     .map(node => node.textContent.replace(/\s+/g, ' ').trim())
     .filter(Boolean);
+
+  // Replace <img> and standalone <image> nodes with [[STEALTH_IMG:id|label]] markers
+  Array.from(root.querySelectorAll('img, image')).forEach(imgNode => {
+    const rawSrc = imgNode.getAttribute('src') || imgNode.getAttribute('href') || imgNode.getAttribute('xlink:href') || '';
+    const rawAlt = imgNode.getAttribute('alt') || imgNode.getAttribute('title') || '';
+    const token = typeof resolveImageToken === 'function' ? resolveImageToken(rawSrc, rawAlt) : '';
+    if (token) {
+      if (imgNode.closest(blockSelector)) {
+        const span = documentNode.createElement('span');
+        span.textContent = `\n${token}\n`;
+        imgNode.replaceWith(span);
+      } else {
+        const p = documentNode.createElement('p');
+        p.textContent = token;
+        imgNode.replaceWith(p);
+      }
+    } else {
+      imgNode.remove();
+    }
+  });
+
+  const normalizeBlockWithTokens = (rawText) => {
+    return String(rawText || '')
+      .split(/(\[\[STEALTH_IMG:[^\]]+\]\])/g)
+      .map(part => {
+        const trimmed = part.trim();
+        if (!trimmed) return '';
+        if (/^\[\[STEALTH_IMG:[^\]]+\]\]$/.test(trimmed)) return trimmed;
+        return part.replace(/\s+/g, ' ').trim();
+      })
+      .filter(Boolean)
+      .join('\n\n');
+  };
+
+  const blocks = Array.from(root.querySelectorAll(blockSelector))
+    .filter(node => !Array.from(node.children).some(child => child.matches(blockSelector)))
+    .map(node => normalizeBlockWithTokens(node.textContent))
+    .filter(Boolean);
+
   return {
-    title: heading?.textContent?.replace(/\s+/g, ' ').trim() || '',
+    title: cleanHeadingTitle,
     headings,
-    text: blocks.length > 0 ? blocks.join('\n\n') : root.textContent.replace(/\s+/g, ' ').trim()
+    text: blocks.length > 0 ? blocks.join('\n\n') : normalizeBlockWithTokens(root.textContent)
   };
 }
 
@@ -5982,6 +6369,22 @@ async function processEpubFile(file, documentId = '') {
       .filter(Boolean);
     if (spinePaths.length === 0) throw new Error('EPUB không có thứ tự chương đọc (spine).');
 
+    // Build case-insensitive lookup map for zip entries (helps resolve relative image paths reliably)
+    const zipLowerLookup = new Map();
+    Object.keys(zip.files).forEach(entryPath => {
+      if (!zip.files[entryPath].dir) {
+        zipLowerLookup.set(entryPath.toLowerCase(), zip.files[entryPath]);
+      }
+    });
+
+    const findZipEntry = (targetPath) => {
+      if (!targetPath) return null;
+      return zip.file(targetPath) || zipLowerLookup.get(targetPath.toLowerCase()) || null;
+    };
+
+    const extractedImageByPath = new Map();
+    let epubImageCounter = 0;
+
     const pagesData = {};
     const toc = [];
     let pageNum = 1;
@@ -5990,8 +6393,12 @@ async function processEpubFile(file, documentId = '') {
     for (let index = 0; index < spinePaths.length; index++) {
       if (loadToken !== state.pdfLoadToken) return;
 
-      const chapterEntry = zip.file(spinePaths[index]);
+      const chapterPath = spinePaths[index];
+      const chapterEntry = findZipEntry(chapterPath);
       if (!chapterEntry) continue;
+      const chapterDir = chapterPath.includes('/')
+        ? chapterPath.slice(0, chapterPath.lastIndexOf('/'))
+        : '';
 
       updateEpubStatus(`Đang đọc chương ${index + 1} / ${spinePaths.length}`);
       updateLoadingProgress(Math.round(((index + 0.2) / spinePaths.length) * 85), `Chương ${index + 1}/${spinePaths.length}`);
@@ -6003,8 +6410,88 @@ async function processEpubFile(file, documentId = '') {
 
       updateEpubStatus(`Đang tách văn bản chương ${index + 1} / ${spinePaths.length}`);
       await yieldToBrowser();
-      const chapter = extractTextFromEpubHtml(chapterHtml);
+
       const chapterStartPage = pageNum;
+      const pendingChapterImages = [];
+
+      const resolveEpubImageToken = (rawSrc, rawAlt) => {
+        if (!rawSrc || rawSrc.startsWith('http://') || rawSrc.startsWith('https://')) return '';
+        if (rawSrc.startsWith('data:image/')) {
+          const imgNum = ++epubImageCounter;
+          const imgKey = `epub_img_${imgNum}`;
+          const cleanAlt = String(rawAlt || '').replace(/[\[\]|]/g, ' ').replace(/\s+/g, ' ').trim();
+          const label = cleanAlt
+            ? `Xem hình ảnh minh họa #${imgNum} (${cleanAlt})`
+            : `Xem hình ảnh minh họa #${imgNum}`;
+          state.documentImages[imgKey] = {
+            src: rawSrc,
+            label,
+            fileName: `inline_${imgNum}.png`,
+            page: chapterStartPage
+          };
+          return `[[STEALTH_IMG:${imgKey}|${label}]]`;
+        }
+
+        let resolvedImgPath = '';
+        try {
+          resolvedImgPath = normalizeEpubPath(chapterDir, rawSrc);
+        } catch (_) {
+          try {
+            resolvedImgPath = normalizeEpubPath(packageDirectory, rawSrc);
+          } catch (__) {
+            return '';
+          }
+        }
+
+        let imgZipEntry = findZipEntry(resolvedImgPath);
+        if (!imgZipEntry && packageDirectory) {
+          try {
+            const fallbackPath = normalizeEpubPath(packageDirectory, rawSrc);
+            imgZipEntry = findZipEntry(fallbackPath);
+            if (imgZipEntry) resolvedImgPath = fallbackPath;
+          } catch (_) {}
+        }
+        if (!imgZipEntry) return '';
+
+        const existing = extractedImageByPath.get(resolvedImgPath);
+        if (existing) {
+          return `[[STEALTH_IMG:${existing.imgKey}|${existing.label}]]`;
+        }
+
+        const imgNum = ++epubImageCounter;
+        const imgKey = `epub_img_${imgNum}`;
+        const baseName = resolvedImgPath.split('/').pop() || `image_${imgNum}.jpg`;
+        const cleanAlt = String(rawAlt || '').replace(/[\[\]|]/g, ' ').replace(/\s+/g, ' ').trim();
+        const hasUsefulAlt = cleanAlt && cleanAlt.length > 1 && cleanAlt.toLowerCase() !== 'image' && cleanAlt.toLowerCase() !== 'img' && cleanAlt.toLowerCase() !== baseName.toLowerCase();
+        const label = hasUsefulAlt
+          ? `Xem hình ảnh minh họa #${imgNum} — ${cleanAlt}`
+          : `Xem hình ảnh minh họa #${imgNum} (${baseName})`;
+
+        const info = { imgKey, label, baseName, resolvedImgPath, imgZipEntry, page: chapterStartPage };
+        extractedImageByPath.set(resolvedImgPath, info);
+        pendingChapterImages.push(info);
+        return `[[STEALTH_IMG:${imgKey}|${label}]]`;
+      };
+
+      const chapter = extractTextFromEpubHtml(chapterHtml, resolveEpubImageToken);
+
+      if (pendingChapterImages.length > 0) {
+        await Promise.all(pendingChapterImages.map(async (item) => {
+          try {
+            const b64 = await item.imgZipEntry.async('base64');
+            const mime = getEpubImageMimeType(item.resolvedImgPath);
+            state.documentImages[item.imgKey] = {
+              src: `data:${mime};base64,${b64}`,
+              label: item.label,
+              fileName: item.baseName,
+              page: item.page
+            };
+          } catch (imgErr) {
+            console.warn('Không thể giải nén ảnh trong EPUB:', item.resolvedImgPath, imgErr);
+          }
+        }));
+      }
+
       const chunks = await runTextChunkWorker(chapter.text, state.chunkMode);
       if (chunks.length) {
         const chapterHeadings = chapter.headings.length ? chapter.headings : [chapter.title || `Chương ${index + 1}`];
@@ -6038,7 +6525,9 @@ async function processEpubFile(file, documentId = '') {
     persistDocumentCache().catch(() => {});
     commitDocumentLoad();
     const elapsedSeconds = ((performance.now() - startedAt) / 1000).toFixed(1);
-    showBanner(`Đã nạp thành công EPUB: <b>${totalPages}</b> phần đọc từ ${spinePaths.length} chương trong <b>${elapsedSeconds} giây</b>.`);
+    const imgCount = Object.keys(state.documentImages || {}).length;
+    const imgSummary = imgCount > 0 ? ` (kèm <b>${imgCount}</b> hình ảnh minh họa)` : '';
+    showBanner(`Đã nạp thành công EPUB: <b>${totalPages}</b> phần đọc từ ${spinePaths.length} chương${imgSummary} trong <b>${elapsedSeconds} giây</b>.`);
   } catch (error) {
     if (loadToken !== state.pdfLoadToken) return;
     state.isPdfProcessing = false;
@@ -6079,11 +6568,35 @@ async function hasPdfBackend() {
   return pdfBackendAvailable;
 }
 
+function upgradeLegacyImagePlaceholder(text) {
+  if (!text || typeof text !== 'string') return text;
+  const match = text.trim().match(/^\[Trang\s+(\d+)\s*:\s*(?:Trang bìa hoặc hình ảnh scan|Hình ảnh hoặc trang scan)[^\]]*\]$/i);
+  if (match) {
+    const pageNum = match[1];
+    return `[[STEALTH_IMG:pdf_page_${pageNum}|Xem hình ảnh trang ${pageNum} — Ảnh bìa / Minh họa]]`;
+  }
+  return text;
+}
+
 function cleanAndRepairVietnameseText(text) {
   if (!text || typeof text !== 'string') return text;
 
+  const upgraded = upgradeLegacyImagePlaceholder(text);
+  const trimmedToken = upgraded.trim();
+  if (/^\[\[STEALTH_IMG:[^\]]+\]\]$/.test(trimmedToken)) {
+    return trimmedToken;
+  }
+
+  // If text contains embedded [[STEALTH_IMG:...]] tokens, clean only the surrounding text parts
+  if (upgraded.includes('[[STEALTH_IMG:')) {
+    return upgraded
+      .split(/(\[\[STEALTH_IMG:[^\]]+\]\])/g)
+      .map(part => (/^\[\[STEALTH_IMG:[^\]]+\]\]$/.test(part.trim()) ? part.trim() : cleanAndRepairVietnameseText(part)))
+      .join('');
+  }
+
   // 1. Normalize Unicode to standard precomposed NFC
-  let s = text.normalize('NFC');
+  let s = upgraded.normalize('NFC');
 
   // 2. Fix decomposed combining diacritical marks with a space in front
   // e.g., 'e ̣' -> 'ẹ', 'o ̀' -> 'ò'
@@ -6129,12 +6642,31 @@ function cleanAndRepairVietnameseText(text) {
   }
 
   // 4. Clean up spaces before punctuation marks: e.g. "bản đồ ." -> "bản đồ."
-  s = s.replace(/\s+([,.;:!?])/g, '$1');
+  s = s.replace(/ +([,.;:!?])/g, '$1');
 
   // 5. Clean duplicate spaces
   s = s.replace(/ {2,}/g, ' ');
 
   return s;
+}
+
+async function renderPdfPageToDataUrl(page, scale = 1.4) {
+  if (!page || typeof document === 'undefined') return '';
+  try {
+    const viewport = page.getViewport({ scale });
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.floor(viewport.width));
+    canvas.height = Math.max(1, Math.floor(viewport.height));
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvasContext: ctx, viewport }).promise;
+    return canvas.toDataURL('image/jpeg', 0.85);
+  } catch (err) {
+    console.warn('Không thể kết xuất ảnh trang PDF:', err);
+    return '';
+  }
 }
 
 async function extractPdfPage(pdfDoc, pageNum) {
@@ -6198,11 +6730,50 @@ async function extractPdfPage(pdfDoc, pageNum) {
     }
 
     const normalizedText = cleanAndRepairVietnameseText(fullText);
+    const trimmedLength = normalizedText.trim().length;
+    const chunks = trimmedLength > 0 ? splitTextIntoChunks(normalizedText, state.chunkMode) : [];
+
+    // Check if the PDF page contains embedded images or is a scanned/illustration page
+    let hasEmbeddedImage = trimmedLength === 0;
+    if (!hasEmbeddedImage && typeof page.getOperatorList === 'function') {
+      try {
+        const opList = await page.getOperatorList();
+        const ops = window.pdfjsLib?.OPS || {};
+        const imgOps = new Set([
+          ops.paintImageXObject || 85,
+          ops.paintInlineImageXObject || 86,
+          ops.paintJpegXObject || 82,
+          ops.paintImageXObjectRepeat || 88
+        ]);
+        if (opList && Array.isArray(opList.fnArray)) {
+          hasEmbeddedImage = opList.fnArray.some(fn => imgOps.has(fn));
+        }
+      } catch (_) {}
+    }
+
+    if (hasEmbeddedImage) {
+      const imgKey = `pdf_page_${pageNum}`;
+      const label = trimmedLength === 0
+        ? (pageNum === 1 ? 'Xem hình ảnh trang 1 — Ảnh bìa / Minh họa' : `Xem hình ảnh trang ${pageNum} (Trang minh họa / Scan)`)
+        : `Xem hình ảnh minh họa — Trang ${pageNum}`;
+      // Pre-render up to 40 image pages into cache so switching themes keeps images ready
+      let dataUrl = '';
+      if (Object.keys(state.documentImages || {}).length < 40) {
+        dataUrl = await renderPdfPageToDataUrl(page, 1.35);
+      }
+      state.documentImages[imgKey] = {
+        src: dataUrl,
+        label,
+        fileName: `pdf_page_${pageNum}.jpg`,
+        page: pageNum
+      };
+      chunks.unshift(`[[STEALTH_IMG:${imgKey}|${label}]]`);
+    }
 
     return {
       pageNum,
-      chunks: splitTextIntoChunks(normalizedText, state.chunkMode),
-      textLength: normalizedText.trim().length
+      chunks,
+      textLength: trimmedLength
     };
   } catch (error) {
     console.warn(`Không thể trích xuất trang ${pageNum}:`, error);
@@ -6221,7 +6792,7 @@ function appendExtractedPages(pageResults) {
       state.pageStartIndices[pageNum] = state.allChunks.length;
       const pageChunks = chunks.length > 0
         ? chunks
-        : [`[Trang ${pageNum}: Hình ảnh hoặc trang scan không chứa ký tự văn bản]`];
+        : [`[[STEALTH_IMG:pdf_page_${pageNum}|Xem hình ảnh trang ${pageNum} (Trang minh họa / Scan)]]`];
 
       pageChunks.forEach((text, indexInPage) => {
         state.allChunks.push({
@@ -6247,8 +6818,7 @@ function initProgressiveStory(initialPages, totalPages) {
 
   appendExtractedPages(initialPages);
 
-  const firstTextPage = initialPages.find(page => page.textLength > 80);
-  const startPage = firstTextPage ? firstTextPage.pageNum : 1;
+  const startPage = 1;
   const startIdx = state.pageStartIndices[startPage] || 0;
   state.firstStoryPage = startPage;
   state.currentPage = startPage;
@@ -6281,7 +6851,11 @@ async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken
         }
       });
     }
-    updateLoadingProgress(Math.round((state.loadedPages / totalPages) * 100), `${state.loadedPages}/${totalPages} trang đã xử lý`);
+    const pct = Math.round((state.loadedPages / totalPages) * 100);
+    updateLoadingProgress(pct, `${state.loadedPages}/${totalPages} trang đã xử lý`);
+    if (typeof updatePortalUploadProgress === 'function') {
+      updatePortalUploadProgress(pct, `Đang xử lý trang ${state.loadedPages}/${totalPages}...`);
+    }
     showBanner(`Đã sẵn sàng <b>${state.loadedPages}/${totalPages}</b> trang. Bạn có thể đọc trong khi các trang còn lại đang được xử lý.`);
 
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -6294,9 +6868,11 @@ async function extractRemainingPdfPages(pdfDoc, startPage, totalPages, loadToken
     renderContinuousView(false, state.currentGlobalIndex);
     setTimeout(() => restoreSavedReadingPosition(true), 0);
   }
-  showBanner(`Đã nạp thành công toàn bộ <b>${totalPages}</b> trang sách!`);
+  const imgCount = Object.keys(state.documentImages || {}).length;
+  const imgSummary = imgCount > 0 ? ` (kèm <b>${imgCount}</b> hình ảnh minh họa)` : '';
+  showBanner(`Đã nạp thành công toàn bộ <b>${totalPages}</b> trang sách${imgSummary}!`);
   saveState();
-  persistDocumentCache().catch(() => {});
+  await persistDocumentCache().catch(() => {});
 }
 
 async function extractPdfOutline(pdfDoc) {
@@ -6371,13 +6947,18 @@ async function processPdfFile(file, documentId = '') {
         if (loadToken !== state.pdfLoadToken) return;
         if (data.success && data.totalPages > 0) {
           state.totalPages = data.totalPages;
-          state.firstStoryPage = data.firstStoryPage || 1;
+          state.firstStoryPage = 1;
           state.loadedPages = data.totalPages;
           state.isPdfProcessing = false;
+          if (data.images && typeof data.images === 'object') {
+            state.documentImages = data.images;
+          }
           const backendToc = Array.isArray(data.toc) ? data.toc : [];
+          const imgCount = Object.keys(state.documentImages || {}).length;
+          const imgSummary = imgCount > 0 ? ` (kèm <b>${imgCount}</b> hình ảnh minh họa)` : '';
 
-          showBanner(`Đã nạp thành công toàn bộ <b>${data.totalPages}</b> trang sách!`);
-          initStoryFromPages(data.pages, data.totalPages, state.firstStoryPage);
+          showBanner(`Đã nạp thành công toàn bộ <b>${data.totalPages}</b> trang sách${imgSummary}!`);
+          initStoryFromPages(data.pages, data.totalPages, 1);
           if (backendToc.length > 0) {
             state.documentToc = backendToc.map(item => ({
               ...item,
@@ -6435,11 +7016,13 @@ async function processPdfFile(file, documentId = '') {
       persistDocumentCache().catch(() => {});
     }
     commitDocumentLoad();
-    hideLoading();
+
+    const portalEl = document.getElementById('landing-portal');
+    const isPortalVisible = Boolean(portalEl && !portalEl.classList.contains('hidden'));
 
     if (initialPageCount < state.totalPages) {
       showBanner(`Đã sẵn sàng <b>${initialPageCount}/${state.totalPages}</b> trang. Các trang còn lại đang được xử lý nền.`);
-      extractRemainingPdfPages(state.pdfDoc, initialPageCount + 1, state.totalPages, loadToken)
+      const remainingPromise = extractRemainingPdfPages(state.pdfDoc, initialPageCount + 1, state.totalPages, loadToken)
         .catch(error => {
           if (loadToken !== state.pdfLoadToken) return;
           state.isPdfProcessing = false;
@@ -6447,10 +7030,17 @@ async function processPdfFile(file, documentId = '') {
           console.error('Background PDF parsing error:', error);
           showBanner(`Đã đọc được <b>${state.loadedPages}/${state.totalPages}</b> trang. Một số trang còn lại không thể xử lý.`);
         });
+      if (isPortalVisible) {
+        await remainingPromise;
+      }
+      hideLoading();
     } else {
       state.isPdfProcessing = false;
       updatePaginationUI();
-      showBanner(`Đã nạp thành công toàn bộ <b>${state.totalPages}</b> trang sách!`);
+      const imgCount = Object.keys(state.documentImages || {}).length;
+      const imgSummary = imgCount > 0 ? ` (kèm <b>${imgCount}</b> hình ảnh minh họa)` : '';
+      showBanner(`Đã nạp thành công toàn bộ <b>${state.totalPages}</b> trang sách${imgSummary}!`);
+      hideLoading();
     }
   } catch (err) {
     if (loadToken !== state.pdfLoadToken) return;
@@ -6479,7 +7069,16 @@ function splitTextIntoChunks(text, mode = state.chunkMode, options = {}) {
     cleanText = cleanText.replace(/\t/g, ' ').replace(/ +/g, ' ');
   }
 
+  if (cleanText.includes('[[STEALTH_IMG:')) {
+    cleanText = cleanText
+      .replace(/([^\n])(\[\[STEALTH_IMG:[^\]]+\]\])/g, '$1\n$2')
+      .replace(/(\[\[STEALTH_IMG:[^\]]+\]\])([^\n])/g, '$1\n$2');
+  }
+
+  const STEALTH_IMG_EXACT_RE = /^\[\[STEALTH_IMG:[^\]]+\]\]$/;
+
   function applyMaxChars(str, limit) {
+    if (STEALTH_IMG_EXACT_RE.test(str.trim())) return [str.trim()];
     if (!limit || limit <= 0 || str.length <= limit) return [str];
     const words = str.split(' ');
     const res = [];
@@ -6503,7 +7102,12 @@ function splitTextIntoChunks(text, mode = state.chunkMode, options = {}) {
     const rawLines = cleanText.split('\n');
     const result = [];
     rawLines.forEach(line => {
-      const lineText = preserveIndents ? line : line.trim();
+      const trimmedCheck = line.trim();
+      if (STEALTH_IMG_EXACT_RE.test(trimmedCheck)) {
+        result.push(trimmedCheck);
+        return;
+      }
+      const lineText = preserveIndents ? line : trimmedCheck;
       if (compactBlankLines && !lineText.trim()) return;
       if (maxCharsPerLine > 0) {
         applyMaxChars(lineText, maxCharsPerLine).forEach(w => result.push(w));
@@ -6516,31 +7120,40 @@ function splitTextIntoChunks(text, mode = state.chunkMode, options = {}) {
 
   // 2. Sentence-by-sentence
   if (mode === 'sentence') {
-    const rawSentences = cleanText.split(/([.!?…\n]+)/);
+    const segments = cleanText.split(/(\[\[STEALTH_IMG:[^\]]+\]\])/g);
     const sentences = [];
-    let cur = '';
-    for (let i = 0; i < rawSentences.length; i++) {
-      cur += rawSentences[i];
-      if (cur.trim().length > 20 || rawSentences[i].includes('\n')) {
-        const s = preserveIndents ? cur : cur.trim();
-        if (s.trim().length > 0) {
-          if (maxCharsPerLine > 0) {
-            applyMaxChars(s, maxCharsPerLine).forEach(w => sentences.push(w));
-          } else {
-            sentences.push(s);
+    segments.forEach(seg => {
+      const segTrim = seg.trim();
+      if (!segTrim) return;
+      if (STEALTH_IMG_EXACT_RE.test(segTrim)) {
+        sentences.push(segTrim);
+        return;
+      }
+      const rawSentences = seg.split(/([.!?…\n]+)/);
+      let cur = '';
+      for (let i = 0; i < rawSentences.length; i++) {
+        cur += rawSentences[i];
+        if (cur.trim().length > 20 || rawSentences[i].includes('\n')) {
+          const s = preserveIndents ? cur : cur.trim();
+          if (s.trim().length > 0) {
+            if (maxCharsPerLine > 0) {
+              applyMaxChars(s, maxCharsPerLine).forEach(w => sentences.push(w));
+            } else {
+              sentences.push(s);
+            }
           }
+          cur = '';
         }
-        cur = '';
       }
-    }
-    if (cur.trim().length > 0) {
-      const s = preserveIndents ? cur : cur.trim();
-      if (maxCharsPerLine > 0) {
-        applyMaxChars(s, maxCharsPerLine).forEach(w => sentences.push(w));
-      } else {
-        sentences.push(s);
+      if (cur.trim().length > 0) {
+        const s = preserveIndents ? cur : cur.trim();
+        if (maxCharsPerLine > 0) {
+          applyMaxChars(s, maxCharsPerLine).forEach(w => sentences.push(w));
+        } else {
+          sentences.push(s);
+        }
       }
-    }
+    });
     return sentences;
   }
 
@@ -6548,7 +7161,13 @@ function splitTextIntoChunks(text, mode = state.chunkMode, options = {}) {
   const paragraphs = cleanText.split(/\n\s*\n|\n/);
   const result = [];
   paragraphs.forEach(p => {
-    const trimmed = preserveIndents ? p : p.trim();
+    const trimmedCheck = p.trim();
+    if (!trimmedCheck) return;
+    if (STEALTH_IMG_EXACT_RE.test(trimmedCheck)) {
+      result.push(trimmedCheck);
+      return;
+    }
+    const trimmed = preserveIndents ? p : trimmedCheck;
     if (trimmed.length > 0) {
       if (maxCharsPerLine > 0) {
         applyMaxChars(trimmed, maxCharsPerLine).forEach(w => result.push(w));
@@ -6587,7 +7206,7 @@ function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
 
     if (rawChunks.length === 0) {
       state.allChunks.push({
-        text: `[Trang ${p}: Hình ảnh hoặc trang scan không chứa ký tự văn bản]`,
+        text: `[[STEALTH_IMG:pdf_page_${p}|Xem hình ảnh trang ${p} (Trang minh họa / Scan)]]`,
         page: p,
         indexInPage: 0,
         globalIndex: globalIdx++
@@ -6740,7 +7359,7 @@ function appendSpreadsheetBatch(count) {
       <td style="font-family: monospace; font-size: 10px; color: #444;">${auditId}</td>
       <td style="font-weight: 500; font-size: 11px;">${mod}</td>
       <td style="color: #666; font-size: 10px;">${timeStr}</td>
-      <td class="story-cell" id="story-cell-${chunk.globalIndex}" tabindex="0">${escapeHtml(colDContent)}</td>
+      <td class="story-cell" id="story-cell-${chunk.globalIndex}" tabindex="0">${formatChunkText(colDContent)}</td>
       <td><span class="badge-status ${st.cls}">${st.text}</span></td>
       <td style="text-align: right; color: ${variance >= 0 ? '#0F9D58' : '#d93025'}">${varianceText}</td>
       <td style="color: #555;">${auditor}</td>
@@ -6829,7 +7448,7 @@ function appendVSCodeBatch(count) {
     addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># [Trang ${chunk.page} - Dòng ${chunk.indexInPage + 1}]</span>`);
     addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">${varName}</span> = (`);
 
-    const storyHtml = `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"${escapeHtml(chunk.text)}"</span>`;
+    const storyHtml = `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"${formatChunkText(chunk.text)}"</span>`;
     addVSCLine(storyHtml, true, chunk);
     addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)`);
     addVSCLine('');
@@ -6902,7 +7521,7 @@ function appendPhotoshopBatch(count) {
     p.id = `ps-story-para-${chunk.globalIndex}`;
     p.innerHTML = `
       <span class="ps-chunk-meta">T&nbsp;&nbsp;Editorial_Copy_${String(chunk.globalIndex + 1).padStart(4, '0')} &nbsp;•&nbsp; Artboard ${chunk.page}</span>
-      <div class="ps-chunk-body">${escapeHtml(chunk.text)}</div>
+      <div class="ps-chunk-body">${formatChunkText(chunk.text)}</div>
     `;
     return p;
   });
@@ -6917,7 +7536,7 @@ function appendBlenderBatch(count) {
     const variableName = `copy_block_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
     line.innerHTML = `
       <span class="b-line-number">${chunk.globalIndex + 12}</span>
-      <span class="b-code-content"><span class="b-code-var">${variableName}</span> <span class="b-code-op">=</span> <span class="b-story-text">"""${escapeHtml(chunk.text)}"""</span></span>
+      <span class="b-code-content"><span class="b-code-var">${variableName}</span> <span class="b-code-op">=</span> <span class="b-story-text">"""${formatChunkText(chunk.text)}"""</span></span>
     `;
     return line;
   });
@@ -6971,7 +7590,7 @@ function appendLinkedInBatch(count) {
       paragraphsHtml += `
         <div class="ln-post-paragraph" id="ln-para-${chunk.globalIndex}" data-index="${chunk.globalIndex}" data-page="${chunk.page}">
           <span class="ln-paragraph-seq">§${chunk.globalIndex + 1}</span>
-          ${escapeHtml(chunk.text)}
+          ${formatChunkText(chunk.text)}
         </div>
       `;
     });
@@ -7024,7 +7643,7 @@ function appendAutoCADBatch(count) {
     const noteTag = `GN-${String(chunk.page).padStart(2, '0')}.${String(chunk.indexInPage + 1).padStart(2, '0')}`;
     note.innerHTML = `
       <span class="cad-note-tag">${noteTag}:</span>
-      <span class="cad-note-text">${escapeHtml(chunk.text)}</span>
+      <span class="cad-note-text">${formatChunkText(chunk.text)}</span>
     `;
     return note;
   });
@@ -7036,7 +7655,7 @@ function appendGoogleDocsBatch(count) {
     const p = document.createElement('p');
     p.className = 'gdocs-story-paragraph';
     p.id = `gdocs-story-para-${chunk.globalIndex}`;
-    p.textContent = chunk.text;
+    p.innerHTML = formatChunkText(chunk.text);
     if (state.fontFamily) p.style.fontFamily = state.fontFamily;
     if (state.fontSize) p.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) p.style.lineHeight = state.lineHeight;
@@ -7078,7 +7697,7 @@ function appendZaloBatch(count) {
           <span class="zalo-msg-time">${timeStr} • Trang ${chunk.page}</span>
         </div>
         <div class="zalo-msg-bubble">
-          <div class="zalo-msg-text">${escapeHtml(chunk.text)}</div>
+          <div class="zalo-msg-text">${formatChunkText(chunk.text)}</div>
           <span class="zalo-msg-meta-tag">Đoạn #${chunk.globalIndex + 1} • Đã nhận ✓✓</span>
         </div>
       </div>
@@ -7099,7 +7718,7 @@ function appendFigmaBatch(count) {
         <span class="figma-meta-name">${layerName}</span>
         <span class="figma-meta-spec">AutoLayout • Trang ${chunk.page}</span>
       </div>
-      <div class="figma-text-layer">${escapeHtml(chunk.text)}</div>
+      <div class="figma-text-layer">${formatChunkText(chunk.text)}</div>
     `;
     return layer;
   });
@@ -7115,7 +7734,7 @@ function appendCanvaBatch(count) {
       <div class="canva-block-header">
         <span class="canva-block-label">Mục ${chunk.globalIndex + 1} • Trang ${chunk.page}</span>
       </div>
-      <div class="canva-text-box">${escapeHtml(chunk.text)}</div>
+      <div class="canva-text-box">${formatChunkText(chunk.text)}</div>
     `;
     return box;
   });
@@ -7129,7 +7748,7 @@ function appendPowerPointBatch(count) {
     para.id = `ppt-para-${chunk.globalIndex}`;
     para.innerHTML = `
       <span class="ppt-bullet-icon">■</span>
-      <div class="ppt-bullet-text">${escapeHtml(chunk.text)}</div>
+      <div class="ppt-bullet-text">${formatChunkText(chunk.text)}</div>
     `;
     return para;
   });
@@ -7143,7 +7762,7 @@ function appendTVPLBatch(count) {
     item.id = `tvpl-clause-${chunk.globalIndex}`;
     item.innerHTML = `
       <div class="tvpl-clause-num">Điều ${chunk.globalIndex + 1}.</div>
-      <div class="tvpl-clause-text">${escapeHtml(chunk.text)}</div>
+      <div class="tvpl-clause-text">${formatChunkText(chunk.text)}</div>
     `;
     return item;
   });
@@ -7228,18 +7847,7 @@ function setActiveRow(index, scrollIntoView = true) {
       target = activeRow;
     }
 
-    const storyText = chunk ? chunk.text : '';
-    const formulaInput = document.getElementById('formula-input');
-    if (formulaInput) {
-      if (state.theme !== 'theme-googlesheets' && state.readingMode === 'formula') {
-        formulaInput.value = `=PROSE("${storyText}")`;
-      } else {
-        formulaInput.value = storyText;
-      }
-    }
-
-    const cellAddr = document.getElementById('active-cell-address');
-    if (cellAddr) cellAddr.textContent = `D${index + 2}`;
+    syncFormulaBarForSheet();
   }
 
   if (target && scrollIntoView) {
@@ -7488,7 +8096,7 @@ function initContinuousScrollListeners() {
     if (e.ctrlKey) return;
 
     // Allow modal overlays to scroll normally
-    if (document.querySelector('.stealth-modal-overlay.show, .landing-portal-overlay.show')) {
+    if (document.querySelector('.stealth-modal-overlay.show, .landing-portal-overlay.show, .stealth-img-viewer-overlay.show')) {
       return;
     }
 
@@ -7626,6 +8234,310 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
+function formatPlainTextChunk(text) {
+  const raw = upgradeLegacyImagePlaceholder(String(text ?? ''));
+  if (!raw.includes('[[STEALTH_IMG:')) return raw;
+  return raw.replace(/\[\[STEALTH_IMG:([^|\]]+)\|([^\]]+)\]\]/g, '[$2]');
+}
+
+function formatChunkText(text) {
+  const raw = upgradeLegacyImagePlaceholder(String(text ?? ''));
+  if (!raw.includes('[[STEALTH_IMG:')) {
+    return escapeHtml(raw);
+  }
+  return raw
+    .split(/(\[\[STEALTH_IMG:[^\]]+\]\])/g)
+    .map(part => {
+      const match = part.match(/^\[\[STEALTH_IMG:([^|\]]+)\|([^\]]+)\]\]$/);
+      if (!match) return escapeHtml(part);
+      const imgKey = match[1].trim();
+      const label = match[2].trim();
+      return `<a href="javascript:void(0)" class="stealth-inline-img-link" data-stealth-img-id="${escapeHtml(imgKey)}" data-stealth-img-label="${escapeHtml(label)}" title="Nhấp để mở xem hình ảnh minh họa (Nhấn ESC để đóng nhanh)"><svg class="stealth-inline-img-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg><span class="stealth-inline-img-label">${escapeHtml(label)}</span><span class="stealth-inline-img-badge">Mở ảnh ↗</span></a>`;
+    })
+    .join('');
+}
+
+let currentViewerImgKey = '';
+let currentViewerZoom = 1;
+
+function getDocumentImageKeys() {
+  const keys = [];
+  const seen = new Set();
+  (state.allChunks || []).forEach(chunk => {
+    const raw = upgradeLegacyImagePlaceholder(String(chunk?.text || ''));
+    if (!raw.includes('[[STEALTH_IMG:')) return;
+    const matches = raw.matchAll(/\[\[STEALTH_IMG:([^|\]]+)\|([^\]]+)\]\]/g);
+    for (const m of matches) {
+      const k = m[1].trim();
+      if (k && !seen.has(k)) {
+        seen.add(k);
+        keys.push({ imgKey: k, label: m[2].trim(), page: chunk.page });
+      }
+    }
+  });
+  Object.entries(state.documentImages || {}).forEach(([k, val]) => {
+    if (!seen.has(k)) {
+      seen.add(k);
+      keys.push({ imgKey: k, label: val?.label || k, page: val?.page || 1 });
+    }
+  });
+  return keys;
+}
+
+function ensureStoryImageViewerModal() {
+  let modal = document.getElementById('stealth-image-viewer-modal');
+  if (modal) return modal;
+
+  modal = document.createElement('div');
+  modal.id = 'stealth-image-viewer-modal';
+  modal.className = 'stealth-img-viewer-overlay';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-labelledby', 'stealth-img-modal-title');
+
+  modal.innerHTML = `
+    <div class="stealth-img-viewer-card" id="stealth-img-viewer-card">
+      <div class="stealth-img-viewer-header">
+        <div class="stealth-img-viewer-title-wrap">
+          <span class="stealth-img-viewer-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          </span>
+          <span class="stealth-img-viewer-title" id="stealth-img-modal-title">Hình ảnh minh họa</span>
+          <span class="stealth-img-viewer-counter" id="stealth-img-modal-counter"></span>
+        </div>
+        <div class="stealth-img-viewer-controls">
+          <button type="button" class="stealth-img-ctrl-btn" id="stealth-img-prev" title="Hình ảnh trước">‹ Trước</button>
+          <button type="button" class="stealth-img-ctrl-btn" id="stealth-img-next" title="Hình ảnh tiếp theo">Tiếp ›</button>
+          <span class="stealth-img-ctrl-divider" aria-hidden="true"></span>
+          <button type="button" class="stealth-img-ctrl-btn" id="stealth-img-zoom-out" title="Thu nhỏ">-</button>
+          <button type="button" class="stealth-img-ctrl-btn stealth-img-zoom-label" id="stealth-img-zoom-reset" title="Đặt lại kích thước 100%">100%</button>
+          <button type="button" class="stealth-img-ctrl-btn" id="stealth-img-zoom-in" title="Phóng to">+</button>
+          <span class="stealth-img-ctrl-divider" aria-hidden="true"></span>
+          <button type="button" class="stealth-img-close-btn" id="stealth-img-modal-close" title="Đóng cửa sổ xem ảnh (ESC)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            <span>Đóng (ESC)</span>
+          </button>
+        </div>
+      </div>
+      <div class="stealth-img-viewer-viewport" id="stealth-img-modal-viewport">
+        <div class="stealth-img-viewer-status" id="stealth-img-modal-status" style="display:none;">Đang tải hình ảnh...</div>
+        <img id="stealth-img-modal-preview" class="stealth-img-viewer-img" alt="Hình ảnh minh họa trong truyện" />
+      </div>
+      <div class="stealth-img-viewer-footer">
+        <span class="stealth-img-footer-hint">🛡️ Chế độ xem kín đáo • Nhấn <b>ESC</b> hoặc nhấp ra ngoài vùng tối để đóng ảnh ngay lập tức</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal || e.target.id === 'stealth-img-modal-viewport') {
+      closeStoryImageViewer();
+    }
+  });
+
+  modal.querySelector('#stealth-img-modal-close')?.addEventListener('click', () => {
+    closeStoryImageViewer();
+  });
+
+  modal.querySelector('#stealth-img-zoom-in')?.addEventListener('click', () => {
+    setStoryImageViewerZoom(currentViewerZoom + 0.25);
+  });
+
+  modal.querySelector('#stealth-img-zoom-out')?.addEventListener('click', () => {
+    setStoryImageViewerZoom(currentViewerZoom - 0.25);
+  });
+
+  modal.querySelector('#stealth-img-zoom-reset')?.addEventListener('click', () => {
+    setStoryImageViewerZoom(1);
+  });
+
+  modal.querySelector('#stealth-img-prev')?.addEventListener('click', () => {
+    navigateStoryImageViewer(-1);
+  });
+
+  modal.querySelector('#stealth-img-next')?.addEventListener('click', () => {
+    navigateStoryImageViewer(1);
+  });
+
+  return modal;
+}
+
+function setStoryImageViewerZoom(zoomLevel) {
+  currentViewerZoom = Math.min(3, Math.max(0.5, Math.round(zoomLevel * 100) / 100));
+  const imgEl = document.getElementById('stealth-img-modal-preview');
+  const resetBtn = document.getElementById('stealth-img-zoom-reset');
+  if (imgEl) {
+    imgEl.style.transform = `scale(${currentViewerZoom})`;
+  }
+  if (resetBtn) {
+    resetBtn.textContent = `${Math.round(currentViewerZoom * 100)}%`;
+  }
+}
+
+function navigateStoryImageViewer(delta) {
+  const list = getDocumentImageKeys();
+  if (list.length <= 1) return;
+  const idx = list.findIndex(item => item.imgKey === currentViewerImgKey);
+  if (idx < 0) return;
+  const nextIdx = (idx + delta + list.length) % list.length;
+  const target = list[nextIdx];
+  if (target) {
+    openStoryImageViewer(target.imgKey, target.label);
+  }
+}
+
+async function resolveStoryImageSrc(imgKey, fallbackLabel = '') {
+  const existing = state.documentImages?.[imgKey];
+  if (existing && existing.src) {
+    return existing;
+  }
+
+  // Try hydrating from IndexedDB cache if not in memory
+  try {
+    const cached = await readDocumentCache();
+    if (cached?.documentImages?.[imgKey]?.src) {
+      state.documentImages = { ...(state.documentImages || {}), ...cached.documentImages };
+      return state.documentImages[imgKey];
+    }
+  } catch (_) {}
+
+  // Lazy-load state.pdfDoc from lastUploadedPdfFile if needed
+  if (imgKey.startsWith('pdf_page_') && !state.pdfDoc && lastUploadedPdfFile && window.pdfjsLib) {
+    try {
+      const ab = await lastUploadedPdfFile.arrayBuffer();
+      state.pdfDoc = await window.pdfjsLib.getDocument({
+        data: ab,
+        cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+        cMapPacked: true,
+        isEvalSupported: false,
+        enableScripting: false
+      }).promise;
+    } catch (_) {}
+  }
+
+  // If this is a PDF page token and state.pdfDoc is loaded in memory, render on-demand
+  if (imgKey.startsWith('pdf_page_') && state.pdfDoc && typeof state.pdfDoc.getPage === 'function') {
+    const pageNum = parseInt(imgKey.replace('pdf_page_', ''), 10);
+    if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= state.totalPages) {
+      let page = null;
+      try {
+        page = await state.pdfDoc.getPage(pageNum);
+        const dataUrl = await renderPdfPageToDataUrl(page, 1.5);
+        if (dataUrl) {
+          const record = {
+            src: dataUrl,
+            label: fallbackLabel || `Xem hình ảnh trang ${pageNum}`,
+            fileName: `pdf_page_${pageNum}.jpg`,
+            page: pageNum
+          };
+          state.documentImages[imgKey] = record;
+          persistDocumentCache().catch(() => {});
+          return record;
+        }
+      } catch (err) {
+        console.warn('Không thể kết xuất trang PDF theo yêu cầu:', err);
+      } finally {
+        if (page && typeof page.cleanup === 'function') page.cleanup();
+      }
+    }
+  }
+
+  return existing || null;
+}
+
+async function openStoryImageViewer(imgKey, fallbackLabel = 'Hình ảnh minh họa') {
+  if (!imgKey) return;
+  const modal = ensureStoryImageViewerModal();
+  currentViewerImgKey = imgKey;
+  setStoryImageViewerZoom(1);
+
+  const titleEl = document.getElementById('stealth-img-modal-title');
+  const counterEl = document.getElementById('stealth-img-modal-counter');
+  const statusEl = document.getElementById('stealth-img-modal-status');
+  const imgEl = document.getElementById('stealth-img-modal-preview');
+  const prevBtn = document.getElementById('stealth-img-prev');
+  const nextBtn = document.getElementById('stealth-img-next');
+
+  const allImages = getDocumentImageKeys();
+  const currentPos = allImages.findIndex(item => item.imgKey === imgKey);
+  if (counterEl) {
+    counterEl.textContent = allImages.length > 1 && currentPos >= 0
+      ? `${currentPos + 1} / ${allImages.length}`
+      : '';
+    counterEl.style.display = counterEl.textContent ? 'inline-flex' : 'none';
+  }
+  if (prevBtn) prevBtn.disabled = allImages.length <= 1;
+  if (nextBtn) nextBtn.disabled = allImages.length <= 1;
+
+  if (titleEl) titleEl.textContent = fallbackLabel || 'Hình ảnh minh họa';
+  if (imgEl) {
+    imgEl.style.display = 'none';
+    imgEl.removeAttribute('src');
+  }
+  if (statusEl) {
+    statusEl.textContent = 'Đang mở hình ảnh...';
+    statusEl.style.display = 'flex';
+  }
+
+  modal.classList.add('show');
+
+  const record = await resolveStoryImageSrc(imgKey, fallbackLabel);
+  if (currentViewerImgKey !== imgKey) return;
+
+  if (record && record.src) {
+    if (titleEl && record.label) titleEl.textContent = record.label;
+    if (statusEl) statusEl.style.display = 'none';
+    if (imgEl) {
+      imgEl.src = record.src;
+      imgEl.alt = record.label || fallbackLabel;
+      imgEl.style.display = 'block';
+    }
+  } else {
+    if (statusEl) {
+      statusEl.innerHTML = `
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px; max-width:440px; text-align:center;">
+          <span>Tài liệu này được lưu từ phiên bản cũ trước khi có tính năng trích xuất ảnh. Hãy nạp lại file gốc 1 lần để hiển thị toàn bộ hình ảnh.</span>
+          <button type="button" id="stealth-img-reupload-btn" style="padding:8px 16px; border-radius:8px; border:1px solid #38bdf8; background:#0284c7; color:#fff; font-weight:600; cursor:pointer;">📂 Chọn nạp lại file gốc</button>
+        </div>
+      `;
+      statusEl.style.display = 'flex';
+      statusEl.querySelector('#stealth-img-reupload-btn')?.addEventListener('click', () => {
+        closeStoryImageViewer();
+        const fileInput = document.getElementById('file-pdf-input') || document.getElementById('portal-file-input');
+        if (fileInput) fileInput.click();
+      });
+    }
+  }
+}
+
+function closeStoryImageViewer() {
+  const modal = document.getElementById('stealth-image-viewer-modal');
+  if (modal) {
+    modal.classList.remove('show');
+  }
+  currentViewerImgKey = '';
+}
+
+// Global click delegation for inline story image links across all 22 themes
+document.addEventListener('click', (e) => {
+  const imgLink = e.target?.closest?.('.stealth-inline-img-link');
+  if (!imgLink) return;
+  e.preventDefault();
+  e.stopPropagation();
+
+  const rowEl = imgLink.closest('[data-index]');
+  if (rowEl && rowEl.dataset.index !== undefined) {
+    const gIdx = parseInt(rowEl.dataset.index, 10);
+    if (!isNaN(gIdx)) setActiveRow(gIdx, false);
+  }
+
+  const imgKey = imgLink.getAttribute('data-stealth-img-id') || '';
+  const label = imgLink.getAttribute('data-stealth-img-label') || 'Hình ảnh minh họa';
+  openStoryImageViewer(imgKey, label);
+});
+
 let toastTimer = null;
 function showPageFlipToast(msg) {
   const toast = document.getElementById('page-flip-toast');
@@ -7655,7 +8567,7 @@ function appendPremiereBatch(count) {
     el.className = 'pr-cap';
     el.id = `pr-caption-${chunk.globalIndex}`;
     const speaker = chunk.page % 2 ? 'Speaker 1' : 'Speaker 2';
-    el.innerHTML = `<div class="pr-cap-meta"><span class="pr-cap-speaker s${chunk.page % 2}">${speaker}</span><span class="pr-cap-tc">${premiereTimecode(chunk.globalIndex)}</span></div><div class="pr-cap-text">${escapeHtml(chunk.text)}</div>`;
+    el.innerHTML = `<div class="pr-cap-meta"><span class="pr-cap-speaker s${chunk.page % 2}">${speaker}</span><span class="pr-cap-tc">${premiereTimecode(chunk.globalIndex)}</span></div><div class="pr-cap-text">${formatChunkText(chunk.text)}</div>`;
     return el;
   });
 }
@@ -7666,7 +8578,7 @@ function appendClaudeBatch(count) {
     el.className = 'cl-para';
     el.id = `claude-para-${chunk.globalIndex}`;
     const heading = (chunk.indexInPage === 0) ? `<h3 class="cl-h">Phần ${chunk.page}</h3>` : '';
-    el.innerHTML = `${heading}<p>${escapeHtml(chunk.text)}</p>`;
+    el.innerHTML = `${heading}<p>${formatChunkText(chunk.text)}</p>`;
     return el;
   });
 }
@@ -7677,7 +8589,7 @@ function appendChatGPTBatch(count) {
     el.className = 'gpt-para';
     el.id = `gpt-para-${chunk.globalIndex}`;
     const heading = (chunk.indexInPage === 0) ? `<h3 class="gpt-h">${chunk.page}. Phần ${chunk.page}</h3>` : '';
-    el.innerHTML = `${heading}<p>${escapeHtml(chunk.text)}</p>`;
+    el.innerHTML = `${heading}<p>${formatChunkText(chunk.text)}</p>`;
     return el;
   });
 }
@@ -7690,7 +8602,7 @@ function appendTeamsBatch(count) {
     const headingHtml = (chunk.indexInPage === 0) ? `<div class="teams-doc-heading">Phần ${chunk.page}: Báo cáo tiến độ &amp; Hợp đồng dự án</div>` : '';
     cardEl.innerHTML = `
       ${headingHtml}
-      <div class="teams-doc-body">${escapeHtml(chunk.text)}</div>
+      <div class="teams-doc-body">${formatChunkText(chunk.text)}</div>
       <div class="teams-doc-meta">&bull; Trang ${chunk.page} - Đoạn #${chunk.globalIndex + 1}</div>
     `;
     return cardEl;
@@ -7705,7 +8617,7 @@ function appendRevitBatch(count) {
     const specTag = `SPEC-A${chunk.page}.${String(chunk.indexInPage + 1).padStart(2, '0')}`;
     note.innerHTML = `
       <span class="rvt-note-tag">${specTag}</span>
-      <span class="rvt-note-text">${escapeHtml(chunk.text)}</span>
+      <span class="rvt-note-text">${formatChunkText(chunk.text)}</span>
     `;
     return note;
   });
@@ -7740,7 +8652,7 @@ function appendMisaBatch(count) {
       <td style="font-weight:600; color:#005a9c;">${orderNum}</td>
       <td>${orderDate}</td>
       <td title="${custName}">${custName}</td>
-      <td class="misa-col-desc">${escapeHtml(chunk.text)}</td>
+      <td class="misa-col-desc">${formatChunkText(chunk.text)}</td>
       <td style="text-align:right; font-family:Consolas, monospace;">${amountVal}</td>
       <td style="text-align:right; font-family:Consolas, monospace;">0,00</td>
     `;
@@ -7780,7 +8692,7 @@ function appendCapCutBatch(count) {
         <span class="cc-caption-num">#${String(chunk.globalIndex + 1).padStart(3, '0')}</span>
         <span class="cc-caption-dur">3.4s</span>
       </div>
-      <div class="cc-caption-text">${escapeHtml(chunk.text)}</div>
+      <div class="cc-caption-text">${formatChunkText(chunk.text)}</div>
     `;
     return el;
   });
@@ -7793,7 +8705,7 @@ function appendGmailBatch(count) {
     el.className = 'gmail-story-para';
     el.id = `gmail-para-${chunk.globalIndex}`;
     const heading = (chunk.indexInPage === 0) ? `<div class="gmail-section-heading">§ Phần ${chunk.page} — Phân đoạn tài liệu kỹ thuật</div>` : '';
-    el.innerHTML = `${heading}<div class="gmail-para-text">${escapeHtml(chunk.text)}</div><span class="gmail-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
+    el.innerHTML = `${heading}<div class="gmail-para-text">${formatChunkText(chunk.text)}</div><span class="gmail-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
     return el;
   });
 }
@@ -7804,7 +8716,7 @@ function appendOutlookBatch(count) {
     el.className = 'outlook-story-para';
     el.id = `outlook-para-${chunk.globalIndex}`;
     const heading = (chunk.indexInPage === 0) ? `<div class="outlook-section-heading">Mục ${chunk.page}: Đặc tả yêu cầu kỹ thuật &amp; phân tích</div>` : '';
-    el.innerHTML = `${heading}<div class="outlook-para-text">${escapeHtml(chunk.text)}</div><span class="outlook-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
+    el.innerHTML = `${heading}<div class="outlook-para-text">${formatChunkText(chunk.text)}</div><span class="outlook-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
     return el;
   });
 }
@@ -7827,7 +8739,7 @@ function appendSAPBatch(count) {
       <td style="text-align:center;"><span style="color:#107c41;">●</span></td>
       <td class="sap-item-num">${itemNum}</td>
       <td style="font-family:Consolas, monospace; font-weight:600; color:#0b3760;">${matNum}</td>
-      <td class="sap-item-desc">${escapeHtml(chunk.text)}</td>
+      <td class="sap-item-desc">${formatChunkText(chunk.text)}</td>
       <td class="sap-item-qty">${poQty}</td>
       <td style="text-align:center;">EA</td>
       <td class="sap-item-price">${netVal}</td>

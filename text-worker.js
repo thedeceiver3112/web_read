@@ -24,7 +24,17 @@ function splitText(source, mode, options = {}) {
     cleanText = cleanText.replace(/\t/g, ' ').replace(/ +/g, ' ');
   }
 
+  // Ensure any [[STEALTH_IMG:...]] token is isolated on its own line without adding duplicate blank lines
+  if (cleanText.includes('[[STEALTH_IMG:')) {
+    cleanText = cleanText
+      .replace(/([^\n])(\[\[STEALTH_IMG:[^\]]+\]\])/g, '$1\n$2')
+      .replace(/(\[\[STEALTH_IMG:[^\]]+\]\])([^\n])/g, '$1\n$2');
+  }
+
+  const STEALTH_IMG_EXACT_RE = /^\[\[STEALTH_IMG:[^\]]+\]\]$/;
+
   function applyMaxChars(str, limit) {
+    if (STEALTH_IMG_EXACT_RE.test(str.trim())) return [str.trim()];
     if (!limit || limit <= 0 || str.length <= limit) return [str];
     const words = str.split(' ');
     const res = [];
@@ -48,7 +58,12 @@ function splitText(source, mode, options = {}) {
     const rawLines = cleanText.split('\n');
     const chunks = [];
     rawLines.forEach(line => {
-      const lineText = preserveIndents ? line : line.trim();
+      const trimmedCheck = line.trim();
+      if (STEALTH_IMG_EXACT_RE.test(trimmedCheck)) {
+        chunks.push(trimmedCheck);
+        return;
+      }
+      const lineText = preserveIndents ? line : trimmedCheck;
       if (compactBlankLines && !lineText.trim()) return;
       if (maxCharsPerLine > 0) {
         applyMaxChars(lineText, maxCharsPerLine).forEach(w => chunks.push(w));
@@ -61,39 +76,53 @@ function splitText(source, mode, options = {}) {
 
   // 2. Sentence-by-Sentence
   if (mode === 'sentence') {
-    const raw = cleanText.split(/([.!?…\n]+)/);
+    const segments = cleanText.split(/(\[\[STEALTH_IMG:[^\]]+\]\])/g);
     const chunks = [];
-    let current = '';
-    raw.forEach(part => {
-      current += part;
-      if (current.trim().length > 20 || part.includes('\n')) {
-        const s = preserveIndents ? current : current.trim();
-        if (s.trim().length > 0) {
-          if (maxCharsPerLine > 0) {
-            applyMaxChars(s, maxCharsPerLine).forEach(w => chunks.push(w));
-          } else {
-            chunks.push(s);
+    segments.forEach(seg => {
+      const segTrim = seg.trim();
+      if (!segTrim) return;
+      if (STEALTH_IMG_EXACT_RE.test(segTrim)) {
+        chunks.push(segTrim);
+        return;
+      }
+      const raw = seg.split(/([.!?…\n]+)/);
+      let current = '';
+      raw.forEach(part => {
+        current += part;
+        if (current.trim().length > 20 || part.includes('\n')) {
+          const s = preserveIndents ? current : current.trim();
+          if (s.trim().length > 0) {
+            if (maxCharsPerLine > 0) {
+              applyMaxChars(s, maxCharsPerLine).forEach(w => chunks.push(w));
+            } else {
+              chunks.push(s);
+            }
           }
+          current = '';
         }
-        current = '';
+      });
+      if (current.trim()) {
+        const s = preserveIndents ? current : current.trim();
+        if (maxCharsPerLine > 0) {
+          applyMaxChars(s, maxCharsPerLine).forEach(w => chunks.push(w));
+        } else {
+          chunks.push(s);
+        }
       }
     });
-    if (current.trim()) {
-      const s = preserveIndents ? current : current.trim();
-      if (maxCharsPerLine > 0) {
-        applyMaxChars(s, maxCharsPerLine).forEach(w => chunks.push(w));
-      } else {
-        chunks.push(s);
-      }
-    }
     return chunks;
   }
 
   // 3. Paragraph mode
   const chunks = [];
   cleanText.split(/\n\s*\n|\n/).forEach(paragraph => {
-    const trimmed = preserveIndents ? paragraph : paragraph.trim();
-    if (!trimmed.trim()) return;
+    const trimmedCheck = paragraph.trim();
+    if (!trimmedCheck) return;
+    if (STEALTH_IMG_EXACT_RE.test(trimmedCheck)) {
+      chunks.push(trimmedCheck);
+      return;
+    }
+    const trimmed = preserveIndents ? paragraph : trimmedCheck;
     if (maxCharsPerLine > 0) {
       applyMaxChars(trimmed, maxCharsPerLine).forEach(w => chunks.push(w));
       return;

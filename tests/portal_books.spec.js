@@ -171,4 +171,39 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     await expect(dropdown).toBeVisible();
     await dropdown.screenshot({ path: testInfo.outputPath('navbar_book_switcher.png') });
   });
+
+  test('displays modern redesigned header and simple footer on portal home', async ({ page }) => {
+    await page.goto('/index.html?portal=1');
+    await page.waitForLoadState('domcontentloaded');
+
+    // 1. Verify modern header elements
+    const header = page.locator('#portal-top-navbar');
+    await expect(header).toBeVisible();
+    await expect(header.locator('.duo-brand-titles h1')).toHaveText('Stealth Reader');
+    await expect(header.locator('.portal-version-pill')).toBeVisible();
+
+    // Verify Google sign-in button with colorful SVG
+    const authBtn = page.locator('#hybrid-auth-button');
+    await expect(authBtn).toBeVisible();
+    await expect(authBtn).toContainText('Đăng nhập Google');
+    await expect(authBtn.locator('.hybrid-google-svg')).toBeVisible();
+
+    // Verify announcement card
+    const announcement = page.locator('#portal-announcement');
+    await expect(announcement).toBeVisible();
+    await expect(announcement).toContainText('Bộ công cụ đọc nâng cao');
+
+    // 2. Verify modern simple footer
+    const footer = page.locator('#portal-footer');
+    await expect(footer).toBeVisible();
+    await expect(footer.locator('.portal-footer-title')).toHaveText('Stealth Reader');
+    await expect(footer.locator('.portal-footer-status')).toContainText('Hệ thống ổn định');
+    await expect(footer.locator('#btn-footer-feedback')).toBeVisible();
+    await expect(footer.locator('#btn-footer-progress')).toBeVisible();
+    await expect(footer.locator('#btn-footer-scroll-top')).toBeVisible();
+
+    // Test scroll to top button
+    await footer.scrollIntoViewIfNeeded();
+    await footer.locator('#btn-footer-scroll-top').click();
+  });
 });
