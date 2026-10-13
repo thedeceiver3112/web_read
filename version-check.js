@@ -3,7 +3,7 @@
 
   const script = document.currentScript;
   const currentVersion = script?.dataset.appVersion || '';
-  if (!currentVersion || window.location.protocol === 'file:') return;
+  if (!currentVersion || window.location.protocol === 'file:' || window.navigator.webdriver) return;
 
   const checkForUpdate = () => {
     const versionUrl = new URL('version.json', document.baseURI);

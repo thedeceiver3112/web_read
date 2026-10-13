@@ -236,7 +236,8 @@ const THEME_PAGES = {
   'theme-capcut': 'capcut.html',
   'theme-sap': 'sap.html',
   'theme-gmail': 'gmail.html',
-  'theme-outlook': 'outlook.html'
+  'theme-outlook': 'outlook.html',
+  'theme-jira': 'jira.html'
 };
 
 // Single source of truth for per-page control id prefixes.
@@ -244,7 +245,7 @@ const THEME_PAGES = {
 // To add a theme, add its prefix here instead of editing every id list.
 const THEME_CONTROL_PREFIXES = [
   'gs', 'gdocs', 'excel', 'vsc', 'ps', 'blender', 'linkedin',
-  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook'
+  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook', 'jira'
 ];
 
 function themeControlIds(suffix) {
@@ -255,7 +256,7 @@ function themeControlIds(suffix) {
 const BOSS_KEY_BUTTON_IDS = [
   'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'blender', 'linkedin',
   'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat',
-  'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap'
+  'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'jira'
 ].map(name => `btn-boss-key-${name}`);
 
 const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
@@ -885,6 +886,7 @@ function getThemeForCurrentPage() {
   if (path.endsWith('sap.html')) return 'theme-sap';
   if (path.endsWith('gmail.html')) return 'theme-gmail';
   if (path.endsWith('outlook.html')) return 'theme-outlook';
+  if (path.endsWith('jira.html')) return 'theme-jira';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -1249,6 +1251,7 @@ const FAVICONS = {
   'theme-sap': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%2300386B%22/%3E%3Cpath%20d%3D%22M10%2012h28l-8%2024H2l8-24z%22%20fill%3D%22%23007DB8%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%2231%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2216%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%221%22%3ESAP%3C/text%3E%3C/svg%3E",
   'theme-gmail': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2038.5V13.8L24%2027.5l19.5-13.7v24.7c0%202.2-1.8%204-4%204H8.5c-2.2%200-4-1.8-4-4z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M43.5%2013.8v24.7c0%202.2-1.8%204-4%204h-5V20.5l9-6.7z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2013.8v24.7c0%202.2%201.8%204%204%204h5V20.5l-9-6.7z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M13.5%205.5L24%2014.5l10.5-9h-21z%22/%3E%3Cpath%20fill%3D%22%23FBBC05%22%20d%3D%22M4.5%209.5C4.5%207.3%206.3%205.5%208.5%205.5h5l-9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23C5221F%22%20d%3D%22M43.5%209.5c0-2.2-1.8-4-4-4h-5l9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M4.5%2013.8L24%2027.5%2043.5%2013.8%2024%2029%204.5%2013.8z%22/%3E%3C/svg%3E",
   'theme-outlook': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2214%22%20y%3D%228%22%20width%3D%2228%22%20height%3D%2232%22%20rx%3D%224%22%20fill%3D%22%230078D4%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10v22a4%204%200%200%201-4%204H18a4%204%200%200%201-4-4V14z%22%20fill%3D%22%2328A8EA%22%20opacity%3D%220.6%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Crect%20x%3D%226%22%20y%3D%2212%22%20width%3D%2222%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23005A9E%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2224%22%20r%3D%226.5%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223.2%22/%3E%3C/svg%3E",
+  'theme-jira': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20d%3D%22M490.6%207.4H243.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V28.1c.1-11.7-9.2-20.7-21.3-20.7%22%20fill%3D%22%232684ff%22/%3E%3Cpath%20d%3D%22M368.7%20126.5H121.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.9c0%2059.6%2049.9%20108%20111.2%20108V147.3c.2-11.1-9.1-20.8-21.2-20.8%22%20fill%3D%22%230052cc%22/%3E%3Cpath%20d%3D%22M246.7%20246.3H0c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V267.1c.1-11.8-9.9-20.8-21.3-20.8%22%20fill%3D%22%230052cc%22/%3E%3C/svg%3E",
   'portal': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E",
 };
 
@@ -2722,6 +2725,18 @@ function getThemePickerModalHTML() {
               <span class="theme-card-title">Outlook</span>
               <div class="theme-card-check">✓</div>
             </div>
+            <!-- Theme 24: Jira -->
+            <div class="theme-card" data-theme="theme-jira">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 512 512">
+                  <path d="M490.6 7.4H243.9c0 59.6 49.9 108 111.2 108h45.6v42.2c0 59.6 49.9 108 111.2 108V28.1c.1-11.7-9.2-20.7-21.3-20.7" fill="#2684ff"/>
+                  <path d="M368.7 126.5H121.9c0 59.6 49.9 108 111.2 108h45.6v42.9c0 59.6 49.9 108 111.2 108V147.3c.2-11.1-9.1-20.8-21.2-20.8" fill="#0052cc"/>
+                  <path d="M246.7 246.3H0c0 59.6 49.9 108 111.2 108h45.6v42.2c0 59.6 49.9 108 111.2 108V267.1c.1-11.8-9.9-20.8-21.3-20.8" fill="#0052cc"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Jira</span>
+              <div class="theme-card-check">✓</div>
+            </div>
           </div>
         </div>
         <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
@@ -3193,6 +3208,12 @@ const THEME_DOC_CONFIGS = {
     defaultTitle: '[Dự án 2026] Báo cáo tiến độ phân tích hệ thống & tài liệu đặc tả',
     formatTabTitle: () => 'Hộp thư đến - minhquan@outlook.com - Outlook',
     titleId: 'outlook-doc-title'
+  },
+  'theme-jira': {
+    prop: 'jiraTitle',
+    defaultTitle: '[NUC-342] Fast trip search',
+    formatTabTitle: (val) => val ? `${val} - Beyond Gravity - Jira` : 'Board - Beyond Gravity - Jira',
+    titleId: 'jira-doc-title'
   }
 };
 
@@ -5679,11 +5700,11 @@ function applyStyles() {
   // 3. Document, Email, Chat & Prose reading themes (Gmail, Outlook, Google Docs, Zalo, LinkedIn, Figma, Canva, PPT, Captions, Notes)
   // Text in these themes MUST ALWAYS wrap naturally within their containers and NEVER produce horizontal scrollbars.
   const proseWhiteSpace = isNowrap ? (state.preserveIndents ? 'pre-wrap' : 'normal') : 'normal';
-  restyle('.gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .cad-note-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text', el => {
+  restyle('.gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .jira-log-body, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .cad-note-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text', el => {
     el.style.whiteSpace = proseWhiteSpace;
     el.style.wordBreak = 'break-word';
     el.style.overflowX = 'hidden';
-    if (state.fontFamily && (el.classList.contains('gdocs-story-paragraph') || el.classList.contains('gmail-story-para') || el.classList.contains('outlook-story-para'))) {
+    if (state.fontFamily && (el.classList.contains('gdocs-story-paragraph') || el.classList.contains('gmail-story-para') || el.classList.contains('outlook-story-para') || el.classList.contains('jira-log-body'))) {
       el.style.fontFamily = state.fontFamily;
     }
     if (state.fontSize) el.style.fontSize = `${state.fontSize}pt`;
@@ -5813,7 +5834,7 @@ const BOSS_VIEW_CONFIGS = [
   { story: 'canva-story-view', boss: 'canva-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
   { story: 'ppt-story-view', boss: 'ppt-boss-view', storyDisplay: 'flex', bossDisplay: 'flex' },
   { story: 'tvpl-story-view', boss: 'tvpl-boss-view', storyDisplay: '', bossDisplay: 'block' },
-  ...['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook'].map(p => ({
+  ...['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook', 'jira'].map(p => ({
     story: `${p}-story-view`,
     boss: `${p}-boss-view`,
     storyDisplay: '',
@@ -7287,6 +7308,7 @@ const THEME_RENDERERS = {
   'theme-sap': { append: appendSAPBatch, streams: ['sap-story-stream'] },
   'theme-gmail': { append: appendGmailBatch, streams: ['gmail-story-stream'] },
   'theme-outlook': { append: appendOutlookBatch, streams: ['outlook-story-stream'] },
+  'theme-jira': { append: appendJiraBatch, streams: ['jira-story-stream'] },
   // Google Sheets / Excel (spreadsheet table) is the default
   default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
 };
@@ -7793,7 +7815,8 @@ const ACTIVE_ROW_SPECS = {
   'theme-capcut': { id: 'capcut-cap-', cls: 'active-caption' },
   'theme-sap': { id: 'sap-item-', cls: 'selected-sap-row' },
   'theme-gmail': { id: 'gmail-para-', cls: 'active-email-para' },
-  'theme-outlook': { id: 'outlook-para-', cls: 'active-outlook-para' }
+  'theme-outlook': { id: 'outlook-para-', cls: 'active-outlook-para' },
+  'theme-jira': { id: 'jira-log-item-', cls: 'active-jira-item' }
 };
 
 // Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
@@ -7989,11 +8012,18 @@ function getActiveScrollContainer() {
     'theme-sap': 'sap-scroll-container',
     'theme-gmail': 'gmail-scroll-container',
     'theme-outlook': 'outlook-scroll-container',
+    'theme-jira': 'jira-issue-scroll-container',
   };
   const id = containerMap[state.theme];
   if (id) {
     const el = document.getElementById(id);
-    if (el) return el;
+    if (el) {
+      if (!el._hasScrollListener) {
+        el._hasScrollListener = true;
+        el.addEventListener('scroll', () => handleContainerScroll(el), { passive: true });
+      }
+      return el;
+    }
   }
   return document.getElementById('grid-scroll-container') ||
          document.getElementById('capcut-scroll-container') ||
@@ -8015,75 +8045,83 @@ function getActiveScrollContainer() {
          document.querySelector('.table-container');
 }
 
-function initContinuousScrollListeners() {
-  function handleContainerScroll(container) {
-    if (state.bossModeActive) return;
+function handleContainerScroll(container) {
+  if (!container || state.bossModeActive) return;
 
-    // 1. Infinite scroll: check if near bottom to load next batch (expanded threshold for seamless continuous reading)
-    const distanceToBottom = container.scrollHeight - (container.scrollTop + container.clientHeight);
-    if (distanceToBottom <= 1200 || container.scrollTop + container.clientHeight >= container.scrollHeight - 50) {
-      if (state.renderedCount < state.allChunks.length) {
-        renderNextBatch(state.BATCH_SIZE);
+  // 1. Infinite scroll: check if near bottom to load next batch (expanded threshold for seamless continuous reading)
+  const distanceToBottom = container.scrollHeight - (container.scrollTop + container.clientHeight);
+  if (distanceToBottom <= 1600 || container.scrollTop + container.clientHeight >= container.scrollHeight - 100) {
+    if (state.renderedCount < state.allChunks.length) {
+      renderNextBatch(state.BATCH_SIZE);
+    }
+  }
+
+  // 2. Viewport detection: detect current page from top third of viewport
+  if (Date.now() < suppressScrollSyncUntil) return;
+
+  if (scrollThrottleTimer) return;
+  scrollThrottleTimer = true;
+  requestAnimationFrame(() => {
+    scrollThrottleTimer = false;
+    const rect = container.getBoundingClientRect();
+    const sampleX = rect.left + Math.min(220, rect.width / 2);
+    const sampleY = rect.top + Math.max(80, Math.min(rect.height * 0.45, rect.height - 40));
+
+    const el = document.elementFromPoint(sampleX, sampleY);
+    if (!el) return;
+
+    const pageEl = el.closest('[data-page]');
+    if (pageEl && pageEl.dataset.page) {
+      const p = parseInt(pageEl.dataset.page);
+      if (p && p !== state.currentPage && p >= 1 && p <= state.totalPages) {
+        state.currentPage = p;
+        updatePaginationUI();
       }
     }
 
-    // 2. Viewport detection: detect current page from top third of viewport
-    if (Date.now() < suppressScrollSyncUntil) return;
-
-    if (scrollThrottleTimer) return;
-    scrollThrottleTimer = true;
-    requestAnimationFrame(() => {
-      scrollThrottleTimer = false;
-      const rect = container.getBoundingClientRect();
-      const sampleX = rect.left + Math.min(220, rect.width / 2);
-      const sampleY = rect.top + Math.max(80, Math.min(rect.height * 0.45, rect.height - 40));
-
-      const el = document.elementFromPoint(sampleX, sampleY);
-      if (!el) return;
-
-      const pageEl = el.closest('[data-page]');
-      if (pageEl && pageEl.dataset.page) {
-        const p = parseInt(pageEl.dataset.page);
-        if (p && p !== state.currentPage && p >= 1 && p <= state.totalPages) {
-          state.currentPage = p;
-          updatePaginationUI();
-        }
+    const itemEl = el.closest('[data-index]');
+    if (itemEl && itemEl.dataset.index) {
+      const idx = parseInt(itemEl.dataset.index);
+      if (!isNaN(idx) && idx !== state.currentGlobalIndex) {
+        state.currentGlobalIndex = idx;
+        updateReadingProgressStatus(idx);
+        scheduleSaveState();
       }
+    }
+  });
+}
 
-      const itemEl = el.closest('[data-index]');
-      if (itemEl && itemEl.dataset.index) {
-        const idx = parseInt(itemEl.dataset.index);
-        if (!isNaN(idx) && idx !== state.currentGlobalIndex) {
-          state.currentGlobalIndex = idx;
-          updateReadingProgressStatus(idx);
-          scheduleSaveState();
-        }
-      }
-    });
-  }
-
-  const scrollContainers = [
-    document.getElementById('grid-scroll-container'),
-    document.getElementById('gdocs-canvas-scroll-container'),
-    document.getElementById('vsc-code-scroll-container'),
-    document.getElementById('ps-canvas-scroll-container'),
-    document.getElementById('blender-viewport-scroll-container'),
-    document.getElementById('linkedin-feed-scroll-container'),
-    document.getElementById('autocad-canvas-scroll-container'),
-    document.getElementById('zalo-chat-scroll-container'),
-    document.getElementById('figma-canvas-scroll-container'),
-    document.getElementById('canva-canvas-scroll-container'),
-    document.getElementById('ppt-canvas-scroll-container'),
-    document.getElementById('tvpl-document-scroll-container'),
-    document.getElementById('premiere-transcript-scroll-container'),
-    document.getElementById('claude-chat-scroll-container'),
-    document.getElementById('chatgpt-chat-scroll-container'),
-    document.getElementById('teams-chat-scroll-container'),
-    document.getElementById('revit-schedule-scroll-container'),
-    document.getElementById('misa-orders-scroll-container'),
+function initContinuousScrollListeners() {
+  const allContainerIds = [
+    'grid-scroll-container',
+    'gdocs-canvas-scroll-container',
+    'vsc-code-scroll-container',
+    'ps-canvas-scroll-container',
+    'blender-viewport-scroll-container',
+    'linkedin-feed-scroll-container',
+    'autocad-canvas-scroll-container',
+    'zalo-chat-scroll-container',
+    'figma-canvas-scroll-container',
+    'canva-canvas-scroll-container',
+    'ppt-canvas-scroll-container',
+    'tvpl-document-scroll-container',
+    'premiere-transcript-scroll-container',
+    'claude-chat-scroll-container',
+    'chatgpt-chat-scroll-container',
+    'teams-chat-scroll-container',
+    'revit-schedule-scroll-container',
+    'misa-orders-scroll-container',
+    'capcut-scroll-container',
+    'sap-scroll-container',
+    'gmail-scroll-container',
+    'outlook-scroll-container',
+    'jira-issue-scroll-container'
   ];
-  scrollContainers.forEach(container => {
-    if (container) {
+
+  allContainerIds.forEach(id => {
+    const container = document.getElementById(id);
+    if (container && !container._hasScrollListener) {
+      container._hasScrollListener = true;
       container.addEventListener('scroll', () => handleContainerScroll(container), { passive: true });
     }
   });
@@ -8717,6 +8755,22 @@ function appendOutlookBatch(count) {
     el.id = `outlook-para-${chunk.globalIndex}`;
     const heading = (chunk.indexInPage === 0) ? `<div class="outlook-section-heading">Mục ${chunk.page}: Đặc tả yêu cầu kỹ thuật &amp; phân tích</div>` : '';
     el.innerHTML = `${heading}<div class="outlook-para-text">${formatChunkText(chunk.text)}</div><span class="outlook-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
+    return el;
+  });
+}
+
+function appendJiraBatch(count) {
+  appendSimpleThemeBatch(count, 'jira-story-stream', chunk => {
+    const el = document.createElement('div');
+    el.className = 'jira-log-item';
+    el.id = `jira-log-item-${chunk.globalIndex}`;
+    const heading = (chunk.indexInPage === 0) ? `<div class="jira-section-heading">§ Trang ${chunk.page} — Kịch bản nghiệm thu &amp; Phân tích [NUC-342]</div>` : '';
+    el.innerHTML = `${heading}
+      <div class="jira-log-header">
+        <span class="jira-log-badge">NUC-342-L${String(chunk.globalIndex + 1).padStart(3, '0')}</span>
+        <span class="jira-log-meta">Đoạn #${chunk.globalIndex + 1} &bull; Trang ${chunk.page}</span>
+      </div>
+      <div class="jira-log-body">${formatChunkText(chunk.text)}</div>`;
     return el;
   });
 }

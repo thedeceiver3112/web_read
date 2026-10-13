@@ -9,7 +9,7 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <script src="version-check.js?v=20261010-15" data-app-version="20261010-15"></script>
+    <script src="version-check.js?v=20261013-9" data-app-version="20261013-9"></script>
     <script>
       (function() {
         try {
@@ -63,23 +63,24 @@
     <meta property="og:site_name" content="The Deceiver" />
     <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="style.css?v=20261013-5" />
+    <link rel="stylesheet" href="style.css?v=20261013-8" />
     <script src="static/pdf.min.js" defer></script>
   </head>
   <body class="theme-googlesheets">
     <div class="theme-header-container gsheet-only">
-      <header class="gsheet-top-bar">
+      <header class="gsheet-top-bar" id="docs-header">
         <div class="gsheet-top-left">
           <a
             href="javascript:void(0)"
             class="gsheet-logo-btn"
             title="Trang chủ Google Trang tính"
+            aria-label="Trang chủ Trang tính"
           >
-            <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
-              <path d="M37 45H11C8.8 45 7 43.2 7 41V7C7 4.8 8.8 3 11 3H29L41 15V41C41 43.2 39.2 45 37 45Z" fill="#0F9D58"/>
-              <path d="M29 3L41 15H29V3Z" fill="#87CEAC"/>
-              <path d="M14 21H34V39H14V21Z" fill="white"/>
-              <path d="M14 27H34V29H14V27ZM14 33H34V35H14V33ZM22 21V39H24V21H22Z" fill="#0F9D58"/>
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+              <path d="M24 2H8C5.79 2 4 3.79 4 6V30C4 32.21 5.79 34 8 34H28C30.21 34 32 32.21 32 30V10L24 2Z" fill="#0F9D58"/>
+              <path d="M24 2L32 10H24V2Z" fill="#87CEAC"/>
+              <rect x="9.5" y="14.5" width="17" height="13" rx="1.5" fill="#FFFFFF"/>
+              <path d="M9.5 19H26.5M9.5 23.5H26.5M15.5 14.5V27.5" stroke="#0F9D58" stroke-width="1.8"/>
             </svg>
           </a>
 
@@ -90,28 +91,24 @@
                 id="gsheet-doc-title"
                 contenteditable="true"
                 spellcheck="false"
-                title="Nhấp để đổi tên tài liệu ngụy trang"
-                >Báo cáo số liệu & Phân tích KPI Q3</span
-              >
-              <div class="gsheet-doc-icons">
+                title="Nhấp để đổi tên"
+                data-stealth-key="stealth_title_gsheet"
+              >Báo cáo số liệu & Phân tích KPI Q3</span>
+              <div class="docs-titlebar-badges">
                 <button class="gsheet-icon-btn star-btn" title="Gắn dấu sao">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.78 5.63 6.22.9-4.5 4.39 1.06 6.2L12 17.2l-5.56 2.92 1.06-6.2L3 9.53l6.22-.9L12 3Z"/></svg>
+                  <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor">
+                    <path d="m352-293 128-76 129 76-34-144 111-95-147-13-59-137-59 137-147 13 112 95-34 144ZM243-144l63-266L96-589l276-24 108-251 108 252 276 23-210 179 63 266-237-141-237 141Zm237-333Z"/>
+                  </svg>
                 </button>
                 <button class="gsheet-icon-btn folder-btn" title="Di chuyển">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 6.5h6l2 2h9v9.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V6.5Z"/><path d="M3.5 9h17"/></svg>
+                  <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor">
+                    <path d="M168-192q-29 0-50.5-21.5T96-264v-432q0-29.7 21.5-50.85Q139-768 168-768h216l96 96h312q29.7 0 50.85 21.15Q864-629.7 864-600v336q0 29-21.15 50.5T792-192H168Zm0-72h624v-336H450l-96-96H168v432Zm0 0v-432 432Z"/>
+                  </svg>
                 </button>
                 <span class="gsheet-cloud-status" title="Đã lưu vào Drive">
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 24 24"
-                    fill="#5f6368"
-                  >
-                    <path
-                      d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17l5.09-5.09 1.41 1.41L10 17z"
-                    />
+                  <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor">
+                    <path d="m429-314 204-204-51-51-153 153-68-68-51 51 119 119ZM240-192q-80 0-136-56T48-384q0-76 52-131.5T227-576q23-85 92.5-138.5T480-768q103 0 179 69.5T744-528q70 0 119 49t49 119q0 70-49 119t-119 49H240Zm0-72h504q40 0 68-28t28-68q0-40-28-68t-68-28h-66l-6-65q-7-74-62-124.5T480-696q-64 0-114.5 38.5T297-556l-14 49-51 3q-48 3-80 37.5T120-384q0 50 35 85t85 35Zm240-216Z"/>
                   </svg>
-                  <span class="cloud-text">Đã lưu vào Drive</span>
                 </span>
               </div>
             </div>
@@ -124,145 +121,256 @@
               <button class="gsheet-menu-item">Định dạng</button>
               <button class="gsheet-menu-item">Dữ liệu</button>
               <button class="gsheet-menu-item">Công cụ</button>
-              <button class="gsheet-menu-item">Tiện ích mở rộng</button>
+              <button class="gsheet-menu-item">Gemini</button>
+              <button class="gsheet-menu-item">Tiện ích</button>
               <button class="gsheet-menu-item">Trợ giúp</button>
             </nav>
           </div>
         </div>
 
         <div class="gsheet-top-right">
-
-          <button class="gsheet-circle-btn" title="Mở lịch sử chỉnh sửa">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.2-5.72"/><path d="M3.5 4.5v5h5M12 7.5V12l3 1.8"/></svg>
-          </button>
-          <button class="gsheet-circle-btn" title="Mở lịch sử nhận xét">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 3v-14a2 2 0 0 1 2-2Z"/><path d="M8 9h8M8 13h5"/></svg>
-          </button>
-          <button class="gsheet-circle-btn" title="Tham gia cuộc gọi Meet">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="12.5" height="12" rx="2"/><path d="m15.5 10 5-3v10l-5-3"/></svg>
-          </button>
-
-          <button class="gsheet-share-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#001d35">
-              <path
-                d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
-              />
+          <!-- Anonymous Chicken Collaborator Avatar -->
+          <div class="docs-presence-chicken-avatar" title="Gà ẩn danh" aria-label="Gà ẩn danh">
+            <img src="https://ssl.gstatic.com/docs/common/profile/chicken_lg_2.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" alt="Gà ẩn danh" width="24" height="24" />
+            <svg class="chicken-fallback-svg" width="18" height="18" viewBox="0 0 24 24" fill="#ffffff" style="display:none;">
+              <path d="M12 2a4 4 0 0 0-4 4c0 1.5.8 2.8 2 3.5V11l-3 2c-1.5 1-2 2.5-2 4.5v1.5h14V17.5c0-2-0.5-3.5-2-4.5l-3-2V9.5c1.2-.7 2-2 2-3.5a4 4 0 0 0-4-4z"/>
             </svg>
-            <span>Chia sẻ</span>
+          </div>
+
+          <!-- History Button -->
+          <button class="gsheet-circle-btn" title="Chỉnh sửa lần cuối cách đây 3 giờ" aria-label="Lịch sử chỉnh sửa">
+            <svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor">
+              <path d="M480-144q-140 0-238-98t-98-238h72q0 109 77.5 186.5T480-216q109 0 186.5-77.5T744-480q0-109-77.5-186.5T480-744q-62 0-114.55 25.6Q312.91-692.8 277-648h107v72H144v-240h72v130q46-60 114.5-95T480-816q70 0 131.13 26.6 61.14 26.6 106.4 71.87 45.27 45.26 71.87 106.4Q816-550 816-480t-26.6 131.13q-26.6 61.14-71.87 106.4-45.26 45.27-106.4 71.87Q550-144 480-144Zm100-200L444-480v-192h72v162l115 115-51 51Z"/>
+            </svg>
           </button>
 
-          <div class="gsheet-avatar" title="Tài khoản Google: Nguyen Van A">
-            JD
+          <!-- Comments Button -->
+          <button class="gsheet-circle-btn" title="Hiện tất cả nhận xét" aria-label="Nhận xét">
+            <svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor">
+              <path d="M96-96v-696q0-29.7 21.15-50.85Q138.3-864 168-864h624q29.7 0 50.85 21.15Q864-821.7 864-792v480q0 29.7-21.15 50.85Q821.7-240 792-240H240L96-96Zm114-216h582v-480H168v522l42-42Zm-42 0v-480 480Z"/>
+            </svg>
+          </button>
+
+          <!-- Meet Video Call Button with Dropdown -->
+          <div class="gsheet-meet-container" title="Tham gia cuộc gọi Meet hoặc trình bày thẻ này">
+            <button class="gsheet-meet-btn">
+              <svg viewBox="0 -960 960 960" width="20" height="20" fill="currentColor">
+                <path d="M216-192q-29 0-50.5-21.5T144-264v-432q0-29.7 21.5-50.85Q187-768 216-768h432q29.7 0 50.85 21.15Q720-725.7 720-696v168l144-144v384L720-432v168q0 29-21.15 50.5T648-192H216Zm0-72h432v-432H216v432Zm0 0v-432 432Z"/>
+              </svg>
+              <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor">
+                <path d="M480-384 288-576h384L480-384Z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Share Button with Split Dropdown -->
+          <div class="gsheet-share-split-btn" title="Chia sẻ">
+            <button class="gsheet-share-main">
+              <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor">
+                <path d="M263.72-96Q234-96 213-117.15T192-168v-384q0-29.7 21.15-50.85Q234.3-624 264-624h24v-96q0-79.68 56.23-135.84 56.22-56.16 136-56.16Q560-912 616-855.84q56 56.16 56 135.84v96h24q29.7 0 50.85 21.15Q768-581.7 768-552v384q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72Zm.28-72h432v-384H264v384Zm216.21-120Q510-288 531-309.21t21-51Q552-390 530.79-411t-51-21Q450-432 429-410.79t-21 51Q408-330 429.21-309t51 21ZM360-624h240v-96q0-50-35-85t-85-35q-50 0-85 35t-35 85v96Zm-96 456v-384 384Z"/>
+              </svg>
+              <span>Chia sẻ</span>
+            </button>
+            <button class="gsheet-share-caret" title="Thao tác chia sẻ nhanh">
+              <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor">
+                <path d="M480-384 288-576h384L480-384Z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Ask Gemini Sparkle Button -->
+          <button class="gsheet-circle-btn gsheet-gemini-sparkle-btn" title="Hỏi Gemini" aria-label="Hỏi Gemini">
+            <svg viewBox="0 -960 960 960" height="24" width="24">
+              <defs>
+                <linearGradient id="gsheet-gemini-grad-top" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1ba0e2"/>
+                  <stop offset="50%" stop-color="#9b72cb"/>
+                  <stop offset="100%" stop-color="#d96570"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#gsheet-gemini-grad-top)" d="M480-80q-6,0-11-4t-7-10q-17-67-51-126T328-328T220-411T94-462q-6-2-10-7t-4-11t4-11t10-7q67-17 126-51t108-83t83-108t51-126q2-6 7-10t11-4t10.5,4t6.5,10q18,67 52,126t83,108t108,83t126,51q6,2 10,7t4,11t-4,11t-10,7q-67,17-126,51T632-328T549-220T498-94q-2,6-7,10t-11,4Z"/>
+            </svg>
+          </button>
+
+          <!-- User Google Profile Avatar -->
+          <div class="gsheet-user-profile-circle" title="Tài khoản Google: Nguyễn Phong (nguyentranhaiphong25@gmail.com)">
+            <span>P</span>
           </div>
         </div>
       </header>
 
-      <div class="gsheet-toolbar">
+      <!-- Google Sheets Toolbar -->
+      <div class="gsheet-toolbar" id="docs-toolbar">
         <div class="gsheet-tools-group">
-          <button
-            class="gs-tool-btn"
-            id="gs-btn-undo"
-            title="Hoàn tác (Ctrl+Z)"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7 4 12l5 5"/><path d="M5 12h8.5a6 6 0 0 1 6 6"/></svg>
+          <!-- Omnibox Search Menu -->
+          <div class="gs-omnibox-pill" title="Tìm kiếm trong menu (Alt+/)">
+            <svg viewBox="0 -960 960 960" width="16" height="16" fill="currentColor">
+              <path d="M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z"/>
+            </svg>
+            <span class="gs-omnibox-text">Trình đơn</span>
+          </div>
+
+          <span class="gs-tool-divider"></span>
+
+          <!-- Undo / Redo / Print / Paint Format -->
+          <button class="gs-tool-btn" id="gs-btn-undo" title="Hoàn tác (Ctrl+Z)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M288-192v-72h288q50 0 85-35t35-85q0-50-35-85t-85-35H330l93 93-51 51-180-180 180-180 51 51-93 93h246q80 0 136 56t56 136q0 80-56 136t-136 56H288Z"/></svg>
           </button>
           <button class="gs-tool-btn" id="gs-btn-redo" title="Làm lại (Ctrl+Y)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 7 5 5-5 5"/><path d="M19 12h-8.5a6 6 0 0 0-6 6"/></svg>
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M384-192q-80 0-136-56t-56-136q0-80 56-136t136-56h246l-93-93 51-51 180 180-180 180-51-51 93-93H384q-50 0-85 35t-35 85q0 50 35 85t85 35h288v72H384Z"/></svg>
           </button>
-          <button class="gs-tool-btn" title="In (Ctrl+P)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg></button>
-          <button class="gs-tool-btn" title="Định dạng sơn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 4V3c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6h1v4H9v11c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-9h7c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1h-2z"/></svg></button>
+          <button class="gs-tool-btn" title="In (Ctrl+P)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M648-624v-120H312v120h-72v-192h480v192h-72Zm-480 72h625-625Zm539.79 96q15.21 0 25.71-10.29t10.5-25.5q0-15.21-10.29-25.71t-25.5-10.5q-15.21 0-25.71 10.29t-10.5 25.5q0 15.21 10.29 25.71t25.5 10.5ZM648-216v-144H312v144h336Zm72 72H240v-144H96v-240q0-40 28-68t68-28h576q40 0 68 28t28 68v240H720v144Zm73-216v-153.67Q793-530 781-541t-28-11H206q-16.15 0-27.07 11.04Q168-529.92 168-513.6V-360h72v-72h480v72h73Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Sao chép định dạng">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M456-96q-29.7 0-50.85-21.15Q384-138.3 384-168v-167H264q-29.7 0-50.85-21.15Q192-377.3 192-407v-265q0-61 42-102.5T336-816h432v409q0 29.7-21.5 50.85Q725-335 696-335H576v167q0 29.7-21.5 50.85Q533-96 504-96h-48ZM264-552h432v-192h-48v144h-72v-144h-48v73h-72v-73H336q-29.7 0-50.85 20.5Q264-703 264-672v120Zm0 145h432v-73H264v73Zm0 0v-73 73Z"/></svg>
+          </button>
+
+          <!-- Zoom Dropdown -->
+          <div class="gs-zoom-wrapper" title="Thu phóng">
+            <select class="gs-select gs-zoom-select">
+              <option selected>100%</option>
+              <option>75%</option>
+              <option>90%</option>
+              <option>125%</option>
+              <option>150%</option>
+            </select>
+            <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor" class="gs-select-caret"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </div>
+
           <span class="gs-tool-divider"></span>
-          <select class="gs-select gs-zoom-select" title="Thu phóng">
-            <option>100%</option>
-            <option>75%</option>
-            <option>90%</option>
-            <option>125%</option>
-          </select>
-          <span class="gs-tool-divider"></span>
-          <button class="gs-tool-btn" title="Định dạng tiền tệ">$</button>
-          <button class="gs-tool-btn" title="Định dạng phần trăm">%</button>
+
+          <!-- Vietnamese Dong currency symbol / Percent / Decimals -->
+          <button class="gs-tool-btn gs-tool-symbol-btn" title="Định dạng theo tiền tệ">₫</button>
+          <button class="gs-tool-btn gs-tool-symbol-btn" title="Định dạng theo phần trăm">%</button>
           <button class="gs-tool-btn" title="Giảm số chữ số thập phân">
-            .0
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M624-96 480-240l144-144 51 51-57 57h246v72H618l57 57-51 51ZM96-432v-96h96v96H96Zm299.78 0q-54.78 0-93.28-38.66Q264-509.31 264-564v-168q0-54.69 38.72-93.34Q341.44-864 396.22-864t93.28 38.66Q528-786.69 528-732v168q0 54.69-38.72 93.34Q450.56-432 395.78-432Zm.22-72q25 0 42.5-17.5T456-564v-168q0-25-17.5-42.5T396-792q-25 0-42.5 17.5T336-732v168q0 25 17.5 42.5T396-504Z"/></svg>
           </button>
           <button class="gs-tool-btn" title="Tăng số chữ số thập phân">
-            .00
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="m720-96-51-51 57-57H480v-72h246l-57-57 51-51 144 144L720-96ZM96-432v-96h96v96H96Zm299.78 0q-54.78 0-93.28-38.66Q264-509.31 264-564v-168q0-54.69 38.72-93.34Q341.44-864 396.22-864t93.28 38.66Q528-786.69 528-732v168q0 54.69-38.72 93.34Q450.56-432 395.78-432Zm336 0q-54.78 0-93.28-38.66Q600-509.31 600-564v-168q0-54.69 38.72-93.34Q677.44-864 732.22-864t93.28 38.66Q864-786.69 864-732v168q0 54.69-38.72 93.34Q786.56-432 731.78-432ZM396-504q25 0 42.5-17.5T456-564v-168q0-25-17.5-42.5T396-792q-25 0-42.5 17.5T336-732v168q0 25 17.5 42.5T396-504Zm336 0q25 0 42.5-17.5T792-564v-168q0-25-17.5-42.5T732-792q-25 0-42.5 17.5T672-732v168q0 25 17.5 42.5T732-504Z"/></svg>
           </button>
+          <button class="gs-tool-btn gs-tool-symbol-btn" title="Định dạng khác">
+            123
+          </button>
+
           <span class="gs-tool-divider"></span>
-          <select
-            id="gs-select-font-family"
-            class="gs-select gs-font-select"
-            title="Phông chữ"
-          >
-            <option value="Arial" selected>Arial</option>
-            <option value="Roboto">Roboto</option>
-            <option value="Calibri">Calibri</option>
-            <option value="Segoe UI">Segoe UI</option>
-          </select>
-          <button
-            class="gs-tool-btn gd-font-step-btn"
-            id="gs-btn-font-dec"
-            title="Giảm cỡ chữ (phím [)"
-          >
-            −
-          </button>
-          <select
-            id="gs-select-font-size"
-            class="gs-select gs-size-select"
-            title="Cỡ chữ (8pt - 24pt)"
-          >
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10" selected>10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
-            <option value="13">13</option>
-            <option value="14">14</option>
-            <option value="15">15</option>
-            <option value="16">16</option>
-            <option value="18">18</option>
-            <option value="20">20</option>
-            <option value="24">24</option>
-          </select>
-          <button
-            class="gs-tool-btn gd-font-step-btn"
-            id="gs-btn-font-inc"
-            title="Tăng cỡ chữ (phím ])"
-          >
-            +
-          </button>
+
+          <!-- Font Select -->
+          <div class="gs-font-wrapper" title="Phông chữ">
+            <select id="gs-select-font-family" class="gs-select gs-font-select">
+              <option value="Arial" selected>Mặc định (Arial)</option>
+              <option value="Roboto">Roboto</option>
+              <option value="Calibri">Calibri</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Segoe UI">Segoe UI</option>
+            </select>
+            <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor" class="gs-select-caret"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </div>
+
           <span class="gs-tool-divider"></span>
-          <button class="gs-tool-btn" id="gs-btn-bold" title="Đậm (Ctrl+B)">
-            <b>B</b>
-          </button>
-          <button
-            class="gs-tool-btn"
-            id="gs-btn-italic"
-            title="Nghiêng (Ctrl+I)"
-          >
-            <i>I</i>
-          </button>
-          <button
-            class="gs-tool-btn"
-            id="gs-btn-strikethrough"
-            title="Gạch ngang"
-          >
-            <s>S</s>
-          </button>
-          <button
-            class="gs-tool-btn color-btn"
-            id="gs-btn-color"
-            title="Màu văn bản"
-          >
-            <span style="border-bottom: 3px solid #202124">A</span>
-          </button>
-          <button class="gs-tool-btn" title="Màu tô"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.64 10.56 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg></button>
-          <button class="gs-tool-btn" title="Đường viền"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="4" width="16" height="16"/><path d="M12 4v16M4 12h16"/></svg></button>
+
+          <!-- Font Size Stepper -->
+          <div class="gs-font-size-stepper">
+            <button class="gs-tool-btn gs-font-step-btn" id="gs-btn-font-dec" title="Giảm cỡ chữ (Ctrl+Shift+,)">
+              <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor"><path d="M232-444v-72h496v72H232Z"/></svg>
+            </button>
+            <select id="gs-select-font-size" class="gs-size-select" title="Cỡ chữ">
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11" selected>11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="16">16</option>
+              <option value="18">18</option>
+              <option value="20">20</option>
+              <option value="24">24</option>
+            </select>
+            <button class="gs-tool-btn gs-font-step-btn" id="gs-btn-font-inc" title="Tăng cỡ chữ (Ctrl+Shift+.)">
+              <svg viewBox="0 -960 960 960" width="14" height="14" fill="currentColor"><path d="M444-444H240v-72h204v-204h72v204h204v72H516v204h-72v-204Z"/></svg>
+            </button>
+          </div>
+
           <span class="gs-tool-divider"></span>
-          <button class="gs-tool-btn" id="gs-btn-wrap" title="Ngắt dòng">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h12a3 3 0 0 1 0 6h-3"/><path d="m15 15-3 3 3 3"/></svg>
+
+          <!-- Text Formatting: Bold, Italic, Strikethrough, Text Color, Fill Color -->
+          <button class="gs-tool-btn" id="gs-btn-bold" title="In đậm (Ctrl+B)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M266-192v-576h227.95q67.05 0 123.55 41.32Q674-685.35 674-612q0 51-22.5 79.5T609-490.96Q635-479 665-448t30 91q0 91-67.03 128t-125.81 37H266Zm127-118h104.68Q546-310 556-334.5t10-35.5q0-11-10.5-35.5T494-430H393v120Zm0-232h93q33 0 48.5-17.5T550-597q0-24-17.11-39t-44.28-15H393v109Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" id="gs-btn-italic" title="In nghiêng (Ctrl+I)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M216-192v-96h160l124-384H336v-96h408v96H596L472-288h152v96H216Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" id="gs-btn-strikethrough" title="Gạch ngang (Alt+Shift+5)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M486-196q-72 0-126-42t-72-111l81-33q16 51 46.5 77t72.5 26q45 0 71.5-21.5T586-358q0-16-6-29.5T562-412h103q5 11 6.5 23.5T673-359q0 72-52 117.5T486-196ZM96-484v-72h768v72H96Zm384-288q64 0 106 27t68 86l-78 34q-11-30-36.5-48.5T482-692q-37 0-61.5 18T394-628h-87q2-63 51-103.5T480-772Z"/></svg>
+          </button>
+          <button class="gs-tool-btn color-btn" id="gs-btn-color" title="Màu văn bản">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M96 0v-192h768V0H96Zm161-336 180-480h86l180 480h-83l-43-123H384l-44 123h-83Zm151-192h144l-70-194h-4l-70 194Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Tô màu">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="m216-909 51-51 338 338q20 20 19.5 47T605-529L431-355q-20 20-47 20t-47-20L163-530q-19-19-20-46t20-47l170-169-117-117Zm168 168L219-576h1-1 330L384-741Zm348 453q-35 0-59.5-24.5T648-372q0-20 10.5-42.5T692-469q8-11 18.5-24t21.5-26q10 13 20.5 25.5T772-469q16 23 30 47t14 50q0 35-24.5 59.5T732-288ZM96 0v-192h768V0H96Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Đường viền">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M144-144v-672h672v672H144Zm600-72v-228H516v228h228Zm0-528H516v228h228v-228Zm-528 0v228h228v-228H216Zm0 528h228v-228H216v228Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Hợp nhất ô">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M144-144v-240h72v168h168v72H144Zm432 0v-72h168v-168h72v240H576ZM288-336l-51-51 57-57H96v-72h198l-57-57 51-51 144 144-144 144Zm384 0L528-480l144-144 51 51-57 57h198v72H666l57 57-51 51ZM144-576v-240h240v72H216v168h-72Zm600 0v-168H576v-72h240v240h-72Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </button>
+
+          <span class="gs-tool-divider"></span>
+
+          <!-- Alignments -->
+          <button class="gs-tool-btn" title="Căn ngang">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M144-144v-72h672v72H144Zm0-150v-72h480v72H144Zm0-150v-72h672v72H144Zm0-150v-72h480v72H144Zm0-150v-72h672v72H144Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Căn dọc">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M192-144v-72h576v72H192Zm288-144L288-480l51-51 105 105v-390h72v390l105-105 51 51-192 192Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" id="gs-btn-wrap" title="Xuống dòng tự động">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M570-192 432-330l138-138 51 51-52 51h103q29.83 0 50.91-21.12 21.09-21.12 21.09-51T722.91-489q-21.08-21-50.91-21H192v-72h480q60.48 0 102.24 41.76T816-438q0 60.48-41.76 102.24T672-294H570l51 51-51 51ZM192-294v-72h192v72H192Zm0-432v-72h576v72H192Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Xoay văn bản">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M192-228v-72h486l-33-33 51-51 120 120-120 120-51-51 33-33H192Zm63-156 163-432h76l163 432h-75l-39-110H369l-39 110h-75Zm137-173h129l-63-179h-4l-62 179Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </button>
+
+          <span class="gs-tool-divider"></span>
+
+          <!-- Insert and Data: Link, Comment, Chart, Filter, Filter Views, Functions, Input Tools -->
+          <button class="gs-tool-btn" title="Chèn đường liên kết (Ctrl+K)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M432-288H288q-79.68 0-135.84-56.23Q96-400.45 96-480.23 96-560 152.16-616q56.16-56 135.84-56h144v72H288q-50 0-85 35t-35 85q0 50 35 85t85 35h144v72Zm-96-156v-72h288v72H336Zm192 156v-72h144q50 0 85-35t35-85q0-50-35-85t-85-35H528v-72h144q79.68 0 135.84 56.23 56.16 56.22 56.16 136Q864-400 807.84-344 751.68-288 672-288H528Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Chèn nhận xét (Ctrl+Alt+M)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M444-384h72v-132h132v-72H516v-132h-72v132H312v72h132v132ZM96-96v-696q0-29.7 21.15-50.85Q138.3-864 168-864h624q29.7 0 50.85 21.15Q864-821.7 864-792v480q0 29.7-21.15 50.85Q821.7-240 792-240H240L96-96Zm114-216h582v-480H168v522l42-42Zm-42 0v-480 480Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Chèn biểu đồ">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M624-192v-288h144v288H624Zm-216 0v-576h144v576H408Zm-216 0v-384h144v384H192Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Tạo bộ lọc">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M456.18-192Q446-192 439-198.9t-7-17.1v-227L197-729q-9-12-2.74-25.5Q200.51-768 216-768h528q15.49 0 21.74 13.5Q772-741 763-729L528-443v227q0 10.2-6.88 17.1-6.89 6.9-17.06 6.9h-47.88ZM480-498l162-198H317l163 198Zm0 0Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Các chế độ xem bộ lọc">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M288-96q-35 0-53.5-18.5T216-168v-480q0-34 18.5-53t53.5-19h480q34 0 53 19t19 53v480q0 35-19 53.5T768-96H288Zm0-408h480v-144H288v144Zm192 168h96v-96h-96v96Zm0 168h96v-96h-96v96ZM288-336h120v-96H288v96Zm360 0h120v-96H648v96ZM288-168h120v-96H288v96Zm360 0h120v-96H648v96Zm-504-72q-27 0-49.5-24T72-323v-469q0-34 18.5-53t53.5-19h469q35 0 59 22.5t24 49.5H144v552Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Chức năng (Hàm số)">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M288-192v-86l206-202-206-202v-86h384v96H424l192 192-192 192h248v96H288Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
+          </button>
+          <button class="gs-tool-btn" title="Công cụ nhập liệu">
+            <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="M168-240q-29.7 0-50.85-21.15Q96-282.3 96-312v-336q0-29.7 21.15-50.85Q138.3-720 168-720h624q29.7 0 50.85 21.15Q864-677.7 864-648v336q0 29.7-21.15 50.85Q821.7-240 792-240H168Zm0-72h624v-336H168v336Zm168-24h288v-72H336v72Zm-96-120h72v-72h-72v72Zm102 0h72v-72h-72v72Zm102 0h72v-72h-72v72Zm102 0h72v-72h-72v72Zm102 0h72v-72h-72v72Zm-408-96h72v-72h-72v72Zm102 0h72v-72h-72v72Zm102 0h72v-72h-72v72Zm102 0h72v-72h-72v72Zm102 0h72v-72h-72v72ZM168-312v-336 336Z"/></svg>
+            <svg viewBox="0 -960 960 960" width="12" height="12" fill="currentColor"><path d="M480-384 288-576h384L480-384Z"/></svg>
           </button>
         </div>
 
+        <!-- Far Right Collapse Button -->
+        <button class="gs-tool-btn gs-collapse-btn" title="Ẩn các menu (Ctrl+Shift+F)">
+          <svg viewBox="0 -960 960 960" width="18" height="18" fill="currentColor"><path d="m291-336-51-51 240-240 240 240-51 51-189-189-189 189Z"/></svg>
+        </button>
       </div>
     </div>
 
@@ -273,24 +381,40 @@
       style="display: none"
     />
 
+    <!-- Google Sheets & Excel Formula Bar -->
     <div
       class="excel-formula-bar-container gsheet-excel-only"
       id="main-formula-bar"
     >
-      <div class="name-box" id="active-cell-address" title="Tọa độ ô">D1</div>
-      <div class="formula-actions">
-        <button class="formula-btn" title="Hủy">✕</button>
-        <button class="formula-btn" title="Nhập">✓</button>
-        <span class="fx-symbol" title="Hàm số"><i>fx</i></span>
+      <div class="name-box-wrapper" title="Hộp tên (Ctrl + J)">
+        <div class="name-box" id="active-cell-address">D1</div>
+        <svg width="8" height="6" viewBox="0 0 10 6" fill="currentColor" class="name-box-caret"><path d="M0 0L5 6L10 0Z"/></svg>
       </div>
+
+      <div class="formula-bar-divider"></div>
+
+      <div class="formula-fx-symbol" title="Hàm số">
+        <i>fx</i>
+      </div>
+
+      <div class="formula-bar-divider"></div>
+
       <div class="formula-input-wrapper">
         <input
           type="text"
           id="formula-input"
           class="formula-input"
-          placeholder="=VLOOKUP(Data_Key, Financial_Data, 4, FALSE)"
+          placeholder=""
           readonly
         />
+      </div>
+
+      <!-- Right Side Gemini Summarize Button -->
+      <div class="FormulaBarContainerGeminiSummarizeButton" title="Tóm tắt dữ liệu">
+        <svg class="geminiButtonIcon FormulaBarContainerGeminiButtonIcon" xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 -960 960 960" fill="none">
+          <path d="M480-80q0-83-31.5-156T363-363q-54-54-127-85.5T80-480q83 0 156-31.5T363-597q54-54 85.5-127T480-880q0 83 31.5 156T597-597q54 54 127 85.5T880-480q-83 0-156 31.5T597-363q-54 54-85.5 127T480-80Z" fill="#1F1F1F"/>
+        </svg>
+        <span class="FormulaBarContainerGeminiButtonLabel">Tóm tắt dữ liệu này</span>
       </div>
     </div>
 
@@ -1242,6 +1366,21 @@
               </div>
               <div class="duo-mission-check">✓</div>
             </div>
+
+            <!-- Theme 24: Jira -->
+            <div class="duo-mission-item" data-theme="theme-jira">
+              <div class="duo-mission-icon-box jira" style="background:transparent; padding:0;">
+                <svg width="34" height="34" viewBox="0 0 512 512" fill="none">
+                  <path d="M490.6 7.4H243.9c0 59.6 49.9 108 111.2 108h45.6v42.2c0 59.6 49.9 108 111.2 108V28.1c.1-11.7-9.2-20.7-21.3-20.7" fill="#2684ff"/>
+                  <path d="M368.7 126.5H121.9c0 59.6 49.9 108 111.2 108h45.6v42.9c0 59.6 49.9 108 111.2 108V147.3c.2-11.1-9.1-20.8-21.2-20.8" fill="#0052cc"/>
+                  <path d="M246.7 246.3H0c0 59.6 49.9 108 111.2 108h45.6v42.2c0 59.6 49.9 108 111.2 108V267.1c.1-11.8-9.9-20.8-21.3-20.8" fill="#0052cc"/>
+                </svg>
+              </div>
+              <div class="duo-mission-info">
+                <span class="duo-mission-title">Jira</span>
+              </div>
+              <div class="duo-mission-check">✓</div>
+            </div>
           </div>
 
           <!-- Nạp tài liệu (Nổi bật & Bắt buộc có truyện mới bắt đầu đọc) -->
@@ -1482,7 +1621,7 @@
     <!-- Toast Notification for Seamless Page Navigation -->
     <div id="page-flip-toast" class="page-flip-toast"></div>
 
-    <script src="app.js?v=20261013-5" defer></script>
+    <script src="app.js?v=20261013-7" defer></script>
   </body>
 </html>
 

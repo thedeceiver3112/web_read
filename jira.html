@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script src="version-check.js?v=20261013-9" data-app-version="20261013-9"></script>
+  <title>Board - Beyond Gravity - Jira</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20d%3D%22M490.6%207.4H243.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V28.1c.1-11.7-9.2-20.7-21.3-20.7%22%20fill%3D%22%232684ff%22/%3E%3Cpath%20d%3D%22M368.7%20126.5H121.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.9c0%2059.6%2049.9%20108%20111.2%20108V147.3c.2-11.1-9.1-20.8-21.2-20.8%22%20fill%3D%22%230052cc%22/%3E%3Cpath%20d%3D%22M246.7%20246.3H0c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V267.1c.1-11.8-9.9-20.8-21.3-20.8%22%20fill%3D%22%230052cc%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=20261013-9">
+  <script src="static/pdf.min.js" defer></script>
+</head>
+<body class="theme-jira">
+
+  <div class="jira-app-container">
+    <!-- 1. TOP GLOBAL NAVIGATION (Atlassian Suite, exact screenshot layout) -->
+    <header class="jira-top-nav">
+      <div class="jira-nav-left">
+        <button class="jira-app-switcher" title="App switcher">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="5" cy="5" r="2.2"/><circle cx="12" cy="5" r="2.2"/><circle cx="19" cy="5" r="2.2"/>
+            <circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/>
+            <circle cx="5" cy="19" r="2.2"/><circle cx="12" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/>
+          </svg>
+        </button>
+
+        <a href="javascript:void(0)" class="jira-logo-link" title="Jira">
+          <svg width="22" height="22" viewBox="0 0 512 512" fill="none">
+            <path d="M490.6 7.4H243.9c0 59.6 49.9 108 111.2 108h45.6v42.2c0 59.6 49.9 108 111.2 108V28.1c.1-11.7-9.2-20.7-21.3-20.7" fill="#2684ff"/>
+            <path d="M368.7 126.5H121.9c0 59.6 49.9 108 111.2 108h45.6v42.9c0 59.6 49.9 108 111.2 108V147.3c.2-11.1-9.1-20.8-21.2-20.8" fill="#0052cc"/>
+            <path d="M246.7 246.3H0c0 59.6 49.9 108 111.2 108h45.6v42.2c0 59.6 49.9 108 111.2 108V267.1c.1-11.8-9.9-20.8-21.3-20.8" fill="#0052cc"/>
+          </svg>
+          <span class="jira-logo-text">Jira</span>
+        </a>
+
+        <nav class="jira-nav-links">
+          <button class="jira-nav-item">Your work <span class="jira-chevron">▾</span></button>
+          <button class="jira-nav-item active">Projects <span class="jira-chevron">▾</span></button>
+          <button class="jira-nav-item">Filter <span class="jira-chevron">▾</span></button>
+          <button class="jira-nav-item">Dashboards <span class="jira-chevron">▾</span></button>
+          <button class="jira-nav-item">Teams <span class="jira-chevron">▾</span></button>
+          <button class="jira-nav-item">Plans <span class="jira-chevron">▾</span></button>
+          <button class="jira-nav-item">Apps <span class="jira-chevron">▾</span></button>
+          <button class="jira-btn-create">Create</button>
+        </nav>
+      </div>
+
+      <div class="jira-nav-right">
+        <div class="jira-search-bar" title="Search (/)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" placeholder="Search" readonly spellcheck="false" />
+        </div>
+
+        <button class="jira-icon-btn" title="Deployments &amp; Discover">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+            <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+            <path d="M9 12H4s.55-3.03 2-4.5c1.26-1.28 3.03-1.5 3.03-1.5"/>
+            <path d="M12 15v5s3.03-.55 4.5-2c1.28-1.26 1.5-3.03 1.5-3.03"/>
+          </svg>
+        </button>
+
+        <button class="jira-icon-btn" title="Help">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+
+        <button class="jira-icon-btn" title="Settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <div class="jira-user-avatar" title="Account: Minh Quân (Tech Lead)">
+          <div class="jira-avatar-photo">MQ</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. MAIN LAYOUT (SIDEBAR + MAIN WORKSPACE) -->
+    <div class="jira-layout-body">
+      <!-- SIDEBAR (Beyond Gravity Software project) -->
+      <aside class="jira-sidebar" id="jira-sidebar">
+        <div class="jira-sidebar-project-header">
+          <div class="jira-project-avatar beyond-gravity">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+              <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+            </svg>
+          </div>
+          <div class="jira-project-meta">
+            <h3 class="jira-project-name">Beyond Gravity</h3>
+            <span class="jira-project-type">Software project</span>
+          </div>
+        </div>
+
+        <nav class="jira-sidebar-menu">
+          <div class="jira-menu-section-label">PLANNING</div>
+          <a href="javascript:void(0)" class="jira-sidebar-link">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 6-6"/></svg>
+            <span>Roadmap</span>
+          </a>
+          <a href="javascript:void(0)" class="jira-sidebar-link">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            <span>Backlog</span>
+          </a>
+          <a href="javascript:void(0)" class="jira-sidebar-link active">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="18" rx="1"/><rect x="17" y="3" width="5" height="18" rx="1"/></svg>
+            <span>Board</span>
+          </a>
+          <a href="javascript:void(0)" class="jira-sidebar-link">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-3 3"/></svg>
+            <span>Reports</span>
+          </a>
+          <a href="javascript:void(0)" class="jira-sidebar-link">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="11" y2="17"/></svg>
+            <span>Issues</span>
+          </a>
+
+          <div class="jira-menu-section-label">DEVELOPMENT</div>
+          <a href="javascript:void(0)" class="jira-sidebar-link">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            <span>Code</span>
+          </a>
+          <a href="javascript:void(0)" class="jira-sidebar-link">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Security</span>
+          </a>
+          <a href="javascript:void(0)" class="jira-sidebar-link">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/><circle cx="12" cy="12" r="4"/></svg>
+            <span>Releases</span>
+          </a>
+
+          <a href="javascript:void(0)" class="jira-sidebar-link jira-sb-bottom">
+            <svg class="jira-sb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Project settings</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN WORKSPACE -->
+      <main class="jira-main-content">
+
+        <!-- A. FULL KANBAN BOARD CONTAINER (Exact Beyond Gravity Board layout from screenshot) -->
+        <div class="jira-board-view" id="jira-boss-view" style="display: none;">
+          <!-- BOARD HEADER & BREADCRUMBS -->
+          <div class="jira-board-top-section">
+            <div class="jira-board-breadcrumbs">
+              <span>Projects</span> / <span>Beyond Gravity</span>
+            </div>
+            <div class="jira-board-title-row">
+              <h1 class="jira-board-title">Board</h1>
+              <div class="jira-board-title-actions">
+                <button class="jira-icon-btn star-btn" title="Add to favorites">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </button>
+                <button class="jira-icon-btn" title="Board actions">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- BOARD FILTER & TOOLBAR -->
+            <div class="jira-board-toolbar">
+              <div class="jira-board-toolbar-left">
+                <div class="jira-board-search-box">
+                  <input type="text" placeholder="" readonly />
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+
+                <!-- Avatar stack -->
+                <div class="jira-avatar-stack">
+                  <div class="jira-stack-avatar a1"></div>
+                  <div class="jira-stack-avatar a2"></div>
+                  <div class="jira-stack-avatar a3"></div>
+                  <div class="jira-stack-avatar a4"></div>
+                  <div class="jira-stack-avatar more">+3</div>
+                </div>
+
+                <button class="jira-pill-filter">Epic <span class="jira-chevron">▾</span></button>
+              </div>
+
+              <div class="jira-board-toolbar-right">
+                <div class="jira-group-by-wrap">
+                  <span class="jira-group-by-label">GROUP BY</span>
+                  <button class="jira-pill-filter">None <span class="jira-chevron">▾</span></button>
+                </div>
+
+                <button class="jira-btn-insights">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  <span>Insights</span>
+                </button>
+
+                <button class="jira-icon-btn btn-add-col" title="Add column">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- THE 4 KANBAN BOARD COLUMNS (Identical cards from screenshot) -->
+          <div class="jira-kanban-board-scroll">
+            <div class="jira-kanban-columns">
+
+              <!-- COL 1: TO DO 6 -->
+              <div class="jira-board-col">
+                <div class="jira-col-header">
+                  <span class="jira-col-name">TO DO</span>
+                  <span class="jira-col-count">6</span>
+                </div>
+                <div class="jira-col-cards">
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Optimize experience for mobile web</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-blue">BILLING</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-344</span>
+                      </div>
+                      <div class="jira-card-avatar a1"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Onboard workout options (OWO)</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-green">ACCOUNTS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-360</span>
+                      </div>
+                      <div class="jira-card-avatar a2"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Multi-dest search UI mobileweb</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-green">ACCOUNTS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-337</span>
+                      </div>
+                      <div class="jira-card-avatar a3"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Billing system integration - frontend</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-purple">FORMS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-339</span>
+                      </div>
+                      <div class="jira-card-avatar a4"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Account settings defaults</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-green">ACCOUNTS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-340</span>
+                      </div>
+                      <div class="jira-card-avatar a3"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COL 2: IN PROGRESS 6 -->
+              <div class="jira-board-col">
+                <div class="jira-col-header">
+                  <span class="jira-col-name">IN PROGRESS</span>
+                  <span class="jira-col-count">6</span>
+                </div>
+                <div class="jira-col-cards">
+                  <!-- Active Reading Card -->
+                  <div class="jira-kanban-card active-card" id="btn-open-issue-reader" title="Click to open Technical Specification Reader">
+                    <div class="jira-card-summary">Fast trip search</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-purple">ACCOUNTS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key highlight">NUC-342</span>
+                      </div>
+                      <div class="jira-card-avatar a3"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Affelite links integration - frontend</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-blue">BILLING</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-336</span>
+                      </div>
+                      <div class="jira-card-avatar a1"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Shopping cart purchasing error - quick fix required</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-purple">FORMS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-341</span>
+                      </div>
+                      <div class="jira-card-avatar a2"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COL 3: IN REVIEW 6 -->
+              <div class="jira-board-col">
+                <div class="jira-col-header">
+                  <span class="jira-col-name">IN REVIEW</span>
+                  <span class="jira-col-count">6</span>
+                </div>
+                <div class="jira-col-cards">
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Revise and streamline booking flow</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-green">ACCOUNTS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-367</span>
+                      </div>
+                      <div class="jira-card-avatar a4"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Travel suggestion experiments</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-green">ACCOUNTS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-358</span>
+                      </div>
+                      <div class="jira-card-avatar a2"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Ongoing customer satisfaction</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-green">ACCOUNTS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-354</span>
+                      </div>
+                      <div class="jira-card-avatar a4"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card">
+                    <div class="jira-card-summary">Planet Taxi Device exploration &amp; research</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-yellow">FEEDBACK</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-351</span>
+                      </div>
+                      <div class="jira-card-avatar a1"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- COL 4: DONE 6 -->
+              <div class="jira-board-col">
+                <div class="jira-col-header">
+                  <span class="jira-col-name">DONE <span class="jira-check-green">✓</span></span>
+                  <span class="jira-col-count">6</span>
+                </div>
+                <div class="jira-col-cards">
+                  <div class="jira-kanban-card done">
+                    <div class="jira-card-summary">High outage: Software bug fix - BG Web-store app crashing</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-blue">BILLING</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-340</span>
+                      </div>
+                      <div class="jira-card-avatar a3"></div>
+                    </div>
+                  </div>
+
+                  <div class="jira-kanban-card done">
+                    <div class="jira-card-summary">Web-store purchasing performance issue fix.....t</div>
+                    <div class="jira-card-badge-row">
+                      <span class="jira-pill-tag tag-purple">FORMS</span>
+                    </div>
+                    <div class="jira-card-footer">
+                      <div class="jira-card-key-wrap">
+                        <span class="jira-story-icon">🔖</span>
+                        <span class="jira-tag-key">NUC-341</span>
+                      </div>
+                      <div class="jira-card-avatar a1"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- B. ISSUE DETAIL READING PANE (NUC-342 Story Spec Reader) -->
+        <div class="jira-story-layout" id="jira-story-view">
+          <!-- BREADCRUMBS & TOP ACTIONS BAR -->
+          <div class="jira-subnav-bar">
+            <div class="jira-breadcrumbs">
+              <span>Projects</span> / <span>Beyond Gravity</span> / <span class="jira-issue-key" id="jira-issue-key-badge">NUC-342</span>
+            </div>
+            <div class="jira-subnav-actions">
+              <button class="jira-btn-subaction" id="btn-jira-view-board" title="View Full Board (ESC)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="18" rx="1"/><rect x="17" y="3" width="5" height="18" rx="1"/></svg>
+                <span>Board (ESC)</span>
+              </button>
+              <button class="jira-btn-subaction" title="Watch issue">👁 Watch (8)</button>
+              <button class="jira-btn-subaction" title="Share issue">🔗 Share</button>
+              <button class="jira-btn-subaction" title="Actions">•••</button>
+            </div>
+          </div>
+
+          <!-- ISSUE SCROLL CONTAINER -->
+          <div class="jira-issue-scroll-container" id="jira-issue-scroll-container">
+            <div class="jira-issue-page-layout">
+              <!-- LEFT COLUMN: TICKET TITLE, DESCRIPTION & COMMENTS -->
+              <div class="jira-issue-main-col">
+                <div class="jira-issue-summary-box">
+                  <div class="jira-issue-type-badge">
+                    <span class="jira-type-icon story">🔖</span>
+                    <span class="jira-type-label">Story / Technical Specification</span>
+                  </div>
+                  <h1 class="jira-issue-title stealth-editable" id="jira-doc-title" contenteditable="true" spellcheck="false" title="Click to rename" data-stealth-key="stealth_title_jira">[NUC-342] Fast trip search</h1>
+                </div>
+
+                <div class="jira-issue-actions-bar">
+                  <button class="jira-pill-action active">
+                    <span class="jira-pill-icon">✏️</span> Description &amp; Activity
+                  </button>
+                  <button class="jira-pill-action">
+                    <span class="jira-pill-icon">📎</span> Attach
+                  </button>
+                  <button class="jira-pill-action">
+                    <span class="jira-pill-icon">🔗</span> Link issue
+                  </button>
+                  <button class="jira-pill-action">
+                    <span class="jira-pill-icon">⚡</span> Automations
+                  </button>
+                </div>
+
+                <!-- DESCRIPTION BOX -->
+                <div class="jira-section-card">
+                  <div class="jira-section-header">
+                    <h3>Technical Specification &amp; Activity Log</h3>
+                  </div>
+                  <div class="jira-desc-prologue">
+                    <p><b>Goal:</b> Refactor search engine indexing, optimize mobile client response times, and stream continuous audit logs.</p>
+                    <p class="jira-desc-note">📌 <i>Continuous Specification Stream (Scroll to automatically load subsequent sections):</i></p>
+                  </div>
+
+                  <!-- MAIN STORY STREAM IN JIRA -->
+                  <div class="jira-story-stream" id="jira-story-stream">
+                    <!-- Rendered continuously by app.js -->
+                  </div>
+                </div>
+
+                <!-- COMMENTS SECTION -->
+                <div class="jira-section-card jira-comments-card">
+                  <div class="jira-section-header">
+                    <h3>Activity &amp; Discussion</h3>
+                    <div class="jira-activity-tabs">
+                      <button class="jira-tab-btn active">All</button>
+                      <button class="jira-tab-btn">Comments</button>
+                      <button class="jira-tab-btn">History</button>
+                    </div>
+                  </div>
+
+                  <div class="jira-comment-input-box">
+                    <div class="jira-avatar-sm">MQ</div>
+                    <input type="text" class="jira-comment-fake-input" placeholder="Add a comment..." readonly />
+                  </div>
+
+                  <div class="jira-sample-comments">
+                    <div class="jira-comment-item">
+                      <div class="jira-avatar-sm qa">QA</div>
+                      <div class="jira-comment-content">
+                        <div class="jira-comment-author">
+                          <strong>Lê Tuấn Hưng (QA Lead)</strong>
+                          <span>2 hours ago</span>
+                        </div>
+                        <p>Verified test suite and performance criteria. Specification verified and approved.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RIGHT COLUMN: SIDEBAR METADATA -->
+              <div class="jira-issue-side-col">
+                <div class="jira-meta-card">
+                  <div class="jira-meta-field">
+                    <label class="jira-meta-label">STATUS</label>
+                    <div class="jira-status-badge in-progress" title="In Progress">
+                      <span>IN PROGRESS</span> ▾
+                    </div>
+                  </div>
+                </div>
+
+                <div class="jira-meta-card">
+                  <h4 class="jira-card-title">Details</h4>
+
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Assignee</span>
+                    <div class="jira-user-cell">
+                      <div class="jira-avatar-sm" style="background:#0052cc;">MQ</div>
+                      <span>Minh Quân (Tech Lead)</span>
+                    </div>
+                  </div>
+
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Reporter</span>
+                    <div class="jira-user-cell">
+                      <div class="jira-avatar-sm" style="background:#5243aa;">SC</div>
+                      <span>Sarah Chen (Product Owner)</span>
+                    </div>
+                  </div>
+
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Priority</span>
+                    <div class="jira-priority-cell">
+                      <span class="jira-priority-icon">🔴</span>
+                      <span>High</span>
+                    </div>
+                  </div>
+
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Story Points</span>
+                    <div class="jira-meta-val badge-gray">5</div>
+                  </div>
+
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Sprint</span>
+                    <div class="jira-meta-val link-blue">Beyond Gravity Sprint 14</div>
+                  </div>
+
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Labels</span>
+                    <div class="jira-labels-wrap">
+                      <span class="jira-label-pill">accounts</span>
+                      <span class="jira-label-pill">search</span>
+                      <span class="jira-label-pill">frontend</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="jira-meta-card">
+                  <h4 class="jira-card-title">Dates</h4>
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Created</span>
+                    <div class="jira-meta-val">Yesterday at 09:15</div>
+                  </div>
+                  <div class="jira-meta-field">
+                    <span class="jira-meta-label">Updated</span>
+                    <div class="jira-meta-val">12 minutes ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-spinner" style="display: none;">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p id="loading-status-text">Loading issue data...</p>
+    </div>
+  </div>
+
+  <!-- Floating Quick Controls Visibility Toggle -->
+  <button id="btn-toggle-ctrls-floating" class="floating-stealth-toggle" title="Toggle Reading Controls (Shortcut: H)">
+    <span class="stealth-toggle-icon">👁</span>
+    <span class="stealth-toggle-text">Controls (H)</span>
+  </button>
+
+  <!-- Toast Notification for Seamless Page Navigation -->
+  <div id="page-flip-toast" class="page-flip-toast"></div>
+
+  <script src="app.js?v=20261013-9" defer></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cardReader = document.getElementById('btn-open-issue-reader');
+      const btnViewBoard = document.getElementById('btn-jira-view-board');
+
+      if (cardReader) {
+        cardReader.addEventListener('click', () => {
+          if (typeof toggleBossKey === 'function') {
+            toggleBossKey();
+          }
+        });
+      }
+
+      if (btnViewBoard) {
+        btnViewBoard.addEventListener('click', () => {
+          if (typeof toggleBossKey === 'function') {
+            toggleBossKey();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

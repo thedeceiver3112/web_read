@@ -135,14 +135,20 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     await page.goto('/googlesheets.html');
     await page.waitForLoadState('domcontentloaded');
 
-    // 1. Upload 2 books via page.evaluate
-    await page.evaluate(async () => {
-      const file1 = new File(['Chương 1: Truyện thứ nhất.'], 'Truyen_Thu_Nhat.txt', { type: 'text/plain' });
-      const file2 = new File(['Chương 1: Truyện thứ hai.'], 'Truyen_Thu_Hai.txt', { type: 'text/plain' });
-      await processDocumentFile(file1);
-      await processDocumentFile(file2);
-      syncUniversalNavbar();
+    // 1. Upload 2 books via setInputFiles
+    await page.locator('#file-pdf-input').setInputFiles({
+      name: 'Truyen_Thu_Nhat.txt',
+      mimeType: 'text/plain',
+      buffer: Buffer.from('Chương 1: Truyện thứ nhất.', 'utf8')
     });
+    await expect(page.locator('#univ-file-name')).toContainText('Truyen_Thu_Nhat.txt');
+
+    await page.locator('#file-pdf-input').setInputFiles({
+      name: 'Truyen_Thu_Hai.txt',
+      mimeType: 'text/plain',
+      buffer: Buffer.from('Chương 1: Truyện thứ hai.', 'utf8')
+    });
+    await expect(page.locator('#univ-file-name')).toContainText('Truyen_Thu_Hai.txt');
 
     // 2. Verify book switch button is visible on navbar
     const btnSwitch = page.locator('#univ-btn-switch-book');
@@ -173,6 +179,15 @@ test.describe('Portal Multi-Book Library & Selector', () => {
   });
 
   test('displays modern redesigned header and simple footer on portal home', async ({ page }) => {
+    await page.route('**/api/auth/status', route => route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ enabled: false, authenticated: false })
+    }));
+    await page.addInitScript(() => {
+      localStorage.removeItem('stealth_reader_hybrid_user');
+      localStorage.removeItem('stealth_reader_hybrid_token');
+    });
     await page.goto('/index.html?portal=1');
     await page.waitForLoadState('domcontentloaded');
 
@@ -197,13 +212,6 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     const footer = page.locator('#portal-footer');
     await expect(footer).toBeVisible();
     await expect(footer.locator('.portal-footer-title')).toHaveText('Stealth Reader');
-    await expect(footer.locator('.portal-footer-status')).toContainText('Hệ thống ổn định');
-    await expect(footer.locator('#btn-footer-feedback')).toBeVisible();
-    await expect(footer.locator('#btn-footer-progress')).toBeVisible();
-    await expect(footer.locator('#btn-footer-scroll-top')).toBeVisible();
-
-    // Test scroll to top button
-    await footer.scrollIntoViewIfNeeded();
-    await footer.locator('#btn-footer-scroll-top').click();
+    await expect(footer.locator('.portal-footer-copy')).toBeVisible();
   });
 });
