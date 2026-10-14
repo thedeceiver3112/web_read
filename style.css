@@ -1281,6 +1281,13 @@ body.theme-googlesheets .story-cell.cell-focused {
 }
 body.theme-excel .story-cell.cell-focused { outline-color: var(--excel-green); }
 
+body.theme-excel .story-cell {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  overflow: hidden;
+}
+
 .story-cell.cell-focused::after {
   content: "";
   position: absolute;
@@ -16529,3 +16536,17 @@ body.theme-jira *::after {
   border-radius: 3px;
 }
 
+/* Reduce GPU-heavy effects automatically on low-memory/low-core devices. */
+html.performance-lite *,
+html.performance-lite *::before,
+html.performance-lite *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+}
+
+html.performance-lite *:not(.spinner):not(.portal-btn-spinner):not(.version-reload-icon) {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+}

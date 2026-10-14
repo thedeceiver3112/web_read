@@ -5,18 +5,62 @@
  * Boss Key (ESC), Auto-advance, and local persistence.
  */
 
-// Initialize PDF.js worker safely
-if (window.pdfjsLib) {
+let pdfLibraryPromise = null;
+
+function configurePdfLibrary() {
+  if (!window.pdfjsLib) return null;
   try {
     if (window.location.protocol !== 'file:') {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'static/pdf.worker.min.js';
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'static/pdf.worker.min.js';
     } else {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = '';
     }
   } catch (e) {
     console.warn('PDF.js worker fallback:', e);
   }
+  return window.pdfjsLib;
 }
+
+function ensurePdfLibrary() {
+  if (window.pdfjsLib) return Promise.resolve(configurePdfLibrary());
+  if (pdfLibraryPromise) return pdfLibraryPromise;
+
+  pdfLibraryPromise = new Promise((resolve, reject) => {
+    const existingScript = document.querySelector('script[data-stealth-pdfjs]');
+    const script = existingScript || document.createElement('script');
+    const handleLoad = () => {
+      const library = configurePdfLibrary();
+      if (library) resolve(library);
+      else reject(new Error('PDF.js tải xong nhưng không khởi tạo được.'));
+    };
+    const handleError = () => reject(new Error('Không tải được thư viện PDF.js.'));
+
+    script.addEventListener('load', handleLoad, { once: true });
+    script.addEventListener('error', handleError, { once: true });
+    if (!existingScript) {
+      script.src = 'static/pdf.min.js';
+      script.async = true;
+      script.dataset.stealthPdfjs = 'true';
+      document.head.appendChild(script);
+    }
+  }).catch(error => {
+    pdfLibraryPromise = null;
+    throw error;
+  });
+
+  return pdfLibraryPromise;
+}
+
+function enableLowPerformanceMode() {
+  const memory = Number(window.navigator.deviceMemory) || 0;
+  const cores = Number(window.navigator.hardwareConcurrency) || 0;
+  const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if ((memory > 0 && memory <= 4) || (cores > 0 && cores <= 4) || prefersReducedMotion) {
+    document.documentElement.classList.add('performance-lite');
+  }
+}
+
+enableLowPerformanceMode();
 
 // Application State - Continuous Infinite Reading Architecture
 const state = {
@@ -42,13 +86,14 @@ const state = {
   searchResultCursor: -1,
   
   // Progressive infinite rendering
+  renderStartIndex: 0,
   renderedCount: 0,
-  BATCH_SIZE: 100, // Render 100 chunks at a time for silky 60fps performance
+  BATCH_SIZE: 60,
   currentGlobalIndex: 0,
   
   readingMode: 'grid', // 'grid' | 'formula'
   chunkMode: 'paragraph', // 'line' | 'paragraph' | 'sentence'
-  layoutMode: 'exact', // 'exact' (giữ nguyên dòng gốc) | 'wrap' (tự co giãn) | 'custom' (cố định số chữ)
+  layoutMode: 'wrap', // 'exact' (giữ nguyên dòng gốc) | 'wrap' (tự co giãn) | 'custom' (cố định số chữ)
   maxCharsPerLine: 80,
   preserveIndents: true,
   compactBlankLines: false,
@@ -64,7 +109,7 @@ const state = {
   isBold: false,
   isItalic: false,
   textDimLevel: 100,
-  wrapText: false,
+  wrapText: true,
   
   // Stealth disguise titles (persisted in localStorage)
   gsheetTitle: localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3',
@@ -264,6 +309,7 @@ const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
 const DOCUMENT_CACHE_STORE_NAME = 'documents';
 const ACTIVE_DOCUMENT_CACHE_KEY = 'active-document';
 const ACTIVE_DOCUMENT_SESSION_KEY = 'stealth_active_document_v2';
+const MAX_INLINE_SESSION_CACHE_CHARS = 600000;
 const READING_BOOKMARKS_STORAGE_KEY = 'stealth_reader_bookmarks_v1';
 const HYBRID_SETTINGS_UPDATED_KEY = 'stealth_sync_settings_updated_v1';
 const HYBRID_SETTINGS_SIGNATURE_KEY = 'stealth_sync_settings_signature_v1';
@@ -1127,10 +1173,12 @@ function applyCachedDocument(cache) {
   if (!isValidCachedDocument(cache)) return false;
 
   const previousDocumentName = state.pdfFileName;
-  state.allChunks = cache.chunks.map(chunk => ({
-    ...chunk,
-    text: cleanAndRepairVietnameseText(chunk.text || '')
-  }));
+  state.allChunks = Number(cache.cacheVersion) >= 3
+    ? cache.chunks
+    : cache.chunks.map(chunk => ({
+      ...chunk,
+      text: cleanAndRepairVietnameseText(chunk.text || '')
+    }));
   state.pageStartIndices = cache.pageStartIndices || {};
   state.documentToc = Array.isArray(cache.documentToc) ? cache.documentToc : [];
   if (cache.documentImages && typeof cache.documentImages === 'object') {
@@ -1206,16 +1254,20 @@ function persistDocumentCache() {
     savedAt: Date.now()
   };
 
-  try {
-    sessionStorage.setItem(ACTIVE_DOCUMENT_SESSION_KEY, JSON.stringify(payload));
-  } catch (error) {
+  const imageCacheSize = Object.values(payload.documentImages || {}).reduce(
+    (total, image) => total + String(image?.src || '').length,
+    0
+  );
+  const inlineCacheSize = (payload.rawText?.length || 0) + imageCacheSize;
+  if (inlineCacheSize <= MAX_INLINE_SESSION_CACHE_CHARS && payload.chunks.length <= 1500) {
     try {
-      const lightPayload = { ...payload, documentImages: {} };
-      sessionStorage.setItem(ACTIVE_DOCUMENT_SESSION_KEY, JSON.stringify(lightPayload));
-    } catch (innerError) {
+      sessionStorage.setItem(ACTIVE_DOCUMENT_SESSION_KEY, JSON.stringify(payload));
+    } catch (error) {
       sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
-      console.info('Tài liệu vượt giới hạn sessionStorage, chuyển sang IndexedDB.', innerError);
+      console.info('Tài liệu vượt giới hạn sessionStorage, chuyển sang IndexedDB.', error);
     }
+  } else {
+    sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
   }
 
   documentCacheWritePromise = documentCacheWritePromise
@@ -1267,7 +1319,13 @@ function restoreChunksFromLegacySession() {
 async function restoreDocumentCache() {
   let restoredFromSession = false;
   try {
-    const sessionCache = JSON.parse(sessionStorage.getItem(ACTIVE_DOCUMENT_SESSION_KEY) || 'null');
+    const sessionRaw = sessionStorage.getItem(ACTIVE_DOCUMENT_SESSION_KEY);
+    if (sessionRaw && sessionRaw.length > MAX_INLINE_SESSION_CACHE_CHARS) {
+      sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
+    }
+    const sessionCache = sessionRaw && sessionRaw.length <= MAX_INLINE_SESSION_CACHE_CHARS
+      ? JSON.parse(sessionRaw)
+      : null;
     if (applyCachedDocument(sessionCache)) {
       restoredFromSession = true;
       const hasImagesInSession = sessionCache?.documentImages && Object.keys(sessionCache.documentImages).length > 0;
@@ -1790,8 +1848,8 @@ function renderSearchPanel(content) {
 
 function jumpToChunk(index, highlight = false) {
   const target = Math.min(Math.max(0, Number(index) || 0), Math.max(0, state.allChunks.length - 1));
-  if (target + 60 > state.renderedCount) renderNextBatch(Math.max(state.BATCH_SIZE, target + 60 - state.renderedCount));
-  setActiveRow(target, true);
+  const reRendered = ensureChunkRendered(target);
+  if (!reRendered) setActiveRow(target, true);
   if (highlight) {
     setTimeout(() => {
       const element = document.querySelector(`[data-index="${target}"]`);
@@ -1833,6 +1891,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   initTitleEditing();
   initStealthEditableElements();
   initEventListeners();
+  syncControls();
+  syncUniversalNavbar();
   initSheetTabs();
   initContinuousScrollListeners();
   initLandingPortal();
@@ -1849,7 +1909,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!restored) {
       state.pdfFileName = '';
       state.documentId = '';
-      initStoryFromChunks(SAMPLE_STORY_CHUNKS);
+      const portal = document.getElementById('landing-portal');
+      initStoryFromChunks(SAMPLE_STORY_CHUNKS, { render: !portal || portal.classList.contains('hidden') });
     } else {
       renderContinuousView(true);
       if (getCurrentBookmark()) {
@@ -1893,7 +1954,7 @@ function loadSavedState() {
       state.readingMode = (state.theme === 'theme-googlesheets') ? 'grid' : (data.readingMode || 'grid');
       state.autoScrollDelay = data.autoScrollDelay || 5000;
       state.textDimLevel = data.textDimLevel || 100;
-      state.wrapText = data.wrapText !== undefined ? data.wrapText : false;
+      state.wrapText = data.wrapText !== undefined ? data.wrapText : true;
       state.layoutMode = data.layoutMode || (state.wrapText ? 'wrap' : 'exact');
       state.chunkMode = data.chunkMode || 'paragraph';
       state.maxCharsPerLine = data.maxCharsPerLine || 80;
@@ -4655,7 +4716,7 @@ function initUniversalNavbar() {
         <div class="unav-dropdown-wrapper" id="univ-layout-dropdown-wrap">
           <button class="unav-btn unav-btn-layout" id="univ-btn-layout-options" title="Tùy chỉnh bố cục dòng & ngắt chữ (Giữ nguyên dòng gốc, cố định số chữ, giãn dòng...)">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
-            <span id="univ-layout-mode-label">Dòng gốc</span>
+            <span id="univ-layout-mode-label">Tự ngắt</span>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="unav-layout-dropdown-menu" id="univ-layout-dropdown-menu" style="display: none;"></div>
@@ -5755,7 +5816,7 @@ function applyStyles() {
 
   // Per-element pass: skip elements already styled with the current settings,
   // so appending a batch doesn't re-style (and re-layout) every rendered row.
-  const styleKey = `${state.fontFamily}|${state.fontSize}|${state.lineHeight}|${state.isBold}|${state.isItalic}|${state.layoutMode}|${state.preserveIndents}|${state.wrapText}`;
+  const styleKey = `${state.theme}|${state.fontFamily}|${state.fontSize}|${state.lineHeight}|${state.isBold}|${state.isItalic}|${state.layoutMode}|${state.preserveIndents}|${state.wrapText}`;
   const restyle = (selector, apply) => {
     document.querySelectorAll(selector).forEach(el => {
       if (el._styleKey === styleKey) return;
@@ -5771,8 +5832,17 @@ function applyStyles() {
   restyle('.story-cell', cell => {
     cell.style.fontWeight = state.isBold ? 'bold' : 'normal';
     cell.style.fontStyle = state.isItalic ? 'italic' : 'normal';
-    cell.style.whiteSpace = whiteSpaceVal;
-    cell.style.wordBreak = wordBreakVal;
+    if (state.theme === 'theme-excel') {
+      cell.style.whiteSpace = state.preserveIndents ? 'pre-wrap' : 'normal';
+      cell.style.wordBreak = 'break-word';
+      cell.style.overflowWrap = 'anywhere';
+      cell.style.overflow = 'hidden';
+    } else {
+      cell.style.whiteSpace = whiteSpaceVal;
+      cell.style.wordBreak = wordBreakVal;
+      cell.style.overflowWrap = '';
+      cell.style.overflow = '';
+    }
     if (state.fontFamily) cell.style.fontFamily = state.fontFamily;
     if (state.fontSize) cell.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) cell.style.lineHeight = state.lineHeight;
@@ -7093,7 +7163,8 @@ async function processPdfFile(file, documentId = '') {
 
   // Client-side fallback: render the first pages, then continue in background.
   try {
-    if (!window.pdfjsLib) throw new Error('Thư viện PDF.js chưa sẵn sàng');
+    showLoading('Đang chuẩn bị thư viện PDF...');
+    await ensurePdfLibrary();
 
     const arrayBuffer = await file.arrayBuffer();
     if (loadToken !== state.pdfLoadToken) return;
@@ -7354,7 +7425,7 @@ function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
   }
 }
 
-function initStoryFromChunks(chunks) {
+function initStoryFromChunks(chunks, options = {}) {
   state.allChunks = [];
   state.pageStartIndices = { 1: 0 };
   state.totalPages = 1;
@@ -7372,7 +7443,7 @@ function initStoryFromChunks(chunks) {
     });
   });
 
-  renderContinuousView(false, 0);
+  if (options.render !== false) renderContinuousView(false, 0);
   saveState();
 }
 
@@ -7413,16 +7484,23 @@ function getThemeRenderer() {
 }
 
 function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null) {
-  const targetIdx = (targetScrollIdx !== null) ? targetScrollIdx : (preserveActiveRow ? state.currentGlobalIndex : 0);
+  if (!state.allChunks.length) return;
+  const requestedTarget = (targetScrollIdx !== null) ? targetScrollIdx : (preserveActiveRow ? state.currentGlobalIndex : 0);
+  const targetIdx = Math.min(Math.max(0, Number(requestedTarget) || 0), state.allChunks.length - 1);
+  const renderBefore = 80;
+  const renderStart = Math.max(0, targetIdx - renderBefore);
 
-  state.renderedCount = 0;
   getThemeRenderer().streams.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.replaceChildren();
   });
 
-  // Render initial batch: up to targetIdx + 60, minimum 120 items
-  const initialBatchCount = Math.max(120, targetIdx + 60);
+  state.renderStartIndex = renderStart;
+  state.renderedCount = renderStart;
+  vscLineCounter = Math.max(1, renderStart * 4 + 1);
+
+  // Keep startup work bounded even when the saved position is near the end of a long book.
+  const initialBatchCount = Math.min(160, state.allChunks.length - renderStart);
   renderNextBatch(initialBatchCount);
 
   // Focus and scroll to active row
@@ -7434,6 +7512,21 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
 function renderNextBatch(count = 100) {
   getThemeRenderer().append(count);
   applyStyles();
+}
+
+function isChunkRendered(index) {
+  return index >= state.renderStartIndex && index < state.renderedCount;
+}
+
+function ensureChunkRendered(index, trailingItems = 60) {
+  if (!isChunkRendered(index)) {
+    renderContinuousView(false, index);
+    return true;
+  }
+  if (index + trailingItems > state.renderedCount && state.renderedCount < state.allChunks.length) {
+    renderNextBatch(Math.max(state.BATCH_SIZE, index + trailingItems - state.renderedCount));
+  }
+  return false;
 }
 
 // 1. Spreadsheet Renderer (Continuous Infinite Table)
@@ -8036,17 +8129,13 @@ function goToPage(pageNum) {
     return;
   }
 
-  // Make sure rows up to targetIdx are rendered
-  if (targetIdx + 60 > state.renderedCount) {
-    const needed = (targetIdx + 60) - state.renderedCount;
-    renderNextBatch(Math.max(needed, state.BATCH_SIZE));
-  }
+  const reRendered = ensureChunkRendered(targetIdx);
 
   state.currentPage = pageNum;
   state.currentGlobalIndex = targetIdx;
   suppressScrollSyncUntil = Date.now() + 1000;
   updatePaginationUI();
-  setActiveRow(targetIdx, true);
+  if (!reRendered) setActiveRow(targetIdx, true);
 
   showPageFlipToast(`📖 Đang xem <b>Trang ${pageNum} / ${state.totalPages}</b>`);
 }
@@ -8069,6 +8158,10 @@ function changePage(delta) {
 function navigateRow(delta) {
   const next = state.currentGlobalIndex + delta;
   if (next >= 0 && next < state.allChunks.length) {
+    if (!isChunkRendered(next)) {
+      renderContinuousView(false, next);
+      return;
+    }
     if (next >= state.renderedCount - 15) {
       renderNextBatch(state.BATCH_SIZE);
     }
@@ -8145,6 +8238,25 @@ function getActiveScrollContainer() {
 
 function handleContainerScroll(container) {
   if (!container || state.bossModeActive) return;
+
+  if (
+    container.scrollTop <= 80 &&
+    state.renderStartIndex > 0 &&
+    Date.now() >= suppressScrollSyncUntil
+  ) {
+    renderContinuousView(false, state.renderStartIndex - 1);
+    return;
+  }
+
+  // Long reading sessions can still accumulate many nodes. Recenter the
+  // rendered window before low-memory devices start paging heavily.
+  if (
+    state.renderedCount - state.renderStartIndex > 600 &&
+    state.currentGlobalIndex - state.renderStartIndex > 180
+  ) {
+    renderContinuousView(true, state.currentGlobalIndex);
+    return;
+  }
 
   // 1. Infinite scroll: check if near bottom to load next batch (expanded threshold for seamless continuous reading)
   const distanceToBottom = container.scrollHeight - (container.scrollTop + container.clientHeight);
@@ -8541,8 +8653,9 @@ async function resolveStoryImageSrc(imgKey, fallbackLabel = '') {
   } catch (_) {}
 
   // Lazy-load state.pdfDoc from lastUploadedPdfFile if needed
-  if (imgKey.startsWith('pdf_page_') && !state.pdfDoc && lastUploadedPdfFile && window.pdfjsLib) {
+  if (imgKey.startsWith('pdf_page_') && !state.pdfDoc && lastUploadedPdfFile) {
     try {
+      await ensurePdfLibrary();
       const ab = await lastUploadedPdfFile.arrayBuffer();
       state.pdfDoc = await window.pdfjsLib.getDocument({
         data: ab,

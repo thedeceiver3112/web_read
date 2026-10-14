@@ -16,6 +16,19 @@ function makeRawLineTextFile() {
 }
 
 test.describe('Layout & Line Customizer Options', () => {
+  test('uses Wrap Text as the default for a new user', async ({ page }) => {
+    await page.goto('/googlesheets.html');
+    await expect(page.locator('#universal-reader-navbar')).toBeVisible();
+
+    const defaults = await page.evaluate(() => ({
+      layoutMode: state.layoutMode,
+      wrapText: state.wrapText
+    }));
+    expect(defaults).toEqual({ layoutMode: 'wrap', wrapText: true });
+    await expect(page.locator('#gs-btn-wrap')).toHaveClass(/active-toggle/);
+    await expect(page.locator('#univ-layout-mode-label')).toHaveText('Tự ngắt');
+  });
+
   test('allows switching layout modes and toggling exact line layout from universal navbar', async ({ page }, testInfo) => {
     await page.goto('/googlesheets.html');
     await expect(page.locator('#universal-reader-navbar')).toBeVisible();
