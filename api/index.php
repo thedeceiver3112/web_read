@@ -228,6 +228,63 @@ function decode_json_value($value, $fallback)
     return is_array($decoded) ? $decoded : $fallback;
 }
 
+function record_analytics_event(array $config, array $payload): bool
+{
+    $eventType = (string)($payload['eventType'] ?? '');
+    if (!in_array($eventType, ['visit', 'theme_view', 'identify'], true)) {
+        throw new InvalidArgumentException('Loại sự kiện thống kê không hợp lệ');
+    }
+
+    $visitorId = (string)($payload['visitorId'] ?? '');
+    $sessionId = (string)($payload['sessionId'] ?? '');
+    if (!preg_match('/^[A-Za-z0-9_-]{16,128}$/D', $visitorId)
+        || !preg_match('/^[A-Za-z0-9_-]{16,128}$/D', $sessionId)) {
+        throw new InvalidArgumentException('Mã phiên thống kê không hợp lệ');
+    }
+
+    $allowedThemes = [
+        'googlesheets', 'googledocs', 'excel', 'vscode', 'photoshop', 'blender',
+        'linkedin', 'autocad', 'zalo', 'figma', 'canva', 'powerpoint',
+        'thuvienphapluat', 'premiere', 'claude', 'chatgpt', 'teams', 'revit',
+        'misa', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack',
+    ];
+    $theme = $eventType === 'theme_view' ? (string)($payload['theme'] ?? '') : '';
+    if ($eventType === 'theme_view' && !in_array($theme, $allowedThemes, true)) {
+        throw new InvalidArgumentException('Giao diện thống kê không hợp lệ');
+    }
+
+    $path = substr((string)($payload['path'] ?? '/'), 0, 255);
+    if ($path === '' || $path[0] !== '/') {
+        $path = '/';
+    }
+    $secret = (string)$config['app_session_secret'];
+    $visitorHash = hash_hmac('sha256', $visitorId, $secret);
+    $sessionHash = hash_hmac('sha256', $sessionId, $secret);
+    $eventKey = hash_hmac('sha256', implode('|', [$eventType, $visitorHash, $sessionHash, $theme]), $secret);
+    $session = current_session($config);
+    $userId = $session ? (int)$session['id'] : null;
+
+    $pdo = db($config);
+    $pdo->beginTransaction();
+    try {
+        $stmt = $pdo->prepare(
+            'INSERT INTO analytics_events (event_key,visitor_hash,session_hash,user_id,event_type,theme,path) '
+            . 'VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE user_id=COALESCE(user_id,VALUES(user_id))'
+        );
+        $stmt->execute([$eventKey, $visitorHash, $sessionHash, $userId, $eventType, $theme, $path]);
+        $inserted = $stmt->rowCount() === 1;
+        if ($userId !== null) {
+            $stmt = $pdo->prepare('UPDATE analytics_events SET user_id=? WHERE visitor_hash=? AND user_id IS NULL');
+            $stmt->execute([$userId, $visitorHash]);
+        }
+        $pdo->commit();
+        return $inserted;
+    } catch (Throwable $error) {
+        $pdo->rollBack();
+        throw $error;
+    }
+}
+
 function pull_document(array $config, int $userId, string $key): array
 {
     $pdo = db($config);
@@ -312,6 +369,10 @@ try {
         json_response(200, ['enabled' => true, 'authenticated' => true, 'csrfToken' => $session['csrf_token'], 'user' => ['email' => $session['email'], 'displayName' => $session['display_name'], 'avatarUrl' => $session['avatar_url']]]);
     }
     if (!configured($config)) json_response(503, ['error' => 'Google Sync chưa được cấu hình trên server']);
+    if ($path === '/api/analytics/event' && $method === 'POST') {
+        $inserted = record_analytics_event($config, json_body());
+        json_response(202, ['ok' => true, 'recorded' => $inserted]);
+    }
     if ($path === '/api/auth/google/start' && $method === 'GET') {
         $state = signed_state((string)($_GET['return'] ?? '/'), (string)$config['app_session_secret']);
         set_secure_cookie(OAUTH_STATE_COOKIE, $state, 600);

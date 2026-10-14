@@ -10,7 +10,29 @@ bookmarks, and reader settings.
 2. Grant that user privileges only on this database.
 3. Review and run `db/migrations/001_hybrid_sync.sql` in phpMyAdmin.
 
+To enable privacy-friendly traffic and theme statistics, review and run
+`db/migrations/002_usage_analytics.sql` after migration 001. This migration
+creates one event table only. It does not store story content, filenames, raw
+IP addresses, or raw browser identifiers.
+
 The application does not run migrations or create tables automatically.
+
+## Usage analytics
+
+The browser records one `visit` per tab session and at most one `theme_view`
+for each theme opened during that session. A persistent random browser ID and
+the tab session ID are HMAC-hashed on the server before they are stored.
+Authenticated events are associated with the corresponding Google account.
+
+Run `db/reports/analytics_summary.sql` in phpMyAdmin to view:
+
+- unique browser profiles and visits;
+- signed-in Google users;
+- daily traffic;
+- theme popularity and usage percentage.
+
+“Unique browser” is an approximation. Clearing browser storage or using a
+different browser/device creates a new anonymous visitor.
 
 ## 2. Create Google OAuth credentials
 

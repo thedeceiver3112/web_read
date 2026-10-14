@@ -237,7 +237,8 @@ const THEME_PAGES = {
   'theme-sap': 'sap.html',
   'theme-gmail': 'gmail.html',
   'theme-outlook': 'outlook.html',
-  'theme-jira': 'jira.html'
+  'theme-jira': 'jira.html',
+  'theme-slack': 'slack.html'
 };
 
 // Single source of truth for per-page control id prefixes.
@@ -245,7 +246,7 @@ const THEME_PAGES = {
 // To add a theme, add its prefix here instead of editing every id list.
 const THEME_CONTROL_PREFIXES = [
   'gs', 'gdocs', 'excel', 'vsc', 'ps', 'blender', 'linkedin',
-  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook', 'jira'
+  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack'
 ];
 
 function themeControlIds(suffix) {
@@ -266,6 +267,10 @@ const ACTIVE_DOCUMENT_SESSION_KEY = 'stealth_active_document_v2';
 const READING_BOOKMARKS_STORAGE_KEY = 'stealth_reader_bookmarks_v1';
 const HYBRID_SETTINGS_UPDATED_KEY = 'stealth_sync_settings_updated_v1';
 const HYBRID_SETTINGS_SIGNATURE_KEY = 'stealth_sync_settings_signature_v1';
+const ANALYTICS_VISITOR_KEY = 'stealth_analytics_visitor_v1';
+const ANALYTICS_SESSION_KEY = 'stealth_analytics_session_v1';
+const ANALYTICS_VISIT_SENT_KEY = 'stealth_analytics_visit_sent_v1';
+const ANALYTICS_THEMES_SENT_KEY = 'stealth_analytics_themes_sent_v1';
 const MAX_SAVED_BOOKMARKS = 30;
 let documentCacheWritePromise = Promise.resolve();
 let activeDocumentWorker = null;
@@ -274,6 +279,72 @@ let activePdfLoadingTask = null;
 let lastFailedDocumentFile = null;
 let previousDocumentSnapshot = null;
 let textWorkerAvailabilityPromise = null;
+
+function createAnalyticsId(prefix) {
+  const value = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  return `${prefix}-${value}`;
+}
+
+function getOrCreateAnalyticsId(storage, key, prefix) {
+  try {
+    let value = storage.getItem(key);
+    if (!value) {
+      value = createAnalyticsId(prefix);
+      storage.setItem(key, value);
+    }
+    return value;
+  } catch (_) {
+    return createAnalyticsId(prefix);
+  }
+}
+
+function getAnalyticsTheme() {
+  const path = window.location.pathname.toLowerCase();
+  const isPortal = path.endsWith('/') || path.endsWith('/index.html') || !path.includes('.html');
+  return isPortal ? '' : getThemeForCurrentPage().replace(/^theme-/, '');
+}
+
+async function postAnalyticsEvent(eventType, theme = '') {
+  const visitorId = getOrCreateAnalyticsId(localStorage, ANALYTICS_VISITOR_KEY, 'visitor');
+  const sessionId = getOrCreateAnalyticsId(sessionStorage, ANALYTICS_SESSION_KEY, 'session');
+  try {
+    await fetch('/api/analytics/event', {
+      method: 'POST',
+      credentials: 'same-origin',
+      cache: 'no-store',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventType,
+        visitorId,
+        sessionId,
+        theme,
+        path: window.location.pathname.slice(0, 255)
+      })
+    });
+  } catch (_) {
+    // Analytics must never block local reading or display an error to the user.
+  }
+}
+
+function initializeUsageAnalytics() {
+  try {
+    if (sessionStorage.getItem(ANALYTICS_VISIT_SENT_KEY) !== '1') {
+      sessionStorage.setItem(ANALYTICS_VISIT_SENT_KEY, '1');
+      postAnalyticsEvent('visit');
+    }
+
+    const theme = getAnalyticsTheme();
+    if (!theme) return;
+    const sentThemes = new Set(JSON.parse(sessionStorage.getItem(ANALYTICS_THEMES_SENT_KEY) || '[]'));
+    if (sentThemes.has(theme)) return;
+    sentThemes.add(theme);
+    sessionStorage.setItem(ANALYTICS_THEMES_SENT_KEY, JSON.stringify([...sentThemes]));
+    postAnalyticsEvent('theme_view', theme);
+  } catch (_) {
+    // Storage can be disabled in private/restricted browser contexts.
+  }
+}
 
 function normalizeBookmarkEntry(raw, documentId = '') {
   if (!raw || typeof raw !== 'object') {
@@ -743,6 +814,7 @@ async function initializeHybridSync() {
     hybridSyncState.csrfToken = data.csrfToken || '';
     hybridSyncState.user = data.user || null;
     renderHybridAuthButton();
+    if (hybridSyncState.authenticated) postAnalyticsEvent('identify');
     if (hybridSyncState.authenticated && getCurrentDocumentId()) await pullHybridDocument();
   } catch (error) {
     console.info('Đồng bộ cloud không khả dụng, tiếp tục dùng dữ liệu local.', error);
@@ -887,6 +959,7 @@ function getThemeForCurrentPage() {
   if (path.endsWith('gmail.html')) return 'theme-gmail';
   if (path.endsWith('outlook.html')) return 'theme-outlook';
   if (path.endsWith('jira.html')) return 'theme-jira';
+  if (path.endsWith('slack.html')) return 'theme-slack';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -1252,6 +1325,7 @@ const FAVICONS = {
   'theme-gmail': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2038.5V13.8L24%2027.5l19.5-13.7v24.7c0%202.2-1.8%204-4%204H8.5c-2.2%200-4-1.8-4-4z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M43.5%2013.8v24.7c0%202.2-1.8%204-4%204h-5V20.5l9-6.7z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2013.8v24.7c0%202.2%201.8%204%204%204h5V20.5l-9-6.7z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M13.5%205.5L24%2014.5l10.5-9h-21z%22/%3E%3Cpath%20fill%3D%22%23FBBC05%22%20d%3D%22M4.5%209.5C4.5%207.3%206.3%205.5%208.5%205.5h5l-9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23C5221F%22%20d%3D%22M43.5%209.5c0-2.2-1.8-4-4-4h-5l9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M4.5%2013.8L24%2027.5%2043.5%2013.8%2024%2029%204.5%2013.8z%22/%3E%3C/svg%3E",
   'theme-outlook': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2214%22%20y%3D%228%22%20width%3D%2228%22%20height%3D%2232%22%20rx%3D%224%22%20fill%3D%22%230078D4%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10v22a4%204%200%200%201-4%204H18a4%204%200%200%201-4-4V14z%22%20fill%3D%22%2328A8EA%22%20opacity%3D%220.6%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Crect%20x%3D%226%22%20y%3D%2212%22%20width%3D%2222%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23005A9E%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2224%22%20r%3D%226.5%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223.2%22/%3E%3C/svg%3E",
   'theme-jira': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20d%3D%22M490.6%207.4H243.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V28.1c.1-11.7-9.2-20.7-21.3-20.7%22%20fill%3D%22%232684ff%22/%3E%3Cpath%20d%3D%22M368.7%20126.5H121.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.9c0%2059.6%2049.9%20108%20111.2%20108V147.3c.2-11.1-9.1-20.8-21.2-20.8%22%20fill%3D%22%230052cc%22/%3E%3Cpath%20d%3D%22M246.7%20246.3H0c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V267.1c.1-11.8-9.9-20.8-21.3-20.8%22%20fill%3D%22%230052cc%22/%3E%3C/svg%3E",
+  'theme-slack': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20122.8%20122.8%22%3E%3Cpath%20d%3D%22M25.8%2077.6c0%207.1-5.8%2012.9-12.9%2012.9S0%2084.7%200%2077.6s5.8-12.9%2012.9-12.9h12.9v12.9zm6.5%200c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9v32.3c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V77.6z%22%20fill%3D%22%23e01e5a%22/%3E%3Cpath%20d%3D%22M45.2%2025.8c-7.1%200-12.9-5.8-12.9-12.9S38.1%200%2045.2%200s12.9%205.8%2012.9%2012.9v12.9H45.2zm0%206.5c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H12.9C5.8%2058.1%200%2052.3%200%2045.2s5.8-12.9%2012.9-12.9h32.3z%22%20fill%3D%22%2336c5f0%22/%3E%3Cpath%20d%3D%22M97%2045.2c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9-5.8%2012.9-12.9%2012.9H97V45.2zm-6.5%200c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V12.9C77.6%205.8%2083.4%200%2090.5%200s12.9%205.8%2012.9%2012.9v32.3z%22%20fill%3D%22%232eb67d%22/%3E%3Cpath%20d%3D%22M77.6%2097c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9-5.8%2012.9-12.9-12.9V97h12.9zm0-6.5c-7.1%200-12.9-5.8-12.9-12.9s5.8-12.9%2012.9-12.9h32.3c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H77.6z%22%20fill%3D%22%23ecb22e%22/%3E%3C/svg%3E",
   'portal': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E",
 };
 
@@ -1751,6 +1825,7 @@ function showReaderError(title, summary, error = null, stage = '', file = lastFa
 document.addEventListener('DOMContentLoaded', async () => {
   ensureSharedReaderComponents();
   loadSavedState();
+  initializeUsageAnalytics();
   initUniversalNavbar();
   initReaderToolsUI();
   initThemeSystem();
@@ -2737,6 +2812,19 @@ function getThemePickerModalHTML() {
               <span class="theme-card-title">Jira</span>
               <div class="theme-card-check">✓</div>
             </div>
+            <!-- Theme 25: Slack -->
+            <div class="theme-card" data-theme="theme-slack">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 122.8 122.8">
+                  <path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="#e01e5a"/>
+                  <path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="#36c5f0"/>
+                  <path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C77.6 5.8 83.4 0 90.5 0s12.9 5.8 12.9 12.9v32.3z" fill="#2eb67d"/>
+                  <path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-5.8 12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ecb22e"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Slack</span>
+              <div class="theme-card-check">✓</div>
+            </div>
           </div>
         </div>
         <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
@@ -3214,6 +3302,12 @@ const THEME_DOC_CONFIGS = {
     defaultTitle: '[NUC-342] Fast trip search',
     formatTabTitle: (val) => val ? `${val} - Beyond Gravity - Jira` : 'Board - Beyond Gravity - Jira',
     titleId: 'jira-doc-title'
+  },
+  'theme-slack': {
+    prop: 'slackTitle',
+    defaultTitle: 'A1 Marketing',
+    formatTabTitle: (val) => val ? `social-media | ${val} | Slack` : 'social-media | A1 Marketing | Slack',
+    titleId: 'slack-doc-title'
   }
 };
 
@@ -5834,7 +5928,7 @@ const BOSS_VIEW_CONFIGS = [
   { story: 'canva-story-view', boss: 'canva-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
   { story: 'ppt-story-view', boss: 'ppt-boss-view', storyDisplay: 'flex', bossDisplay: 'flex' },
   { story: 'tvpl-story-view', boss: 'tvpl-boss-view', storyDisplay: '', bossDisplay: 'block' },
-  ...['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook', 'jira'].map(p => ({
+  ...['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack'].map(p => ({
     story: `${p}-story-view`,
     boss: `${p}-boss-view`,
     storyDisplay: '',
@@ -7309,6 +7403,7 @@ const THEME_RENDERERS = {
   'theme-gmail': { append: appendGmailBatch, streams: ['gmail-story-stream'] },
   'theme-outlook': { append: appendOutlookBatch, streams: ['outlook-story-stream'] },
   'theme-jira': { append: appendJiraBatch, streams: ['jira-story-stream'] },
+  'theme-slack': { append: appendSlackBatch, streams: ['slack-story-stream'] },
   // Google Sheets / Excel (spreadsheet table) is the default
   default: { append: appendSpreadsheetBatch, streams: ['story-tbody'] }
 };
@@ -7816,7 +7911,8 @@ const ACTIVE_ROW_SPECS = {
   'theme-sap': { id: 'sap-item-', cls: 'selected-sap-row' },
   'theme-gmail': { id: 'gmail-para-', cls: 'active-email-para' },
   'theme-outlook': { id: 'outlook-para-', cls: 'active-outlook-para' },
-  'theme-jira': { id: 'jira-log-item-', cls: 'active-jira-item' }
+  'theme-jira': { id: 'jira-log-item-', cls: 'active-jira-item' },
+  'theme-slack': { id: 'slack-msg-', cls: 'active-slack-msg' }
 };
 
 // Track the elements we marked so clearing is O(1) instead of scanning the whole rendered document.
@@ -8013,6 +8109,7 @@ function getActiveScrollContainer() {
     'theme-gmail': 'gmail-scroll-container',
     'theme-outlook': 'outlook-scroll-container',
     'theme-jira': 'jira-issue-scroll-container',
+    'theme-slack': 'slack-chat-scroll-container',
   };
   const id = containerMap[state.theme];
   if (id) {
@@ -8042,6 +8139,7 @@ function getActiveScrollContainer() {
          document.getElementById('premiere-transcript-scroll-container') ||
          document.getElementById('claude-chat-scroll-container') ||
          document.getElementById('chatgpt-chat-scroll-container') ||
+         document.getElementById('slack-chat-scroll-container') ||
          document.querySelector('.table-container');
 }
 
@@ -8115,7 +8213,8 @@ function initContinuousScrollListeners() {
     'sap-scroll-container',
     'gmail-scroll-container',
     'outlook-scroll-container',
-    'jira-issue-scroll-container'
+    'jira-issue-scroll-container',
+    'slack-chat-scroll-container'
   ];
 
   allContainerIds.forEach(id => {
@@ -8810,4 +8909,49 @@ function appendSAPBatch(count) {
     countEl.textContent = `Hiển thị ${state.renderedCount} hạng mục · SAP ALV Grid ME23N`;
   }
 }
+
+// 22. Slack Workspace Channel Chat Stream Batch Renderer (#social-media)
+const SLACK_TEAM_SENDERS = [
+  { name: 'Geeta Joshi', avatar: 'GJ', bg: '#5C2D91', isApp: false },
+  { name: 'Fathina Parveen', avatar: 'FP', bg: '#007A5A', isApp: false },
+  { name: 'A1 Marketing team', avatar: '31', bg: '#1264A3', isApp: true },
+  { name: 'Sandeep Mishra', avatar: 'SM', bg: '#DE6328', isApp: false },
+  { name: 'Rahul Khanna', avatar: 'RK', bg: '#4A154B', isApp: false },
+  { name: 'Faisal Hasan', avatar: 'FH', bg: '#2BAC76', isApp: false }
+];
+
+function appendSlackBatch(count) {
+  appendSimpleThemeBatch(count, 'slack-story-stream', chunk => {
+    const sender = SLACK_TEAM_SENDERS[chunk.globalIndex % SLACK_TEAM_SENDERS.length];
+    const hour = 11 + Math.floor((chunk.globalIndex * 5) / 60) % 8;
+    const min = (chunk.globalIndex * 11) % 60;
+    const timeStr = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+
+    const item = document.createElement('div');
+    item.className = 'slack-msg-item';
+    item.id = `slack-msg-${chunk.globalIndex}`;
+
+    const dateDivider = (chunk.indexInPage === 0)
+      ? `<div class="slack-date-divider"><span>Trang ${chunk.page} — #social-media updates</span></div>`
+      : '';
+
+    item.innerHTML = `
+      ${dateDivider}
+      <div class="slack-msg-avatar" style="background:${sender.bg};">
+        ${sender.isApp ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" fill="#fff"/><rect x="3" y="4" width="18" height="5" fill="#1264a3"/><text x="12" y="17" font-size="10" font-weight="bold" fill="#1264a3" text-anchor="middle">31</text></svg>' : sender.avatar}
+      </div>
+      <div class="slack-msg-content">
+        <div class="slack-msg-header">
+          <span class="slack-msg-sender">${sender.name}</span>
+          ${sender.isApp ? '<span class="slack-app-badge">APP</span>' : ''}
+          <span class="slack-msg-time">${timeStr}</span>
+          <span class="slack-msg-meta-tag">&bull; Trang ${chunk.page} #${chunk.globalIndex + 1}</span>
+        </div>
+        <div class="slack-msg-text">${formatChunkText(chunk.text)}</div>
+      </div>
+    `;
+    return item;
+  });
+}
+
 

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script src="version-check.js?v=20261013-9" data-app-version="20261013-9"></script>
+  <title>social-media | A1 Marketing | Slack</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20122.8%20122.8%22%3E%3Cpath%20d%3D%22M25.8%2077.6c0%207.1-5.8%2012.9-12.9%2012.9S0%2084.7%200%2077.6s5.8-12.9%2012.9-12.9h12.9v12.9zm6.5%200c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9v32.3c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V77.6z%22%20fill%3D%22%23e01e5a%22/%3E%3Cpath%20d%3D%22M45.2%2025.8c-7.1%200-12.9-5.8-12.9-12.9S38.1%200%2045.2%200s12.9%205.8%2012.9%2012.9v12.9H45.2zm0%206.5c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H12.9C5.8%2058.1%200%2052.3%200%2045.2s5.8-12.9%2012.9-12.9h32.3z%22%20fill%3D%22%2336c5f0%22/%3E%3Cpath%20d%3D%22M97%2045.2c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9-5.8%2012.9-12.9%2012.9H97V45.2zm-6.5%200c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V12.9C77.6%205.8%2083.4%200%2090.5%200s12.9%205.8%2012.9%2012.9v32.3z%22%20fill%3D%22%232eb67d%22/%3E%3Cpath%20d%3D%22M77.6%2097c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1%200-12.9-5.8-12.9-12.9s5.8-12.9%2012.9-12.9h32.3c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H77.6z%22%20fill%3D%22%23ecb22e%22/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=20261013-7">
+  <link rel="stylesheet" href="css/slack.css?v=20261013-9">
+  <script src="static/pdf.min.js" defer></script>
+</head>
+<body class="theme-slack">
+  <div class="slack-app">
+    <!-- Top Aubergine Titlebar matching user screenshot -->
+    <header class="slack-titlebar">
+      <div class="slack-titlebar-left">
+        <!-- Hamburger Menu -->
+        <button class="slack-hamburger-btn" title="Main menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <!-- Navigation Arrows -->
+        <div class="slack-nav-arrows">
+          <span class="slack-nav-arrow" title="Back">&larr;</span>
+          <span class="slack-nav-arrow" title="Forward">&rarr;</span>
+        </div>
+
+        <!-- History Clock Icon -->
+        <button class="slack-history-btn" title="History">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Center Search Capsule -->
+      <div class="slack-search-wrap">
+        <div class="slack-search-box">
+          <input type="text" class="slack-search-input" placeholder="Search A1 Marketing" readonly>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Right Controls -->
+      <div class="slack-titlebar-right">
+        <!-- Help Question Mark Icon -->
+        <button class="slack-help-btn" title="Help">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </button>
+
+        <!-- Window Controls -->
+        <div class="slack-win-controls">
+          <span class="slack-win-btn" title="Minimize">&minus;</span>
+          <span class="slack-win-btn" title="Maximize">&#9634;</span>
+          <span class="slack-win-btn close" title="Close">&times;</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace Body -->
+    <div class="slack-body">
+      <!-- 1. Leftmost Workspace Dock Rail (68px) -->
+      <nav class="slack-workspace-rail">
+        <!-- Workspace 1: AM (Selected) -->
+        <div class="slack-workspace-avatar ws-am1 active" title="A1 Marketing">
+          AM
+        </div>
+
+        <!-- Workspace 2: AL -->
+        <div class="slack-workspace-avatar ws-al" title="Atlas Labs">
+          AL
+        </div>
+
+        <!-- Workspace 3: AM with notification badge -->
+        <div class="slack-workspace-avatar ws-am2" title="Apex Media">
+          AM
+          <span class="slack-ws-badge">1</span>
+        </div>
+
+        <!-- Add Workspace Button -->
+        <div class="slack-add-workspace-btn" title="Add workspace">
+          +
+        </div>
+      </nav>
+
+      <!-- 2. Channels & DMs Sidebar (250px) -->
+      <aside class="slack-channel-sidebar">
+        <!-- Sidebar Workspace Header -->
+        <div class="slack-sidebar-header">
+          <div class="slack-sidebar-header-left">
+            <div class="slack-ws-name-row">
+              <span id="slack-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên" data-stealth-key="stealth_title_slack">A1 Marketing</span>
+              <span style="font-size: 11px;">&#9662;</span>
+            </div>
+            <div class="slack-user-status-row">
+              <span class="slack-online-dot"></span>
+              <span>Faisal Hasan</span>
+            </div>
+          </div>
+          <button class="slack-compose-btn" title="New message">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Sidebar Items Scrollable -->
+        <div class="slack-sidebar-scroll">
+          <div class="slack-nav-item">
+            <span class="slack-nav-icon">&#9776;</span>
+            <span>All unread</span>
+          </div>
+          <div class="slack-nav-item">
+            <span class="slack-nav-icon">&#128172;</span>
+            <span>Threads</span>
+          </div>
+          <div class="slack-nav-item">
+            <span class="slack-nav-icon">@</span>
+            <span>Mentions &amp; reactions</span>
+          </div>
+          <div class="slack-nav-item">
+            <span class="slack-nav-icon">&#9998;</span>
+            <span>Drafts</span>
+          </div>
+          <div class="slack-nav-item">
+            <span class="slack-nav-icon">&#8942;</span>
+            <span>Show more</span>
+          </div>
+
+          <!-- Section: Starred -->
+          <div class="slack-channel-section">
+            <div class="slack-section-header">
+              <span>&#9662; Starred</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>announcements</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>design-team</span>
+              <span class="slack-badge-count">1</span>
+            </div>
+            <!-- Active Channel: social-media -->
+            <div class="slack-nav-item active" id="btn-slack-channel-active" title="Channel đang hoạt động (Bấm để bật/tắt Boss Mode)">
+              <span class="slack-nav-icon">#</span>
+              <span>social-media</span>
+              <span style="margin-left: auto; font-size: 13px;">&#128065;</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>triage-issues</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-online-dot" style="margin-right: 2px;"></span>
+              <span>Kriti Sanyal</span>
+            </div>
+          </div>
+
+          <!-- Section: Channels -->
+          <div class="slack-channel-section">
+            <div class="slack-section-header">
+              <span>&#9662; Channels</span>
+              <button class="slack-section-plus">+</button>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>accounting</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>design-crit</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>design-team-sf</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>help-design</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>help-desk</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-nav-icon">#</span>
+              <span>media-and-pr</span>
+            </div>
+          </div>
+
+          <!-- Section: Direct messages -->
+          <div class="slack-channel-section">
+            <div class="slack-section-header">
+              <span>&#9662; Direct messages</span>
+              <button class="slack-section-plus">+</button>
+            </div>
+            <div class="slack-nav-item">
+              <span style="color:#e01e5a; font-size:13px; margin-right:4px;">&#9829;</span>
+              <span>Slackbot</span>
+            </div>
+            <div class="slack-nav-item">
+              <span class="slack-online-dot" style="margin-right: 2px;"></span>
+              <span>Faisal Hasan (you)</span>
+            </div>
+            <div class="slack-nav-item">
+              <span style="font-size: 11px; margin-right: 4px;">&#9632;</span>
+              <span>Fathina Parveen, Madhu...</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 3. Main Chat View -->
+      <main class="slack-chat-main">
+        <!-- Main Channel Header -->
+        <header class="slack-main-header">
+          <div class="slack-main-header-left">
+            <div class="slack-channel-title-row">
+              <span class="slack-channel-title"># social-media</span>
+              <span style="font-size: 11px; color: #616061;">&#9662;</span>
+              <span class="slack-channel-star">&#9734;</span>
+            </div>
+            <div class="slack-channel-meta-row">
+              <span class="slack-meta-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <span>21</span>
+              </span>
+              <span>|</span>
+              <span class="slack-meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span>1</span>
+              </span>
+              <span>|</span>
+              <span style="color: #616061;">Track and coordinate social media</span>
+            </div>
+          </div>
+
+          <div class="slack-main-header-right">
+            <!-- Info Icon Button (toggles right drawer) -->
+            <button class="slack-info-toggle-btn active" id="btn-toggle-slack-details" title="Details">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Scrollable Messages Container -->
+        <div class="slack-messages-scroll" id="slack-chat-scroll-container">
+          <!-- Story Reading View (Novel streams here) -->
+          <div id="slack-story-view">
+            <div id="slack-story-stream"></div>
+          </div>
+
+          <!-- Boss Key View (ESC): Exact Replica of Screenshot -->
+          <div id="slack-boss-view" style="display: none;">
+            <!-- Message 1: Geeta Joshi -->
+            <div class="slack-msg-item">
+              <div class="slack-msg-avatar" style="background:#5C2D91;">
+                GJ
+              </div>
+              <div class="slack-msg-content">
+                <div class="slack-msg-header">
+                  <span class="slack-msg-sender">Geeta Joshi</span>
+                  <span class="slack-msg-time">11:15</span>
+                </div>
+                <div class="slack-msg-text">
+                  Really need to give some kudos to <span class="slack-mention">@Fathina</span> for helping out with the new influx of tweets yesterday. People are really, really excited about yesterday's announcement.
+                </div>
+                <div class="slack-reactions-bar">
+                  <span class="slack-reaction-pill">&#127881; 3</span>
+                  <span class="slack-reaction-pill">&#128588; 1</span>
+                  <span class="slack-reaction-pill">&#128079; 1</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Message 2: Fathina Parveen -->
+            <div class="slack-msg-item">
+              <div class="slack-msg-avatar" style="background:#007A5A;">
+                FP
+              </div>
+              <div class="slack-msg-content">
+                <div class="slack-msg-header">
+                  <span class="slack-msg-sender">Fathina Parveen</span>
+                  <span class="slack-msg-time">11:36</span>
+                </div>
+                <div class="slack-msg-text">
+                  No! It was my pleasure! Great to see the enthusiasm out there.
+                </div>
+              </div>
+            </div>
+
+            <!-- Message 3: A1 Marketing team APP -->
+            <div class="slack-msg-item">
+              <div class="slack-msg-avatar" style="background:#1264A3;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="18" rx="2" fill="#ffffff"/>
+                  <rect x="3" y="4" width="18" height="5" fill="#1264A3"/>
+                  <text x="12" y="17" font-size="10" font-weight="bold" fill="#1264A3" text-anchor="middle">31</text>
+                </svg>
+              </div>
+              <div class="slack-msg-content">
+                <div class="slack-msg-header">
+                  <span class="slack-msg-sender">A1 Marketing team</span>
+                  <span class="slack-app-badge">APP</span>
+                  <span class="slack-msg-time">12:45</span>
+                </div>
+                <div class="slack-msg-text">
+                  Event starting in 15 minutes:
+                </div>
+                <div class="slack-event-card">
+                  <div class="slack-event-title">Team status meeting &#128197;</div>
+                  <div class="slack-event-time">Today from 13:00 to 13:30</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Message 4: Sandeep Mishra -->
+            <div class="slack-msg-item">
+              <div class="slack-msg-avatar" style="background:#DE6328;">
+                SM
+              </div>
+              <div class="slack-msg-content">
+                <div class="slack-msg-header">
+                  <span class="slack-msg-sender">Sandeep Mishra</span>
+                  <span class="slack-msg-time">12:56</span>
+                </div>
+                <div class="slack-msg-text">
+                  Quick note: today <span class="slack-mention">@Madhu</span> will join our team sync to provide updates on the launch. If you have questions, bring 'em. See you all later... er, in 2 minutes &#128521;
+                </div>
+              </div>
+            </div>
+
+            <!-- Message 5: Rahul Khanna -->
+            <div class="slack-msg-item">
+              <div class="slack-msg-avatar" style="background:#4A154B;">
+                RK
+              </div>
+              <div class="slack-msg-content">
+                <div class="slack-msg-header">
+                  <span class="slack-msg-sender">Rahul Khanna</span>
+                  <span class="slack-msg-time">12:58</span>
+                </div>
+                <div class="slack-msg-text">
+                  Meeting notes from our sync with <span class="slack-mention">@Madhu</span>
+                </div>
+                <div class="slack-post-card">
+                  <div class="slack-post-icon">&#128196;</div>
+                  <div class="slack-post-info">
+                    <span class="slack-post-title">1/9 Meeting notes</span>
+                    <span class="slack-post-sub">Last edited just now</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert Banner above composer matching screenshot -->
+        <div class="slack-alert-banner">
+          <span class="slack-alert-icon"></span>
+          <span>Zenith Marketing is in this channel</span>
+        </div>
+
+        <!-- Message Composer Box -->
+        <div class="slack-composer-wrap">
+          <div class="slack-composer-box">
+            <input type="text" class="slack-composer-input" placeholder="Message #social-media" readonly>
+            <div class="slack-composer-toolbar">
+              <div class="slack-toolbar-left">
+                <button class="slack-tool-btn" title="Shortcuts">&#9889;</button>
+                <button class="slack-tool-btn" title="Bold"><b>B</b></button>
+                <button class="slack-tool-btn" title="Italic"><i>I</i></button>
+                <button class="slack-tool-btn" title="Strikethrough"><s>S</s></button>
+                <button class="slack-tool-btn" title="Link">&#128279;</button>
+                <button class="slack-tool-btn" title="Ordered list">1.</button>
+                <button class="slack-tool-btn" title="Bullet list">&bull;</button>
+                <button class="slack-tool-btn" title="Quote">&ldquo;</button>
+                <button class="slack-tool-btn" title="Code">&lt;&gt;</button>
+                <button class="slack-tool-btn" title="Formatting">Aa</button>
+                <button class="slack-tool-btn" title="Mention">@</button>
+                <button class="slack-tool-btn" title="Emoji">&#128578;</button>
+                <button class="slack-tool-btn" title="Attachment">&#128206;</button>
+              </div>
+              <div class="slack-toolbar-right">
+                <button class="slack-send-btn" title="Send message">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 4. Right Details Drawer (Matching screenshot) -->
+      <aside class="slack-details-drawer" id="slack-details-drawer">
+        <div class="slack-details-header">
+          <div class="slack-details-title-wrap">
+            <span class="slack-details-title">Details</span>
+            <span class="slack-details-subtitle">#social-media</span>
+          </div>
+          <button class="slack-details-close-btn" id="btn-close-slack-details" title="Close details">&times;</button>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="slack-quick-actions">
+          <div class="slack-action-item">
+            <div class="slack-action-icon-circle">&#128100;</div>
+            <span>Add</span>
+          </div>
+          <div class="slack-action-item">
+            <div class="slack-action-icon-circle">&#128269;</div>
+            <span>Find</span>
+          </div>
+          <div class="slack-action-item">
+            <div class="slack-action-icon-circle">&#128222;</div>
+            <span>Call</span>
+          </div>
+          <div class="slack-action-item">
+            <div class="slack-action-icon-circle">&#8943;</div>
+            <span>More</span>
+          </div>
+        </div>
+
+        <!-- Section: About -->
+        <div class="slack-drawer-section">
+          <div class="slack-drawer-section-title">
+            <span>About</span>
+            <span style="font-size: 11px;">&#9662;</span>
+          </div>
+          <div class="slack-drawer-meta-label">Topic</div>
+          <div class="slack-drawer-meta-value">Track and coordinate social media</div>
+
+          <div class="slack-drawer-meta-label">Description</div>
+          <div class="slack-drawer-meta-value">Home of the social media team</div>
+
+          <div class="slack-drawer-meta-label">Created by</div>
+          <div class="slack-drawer-meta-value" style="display: flex; align-items: center; gap: 6px;">
+            <span style="color:#DE6328;">&#128100;</span> Created on 18th October 2019
+          </div>
+        </div>
+
+        <!-- Accordion Rows -->
+        <div class="slack-drawer-accordion-row">
+          <span>Members</span>
+          <span class="slack-drawer-accordion-meta">21 &rsaquo;</span>
+        </div>
+        <div class="slack-drawer-accordion-row">
+          <span>Organisations</span>
+          <span class="slack-drawer-accordion-meta">
+            <span style="background:#ecb22e; color:#fff; padding:1px 4px; border-radius:3px; font-size:10px;">1</span>
+            <span style="background:#1264a3; color:#fff; padding:1px 4px; border-radius:3px; font-size:10px;">1</span>
+            2 &rsaquo;
+          </span>
+        </div>
+        <div class="slack-drawer-accordion-row">
+          <span>Pinned items</span>
+          <span class="slack-drawer-accordion-meta">1 &rsaquo;</span>
+        </div>
+        <div class="slack-drawer-accordion-row">
+          <span>Shortcuts</span>
+          <span class="slack-drawer-accordion-meta">1 &rsaquo;</span>
+        </div>
+        <div class="slack-drawer-accordion-row">
+          <span>Shared files</span>
+          <span class="slack-drawer-accordion-meta">&rsaquo;</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-spinner" style="display: none;">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p id="loading-status-text">Đang trích xuất nội dung tài liệu...</p>
+    </div>
+  </div>
+
+  <!-- Floating Quick Controls Visibility Toggle -->
+  <button id="btn-toggle-ctrls-floating" class="floating-stealth-toggle" title="Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)">
+    <span class="stealth-toggle-icon">&#128065;</span>
+    <span class="stealth-toggle-text">Điều khiển (H)</span>
+  </button>
+
+  <div id="page-flip-toast" class="page-flip-toast"></div>
+
+  <script src="app.js?v=20261013-9" defer></script>
+  <script>
+    // Wire details drawer toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('btn-toggle-slack-details');
+      const closeBtn = document.getElementById('btn-close-slack-details');
+      const drawer = document.getElementById('slack-details-drawer');
+      const activeChannelBtn = document.getElementById('btn-slack-channel-active');
+
+      if (toggleBtn && drawer) {
+        toggleBtn.addEventListener('click', () => {
+          const isHidden = drawer.style.display === 'none';
+          drawer.style.display = isHidden ? 'flex' : 'none';
+          toggleBtn.classList.toggle('active', isHidden);
+        });
+      }
+      if (closeBtn && drawer) {
+        closeBtn.addEventListener('click', () => {
+          drawer.style.display = 'none';
+          if (toggleBtn) toggleBtn.classList.remove('active');
+        });
+      }
+      if (activeChannelBtn) {
+        activeChannelBtn.addEventListener('click', () => {
+          if (typeof toggleBossKey === 'function') toggleBossKey();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
