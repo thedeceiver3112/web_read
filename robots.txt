@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin-analytics.html
 
 Sitemap: https://www.thedeceiver.site/sitemap.xml

@@ -34,6 +34,12 @@ Run `db/reports/analytics_summary.sql` in phpMyAdmin to view:
 “Unique browser” is an approximation. Clearing browser storage or using a
 different browser/device creates a new anonymous visitor.
 
+The protected dashboard is available at `/admin-analytics.html`. Its API is
+`GET /api/admin/analytics?range=30`, where `range` can be `7`, `30`, or `90`.
+Only aggregate counts are returned; visitor and session hashes are never
+included. Set `analytics_admin_emails` in `web_read_config.php` to the Google
+accounts allowed to open the dashboard.
+
 ## 2. Create Google OAuth credentials
 
 In Google Cloud Console, create an OAuth 2.0 Client ID of type **Web

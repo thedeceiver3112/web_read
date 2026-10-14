@@ -11,4 +11,5 @@ return [
     'google_client_id' => '',
     'google_client_secret' => '',
     'google_redirect_uri' => 'https://thedeceiver.site/api/auth/google/callback',
+    'analytics_admin_emails' => ['nguyentranhaiphong2@gmail.com'],
 ];

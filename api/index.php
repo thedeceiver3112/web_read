@@ -5,6 +5,7 @@ const SESSION_COOKIE = 'sr_session';
 const OAUTH_STATE_COOKIE = 'sr_oauth_state';
 const SESSION_DAYS = 30;
 const MAX_JSON_BODY = 524288;
+const DEFAULT_ANALYTICS_ADMIN_EMAILS = ['nguyentranhaiphong2@gmail.com'];
 
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: same-origin');
@@ -268,8 +269,8 @@ function record_analytics_event(array $config, array $payload): bool
     $pdo->beginTransaction();
     try {
         $stmt = $pdo->prepare(
-            'INSERT INTO analytics_events (event_key,visitor_hash,session_hash,user_id,event_type,theme,path) '
-            . 'VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE user_id=COALESCE(user_id,VALUES(user_id))'
+            'INSERT INTO analytics_events (event_key,visitor_hash,session_hash,user_id,event_type,theme,path,occurred_at) '
+            . 'VALUES (?,?,?,?,?,?,?,UTC_TIMESTAMP()) ON DUPLICATE KEY UPDATE user_id=COALESCE(user_id,VALUES(user_id))'
         );
         $stmt->execute([$eventKey, $visitorHash, $sessionHash, $userId, $eventType, $theme, $path]);
         $inserted = $stmt->rowCount() === 1;
@@ -283,6 +284,108 @@ function record_analytics_event(array $config, array $payload): bool
         $pdo->rollBack();
         throw $error;
     }
+}
+
+function analytics_admin_emails(array $config): array
+{
+    $value = $config['analytics_admin_emails'] ?? DEFAULT_ANALYTICS_ADMIN_EMAILS;
+    if (is_string($value)) {
+        $value = preg_split('/[,;\s]+/', $value, -1, PREG_SPLIT_NO_EMPTY);
+    }
+    if (!is_array($value)) {
+        return DEFAULT_ANALYTICS_ADMIN_EMAILS;
+    }
+    $emails = [];
+    foreach ($value as $email) {
+        $email = strtolower(trim((string)$email));
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $emails[$email] = true;
+        }
+    }
+    return array_keys($emails);
+}
+
+function require_analytics_admin(array $config, array $session): void
+{
+    $email = strtolower(trim((string)($session['email'] ?? '')));
+    if ($email === '' || !in_array($email, analytics_admin_emails($config), true)) {
+        json_response(403, ['error' => 'Tài khoản này không có quyền xem thống kê']);
+    }
+}
+
+function analytics_summary(array $config, int $days): array
+{
+    $startAt = gmdate('Y-m-d H:i:s', time() - (($days - 1) * 86400));
+    $startAt = substr($startAt, 0, 10) . ' 00:00:00';
+    $pdo = db($config);
+
+    $stmt = $pdo->prepare(
+        "SELECT COALESCE(SUM(event_type='visit'),0) AS visits, "
+        . "COUNT(DISTINCT CASE WHEN event_type='visit' THEN visitor_hash END) AS unique_visitors, "
+        . "COUNT(DISTINCT CASE WHEN event_type='visit' THEN session_hash END) AS sessions, "
+        . "COUNT(DISTINCT CASE WHEN user_id IS NOT NULL THEN user_id END) AS authenticated_users, "
+        . "COALESCE(SUM(event_type='theme_view'),0) AS theme_views "
+        . 'FROM analytics_events WHERE occurred_at>=?'
+    );
+    $stmt->execute([$startAt]);
+    $summary = $stmt->fetch() ?: [];
+
+    $stmt = $pdo->prepare(
+        "SELECT DATE(occurred_at) AS day, COALESCE(SUM(event_type='visit'),0) AS visits, "
+        . "COUNT(DISTINCT CASE WHEN event_type='visit' THEN visitor_hash END) AS unique_visitors, "
+        . "COUNT(DISTINCT CASE WHEN event_type='visit' THEN session_hash END) AS sessions, "
+        . "COUNT(DISTINCT CASE WHEN user_id IS NOT NULL THEN user_id END) AS authenticated_users "
+        . 'FROM analytics_events WHERE occurred_at>=? GROUP BY DATE(occurred_at) ORDER BY day'
+    );
+    $stmt->execute([$startAt]);
+    $dailyRows = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $dailyRows[(string)$row['day']] = $row;
+    }
+    $daily = [];
+    $startTimestamp = strtotime(substr($startAt, 0, 10) . ' UTC');
+    for ($offset = 0; $offset < $days; $offset++) {
+        $day = gmdate('Y-m-d', $startTimestamp + ($offset * 86400));
+        $row = $dailyRows[$day] ?? [];
+        $daily[] = [
+            'date' => $day,
+            'visits' => (int)($row['visits'] ?? 0),
+            'uniqueVisitors' => (int)($row['unique_visitors'] ?? 0),
+            'sessions' => (int)($row['sessions'] ?? 0),
+            'authenticatedUsers' => (int)($row['authenticated_users'] ?? 0),
+        ];
+    }
+
+    $stmt = $pdo->prepare(
+        "SELECT theme, COUNT(*) AS views, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='theme_view' AND theme<>'' "
+        . 'GROUP BY theme ORDER BY views DESC, theme ASC'
+    );
+    $stmt->execute([$startAt]);
+    $themes = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $themes[] = [
+            'theme' => (string)$row['theme'],
+            'views' => (int)$row['views'],
+            'uniqueVisitors' => (int)$row['unique_visitors'],
+        ];
+    }
+
+    return [
+        'ok' => true,
+        'rangeDays' => $days,
+        'timezone' => 'UTC',
+        'generatedAt' => gmdate('c'),
+        'summary' => [
+            'visits' => (int)($summary['visits'] ?? 0),
+            'uniqueVisitors' => (int)($summary['unique_visitors'] ?? 0),
+            'sessions' => (int)($summary['sessions'] ?? 0),
+            'authenticatedUsers' => (int)($summary['authenticated_users'] ?? 0),
+            'themeViews' => (int)($summary['theme_views'] ?? 0),
+        ],
+        'daily' => $daily,
+        'themes' => $themes,
+    ];
 }
 
 function pull_document(array $config, int $userId, string $key): array
@@ -390,6 +493,14 @@ try {
     }
     $session = current_session($config);
     if (!$session) json_response(401, ['error' => 'Chưa đăng nhập']);
+    if ($path === '/api/admin/analytics' && $method === 'GET') {
+        require_analytics_admin($config, $session);
+        $days = (int)($_GET['range'] ?? 30);
+        if (!in_array($days, [7, 30, 90], true)) {
+            json_response(400, ['error' => 'Khoảng thời gian chỉ hỗ trợ 7, 30 hoặc 90 ngày']);
+        }
+        json_response(200, analytics_summary($config, $days));
+    }
     if ($path === '/api/auth/logout' && $method === 'POST') {
         require_csrf($session);
         $pdo = db($config);
@@ -413,5 +524,5 @@ try {
     json_response(400, ['error' => $error->getMessage()]);
 } catch (Throwable $error) {
     error_log('web_read API error at ' . $path . ': ' . $error->getMessage());
-    json_response(500, ['error' => 'Không thể xử lý đồng bộ. Kiểm tra cấu hình và database trên server.']);
+    json_response(500, ['error' => 'Không thể xử lý yêu cầu. Kiểm tra cấu hình và database trên server.']);
 }

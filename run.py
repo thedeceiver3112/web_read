@@ -161,6 +161,24 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 },
             })
 
+        if path == '/api/admin/analytics' and self.command == 'GET':
+            return self._send_mock_json({
+                "ok": True,
+                "rangeDays": 30,
+                "timezone": "UTC",
+                "generatedAt": "2026-10-14T06:30:00Z",
+                "summary": {"visits": 42, "uniqueVisitors": 18, "sessions": 31, "authenticatedUsers": 7, "themeViews": 56},
+                "daily": [
+                    {"date": "2026-10-13", "visits": 17, "uniqueVisitors": 9, "sessions": 12, "authenticatedUsers": 4},
+                    {"date": "2026-10-14", "visits": 25, "uniqueVisitors": 12, "sessions": 19, "authenticatedUsers": 5},
+                ],
+                "themes": [
+                    {"theme": "googlesheets", "views": 30, "uniqueVisitors": 12},
+                    {"theme": "vscode", "views": 16, "uniqueVisitors": 8},
+                    {"theme": "outlook", "views": 10, "uniqueVisitors": 6},
+                ],
+            })
+
         if path == '/api/sync/document' and self.command == 'GET':
             return self._send_mock_json({
                 "ok": True,
