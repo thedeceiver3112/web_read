@@ -206,7 +206,7 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     // Verify announcement card
     const announcement = page.locator('#portal-announcement');
     await expect(announcement).toBeVisible();
-    await expect(announcement).toContainText('Bộ công cụ đọc nâng cao');
+    await expect(announcement).toContainText('Cải tiến giao diện');
 
     // 2. Verify modern simple footer
     const footer = page.locator('#portal-footer');

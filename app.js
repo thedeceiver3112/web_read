@@ -1970,6 +1970,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (state.theme === 'theme-zalo' || document.body.classList.contains('theme-zalo')) {
     initZaloResponsivePanes();
   }
+  if (state.theme === 'theme-chatgpt' || document.body.classList.contains('theme-chatgpt')) {
+    initChatGPTThemeMode();
+  }
   
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
@@ -3246,7 +3249,11 @@ function setDocumentTitle(title) {
 function applyTheme(themeName) {
   state.theme = themeName;
   const isHidden = document.body.classList.contains('controls-hidden') || localStorage.getItem('stealth_controls_hidden') === '1';
-  document.body.className = `${themeName} has-pinned-navbar ${isHidden ? 'controls-hidden' : ''}`.trim();
+  let bodyClass = `${themeName} has-pinned-navbar ${isHidden ? 'controls-hidden' : ''}`.trim();
+  if (themeName === 'theme-chatgpt' && localStorage.getItem('chatgpt_theme_mode') === 'dark') {
+    bodyClass += ' dark dark-mode';
+  }
+  document.body.className = bodyClass;
   StealthImageManager.init();
 
   document.querySelectorAll('.theme-card').forEach(card => {
@@ -3388,9 +3395,12 @@ const THEME_DOC_CONFIGS = {
   },
   'theme-chatgpt': {
     prop: 'chatgptTitle',
-    defaultTitle: 'ChatGPT 5',
+    defaultTitle: 'ChatGPT',
     formatTabTitle: t => `${t} - ChatGPT`,
-    titleId: 'chatgpt-doc-title'
+    titleId: 'chatgpt-doc-title',
+    init: () => {
+      initChatGPTThemeMode();
+    }
   },
   'theme-teams': {
     prop: 'teamsTitle',
@@ -3779,7 +3789,7 @@ function initTitleEditing() {
   if (gptTitle) {
     gptTitle.addEventListener('blur', () => {
       let val = gptTitle.textContent.trim();
-      if (!val) val = 'ChatGPT 5';
+      if (!val) val = 'ChatGPT';
       gptTitle.textContent = val;
       state.chatgptTitle = val;
       localStorage.setItem('stealth_title_chatgpt', val);
@@ -5483,6 +5493,14 @@ function initEventListeners() {
       return;
     }
 
+    if ((e.altKey && (e.key === 'd' || e.key === 'D')) || (e.ctrlKey && e.shiftKey && (e.key === 'd' || e.key === 'D'))) {
+      if (state.theme === 'theme-chatgpt' || document.body.classList.contains('theme-chatgpt')) {
+        e.preventDefault();
+        toggleChatGPTThemeMode();
+        return;
+      }
+    }
+
     if (state.bossModeActive) return;
 
     if (e.key === 'ArrowDown' || e.key === 'j' || e.key === 'J') {
@@ -6239,7 +6257,7 @@ async function processDocumentFile(file) {
 async function isTextWorkerAvailable() {
   if (!window.Worker) return false;
   if (!textWorkerAvailabilityPromise) {
-    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261015-2', { cache: 'no-store' })
+    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261015-3', { cache: 'no-store' })
       .then(response => {
         const contentType = response.headers.get('content-type') || '';
         return response.ok && /javascript|ecmascript|text\/plain/i.test(contentType);
@@ -6269,7 +6287,7 @@ async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) 
   return new Promise((resolve, reject) => {
     let worker;
     try {
-      worker = new Worker('text-worker.js?v=20261015-2');
+      worker = new Worker('text-worker.js?v=20261015-3');
     } catch (error) {
       resolve(splitTextWithoutWorker(source, mode, workerOptions));
       return;
@@ -9149,10 +9167,106 @@ function appendChatGPTBatch(count) {
     const el = document.createElement('div');
     el.className = 'gpt-para';
     el.id = `gpt-para-${chunk.globalIndex}`;
-    const heading = (chunk.indexInPage === 0) ? `<h3 class="gpt-h">${chunk.page}. Phần ${chunk.page}</h3>` : '';
+    const heading = (chunk.indexInPage === 0) ? `<h3 class="gpt-h">Phần ${chunk.page}</h3>` : '';
     el.innerHTML = `${heading}<p>${formatChunkText(chunk.text)}</p>`;
     return el;
   });
+}
+
+function setChatGPTThemeMode(isDark, showToast = false) {
+  const mode = isDark ? 'dark' : 'light';
+  try {
+    localStorage.setItem('chatgpt_theme_mode', mode);
+  } catch (e) {}
+
+  if (isDark) {
+    document.body.classList.add('dark', 'dark-mode');
+    document.documentElement.classList.add('dark', 'dark-mode');
+  } else {
+    document.body.classList.remove('dark', 'dark-mode');
+    document.documentElement.classList.remove('dark', 'dark-mode');
+  }
+
+  const toggleBtn = document.getElementById('gpt-theme-toggle');
+  if (toggleBtn) {
+    toggleBtn.setAttribute('title', isDark ? 'Chuyển sang chế độ Sáng (Alt+D)' : 'Chuyển sang chế độ Tối (Alt+D)');
+    toggleBtn.setAttribute('aria-label', isDark ? 'Chuyển sang chế độ Sáng' : 'Chuyển sang chế độ Tối');
+  }
+
+  const menuToggleText = document.querySelector('#gpt-menu-theme-toggle .gpt-menu-theme-text');
+  if (menuToggleText) {
+    menuToggleText.textContent = isDark ? 'Giao diện sáng' : 'Giao diện tối';
+  }
+
+  if (showToast) {
+    showPageFlipToast(isDark ? '🌙 Đã chuyển sang giao diện tối ChatGPT' : '☀️ Đã chuyển sang giao diện sáng ChatGPT');
+  }
+}
+
+function toggleChatGPTThemeMode() {
+  const isCurrentlyDark = document.body.classList.contains('dark') || 
+                          document.documentElement.classList.contains('dark') || 
+                          localStorage.getItem('chatgpt_theme_mode') === 'dark';
+  setChatGPTThemeMode(!isCurrentlyDark, true);
+}
+
+function initChatGPTThemeMode() {
+  const savedMode = localStorage.getItem('chatgpt_theme_mode');
+  const isDark = savedMode === 'dark';
+  setChatGPTThemeMode(isDark, false);
+
+  const toggleBtn = document.getElementById('gpt-theme-toggle');
+  if (toggleBtn && !toggleBtn._gptModeBound) {
+    toggleBtn._gptModeBound = true;
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleChatGPTThemeMode();
+    });
+  }
+
+  const menuThemeBtn = document.getElementById('gpt-menu-theme-toggle');
+  if (menuThemeBtn && !menuThemeBtn._gptModeBound) {
+    menuThemeBtn._gptModeBound = true;
+    menuThemeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleChatGPTThemeMode();
+      const menu = document.getElementById('gpt-user-menu');
+      if (menu) menu.style.display = 'none';
+    });
+  }
+
+  const userBtn = document.getElementById('gpt-user-btn') || document.querySelector('.gpt-user');
+  const userMenu = document.getElementById('gpt-user-menu');
+  if (userBtn && userMenu && !userBtn._gptMenuBound) {
+    userBtn._gptMenuBound = true;
+    userBtn.addEventListener('click', (e) => {
+      if (e.target && e.target.closest && e.target.closest('.stealth-editable')) return;
+      e.stopPropagation();
+      const isVisible = userMenu.style.display === 'block';
+      userMenu.style.display = isVisible ? 'none' : 'block';
+    });
+  }
+
+  const topMoreBtn = document.getElementById('gpt-top-more-btn');
+  if (topMoreBtn && !topMoreBtn._gptMoreBound) {
+    topMoreBtn._gptMoreBound = true;
+    topMoreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleChatGPTThemeMode();
+    });
+  }
+
+  if (!document._gptClickOutsideBound) {
+    document._gptClickOutsideBound = true;
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('gpt-user-menu');
+      if (menu && menu.style.display === 'block') {
+        if (!e.target.closest('.gpt-user-wrap')) {
+          menu.style.display = 'none';
+        }
+      }
+    });
+  }
 }
 
 function appendTeamsBatch(count) {
