@@ -1169,17 +1169,96 @@ async function deleteDocumentCache(documentId) {
   }
 }
 
+function hasReadableChunkText(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function normalizeDocumentChunks(rawChunks) {
+  const indexMap = new Map();
+  const pageCounters = new Map();
+  const chunks = [];
+
+  (Array.isArray(rawChunks) ? rawChunks : []).forEach((rawChunk, sourceIndex) => {
+    const text = typeof rawChunk === 'string' ? rawChunk : rawChunk?.text;
+    if (!hasReadableChunkText(text)) return;
+
+    const sourceGlobalIndex = Number.isFinite(Number(rawChunk?.globalIndex))
+      ? Number(rawChunk.globalIndex)
+      : sourceIndex;
+    const page = Math.max(1, Number(rawChunk?.page) || 1);
+    const indexInPage = pageCounters.get(page) || 0;
+    const globalIndex = chunks.length;
+    chunks.push({
+      ...(typeof rawChunk === 'object' && rawChunk ? rawChunk : {}),
+      text,
+      page,
+      indexInPage,
+      globalIndex
+    });
+    pageCounters.set(page, indexInPage + 1);
+    indexMap.set(sourceGlobalIndex, globalIndex);
+  });
+
+  return { chunks, indexMap };
+}
+
+function remapSanitizedChunkIndex(indexMap, requestedIndex, chunkCount) {
+  const requested = Math.max(0, Number(requestedIndex) || 0);
+  if (indexMap.has(requested)) return indexMap.get(requested);
+  const sourceIndices = [...indexMap.keys()].sort((left, right) => left - right);
+  const next = sourceIndices.find(sourceIndex => sourceIndex > requested);
+  if (next !== undefined) return indexMap.get(next);
+  return Math.max(0, chunkCount - 1);
+}
+
+function rebuildPageStartIndices(chunks, totalPages) {
+  const starts = {};
+  chunks.forEach(chunk => {
+    if (starts[chunk.page] === undefined) starts[chunk.page] = chunk.globalIndex;
+  });
+  let nearestIndex = 0;
+  for (let page = 1; page <= totalPages; page++) {
+    if (starts[page] !== undefined) nearestIndex = starts[page];
+    else starts[page] = nearestIndex;
+  }
+  return starts;
+}
+
+function remapSavedBookmarkIndices(documentId, indexMap, chunkCount) {
+  if (!documentId || indexMap.size === 0) return;
+  try {
+    const bookmarks = readSavedBookmarks();
+    const entry = bookmarks[documentId];
+    if (!entry || typeof entry !== 'object') return;
+    if (entry.lastPosition) {
+      entry.lastPosition.globalIndex = remapSanitizedChunkIndex(indexMap, entry.lastPosition.globalIndex, chunkCount);
+    }
+    if (Array.isArray(entry.marks)) {
+      entry.marks = entry.marks.map(mark => ({
+        ...mark,
+        globalIndex: remapSanitizedChunkIndex(indexMap, mark.globalIndex, chunkCount)
+      }));
+    }
+    bookmarks[documentId] = entry;
+    localStorage.setItem(READING_BOOKMARKS_STORAGE_KEY, JSON.stringify(bookmarks));
+  } catch (error) {
+    console.warn('Không thể cập nhật vị trí đọc sau khi loại dòng trống:', error);
+  }
+}
+
 function applyCachedDocument(cache) {
   if (!isValidCachedDocument(cache)) return false;
 
   const previousDocumentName = state.pdfFileName;
-  state.allChunks = Number(cache.cacheVersion) >= 3
+  const cachedChunks = Number(cache.cacheVersion) >= 3
     ? cache.chunks
     : cache.chunks.map(chunk => ({
       ...chunk,
       text: cleanAndRepairVietnameseText(chunk.text || '')
     }));
-  state.pageStartIndices = cache.pageStartIndices || {};
+  const normalizedCache = normalizeDocumentChunks(cachedChunks);
+  if (normalizedCache.chunks.length === 0) return false;
+  state.allChunks = normalizedCache.chunks;
   state.documentToc = Array.isArray(cache.documentToc) ? cache.documentToc : [];
   if (cache.documentImages && typeof cache.documentImages === 'object') {
     state.documentImages = cache.documentImages;
@@ -1193,9 +1272,11 @@ function applyCachedDocument(cache) {
   state.documentId = cache.documentId || '';
   state.documentFileSize = Number(cache.fileSize) || 0;
   state.documentFileType = cache.fileType || getDocumentExtension({ name: state.pdfFileName });
+  state.pageStartIndices = rebuildPageStartIndices(state.allChunks, state.totalPages);
+  remapSavedBookmarkIndices(state.documentId, normalizedCache.indexMap, state.allChunks.length);
   const canUseLegacyPosition = previousDocumentName === state.pdfFileName;
   const cachedPosition = Number.isFinite(Number(cache.currentGlobalIndex))
-    ? Number(cache.currentGlobalIndex)
+    ? remapSanitizedChunkIndex(normalizedCache.indexMap, cache.currentGlobalIndex, state.allChunks.length)
     : (canUseLegacyPosition ? state.currentGlobalIndex : 0);
   state.currentGlobalIndex = Math.min(
     Math.max(0, cachedPosition),
@@ -1612,10 +1693,6 @@ function renderLayoutToolsPanel(content) {
           <input type="checkbox" id="tool-chk-indents" ${state.preserveIndents ? 'checked' : ''} />
           <span>Giữ nguyên thụt lề đầu dòng (Indents / Tabs / Khoảng trắng gốc)</span>
         </label>
-        <label class="unav-layout-checkbox-item" style="color:#334155;">
-          <input type="checkbox" id="tool-chk-compact-blanks" ${state.compactBlankLines ? 'checked' : ''} />
-          <span>Lược bỏ dòng trống liên tiếp</span>
-        </label>
       </div>
 
       <!-- 4. Typography -->
@@ -1694,16 +1771,6 @@ function renderLayoutToolsPanel(content) {
     chkIndents.addEventListener('change', () => {
       state.preserveIndents = chkIndents.checked;
       applyStyles();
-      saveState();
-      renderLayoutToolsPanel(content);
-    });
-  }
-
-  const chkCompact = content.querySelector('#tool-chk-compact-blanks');
-  if (chkCompact) {
-    chkCompact.addEventListener('change', () => {
-      state.compactBlankLines = chkCompact.checked;
-      rechunkActiveDocument();
       saveState();
       renderLayoutToolsPanel(content);
     });
@@ -1900,6 +1967,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   initControlsVisibilityToggle();
   initVersionReloadButton();
   initFeedbackListeners();
+  if (state.theme === 'theme-zalo' || document.body.classList.contains('theme-zalo')) {
+    initZaloResponsivePanes();
+  }
   
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
@@ -3271,7 +3341,10 @@ const THEME_DOC_CONFIGS = {
     prop: 'zaloTitle',
     defaultTitle: 'Dự án Sprint Q3 - Tech Lead & Team Sync',
     formatTabTitle: t => `${t} - Zalo`,
-    titleId: 'zalo-doc-title'
+    titleId: 'zalo-doc-title',
+    init: () => {
+      initZaloResponsivePanes();
+    }
   },
   'theme-figma': {
     prop: 'figmaTitle',
@@ -5165,10 +5238,6 @@ function renderUniversalLayoutDropdown() {
           <input type="checkbox" id="unav-chk-indents" ${state.preserveIndents ? 'checked' : ''} />
           <span>Giữ nguyên thụt lề đầu dòng (Indents / Tabs / Khoảng trắng gốc)</span>
         </label>
-        <label class="unav-layout-checkbox-item">
-          <input type="checkbox" id="unav-chk-compact-blanks" ${state.compactBlankLines ? 'checked' : ''} />
-          <span>Lược bỏ dòng trống liên tiếp</span>
-        </label>
       </div>
 
       <!-- 4. Typography -->
@@ -5245,16 +5314,6 @@ function renderUniversalLayoutDropdown() {
     chkIndents.addEventListener('change', () => {
       state.preserveIndents = chkIndents.checked;
       applyStyles();
-      saveState();
-      renderUniversalLayoutDropdown();
-    });
-  }
-
-  const chkCompact = menu.querySelector('#unav-chk-compact-blanks');
-  if (chkCompact) {
-    chkCompact.addEventListener('change', () => {
-      state.compactBlankLines = chkCompact.checked;
-      rechunkActiveDocument();
       saveState();
       renderUniversalLayoutDropdown();
     });
@@ -6180,7 +6239,7 @@ async function processDocumentFile(file) {
 async function isTextWorkerAvailable() {
   if (!window.Worker) return false;
   if (!textWorkerAvailabilityPromise) {
-    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261013-1', { cache: 'no-store' })
+    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261015-2', { cache: 'no-store' })
       .then(response => {
         const contentType = response.headers.get('content-type') || '';
         return response.ok && /javascript|ecmascript|text\/plain/i.test(contentType);
@@ -6192,7 +6251,7 @@ async function isTextWorkerAvailable() {
 
 function splitTextWithoutWorker(source, mode = state.chunkMode, options = {}) {
   const text = typeof source === 'string' ? source : new TextDecoder('utf-8').decode(source);
-  return splitTextIntoChunks(text, mode, options);
+  return splitTextIntoChunks(text, mode, options).filter(hasReadableChunkText);
 }
 
 async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) {
@@ -6210,7 +6269,7 @@ async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) 
   return new Promise((resolve, reject) => {
     let worker;
     try {
-      worker = new Worker('text-worker.js?v=20261013-1');
+      worker = new Worker('text-worker.js?v=20261015-2');
     } catch (error) {
       resolve(splitTextWithoutWorker(source, mode, workerOptions));
       return;
@@ -6220,7 +6279,9 @@ async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) 
       if (activeDocumentWorker === worker) activeDocumentWorker = null;
       worker.terminate();
       if (event.data?.error) reject(new Error(event.data.error));
-      else resolve((event.data?.chunks || []).map(chunk => cleanAndRepairVietnameseText(chunk)));
+      else resolve((event.data?.chunks || [])
+        .map(chunk => cleanAndRepairVietnameseText(chunk))
+        .filter(hasReadableChunkText));
     };
     worker.onerror = event => {
       if (activeDocumentWorker === worker) activeDocumentWorker = null;
@@ -6981,8 +7042,9 @@ function appendExtractedPages(pageResults) {
       if (Object.prototype.hasOwnProperty.call(state.pageStartIndices, pageNum)) return;
 
       state.pageStartIndices[pageNum] = state.allChunks.length;
-      const pageChunks = chunks.length > 0
-        ? chunks
+      const readableChunks = (chunks || []).filter(hasReadableChunkText);
+      const pageChunks = readableChunks.length > 0
+        ? readableChunks
         : [`[[STEALTH_IMG:pdf_page_${pageNum}|Xem hình ảnh trang ${pageNum} (Trang minh họa / Scan)]]`];
 
       pageChunks.forEach((text, indexInPage) => {
@@ -7300,7 +7362,7 @@ function splitTextIntoChunks(text, mode = state.chunkMode, options = {}) {
         return;
       }
       const lineText = preserveIndents ? line : trimmedCheck;
-      if (compactBlankLines && !lineText.trim()) return;
+      if (!lineText.trim()) return;
       if (maxCharsPerLine > 0) {
         applyMaxChars(lineText, maxCharsPerLine).forEach(w => result.push(w));
       } else {
@@ -7393,7 +7455,7 @@ function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
   let globalIdx = 0;
 
   for (let p = 1; p <= totalPages; p++) {
-    const rawChunks = pagesData[String(p)] || [];
+    const rawChunks = (pagesData[String(p)] || []).filter(hasReadableChunkText);
     state.pageStartIndices[p] = globalIdx;
 
     if (rawChunks.length === 0) {
@@ -7723,6 +7785,7 @@ function appendSimpleThemeBatch(count, streamId, makeItem) {
   for (let i = start; i < end; i++) {
     const chunk = state.allChunks[i];
     const el = makeItem(chunk);
+    if (!el) continue;
     el.dataset.index = chunk.globalIndex;
     el.dataset.page = chunk.page;
     const gIdx = chunk.globalIndex;
@@ -7885,6 +7948,147 @@ function appendGoogleDocsBatch(count) {
   });
 }
 
+// 9. Zalo PC Responsive Panes Controller
+function initZaloResponsivePanes() {
+  const container = document.getElementById('container');
+  if (!container) return;
+
+  const toggleConvsBtn = document.getElementById('zalo-toggle-convs-btn');
+  const toggleInfoBtn = document.getElementById('zalo-toggle-info-btn');
+  const closeConvsBtn = document.getElementById('zalo-close-convs-btn');
+  const closeInfoBtn = document.getElementById('zalo-close-info-btn');
+  const backdrop = document.getElementById('zalo-pane-backdrop');
+
+  function closeAllPanes() {
+    container.classList.remove('zalo-convs-open', 'zalo-info-open');
+    if (toggleInfoBtn && window.innerWidth <= 1100) {
+      toggleInfoBtn.classList.remove('active');
+    }
+  }
+
+  if (toggleConvsBtn && !toggleConvsBtn._zaloBound) {
+    toggleConvsBtn._zaloBound = true;
+    toggleConvsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.innerWidth > 850) {
+        container.classList.toggle('zalo-convs-collapsed');
+      } else {
+        const isOpen = container.classList.contains('zalo-convs-open');
+        container.classList.remove('zalo-info-open');
+        if (isOpen) {
+          container.classList.remove('zalo-convs-open');
+        } else {
+          container.classList.add('zalo-convs-open');
+        }
+      }
+    });
+  }
+
+  if (toggleInfoBtn && !toggleInfoBtn._zaloBound) {
+    toggleInfoBtn._zaloBound = true;
+    toggleInfoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.innerWidth > 1100) {
+        const isCollapsed = container.classList.toggle('zalo-info-collapsed');
+        toggleInfoBtn.classList.toggle('active', !isCollapsed);
+      } else {
+        const isOpen = container.classList.contains('zalo-info-open');
+        container.classList.remove('zalo-convs-open');
+        if (isOpen) {
+          container.classList.remove('zalo-info-open');
+          toggleInfoBtn.classList.remove('active');
+        } else {
+          container.classList.add('zalo-info-open');
+          toggleInfoBtn.classList.add('active');
+        }
+      }
+    });
+  }
+
+  if (closeConvsBtn && !closeConvsBtn._zaloBound) {
+    closeConvsBtn._zaloBound = true;
+    closeConvsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.innerWidth > 850) {
+        container.classList.add('zalo-convs-collapsed');
+      } else {
+        container.classList.remove('zalo-convs-open');
+      }
+    });
+  }
+
+  if (closeInfoBtn && !closeInfoBtn._zaloBound) {
+    closeInfoBtn._zaloBound = true;
+    closeInfoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.innerWidth > 1100) {
+        container.classList.add('zalo-info-collapsed');
+        if (toggleInfoBtn) toggleInfoBtn.classList.remove('active');
+      } else {
+        container.classList.remove('zalo-info-open');
+        if (toggleInfoBtn) toggleInfoBtn.classList.remove('active');
+      }
+    });
+  }
+
+  const msgNavTab = document.querySelector('[data-id="div_Main_TabMsg"]');
+  if (msgNavTab && !msgNavTab._zaloBound) {
+    msgNavTab._zaloBound = true;
+    msgNavTab.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (window.innerWidth > 850) {
+        container.classList.toggle('zalo-convs-collapsed');
+      } else {
+        const isOpen = container.classList.contains('zalo-convs-open');
+        container.classList.remove('zalo-info-open');
+        if (isOpen) {
+          container.classList.remove('zalo-convs-open');
+        } else {
+          container.classList.add('zalo-convs-open');
+        }
+      }
+    });
+  }
+
+  if (backdrop && !backdrop._zaloBound) {
+    backdrop._zaloBound = true;
+    backdrop.addEventListener('click', () => {
+      closeAllPanes();
+    });
+  }
+
+  const convList = document.querySelector('.zalo-chat-list-pane');
+  if (convList && !convList._zaloItemClickBound) {
+    convList._zaloItemClickBound = true;
+    convList.addEventListener('click', (e) => {
+      if (e.target.closest('.zalo-conv-item')) {
+        if (window.innerWidth <= 850) {
+          container.classList.remove('zalo-convs-open');
+        }
+      }
+    });
+  }
+
+  if (!window._zaloResizeBound) {
+    window._zaloResizeBound = true;
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1100) {
+        container.classList.remove('zalo-info-open');
+        if (toggleInfoBtn) {
+          toggleInfoBtn.classList.toggle('active', !container.classList.contains('zalo-info-collapsed'));
+        }
+      } else {
+        if (toggleInfoBtn && !container.classList.contains('zalo-info-open')) {
+          toggleInfoBtn.classList.remove('active');
+        }
+      }
+      if (window.innerWidth > 850) {
+        container.classList.remove('zalo-convs-open');
+      }
+    });
+  }
+}
+
 // 9. Zalo PC Chat Stream Batch Renderer
 const ZALO_SENDERS = [
   { name: 'Minh Quân (Tech Lead)', avatar: 'MQ', bg: '#0068ff', isOwner: true },
@@ -7896,11 +8100,18 @@ const ZALO_SENDERS = [
 ];
 
 function appendZaloBatch(count) {
+  const stream = document.getElementById('zalo-story-stream');
+  let currentMsgCount = stream ? stream.children.length : 0;
+
   appendSimpleThemeBatch(count, 'zalo-story-stream', chunk => {
-    const sender = ZALO_SENDERS[chunk.globalIndex % ZALO_SENDERS.length];
-    const hour = 8 + Math.floor((chunk.globalIndex * 7) / 60) % 10;
-    const min = (chunk.globalIndex * 13) % 60;
+    const raw = (chunk.text || '').replace(/\s+/g, ' ').trim();
+    if (!raw) return null;
+
+    const sender = ZALO_SENDERS[currentMsgCount % ZALO_SENDERS.length];
+    const hour = 8 + Math.floor((currentMsgCount * 7) / 60) % 10;
+    const min = (currentMsgCount * 13) % 60;
     const timeStr = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+    currentMsgCount++;
 
     const msgItem = document.createElement('div');
     msgItem.className = 'zalo-msg-item';
@@ -7918,7 +8129,7 @@ function appendZaloBatch(count) {
         </div>
         <div class="zalo-msg-bubble">
           <div class="zalo-msg-text">${formatChunkText(chunk.text)}</div>
-          <span class="zalo-msg-meta-tag">Đoạn #${chunk.globalIndex + 1} • Đã nhận ✓✓</span>
+          <div class="zalo-msg-time-row">${timeStr}</div>
         </div>
       </div>
     `;

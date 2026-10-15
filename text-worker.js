@@ -64,7 +64,7 @@ function splitText(source, mode, options = {}) {
         return;
       }
       const lineText = preserveIndents ? line : trimmedCheck;
-      if (compactBlankLines && !lineText.trim()) return;
+      if (!lineText.trim()) return;
       if (maxCharsPerLine > 0) {
         applyMaxChars(lineText, maxCharsPerLine).forEach(w => chunks.push(w));
       } else {

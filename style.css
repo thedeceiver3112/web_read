@@ -6995,6 +6995,7 @@ body.theme-zalo {
   min-height: 0;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 /* 1. LEFT NAV RAIL (ZALO ICONIC DEEP BLUE #0068FF) */
@@ -7306,9 +7307,19 @@ body.theme-zalo {
 }
 .zalo-pin-icon,
 .zalo-mute-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 13px;
-  color: #94a3b8;
+  color: #72808e !important;
+  fill: #72808e !important;
   margin-left: 4px;
+  flex-shrink: 0;
+}
+.zalo-pin-icon svg,
+.zalo-mute-icon svg {
+  fill: #72808e !important;
+  color: #72808e !important;
 }
 
 /* 3. MAIN CHAT PANE WORKSPACE */
@@ -7337,8 +7348,29 @@ body.theme-zalo {
 .zalo-header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+.zalo-toggle-sidebar-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 2px;
+  padding: 0;
+}
+.zalo-toggle-sidebar-btn:hover {
+  background: #f1f5f9;
+  color: #0068ff;
 }
 .zalo-header-avatar {
   width: 48px;
@@ -7357,20 +7389,26 @@ body.theme-zalo {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 .zalo-header-title-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
 }
 .zalo-header-title {
   font-weight: 700;
   font-size: 16px;
   color: #081c36;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
   outline: none;
+  min-width: 0;
+  flex-shrink: 1;
 }
 .zalo-header-tag {
   font-size: 11px;
@@ -7380,12 +7418,25 @@ body.theme-zalo {
   padding: 1px 6px;
   border-radius: 4px;
   font-weight: 500;
-  margin-left: 6px;
+  margin-left: 4px;
+  flex-shrink: 0;
 }
 .zalo-header-sub {
   font-size: 12px;
   color: #72808e;
   margin-top: 2px;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0;
+  max-width: 100%;
+}
+.zalo-header-sub span,
+.zalo-header-sub * {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: inline;
 }
 .zalo-header-right {
   display: flex;
@@ -7405,39 +7456,49 @@ body.theme-zalo {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #475569;
+  color: #5b6b79;
   cursor: pointer;
   background: transparent;
   border: none;
+  transition: all 0.15s ease;
 }
 .zalo-top-action-btn:hover {
   background: #f1f5f9;
-  color: #0068ff;
+  color: #081c36;
 }
 .zalo-top-action-btn.active {
-  color: #0068ff;
+  color: #5b6b79;
+  background: rgba(0, 0, 0, 0.05);
 }
 
 /* WINDOW CONTROLS */
 .zalo-win-ctrls {
   display: flex;
   align-items: center;
-  margin-left: 6px;
+  margin-left: 8px;
   border-left: 1px solid #e2e8f0;
-  padding-left: 6px;
+  padding-left: 8px;
+  gap: 2px;
 }
 .zalo-win-btn {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
   color: #64748b;
   cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s ease;
 }
 .zalo-win-btn:hover {
   background: #f1f5f9;
+  color: #081c36;
+}
+.zalo-win-btn.zalo-win-close:hover {
+  background: #ef4444;
+  color: #ffffff;
 }
 
 /* PINNED MESSAGE BANNER */
@@ -7457,9 +7518,19 @@ body.theme-zalo {
   display: flex;
   align-items: center;
   gap: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  min-width: 0;
+  flex: 1;
+}
+#zalo-pinned-msg-text {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  min-width: 0;
+  max-width: 100%;
+  display: inline-block;
 }
 .zalo-pinned-badge {
   background: #f1f5f9;
@@ -7637,6 +7708,9 @@ body.theme-zalo {
   cursor: pointer;
   transition: all 0.12s ease;
 }
+.zalo-msg-item:empty {
+  display: none !important;
+}
 .zalo-msg-item:hover .zalo-msg-bubble {
   border-color: #0068ff;
   box-shadow: 0 2px 8px rgba(0, 104, 255, 0.15);
@@ -7707,17 +7781,27 @@ body.theme-zalo {
 .zalo-input-toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  color: #475569;
-  font-size: 16px;
+  gap: 8px;
+  color: #5b6b79;
   padding-bottom: 6px;
 }
 .zalo-tool-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  color: #5b6b79;
   cursor: pointer;
-  transition: color 0.1s;
+  transition: all 0.15s ease;
 }
 .zalo-tool-icon:hover {
-  color: #0068ff;
+  background: #f1f5f9;
+  color: #081c36;
+}
+.zalo-tool-icon svg {
+  display: block;
 }
 .zalo-textarea-row {
   display: flex;
@@ -7757,7 +7841,8 @@ body.theme-zalo {
   height: 64px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 16px;
   font-weight: 700;
   font-size: 15px;
   color: #081c36;
@@ -7933,6 +8018,176 @@ body.theme-zalo {
   font-size: 13px;
   line-height: 1.8;
   color: #334155;
+}
+
+/* RESPONSIVE & OVERLAY STYLES FOR ZALO PC THEME */
+.zalo-sidebar-close-btn {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.zalo-sidebar-close-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+.zalo-btn-close-pane {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.zalo-btn-close-pane:hover {
+  background: #f1f5f9;
+  color: #081c36;
+}
+#container.zalo-convs-collapsed .zalo-chat-list-pane {
+  display: none !important;
+}
+#container.zalo-convs-collapsed .zalo-toggle-sidebar-btn {
+  display: inline-flex !important;
+}
+.zalo-pane-backdrop {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 45;
+}
+#container.zalo-convs-open .zalo-pane-backdrop,
+#container.zalo-info-open .zalo-pane-backdrop {
+  display: block;
+}
+#container.zalo-info-collapsed .zalo-info-sidebar {
+  display: none !important;
+}
+
+@media (max-width: 1100px) {
+  .zalo-info-sidebar {
+    display: none;
+  }
+  #container.zalo-info-open .zalo-info-sidebar {
+    display: flex !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 290px;
+    max-width: 85vw;
+    z-index: 50;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.2);
+    background: #ffffff;
+  }
+  #zalo-close-info-btn {
+    display: inline-flex !important;
+  }
+  .zalo-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 850px) {
+  .zalo-chat-list-pane {
+    display: none;
+  }
+  #container.zalo-convs-open .zalo-chat-list-pane {
+    display: flex !important;
+    position: absolute;
+    top: 0;
+    left: 64px;
+    bottom: 0;
+    width: 320px;
+    max-width: calc(100% - 64px);
+    z-index: 50;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+    background: #ffffff;
+  }
+  .zalo-toggle-sidebar-btn {
+    display: inline-flex !important;
+  }
+  #zalo-close-convs-btn {
+    display: inline-flex !important;
+  }
+  .zalo-hide-sm {
+    display: none !important;
+  }
+  .zalo-chat-header {
+    padding: 0 10px;
+  }
+  .zalo-messages-scroll {
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 520px) {
+  #sidebarNav,
+  .zalo-nav-rail {
+    width: 52px;
+  }
+  .zavatar-m {
+    width: 36px;
+    height: 36px;
+  }
+  .leftbar-tab,
+  .zalo-rail-btn {
+    height: 44px;
+    padding: 2px 0;
+  }
+  .lb-tab-title {
+    display: none;
+  }
+  #container.zalo-convs-open .zalo-chat-list-pane {
+    left: 52px;
+    max-width: calc(100% - 52px);
+  }
+  .zalo-win-ctrls {
+    display: none !important;
+  }
+  .zalo-header-tag {
+    display: none !important;
+  }
+  .zalo-header-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+  .zalo-header-title {
+    font-size: 14px;
+  }
+  .zalo-header-sub {
+    font-size: 11px;
+  }
+  .zalo-chat-header {
+    padding: 0 8px;
+    height: 56px;
+  }
+  .zalo-pinned-banner {
+    padding: 5px 8px;
+  }
+  .zalo-messages-scroll {
+    padding: 8px 8px;
+    gap: 10px;
+  }
+  .zalo-chat-input-area {
+    padding: 6px 8px 8px;
+  }
+  .zalo-input-toolbar {
+    gap: 10px;
+  }
 }
 
 /* ==========================================================
@@ -16549,4 +16804,120 @@ html.performance-lite *::after {
 html.performance-lite *:not(.spinner):not(.portal-btn-spinner):not(.version-reload-icon) {
   animation-duration: 0.01ms !important;
   animation-iteration-count: 1 !important;
+}
+
+/* AUTHENTIC ZALO SIDEBAR & CONVERSATIONS EXTENSIONS */
+.sync-v2-banner {
+  background-color: #f0f7ff;
+  border-bottom: 1px solid #e0effe;
+  padding: 7px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #081c36;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.sync-v2-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.sync-v2-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+.sync-title {
+  color: #334155;
+  font-size: 12px;
+}
+.sync-v2-ok {
+  background: transparent;
+  border: none;
+  color: #0068ff;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+}
+.sync-v2-ok:hover {
+  text-decoration: underline;
+}
+.sync-v2-cancel {
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 14px;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.sync-v2-cancel:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #475569;
+}
+.zavatar-multi-grid {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1px;
+  background: #cbd5e1;
+  flex-shrink: 0;
+}
+.zavatar-mini {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+.zavatar-count {
+  background: rgba(15, 23, 42, 0.78);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.conv__label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.conv__label.orange {
+  color: #ff6905;
+}
+.conv__label.teal {
+  color: #2ac5bb;
+}
+.conv-msg-icon {
+  margin-right: 3px;
+  vertical-align: -2px;
+  flex-shrink: 0;
+}
+.zalo-conv-badge-counter {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 1px 6px;
+  height: 16px;
+  min-width: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
 }
