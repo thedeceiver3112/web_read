@@ -182,6 +182,53 @@ h2 { font-size: 16px; }
 .chart-day:nth-child(7n) .chart-bar { background: var(--green); }
 .chart-label { color: var(--muted); font-size: 10px; white-space: nowrap; }
 
+.hourly-heading-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.peak-hour {
+  border: 1px solid #b7dfcf;
+  border-radius: 5px;
+  padding: 5px 8px;
+  background: #edf9f4;
+  color: #08764d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hourly-chart {
+  height: 190px;
+  padding: 16px 12px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  display: grid;
+  grid-template-columns: repeat(24, minmax(24px, 1fr));
+  align-items: end;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.hour-column {
+  height: 100%;
+  min-width: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+
+.hour-value { min-height: 14px; color: #475467; font-size: 10px; font-variant-numeric: tabular-nums; }
+.hour-bar { width: min(24px, 76%); min-height: 2px; border-radius: 3px 3px 0 0; background: var(--blue); }
+.hour-column.peak .hour-bar { background: var(--green); }
+.hour-label { min-height: 12px; color: var(--muted); font-size: 10px; font-variant-numeric: tabular-nums; }
+.chart-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+
 .table-wrap {
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -217,5 +264,7 @@ tbody tr:last-child td { border-bottom: 0; }
   .control-actions { align-items: stretch; flex-direction: column; }
   .control-actions .button { width: 100%; }
   .generated-at { order: 3; }
+  .section-heading { align-items: flex-start; flex-direction: column; }
+  .hourly-heading-meta { justify-content: flex-start; }
   th, td { padding: 10px; }
 }

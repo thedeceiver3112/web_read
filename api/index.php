@@ -371,10 +371,32 @@ function analytics_summary(array $config, int $days): array
         ];
     }
 
+    $stmt = $pdo->prepare(
+        "SELECT HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_hour, "
+        . "COUNT(*) AS visits, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='visit' "
+        . 'GROUP BY usage_hour ORDER BY usage_hour'
+    );
+    $stmt->execute([$startAt]);
+    $hourlyRows = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $hourlyRows[(int)$row['usage_hour']] = $row;
+    }
+    $hourly = [];
+    for ($hour = 0; $hour < 24; $hour++) {
+        $row = $hourlyRows[$hour] ?? [];
+        $hourly[] = [
+            'hour' => $hour,
+            'visits' => (int)($row['visits'] ?? 0),
+            'uniqueVisitors' => (int)($row['unique_visitors'] ?? 0),
+        ];
+    }
+
     return [
         'ok' => true,
         'rangeDays' => $days,
         'timezone' => 'UTC',
+        'hourlyTimezone' => 'UTC+7',
         'generatedAt' => gmdate('c'),
         'summary' => [
             'visits' => (int)($summary['visits'] ?? 0),
@@ -384,6 +406,7 @@ function analytics_summary(array $config, int $days): array
             'themeViews' => (int)($summary['theme_views'] ?? 0),
         ],
         'daily' => $daily,
+        'hourly' => $hourly,
         'themes' => $themes,
     ];
 }

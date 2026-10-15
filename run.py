@@ -166,11 +166,16 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                 "ok": True,
                 "rangeDays": 30,
                 "timezone": "UTC",
+                "hourlyTimezone": "UTC+7",
                 "generatedAt": "2026-10-14T06:30:00Z",
                 "summary": {"visits": 42, "uniqueVisitors": 18, "sessions": 31, "authenticatedUsers": 7, "themeViews": 56},
                 "daily": [
                     {"date": "2026-10-13", "visits": 17, "uniqueVisitors": 9, "sessions": 12, "authenticatedUsers": 4},
                     {"date": "2026-10-14", "visits": 25, "uniqueVisitors": 12, "sessions": 19, "authenticatedUsers": 5},
+                ],
+                "hourly": [
+                    {"hour": hour, "visits": (hour * 3) % 11, "uniqueVisitors": (hour * 2) % 7}
+                    for hour in range(24)
                 ],
                 "themes": [
                     {"theme": "googlesheets", "views": 30, "uniqueVisitors": 12},

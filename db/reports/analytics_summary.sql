@@ -23,6 +23,17 @@ WHERE occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
 GROUP BY DATE(occurred_at)
 ORDER BY usage_date DESC;
 
+-- Visits by Vietnam local hour (UTC+7). A visit is a newly opened browser-tab session.
+SELECT
+  HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_hour,
+  COUNT(*) AS visits,
+  COUNT(DISTINCT visitor_hash) AS unique_browsers
+FROM analytics_events
+WHERE event_type = 'visit'
+  AND occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
+GROUP BY usage_hour
+ORDER BY usage_hour;
+
 -- Theme popularity. Each theme counts at most once per browser tab session.
 SELECT
   grouped.theme,

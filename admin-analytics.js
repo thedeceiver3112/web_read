@@ -64,6 +64,44 @@ function renderChart(daily) {
   });
 }
 
+function renderHourly(hourly) {
+  const chart = byId('hourly-chart');
+  const peakLabel = byId('peak-hour');
+  chart.replaceChildren();
+  const values = Array.from({ length: 24 }, (_, hour) => {
+    const source = hourly.find(item => Number(item.hour) === hour) || {};
+    return {
+      hour,
+      visits: Number(source.visits) || 0,
+      uniqueVisitors: Number(source.uniqueVisitors) || 0
+    };
+  });
+  const maxVisits = Math.max(1, ...values.map(item => item.visits));
+  const peak = values.reduce((best, item) => item.visits > best.visits ? item : best, values[0]);
+  peakLabel.textContent = peak.visits
+    ? `Đông nhất: ${String(peak.hour).padStart(2, '0')}:00–${String((peak.hour + 1) % 24).padStart(2, '0')}:00 · ${numberFormat.format(peak.visits)} lượt`
+    : 'Chưa có dữ liệu';
+
+  values.forEach(item => {
+    const column = document.createElement('div');
+    column.className = 'hour-column';
+    if (item.hour === peak.hour && peak.visits) column.classList.add('peak');
+    column.title = `${String(item.hour).padStart(2, '0')}:00–${String((item.hour + 1) % 24).padStart(2, '0')}:00: ${numberFormat.format(item.visits)} lượt, ${numberFormat.format(item.uniqueVisitors)} người dùng`;
+
+    const value = document.createElement('span');
+    value.className = 'hour-value';
+    value.textContent = item.visits ? numberFormat.format(item.visits) : '';
+    const bar = document.createElement('div');
+    bar.className = 'hour-bar';
+    bar.style.height = `${Math.max(2, (item.visits / maxVisits) * 128)}px`;
+    const label = document.createElement('span');
+    label.className = 'hour-label';
+    label.textContent = item.hour % 2 === 0 ? String(item.hour).padStart(2, '0') : '';
+    column.append(value, bar, label);
+    chart.append(column);
+  });
+}
+
 function renderThemes(themes) {
   const body = byId('theme-table');
   body.replaceChildren();
@@ -122,6 +160,7 @@ function renderDashboard(data) {
   byId('generated-at').textContent = `Cập nhật ${generated.toLocaleString('vi-VN')}`;
   renderSummary(data.summary || {});
   renderChart(data.daily || []);
+  renderHourly(data.hourly || []);
   renderThemes(data.themes || []);
   renderDailyTable(data.daily || []);
 }
@@ -158,6 +197,9 @@ function exportCsv() {
   rows.push(['Phiên truy cập', state.data.summary.sessions]);
   rows.push(['User đã đăng nhập', state.data.summary.authenticatedUsers]);
   rows.push(['Lượt mở giao diện', state.data.summary.themeViews], []);
+  rows.push(['Khung giờ (UTC+7)', 'Lượt vào', 'Người dùng duy nhất']);
+  (state.data.hourly || []).forEach(item => rows.push([`${String(item.hour).padStart(2, '0')}:00`, item.visits, item.uniqueVisitors]));
+  rows.push([]);
   rows.push(['Theme', 'Lượt mở', 'Người dùng']);
   state.data.themes.forEach(item => rows.push([themeLabels[item.theme] || item.theme, item.views, item.uniqueVisitors]));
   rows.push([], ['Ngày', 'Lượt truy cập', 'Người dùng', 'Phiên', 'Đã đăng nhập']);

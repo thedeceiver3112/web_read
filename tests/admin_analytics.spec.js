@@ -10,6 +10,11 @@ const analyticsPayload = {
     { date: '2026-10-13', visits: 17, uniqueVisitors: 9, sessions: 12, authenticatedUsers: 4 },
     { date: '2026-10-14', visits: 25, uniqueVisitors: 12, sessions: 19, authenticatedUsers: 5 }
   ],
+  hourly: Array.from({ length: 24 }, (_, hour) => ({
+    hour,
+    visits: hour === 9 ? 15 : hour % 4,
+    uniqueVisitors: hour === 9 ? 11 : hour % 3
+  })),
   themes: [
     { theme: 'googlesheets', views: 30, uniqueVisitors: 12 },
     { theme: 'vscode', views: 16, uniqueVisitors: 8 }
@@ -44,6 +49,9 @@ test('renders aggregate analytics for an authorized admin', async ({ page }) => 
   await page.goto('/admin-analytics.html');
   await expect(page.locator('#stat-visits')).toHaveText('42');
   await expect(page.locator('#stat-visitors')).toHaveText('18');
+  await expect(page.locator('#hourly-chart .hour-column')).toHaveCount(24);
+  await expect(page.locator('#peak-hour')).toContainText('09:00–10:00');
+  await expect(page.locator('#hourly-chart .hour-column.peak')).toHaveAttribute('title', /15 lượt, 11 người dùng/);
   await expect(page.getByRole('cell', { name: 'Google Sheets', exact: false })).toBeVisible();
   await expect(page.getByText('Hai Phong')).toBeVisible();
 });
