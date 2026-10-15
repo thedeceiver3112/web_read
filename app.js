@@ -113,7 +113,7 @@ const state = {
   
   // Stealth disguise titles (persisted in localStorage)
   gsheetTitle: localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3',
-  excelTitle: localStorage.getItem('stealth_title_excel') || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx',
+  excelTitle: localStorage.getItem('stealth_title_excel') || 'Copy of Salary formula (Gửi IT).xlsx',
   vscodeTitle: localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py',
   photoshopTitle: localStorage.getItem('stealth_title_photoshop') || 'Brand_Campaign_KeyVisual_v2.psd',
   blenderTitle: localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend',
@@ -1933,7 +1933,7 @@ function loadSavedState() {
 
     state.gsheetTitle = localStorage.getItem('stealth_title_gsheet') || 'Báo cáo số liệu & Phân tích KPI Q3';
     state.gdocsTitle = localStorage.getItem('stealth_title_gdocs') || 'Báo cáo Tổng kết Hoạt động & Kế hoạch Phát triển Q3';
-    state.excelTitle = localStorage.getItem('stealth_title_excel') || 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
+    state.excelTitle = localStorage.getItem('stealth_title_excel') || 'Copy of Salary formula (Gửi IT).xlsx';
     state.vscodeTitle = localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py';
     state.photoshopTitle = localStorage.getItem('stealth_title_photoshop') || 'Brand_Campaign_KeyVisual_v2.psd';
     state.blenderTitle = localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend';
@@ -3226,7 +3226,7 @@ const THEME_DOC_CONFIGS = {
   },
   'theme-excel': {
     prop: 'excelTitle',
-    defaultTitle: 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx',
+    defaultTitle: 'Copy of Salary formula (Gửi IT).xlsx',
     formatTabTitle: t => `${t} - Excel`,
     titleId: 'excel-doc-title',
     init: () => {
@@ -3439,7 +3439,7 @@ function initTitleEditing() {
   if (eTitle) {
     eTitle.addEventListener('blur', () => {
       let val = eTitle.textContent.trim();
-      if (!val) val = 'Bao_Cao_Kiem_Toan_Q3_2026.xlsx';
+      if (!val) val = 'Copy of Salary formula (Gửi IT).xlsx';
       if (!val.toLowerCase().endsWith('.xlsx') && !val.toLowerCase().endsWith('.xls')) {
         val += '.xlsx';
       }
@@ -5898,6 +5898,12 @@ function syncFormulaBarForSheet(sheetId) {
     return;
   }
 
+  if (state.theme === 'theme-excel' && state.allChunks.length === 0) {
+    if (cellAddr) cellAddr.textContent = 'E6';
+    if (formulaInput) formulaInput.value = 'Department';
+    return;
+  }
+
   const index = Math.max(0, state.currentGlobalIndex || 0);
   const chunk = state.allChunks[index];
   const storyText = chunk ? formatPlainTextChunk(chunk.text) : '';
@@ -7483,7 +7489,7 @@ function getThemeRenderer() {
   return THEME_RENDERERS[state.theme] || THEME_RENDERERS.default;
 }
 
-function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null) {
+function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null, isInitialOrJump = true, options = {}) {
   if (!state.allChunks.length) return;
   const requestedTarget = (targetScrollIdx !== null) ? targetScrollIdx : (preserveActiveRow ? state.currentGlobalIndex : 0);
   const targetIdx = Math.min(Math.max(0, Number(requestedTarget) || 0), state.allChunks.length - 1);
@@ -7503,9 +7509,13 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null)
   const initialBatchCount = Math.min(160, state.allChunks.length - renderStart);
   renderNextBatch(initialBatchCount);
 
-  // Focus and scroll to active row
-  suppressScrollSyncUntil = Date.now() + 1500;
-  setActiveRow(targetIdx, true);
+  // Focus and scroll to active row. Scroll-window maintenance can keep the
+  // currently visible item anchored instead of snapping it to the center.
+  suppressScrollSyncUntil = Date.now() + (isInitialOrJump ? 1500 : 400);
+  const activeIndex = Number.isFinite(Number(options.activeIndex))
+    ? Math.min(Math.max(0, Number(options.activeIndex)), state.allChunks.length - 1)
+    : targetIdx;
+  setActiveRow(activeIndex, options.scrollToTarget !== false);
   updatePaginationUI();
 }
 
@@ -8062,9 +8072,7 @@ function setActiveRow(index, scrollIntoView = true) {
     syncFormulaBarForSheet();
   }
 
-  if (target && scrollIntoView) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }
+  if (target && scrollIntoView) scrollReadingTargetIntoView(target);
 
   if (state.theme === 'theme-vscode') {
     const vscStatusLn = document.getElementById('vsc-status-ln');
@@ -8175,6 +8183,90 @@ function navigateRow(delta) {
 // ==========================================================
 let scrollThrottleTimer = false;
 let suppressScrollSyncUntil = 0;
+let readingScrollFrame = 0;
+let readingScrollContainer = null;
+let readingScrollTargetTop = 0;
+
+function stopReadingScrollAnimation(container = null) {
+  if (container && readingScrollContainer && readingScrollContainer !== container) return;
+  if (readingScrollFrame) cancelAnimationFrame(readingScrollFrame);
+  readingScrollFrame = 0;
+  readingScrollContainer = container || null;
+  readingScrollTargetTop = container ? container.scrollTop : 0;
+}
+
+function clampReadingScrollTop(container, value) {
+  return Math.max(0, Math.min(value, Math.max(0, container.scrollHeight - container.clientHeight)));
+}
+
+function animateReadingScrollTo(container, targetTop, accumulate = false) {
+  if (!container) return;
+  if (readingScrollContainer !== container) stopReadingScrollAnimation(container);
+
+  const baseTop = accumulate && readingScrollFrame ? readingScrollTargetTop : container.scrollTop;
+  readingScrollTargetTop = clampReadingScrollTop(container, accumulate ? baseTop + targetTop : targetTop);
+  readingScrollContainer = container;
+  if (readingScrollFrame) return;
+
+  const step = () => {
+    if (!readingScrollContainer || readingScrollContainer !== container) {
+      readingScrollFrame = 0;
+      return;
+    }
+    const distance = readingScrollTargetTop - container.scrollTop;
+    // scrollTop is integer-rounded in several Chromium layouts; finish before
+    // easing produces a sub-pixel step that can never advance the container.
+    if (Math.abs(distance) <= 1.5) {
+      container.scrollTop = readingScrollTargetTop;
+      readingScrollFrame = 0;
+      return;
+    }
+
+    // Low-resource mode uses fewer frames but retains the same easing in both directions.
+    const easing = document.documentElement.classList.contains('performance-lite') ? 0.34 : 0.26;
+    container.scrollTop += distance * easing;
+    readingScrollFrame = requestAnimationFrame(step);
+  };
+  readingScrollFrame = requestAnimationFrame(step);
+}
+
+function scrollReadingTargetIntoView(target) {
+  const container = getActiveScrollContainer();
+  if (!container || !container.contains(target)) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  const containerRect = container.getBoundingClientRect();
+  const targetRect = target.getBoundingClientRect();
+  const centeredTop = container.scrollTop
+    + (targetRect.top - containerRect.top)
+    - ((container.clientHeight - targetRect.height) / 2);
+  animateReadingScrollTo(container, centeredTop);
+}
+
+function rerenderWindowPreservingAnchor(container, targetIndex, anchorIndex = state.currentGlobalIndex) {
+  if (!container) return false;
+  const anchor = container.querySelector(`[data-index="${anchorIndex}"]`);
+  const containerTop = container.getBoundingClientRect().top;
+  const anchorOffset = anchor ? anchor.getBoundingClientRect().top - containerTop : null;
+  const activeIndex = anchorIndex;
+
+  stopReadingScrollAnimation(container);
+  renderContinuousView(false, targetIndex, false, {
+    activeIndex,
+    scrollToTarget: false
+  });
+
+  if (anchorOffset !== null) {
+    const restoredAnchor = container.querySelector(`[data-index="${anchorIndex}"]`);
+    if (restoredAnchor) {
+      const restoredOffset = restoredAnchor.getBoundingClientRect().top - container.getBoundingClientRect().top;
+      container.scrollTop += restoredOffset - anchorOffset;
+    }
+  }
+  stopReadingScrollAnimation(container);
+  return true;
+}
 
 function getActiveScrollContainer() {
   const containerMap = {
@@ -8239,12 +8331,14 @@ function getActiveScrollContainer() {
 function handleContainerScroll(container) {
   if (!container || state.bossModeActive) return;
 
+  // Infinite scroll upward: load previous batch when near top
   if (
-    container.scrollTop <= 80 &&
+    container.scrollTop <= 150 &&
     state.renderStartIndex > 0 &&
     Date.now() >= suppressScrollSyncUntil
   ) {
-    renderContinuousView(false, state.renderStartIndex - 1);
+    const previousStart = state.renderStartIndex;
+    rerenderWindowPreservingAnchor(container, previousStart - 1, previousStart);
     return;
   }
 
@@ -8254,7 +8348,7 @@ function handleContainerScroll(container) {
     state.renderedCount - state.renderStartIndex > 600 &&
     state.currentGlobalIndex - state.renderStartIndex > 180
   ) {
-    renderContinuousView(true, state.currentGlobalIndex);
+    rerenderWindowPreservingAnchor(container, state.currentGlobalIndex, state.currentGlobalIndex);
     return;
   }
 
@@ -8370,8 +8464,14 @@ function initContinuousScrollListeners() {
 
     if (!isIndependentScroll) {
       e.preventDefault();
+      // If user is wheeling UP and active container is near or at top, trigger immediate upward continuous loading
+      if (e.deltaY < 0 && activeContainer.scrollTop <= 150 && state.renderStartIndex > 0 && Date.now() >= suppressScrollSyncUntil) {
+        const previousStart = state.renderStartIndex;
+        rerenderWindowPreservingAnchor(activeContainer, previousStart - 1, previousStart);
+      }
       const unit = e.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 : (e.deltaMode === WheelEvent.DOM_DELTA_PAGE ? activeContainer.clientHeight : 1);
-      activeContainer.scrollBy({ top: e.deltaY * unit, left: e.deltaX * unit, behavior: 'auto' });
+      animateReadingScrollTo(activeContainer, e.deltaY * unit, true);
+      if (e.deltaX) activeContainer.scrollLeft += e.deltaX * unit;
     }
   }, { passive: false });
 }
