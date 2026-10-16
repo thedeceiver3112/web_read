@@ -9017,7 +9017,7 @@ function ensureOnlineChapterNextRow() {
       <td class="story-cell online-chapter-cell" tabindex="0">
         <div class="online-chapter-inline-wrap">
           <span class="online-chapter-title-tag">${escapeHtml(nextInfo.title)}</span>
-          <button type="button" id="online-chapter-next-button" class="online-chapter-next-button stealth-reading-ctrls" aria-label="Mở chương tiếp theo (Phím tắt: N hoặc →)" title="Chương sau (Phím tắt: N hoặc →)">
+          <button type="button" id="online-chapter-next-button" class="online-chapter-next-button" aria-label="Mở chương tiếp theo (Phím tắt: N hoặc →)" title="Chương sau (Phím tắt: N hoặc →)">
             <span>Chương sau</span>
             <span class="online-chapter-kbd">N</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
@@ -9049,14 +9049,14 @@ function ensureOnlineChapterNextRow() {
 
   row = document.createElement('div');
   row.id = 'online-chapter-next-row';
-  row.className = 'online-chapter-next-row online-chapter-inline-block stealth-reading-ctrls';
+  row.className = 'online-chapter-next-row online-chapter-inline-block';
   row.dataset.index = state.allChunks.length;
   row.dataset.page = state.currentPage;
 
   row.innerHTML = `
     <div class="online-chapter-inline-wrap">
       <span class="online-chapter-title-tag">${escapeHtml(nextInfo.title)}</span>
-      <button type="button" id="online-chapter-next-button" class="online-chapter-next-button stealth-reading-ctrls" aria-label="Mở chương tiếp theo (Phím tắt: N hoặc →)" title="Chương sau (Phím tắt: N hoặc →)">
+      <button type="button" id="online-chapter-next-button" class="online-chapter-next-button" aria-label="Mở chương tiếp theo (Phím tắt: N hoặc →)" title="Chương sau (Phím tắt: N hoặc →)">
         <span>Chương sau</span>
         <span class="online-chapter-kbd">N</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
@@ -9104,13 +9104,8 @@ function updateOnlineChapterNextButton(container = getActiveScrollContainer(), f
   const row = ensureOnlineChapterNextRow();
   const button = row?.querySelector('#online-chapter-next-button') || existingButton;
 
-  const distanceToBottom = container
-    ? container.scrollHeight - (container.scrollTop + container.clientHeight)
-    : Number.POSITIVE_INFINITY;
-
-  const shouldBeVisible = (forceVisible || distanceToBottom <= 360);
-  if (row) row.hidden = !shouldBeVisible;
-  if (button) button.hidden = !shouldBeVisible;
+  if (row) row.hidden = false;
+  if (button) button.hidden = false;
 }
 
 function stopReadingScrollAnimation(container = null) {

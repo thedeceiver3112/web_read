@@ -175,27 +175,30 @@ test('hiện nút nhỏ ở cuối chương và chỉ chuyển chương khi ngư
   expect(getChapterCalls()).toBe(3);
 });
 
-test('ẩn nút chương sau nếu người đọc cuộn ngược lên', async ({ page }) => {
+test('nút next chương vẫn hiện ở cuối khi ẩn thanh công cụ (controls-hidden)', async ({ page }) => {
   const getChapterCalls = await mockOnlineApi(page);
   await searchAndSelectStory(page);
   await page.locator('.online-story-chapter').first().click();
   await page.evaluate(() => closePortal());
 
+  // Hide controls (navbar, toolbars) with 'h'
+  await page.keyboard.press('h');
+  expect(await page.evaluate(() => document.body.classList.contains('controls-hidden'))).toBe(true);
+
+  // Scroll to bottom
   await page.evaluate(() => {
     const container = getActiveScrollContainer();
     container.scrollTop = container.scrollHeight;
     container.dispatchEvent(new Event('scroll'));
   });
-  await expect(page.locator('#online-chapter-next-button')).toBeVisible();
-  await page.evaluate(() => {
-    const container = getActiveScrollContainer();
-    container.scrollTop = 0;
-    container.dispatchEvent(new Event('scroll'));
-  });
 
-  await expect(page.locator('#online-chapter-next-button')).toBeHidden();
-  expect(await page.evaluate(() => state.currentPage)).toBe(1);
-  expect(getChapterCalls()).toBe(1);
+  const nextButton = page.locator('#online-chapter-next-button');
+  await expect(nextButton).toBeVisible();
+
+  // Clicking it works even when controls are hidden
+  await nextButton.click();
+  await expect.poll(() => page.evaluate(() => state.currentPage), { timeout: 5000 }).toBe(2);
+  expect(getChapterCalls()).toBe(2);
 });
 
 test('nút Chương sau nằm gọn trong hàng (row) của bảng tính', async ({ page }) => {

@@ -12058,8 +12058,6 @@ tr.online-chapter-next-row:hover {
 
 .online-chapter-next-row[hidden],
 .online-chapter-next-button[hidden],
-body.controls-hidden .online-chapter-next-row,
-body.controls-hidden .online-chapter-next-button,
 body.boss-mode-active .online-chapter-next-row,
 body.boss-mode-active .online-chapter-next-button {
   display: none !important;
