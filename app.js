@@ -330,12 +330,13 @@ let onlineStoryAbortController = null;
 
 const ONLINE_STORY_API_BASE = '/api/online-story';
 const ONLINE_STORY_FETCH_TIMEOUT = 15000;
-const ONLINE_STORY_CHAPTERS_PER_PAGE = 60;
+const ONLINE_STORY_CHAPTERS_PER_PAGE = 50;
 const onlineStoryPickerState = {
   results: [],
   story: null,
   chapterFilter: '',
   chapterPage: 1,
+  sortOrder: 'asc',
   busy: false
 };
 
@@ -4097,7 +4098,6 @@ function renderOnlineStoryResults() {
       <div class="online-story-result-content">
         <strong>${escapeHtml(story.title || 'Chưa có tên')}</strong>
         <span>
-          <span class="online-story-source-badge">${escapeHtml(getOnlineSourceLabel(story.source))}</span>
           ${escapeHtml(story.author || 'Không rõ tác giả')}${story.latest_chapter ? ` · ${escapeHtml(story.latest_chapter)}` : ''}
         </span>
       </div>
@@ -4118,10 +4118,18 @@ function renderOnlineStoryResults() {
 function getFilteredOnlineChapters() {
   const chapters = onlineStoryPickerState.story?.chapters || [];
   const query = onlineStoryPickerState.chapterFilter.trim().toLocaleLowerCase('vi');
-  if (!query) return chapters.map((chapter, index) => ({ chapter, index }));
-  return chapters
-    .map((chapter, index) => ({ chapter, index }))
-    .filter(({ chapter, index }) => `${index + 1} ${chapter.title || ''}`.toLocaleLowerCase('vi').includes(query));
+  let list = chapters.map((chapter, index) => ({ chapter, index }));
+  if (query) {
+    list = list.filter(({ chapter, index }) => {
+      const num = String(index + 1);
+      const title = (chapter.title || '').toLocaleLowerCase('vi');
+      return num === query || num.includes(query) || title.includes(query);
+    });
+  }
+  if (onlineStoryPickerState.sortOrder === 'desc') {
+    list = [...list].reverse();
+  }
+  return list;
 }
 
 function renderOnlineStoryDetail() {
@@ -4129,66 +4137,181 @@ function renderOnlineStoryDetail() {
   const story = onlineStoryPickerState.story;
   if (!container || !story) return;
 
+  const totalChapters = story.chapters.length;
   const filtered = getFilteredOnlineChapters();
   const pageCount = Math.max(1, Math.ceil(filtered.length / ONLINE_STORY_CHAPTERS_PER_PAGE));
   onlineStoryPickerState.chapterPage = Math.min(Math.max(1, onlineStoryPickerState.chapterPage), pageCount);
-  const start = (onlineStoryPickerState.chapterPage - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE;
+  const currentPage = onlineStoryPickerState.chapterPage;
+  const start = (currentPage - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE;
   const visible = filtered.slice(start, start + ONLINE_STORY_CHAPTERS_PER_PAGE);
+
+  const isCurrentStory = state.onlineStory?.storyId === story.storyId;
+  const currentChapterIdx = isCurrentStory ? (state.onlineStory?.currentChapterIndex ?? -1) : -1;
+
+  // Build range tabs or dropdown selector
+  let rangeSelectorHtml = '';
+  if (pageCount > 1) {
+    if (pageCount <= 6) {
+      rangeSelectorHtml = `
+        <div class="online-story-range-tabs">
+          ${Array.from({ length: pageCount }, (_, i) => {
+            const p = i + 1;
+            const rStart = (p - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE + 1;
+            const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, filtered.length);
+            const isActive = p === currentPage;
+            return `<button type="button" class="online-story-range-tab ${isActive ? 'active' : ''}" data-online-page="${p}">${rStart}–${rEnd}</button>`;
+          }).join('')}
+        </div>
+      `;
+    } else {
+      rangeSelectorHtml = `
+        <div class="online-story-range-select-wrap">
+          <label class="sr-only" for="online-story-range-select">Chọn phần chương</label>
+          <select id="online-story-range-select" class="online-story-range-select" aria-label="Chọn phần chương">
+            ${Array.from({ length: pageCount }, (_, i) => {
+              const p = i + 1;
+              const rStart = (p - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE + 1;
+              const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, filtered.length);
+              return `<option value="${p}" ${p === currentPage ? 'selected' : ''}>Chương ${rStart} – ${rEnd}</option>`;
+            }).join('')}
+          </select>
+        </div>
+      `;
+    }
+  }
 
   container.hidden = false;
   container.innerHTML = `
+    <div class="online-story-back-row">
+      <button type="button" class="online-story-back-btn" id="online-story-back-btn" title="Quay lại danh sách kết quả tìm kiếm">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        <span>← Quay lại tìm kiếm</span>
+      </button>
+    </div>
     <div class="online-story-detail-head">
       <div class="online-story-detail-info">
         <div class="online-story-detail-badge-row">
-          <span class="online-story-source-badge">${escapeHtml(getOnlineSourceLabel(story.source))}</span>
-          <span class="online-story-chapter-count-pill">${story.chapters.length} chương</span>
+          <span class="online-story-chapter-count-pill">${totalChapters} chương</span>
+          ${isCurrentStory && currentChapterIdx >= 0 ? `<span class="online-story-reading-tag">Đang đọc: Chương ${currentChapterIdx + 1}</span>` : ''}
         </div>
         <h4>${escapeHtml(story.title)}</h4>
-        <p>Tác giả: <b>${escapeHtml(story.author || 'Không rõ tác giả')}</b></p>
+        <p class="online-story-author-line">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Tác giả: <b>${escapeHtml(story.author || 'Không rõ')}</b></span>
+        </p>
       </div>
-      <button type="button" class="online-story-primary" data-online-open-chapter="0">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        <span>Đọc từ chương 1</span>
-      </button>
-    </div>
-    <div class="online-story-chapter-tools">
-      <div class="online-story-filter-wrap">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        <input class="online-story-chapter-search" id="online-story-chapter-search" type="search" value="${escapeHtml(onlineStoryPickerState.chapterFilter)}" placeholder="Lọc theo số hoặc tên chương...">
-      </div>
-    </div>
-    <div class="online-story-chapter-list">
-      ${visible.length ? visible.map(({ chapter, index }) => `
-        <button type="button" class="online-story-chapter" data-online-open-chapter="${index}">
-          <div class="online-story-chapter-left">
-            <span class="online-story-ch-num">#${index + 1}</span>
-            <div>
-              <strong>${escapeHtml(chapter.title || `Chương ${index + 1}`)}</strong>
-              <span>Chương ${index + 1}</span>
-            </div>
-          </div>
-          <span class="online-story-ch-arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </span>
+      <div class="online-story-detail-actions">
+        ${isCurrentStory && currentChapterIdx >= 0 ? `
+          <button type="button" class="online-story-resume-btn" data-online-open-chapter="${currentChapterIdx}" title="Đọc tiếp chương đang đọc dở">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Tiếp tục (C.${currentChapterIdx + 1})</span>
+          </button>
+        ` : ''}
+        <button type="button" class="online-story-primary" data-online-open-chapter="0" title="Đọc từ chương 1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <span>Đọc từ đầu</span>
         </button>
-      `).join('') : '<div class="reader-tools-empty">Không có chương phù hợp.</div>'}
+        ${totalChapters > 1 ? `
+          <button type="button" class="online-story-secondary" data-online-open-chapter="${totalChapters - 1}" title="Chuyển nhanh tới chương mới nhất">
+            <span>Mới nhất (C.${totalChapters})</span>
+          </button>
+        ` : ''}
+      </div>
     </div>
-    <div class="online-story-pager">
-      <button type="button" class="online-story-page-button" data-online-page="${onlineStoryPickerState.chapterPage - 1}" ${onlineStoryPickerState.chapterPage <= 1 ? 'disabled' : ''}>← Trước</button>
-      <span class="online-story-page-indicator">Trang <b>${onlineStoryPickerState.chapterPage}</b>/${pageCount} · ${filtered.length} chương</span>
-      <button type="button" class="online-story-page-button" data-online-page="${onlineStoryPickerState.chapterPage + 1}" ${onlineStoryPickerState.chapterPage >= pageCount ? 'disabled' : ''}>Sau →</button>
-    </div>`;
 
-  container.querySelector('#online-story-chapter-search')?.addEventListener('input', event => {
-    onlineStoryPickerState.chapterFilter = event.target.value;
+    <div class="online-story-chapter-tools">
+      <div class="online-story-tools-row">
+        <div class="online-story-filter-wrap">
+          <svg class="online-story-filter-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input class="online-story-chapter-search" id="online-story-chapter-search" type="search" value="${escapeHtml(onlineStoryPickerState.chapterFilter)}" placeholder="Tìm số chương (vd: 15) hoặc tên chương...">
+          ${onlineStoryPickerState.chapterFilter ? `
+            <button type="button" class="online-story-search-clear" id="online-story-search-clear" title="Xóa tìm kiếm" aria-label="Xóa tìm kiếm">✕</button>
+          ` : ''}
+        </div>
+        <button type="button" class="online-story-sort-btn ${onlineStoryPickerState.sortOrder === 'desc' ? 'is-desc' : ''}" id="online-story-sort-btn" title="Đổi thứ tự sắp xếp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            ${onlineStoryPickerState.sortOrder === 'desc'
+              ? '<path d="M12 5v14M5 12l7-7 7 7"/>'
+              : '<path d="M12 19V5M5 12l7 7 7-7"/>'}
+          </svg>
+          <span>${onlineStoryPickerState.sortOrder === 'desc' ? 'Mới nhất' : 'Cũ nhất'}</span>
+        </button>
+      </div>
+      ${rangeSelectorHtml ? `<div class="online-story-range-bar">${rangeSelectorHtml}</div>` : ''}
+    </div>
+
+    <div class="online-story-chapter-list">
+      ${visible.length ? visible.map(({ chapter, index }) => {
+        const isReading = isCurrentStory && currentChapterIdx === index;
+        const displayTitle = (chapter.title || '').trim() || `Chương ${index + 1}`;
+        return `
+          <button type="button" class="online-story-chapter ${isReading ? 'is-reading' : ''}" data-online-open-chapter="${index}" title="${escapeHtml(displayTitle)}">
+            <span class="online-story-ch-num">#${index + 1}</span>
+            <span class="online-story-ch-title">${escapeHtml(displayTitle)}</span>
+            ${isReading ? '<span class="online-story-reading-pill">Đang đọc</span>' : ''}
+          </button>
+        `;
+      }).join('') : '<div class="reader-tools-empty">Không tìm thấy chương phù hợp.</div>'}
+    </div>
+
+    <div class="online-story-pager">
+      <button type="button" class="online-story-page-button" data-online-page="${currentPage - 1}" ${currentPage <= 1 ? 'disabled' : ''}>← Trước</button>
+      <span class="online-story-page-indicator">Chương <b>${filtered.length ? start + 1 : 0}–${Math.min(start + ONLINE_STORY_CHAPTERS_PER_PAGE, filtered.length)}</b> / ${filtered.length}</span>
+      <button type="button" class="online-story-page-button" data-online-page="${currentPage + 1}" ${currentPage >= pageCount ? 'disabled' : ''}>Sau →</button>
+    </div>
+  `;
+
+  // Attach search event
+  const searchInput = container.querySelector('#online-story-chapter-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', event => {
+      onlineStoryPickerState.chapterFilter = event.target.value;
+      onlineStoryPickerState.chapterPage = 1;
+      renderOnlineStoryDetail();
+      const nextInput = document.getElementById('online-story-chapter-search');
+      if (nextInput) {
+        nextInput.focus();
+        const valLen = nextInput.value.length;
+        nextInput.setSelectionRange(valLen, valLen);
+      }
+    });
+  }
+
+  container.querySelector('#online-story-back-btn')?.addEventListener('click', () => {
+    const searchView = document.getElementById('online-story-search-view');
+    if (searchView) searchView.hidden = false;
+    container.hidden = true;
+  });
+
+  container.querySelector('#online-story-search-clear')?.addEventListener('click', () => {
+    onlineStoryPickerState.chapterFilter = '';
     onlineStoryPickerState.chapterPage = 1;
     renderOnlineStoryDetail();
-    setTimeout(() => document.getElementById('online-story-chapter-search')?.focus(), 0);
+    document.getElementById('online-story-chapter-search')?.focus();
   });
+
+  container.querySelector('#online-story-sort-btn')?.addEventListener('click', () => {
+    onlineStoryPickerState.sortOrder = onlineStoryPickerState.sortOrder === 'asc' ? 'desc' : 'asc';
+    onlineStoryPickerState.chapterPage = 1;
+    renderOnlineStoryDetail();
+  });
+
+  container.querySelector('#online-story-range-select')?.addEventListener('change', event => {
+    onlineStoryPickerState.chapterPage = Number(event.target.value) || 1;
+    renderOnlineStoryDetail();
+  });
+
   container.querySelectorAll('[data-online-page]').forEach(button => button.addEventListener('click', () => {
     onlineStoryPickerState.chapterPage = Number(button.dataset.onlinePage) || 1;
     renderOnlineStoryDetail();
   }));
+
   container.querySelectorAll('[data-online-open-chapter]').forEach(button => button.addEventListener('click', () => {
     loadOnlineStoryChapter(story, Number(button.dataset.onlineOpenChapter));
   }));
@@ -4226,7 +4349,10 @@ async function selectOnlineStoryResult(index) {
     };
     onlineStoryPickerState.chapterFilter = '';
     onlineStoryPickerState.chapterPage = 1;
+    onlineStoryPickerState.sortOrder = 'asc';
     setOnlineStoryStatus(`Đã tìm thấy ${chapters.length} chương của “${result.title}”. Chọn chương để đọc:`);
+    const searchView = document.getElementById('online-story-search-view');
+    if (searchView) searchView.hidden = true;
     renderOnlineStoryDetail();
   } catch (error) {
     setOnlineStoryStatus(normalizeOnlineApiError(error), 'error');
@@ -4317,7 +4443,8 @@ async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
     await updatePortalUploadUI();
     updatePortalUploadProgress(100, `Đã tải ${chapter.title || `chương ${page}`}`);
     setTimeout(hidePortalUploadProgress, 350);
-    showPageFlipToast(`Đã mở <b>${escapeHtml(chapter.title || `Chương ${page}`)}</b>.`);
+    closeOnlineStoryModal();
+    showPageFlipToast(`Đã nạp <b>${escapeHtml(story.title)}</b> (${escapeHtml(chapter.title || `Chương ${page}`)}) vào danh sách truyện.`);
     return true;
   } catch (error) {
     hidePortalUploadProgress();
@@ -4335,38 +4462,89 @@ async function loadOnlineStoryChapterByIndex(index, options = {}) {
   return loadOnlineStoryChapter(state.onlineStory, index, options);
 }
 
+function openOnlineStoryModal() {
+  const modal = document.getElementById('online-story-modal');
+  const toggle = document.getElementById('online-story-toggle');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  if (toggle) toggle.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('modal-open');
+
+  const searchView = document.getElementById('online-story-search-view');
+  const detailView = document.getElementById('online-story-detail');
+  if (!onlineStoryPickerState.story) {
+    if (searchView) searchView.hidden = false;
+    if (detailView) detailView.hidden = true;
+  }
+  setTimeout(() => {
+    const input = document.getElementById('online-story-query');
+    if (input && (!searchView || !searchView.hidden)) {
+      input.focus();
+    }
+  }, 80);
+}
+
+function closeOnlineStoryModal() {
+  const modal = document.getElementById('online-story-modal');
+  const toggle = document.getElementById('online-story-toggle');
+  if (!modal) return;
+  modal.classList.remove('show');
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  if (toggle) toggle.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('modal-open');
+}
+
 function initOnlineStoryPicker() {
   const picker = document.getElementById('online-story-picker');
   const toggle = document.getElementById('online-story-toggle');
-  const body = document.getElementById('online-story-body');
+  const modal = document.getElementById('online-story-modal');
+  const closeBtn = document.getElementById('online-story-modal-close');
   const form = document.getElementById('online-story-search-form');
-  if (!picker || !toggle || !body || !form) return;
+  if (!modal || !form) return;
 
-  function setExpanded(expanded) {
-    toggle.setAttribute('aria-expanded', String(expanded));
-    toggle.textContent = expanded ? 'Thu gọn' : 'Tìm truyện';
-    picker.classList.toggle('is-open', expanded);
-    body.hidden = !expanded;
-    if (expanded) setTimeout(() => document.getElementById('online-story-query')?.focus(), 0);
-  }
-
-  toggle.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const expanded = toggle.getAttribute('aria-expanded') === 'true';
-    setExpanded(!expanded);
-  });
-
-  const header = picker.querySelector('.online-story-header');
-  if (header) {
-    header.addEventListener('click', (e) => {
-      if (e.target.closest('#online-story-toggle')) return;
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      setExpanded(!expanded);
+  if (toggle) {
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openOnlineStoryModal();
     });
   }
 
+  if (picker) {
+    picker.addEventListener('click', (e) => {
+      if (e.target.closest('#online-story-toggle')) return;
+      openOnlineStoryModal();
+    });
+    picker.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openOnlineStoryModal();
+      }
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      closeOnlineStoryModal();
+    });
+  }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeOnlineStoryModal();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+      closeOnlineStoryModal();
+    }
+  });
+
   // Quick suggestion tags
-  picker.querySelectorAll('.online-story-tag-btn').forEach(btn => {
+  modal.querySelectorAll('.online-story-tag-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       const query = btn.getAttribute('data-query');
@@ -4386,7 +4564,7 @@ function initOnlineStoryPicker() {
     event.preventDefault();
     if (onlineStoryPickerState.busy) return;
     const query = document.getElementById('online-story-query')?.value.trim() || '';
-    const source = document.getElementById('online-story-source')?.value || 'all';
+    const source = 'all';
     const button = document.getElementById('online-story-search-button');
     if (query.length < 2) {
       setOnlineStoryStatus('Nhập ít nhất 2 ký tự để tìm truyện.', 'error');
@@ -4397,7 +4575,11 @@ function initOnlineStoryPicker() {
     if (button) button.disabled = true;
     setOnlineStoryStatus('Đang tìm truyện...');
     document.getElementById('online-story-results').innerHTML = '';
-    document.getElementById('online-story-detail').hidden = true;
+    const detail = document.getElementById('online-story-detail');
+    if (detail) detail.hidden = true;
+    const searchView = document.getElementById('online-story-search-view');
+    if (searchView) searchView.hidden = false;
+
     try {
       const payload = await fetchOnlineStoryJson('search', { q: query, source });
       onlineStoryPickerState.results = Array.isArray(payload.data) ? payload.data : [];
@@ -4679,10 +4861,19 @@ async function updatePortalUploadUI() {
           </span>
           <span class="badge-text" id="portal-upload-badge-text">TRUYỆN ĐÃ NẠP (${displayList.length})</span>
         </div>
-        <label for="portal-file-input" class="portal-file-add-btn" title="Nạp thêm truyện mới vào thư viện">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          <span>Thêm truyện mới</span>
-        </label>
+        <div class="portal-upload-header-btns">
+          <button type="button" class="portal-file-add-btn" id="portal-btn-open-online-modal" title="Tìm và nạp truyện từ kho online">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>Tìm truyện online</span>
+          </button>
+          <label for="portal-file-input" class="portal-file-add-btn" title="Nạp thêm truyện mới vào thư viện">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Nạp file máy</span>
+          </label>
+        </div>
       </div>
       <div class="portal-books-list">
         ${displayList.map(rec => {
@@ -4743,6 +4934,10 @@ async function updatePortalUploadUI() {
         if (!docId || docId === currentDocId) return;
         await selectPortalBook(docId);
       });
+    });
+
+    container.querySelector('#portal-btn-open-online-modal')?.addEventListener('click', () => {
+      openOnlineStoryModal();
     });
 
     container.querySelectorAll('.portal-book-delete-btn').forEach(btn => {

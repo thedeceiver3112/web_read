@@ -906,11 +906,10 @@
         <div class="portal-announcement-card" id="portal-announcement">
           <div class="portal-announcement-badge">
             <span class="announcement-pulse"></span>
-            <span>MỚI CẬP NHẬT</span>
+            <span >BIG UPDATE 2026-10-16</span>
           </div>
           <div class="portal-announcement-text">
-            <strong>Cải tiến giao diện:</strong> Google sheet, Excel, Zalo &amp; Tải ảnh ngụy trang.
-            <span class="portal-announcement-hint">Nhấp nút <b>Công cụ</b> trên thanh Universal Navbar khi đang đọc để sử dụng.</span>
+            <strong>Thêm tính năng tìm truyện từ nguồn online</strong> 
           </div>
         </div>
 
@@ -1462,7 +1461,7 @@
               </div>
             </div>
 
-            <section class="online-story-picker" id="online-story-picker" aria-labelledby="online-story-heading">
+            <section class="online-story-picker" id="online-story-picker" aria-labelledby="online-story-heading" role="button" tabindex="0" title="Bấm để mở hộp thoại tìm truyện online">
               <div class="online-story-header">
                 <div class="online-story-header-left">
                   <div class="online-story-icon-box">
@@ -1474,54 +1473,64 @@
                   </div>
                   <div class="online-story-title-group">
                     <div class="online-story-kicker-row">
-                      <span class="online-story-kicker">NGUỒN ONLINE</span>
-                      <span class="online-story-sources-tag">TruyenFull • VivuTruyen</span>
+                      <span class="online-story-kicker">TRUYỆN ONLINE</span>
                     </div>
-                    <h3 id="online-story-heading">Tìm &amp; đọc truyện online</h3>
-                    <span class="online-story-subtitle">Kho truyện trực tuyến, tự động chia chương &amp; lưu vị trí đọc</span>
+                    <h3 id="online-story-heading">Tìm &amp; nạp truyện online</h3>
+                    <!-- <span class="online-story-subtitle">Kho truyện trực tuyến, tự động chia chương &amp; nạp vào danh sách đọc</span> -->
                   </div>
                 </div>
-                <button type="button" class="online-story-toggle" id="online-story-toggle" aria-expanded="false" aria-controls="online-story-body">
+                <button type="button" class="online-story-toggle" id="online-story-toggle" aria-expanded="false" aria-controls="online-story-modal">
                   Tìm truyện
                 </button>
               </div>
-              <div class="online-story-body" id="online-story-body" hidden>
-                <form class="online-story-search" id="online-story-search-form">
-                  <div class="online-story-input-wrap">
-                    <svg class="online-story-input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
-                    </svg>
-                    <label class="sr-only" for="online-story-query">Tên truyện</label>
-                    <input id="online-story-query" type="search" minlength="2" placeholder="Nhập tên truyện, ví dụ: Mao Sơn, Đấu Phá..." autocomplete="off">
-                  </div>
-                  <div class="online-story-source-wrap">
-                    <label class="sr-only" for="online-story-source">Nguồn truyện</label>
-                    <select id="online-story-source" aria-label="Nguồn truyện">
-                      <option value="all">Tất cả nguồn</option>
-                      <option value="s1">TruyenFull</option>
-                      <option value="s2">VivuTruyen</option>
-                    </select>
-                  </div>
-                  <button type="submit" id="online-story-search-button">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
-                    </svg>
-                    <span>Tìm</span>
-                  </button>
-                </form>
-                <div class="online-story-quick-tags" id="online-story-quick-tags">
-                  <span class="online-story-quick-label">Gợi ý:</span>
-                  <button type="button" class="online-story-tag-btn" data-query="Mao Sơn Tróc Quỷ Nhân">Mao Sơn</button>
-                  <button type="button" class="online-story-tag-btn" data-query="Đấu Phá Thương Khung">Đấu Phá</button>
-                  <button type="button" class="online-story-tag-btn" data-query="Phàm Nhân Tu Tiên">Phàm Nhân</button>
-                  <button type="button" class="online-story-tag-btn" data-query="Tiên Nghịch">Tiên Nghịch</button>
-                  <button type="button" class="online-story-tag-btn" data-query="Kiếm Lai">Kiếm Lai</button>
-                </div>
-                <p class="online-story-status" id="online-story-status" role="status" aria-live="polite"></p>
-                <div class="online-story-results" id="online-story-results"></div>
-                <div class="online-story-detail" id="online-story-detail" hidden></div>
-              </div>
             </section>
+
+            <!-- Online Story Modal Dialog -->
+            <div class="stealth-modal-overlay online-story-modal-overlay" id="online-story-modal" aria-hidden="true" style="display: none;">
+              <div class="stealth-modal-content online-story-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="online-story-modal-title">
+                <div class="modal-header online-story-modal-header">
+                  <div class="online-story-modal-header-left">
+                    <div class="online-story-icon-box small">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 id="online-story-modal-title">Tìm &amp; nạp truyện online</h3>
+                      <!-- <span class="online-story-modal-sub">Chọn truyện và chương để nạp vào danh sách đọc</span> -->
+                    </div>
+                  </div>
+                  <button type="button" class="modal-close-btn" id="online-story-modal-close" aria-label="Đóng hộp thoại">✕</button>
+                </div>
+                <div class="online-story-modal-body" id="online-story-body">
+                  <div class="online-story-search-view" id="online-story-search-view">
+                    <form class="online-story-search" id="online-story-search-form">
+                      <div class="online-story-input-wrap">
+                        <svg class="online-story-input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+                        </svg>
+                        <label class="sr-only" for="online-story-query">Tên truyện</label>
+                        <input id="online-story-query" type="search" minlength="2" placeholder="Nhập tên truyện, ví dụ: Mao Sơn, Đấu Phá..." autocomplete="off">
+                      </div>
+                      <button type="submit" id="online-story-search-button">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>
+                        </svg>
+                        <span>Tìm</span>
+                      </button>
+                    </form>
+                    <div class="online-story-quick-tags" id="online-story-quick-tags">
+                      <span class="online-story-quick-label">Hiện tại mình mới chỉ có 1 nguồn truyện nên có thể sẽ thiếu nhiều, mn thông cảm nhé!</span>
+                    </div>
+                    <p class="online-story-status" id="online-story-status" role="status" aria-live="polite"></p>
+                    <div class="online-story-results" id="online-story-results"></div>
+                  </div>
+                  <div class="online-story-detail" id="online-story-detail" hidden></div>
+                </div>
+              </div>
+            </div>
 
             <!-- Enter Button -->
             <button class="duo-btn-primary disabled-need-file" id="btn-portal-enter" title="Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc">
