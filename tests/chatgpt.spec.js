@@ -37,6 +37,8 @@ test('theme ChatGPT giống bố cục web hiện tại và vẫn đọc đượ
   await expect(page.locator('.gpt-composer')).toBeVisible();
   await expect(page.locator('#chatgpt-story-stream .gpt-para')).toHaveCount(16);
 
+  await expect(page.locator('#universal-reader-navbar')).toBeVisible();
+
   const layout = await page.evaluate(() => {
     const sidebar = document.querySelector('.gpt-sidebar').getBoundingClientRect();
     const topbar = document.querySelector('.gpt-topbar').getBoundingClientRect();
@@ -54,7 +56,7 @@ test('theme ChatGPT giống bố cục web hiện tại và vẫn đọc đượ
   });
 
   expect(layout.sidebarWidth).toBe(260);
-  expect(layout.topbarY).toBe(0);
+  expect(layout.topbarY).toBe(40);
   expect(layout.composerWidth).toBeLessThanOrEqual(768);
   expect(layout.threadWidth).toBeLessThanOrEqual(768);
   expect(layout.bodyBackground).toBe('rgb(255, 255, 255)');

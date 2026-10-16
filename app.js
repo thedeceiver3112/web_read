@@ -82,6 +82,7 @@ const state = {
   pageStartIndices: {}, // pageNum -> globalIndex
   documentToc: [], // Array of { title, page, globalIndex }
   documentImages: {}, // Map of imgKey -> { src, label, fileName, page }
+  onlineStory: null, // Metadata for chapter-on-demand stories
   searchResults: [],
   searchResultCursor: -1,
   
@@ -325,6 +326,18 @@ let activePdfLoadingTask = null;
 let lastFailedDocumentFile = null;
 let previousDocumentSnapshot = null;
 let textWorkerAvailabilityPromise = null;
+let onlineStoryAbortController = null;
+
+const ONLINE_STORY_API_BASE = '/api/online-story';
+const ONLINE_STORY_FETCH_TIMEOUT = 15000;
+const ONLINE_STORY_CHAPTERS_PER_PAGE = 60;
+const onlineStoryPickerState = {
+  results: [],
+  story: null,
+  chapterFilter: '',
+  chapterPage: 1,
+  busy: false
+};
 
 function createAnalyticsId(prefix) {
   const value = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -652,9 +665,12 @@ function buildHybridSyncPayload() {
     totalPages: state.totalPages,
     updatedAt: Date.now()
   };
-  const progressPercent = state.allChunks.length > 1
-    ? (Math.max(0, Number(position.globalIndex) || 0) / (state.allChunks.length - 1)) * 100
-    : 100;
+  const chapterProgress = state.allChunks.length > 1
+    ? Math.max(0, Number(position.globalIndex) || 0) / (state.allChunks.length - 1)
+    : 1;
+  const progressPercent = state.onlineStory
+    ? ((Math.max(1, Number(position.page) || 1) - 1 + chapterProgress) / Math.max(1, state.totalPages)) * 100
+    : chapterProgress * 100;
   return {
     document: {
       documentId,
@@ -1260,6 +1276,10 @@ function applyCachedDocument(cache) {
   if (normalizedCache.chunks.length === 0) return false;
   state.allChunks = normalizedCache.chunks;
   state.documentToc = Array.isArray(cache.documentToc) ? cache.documentToc : [];
+  state.onlineStory = cache.onlineStory && typeof cache.onlineStory === 'object'
+    ? cache.onlineStory
+    : null;
+  updateOnlineChapterNextButton(null, false);
   if (cache.documentImages && typeof cache.documentImages === 'object') {
     state.documentImages = cache.documentImages;
   } else if (previousDocumentName !== cache.documentName) {
@@ -1328,6 +1348,7 @@ function persistDocumentCache() {
     pageStartIndices: state.pageStartIndices,
     documentToc: state.documentToc,
     documentImages: state.documentImages || {},
+    onlineStory: state.onlineStory || null,
     totalPages: state.totalPages,
     currentPage: state.currentPage,
     currentGlobalIndex: state.currentGlobalIndex,
@@ -1853,9 +1874,13 @@ function renderBookmarksPanel(content) {
       <div class="reader-tools-actions"><button data-mark-open="${escapeHtml(mark.id)}">Mở</button><button class="danger" data-mark-delete="${escapeHtml(mark.id)}">Xóa</button></div>
     </article>`).join('') : '<div class="reader-tools-empty">Chưa có dấu trang thủ công.</div>'}</div>`;
   content.querySelector('#reader-add-bookmark')?.addEventListener('click', () => addManualBookmark());
-  content.querySelectorAll('[data-mark-open]').forEach(button => button.addEventListener('click', () => {
+  content.querySelectorAll('[data-mark-open]').forEach(button => button.addEventListener('click', async () => {
     const mark = entry.marks.find(item => item.id === button.dataset.markOpen);
-    if (mark) jumpToChunk(mark.globalIndex);
+    if (mark && state.onlineStory && Number(mark.page) !== state.currentPage) {
+      await loadOnlineStoryChapterByIndex(Number(mark.page) - 1, { globalIndex: mark.globalIndex });
+    } else if (mark) {
+      jumpToChunk(mark.globalIndex);
+    }
     closeReaderTools();
   }));
   content.querySelectorAll('[data-mark-note]').forEach(input => input.addEventListener('change', () => {
@@ -1883,10 +1908,53 @@ function renderTocPanel(content) {
     content.innerHTML = '<div class="reader-tools-empty">Tài liệu này không có mục lục chương. File EPUB hoặc PDF có bookmark sẽ tự động hiển thị mục lục tại đây.</div>';
     return;
   }
+  if (state.onlineStory) {
+    renderOnlineTocPanel(content);
+    return;
+  }
   content.innerHTML = `<div class="reader-tools-list">${state.documentToc.map((item, index) => `<button class="reader-toc-item" data-toc-index="${index}"><span>${escapeHtml(item.title)}</span><small>Trang ${item.page}</small></button>`).join('')}</div>`;
-  content.querySelectorAll('[data-toc-index]').forEach(button => button.addEventListener('click', () => {
+  content.querySelectorAll('[data-toc-index]').forEach(button => button.addEventListener('click', async () => {
     const item = state.documentToc[Number(button.dataset.tocIndex)];
-    jumpToChunk(item.globalIndex ?? state.pageStartIndices[item.page] ?? 0);
+    if (state.onlineStory && item?.chapterId) {
+      await loadOnlineStoryChapterByIndex(Number(item.page) - 1);
+    } else {
+      jumpToChunk(item.globalIndex ?? state.pageStartIndices[item.page] ?? 0);
+    }
+    closeReaderTools();
+  }));
+}
+
+function renderOnlineTocPanel(content, query = '', page = 1) {
+  const normalizedQuery = String(query || '').trim().toLocaleLowerCase('vi');
+  const matches = state.documentToc
+    .map((item, index) => ({ item, index }))
+    .filter(({ item, index }) => !normalizedQuery || `${index + 1} ${item.title}`.toLocaleLowerCase('vi').includes(normalizedQuery));
+  const pageSize = 80;
+  const pageCount = Math.max(1, Math.ceil(matches.length / pageSize));
+  const safePage = Math.min(Math.max(1, Number(page) || 1), pageCount);
+  const visible = matches.slice((safePage - 1) * pageSize, safePage * pageSize);
+
+  content.innerHTML = `
+    <form class="reader-search-form" id="online-toc-search-form">
+      <input id="online-toc-search-input" type="search" value="${escapeHtml(query)}" placeholder="Tìm số hoặc tên chương" autocomplete="off">
+      <button type="submit">Tìm</button>
+    </form>
+    <div class="reader-search-summary">${matches.length} chương · Trang ${safePage}/${pageCount}</div>
+    <div class="reader-tools-list">${visible.length ? visible.map(({ item, index }) => `<button class="reader-toc-item" data-toc-index="${index}"><span>${escapeHtml(item.title)}</span><small>Chương ${item.page}</small></button>`).join('') : '<div class="reader-tools-empty">Không tìm thấy chương phù hợp.</div>'}</div>
+    <div class="online-story-pager">
+      <button type="button" class="online-story-page-button" data-toc-page="${safePage - 1}" ${safePage <= 1 ? 'disabled' : ''}>Trước</button>
+      <button type="button" class="online-story-page-button" data-toc-page="${safePage + 1}" ${safePage >= pageCount ? 'disabled' : ''}>Sau</button>
+    </div>`;
+
+  content.querySelector('#online-toc-search-form')?.addEventListener('submit', event => {
+    event.preventDefault();
+    renderOnlineTocPanel(content, content.querySelector('#online-toc-search-input')?.value || '', 1);
+  });
+  content.querySelectorAll('[data-toc-page]').forEach(button => button.addEventListener('click', () => {
+    renderOnlineTocPanel(content, query, Number(button.dataset.tocPage));
+  }));
+  content.querySelectorAll('[data-toc-index]').forEach(button => button.addEventListener('click', async () => {
+    await loadOnlineStoryChapterByIndex(Number(button.dataset.tocIndex));
     closeReaderTools();
   }));
 }
@@ -1964,6 +2032,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initContinuousScrollListeners();
   initLandingPortal();
   initPortalTriggers();
+  initOnlineStoryPicker();
   initControlsVisibilityToggle();
   initVersionReloadButton();
   initFeedbackListeners();
@@ -3939,6 +4008,411 @@ function initStealthEditableElements() {
   });
 }
 
+function setOnlineStoryStatus(message = '', type = '') {
+  const status = document.getElementById('online-story-status');
+  if (!status) return;
+  status.textContent = message;
+  status.classList.toggle('error', type === 'error');
+}
+
+function getOnlineSourceLabel(source) {
+  return source === 's1' ? 'TruyenFull' : source === 's2' ? 'VivuTruyen' : 'Nguồn online';
+}
+
+function normalizeOnlineApiError(error) {
+  if (error?.name === 'AbortError') return 'Nguồn truyện phản hồi quá lâu. Hãy thử lại sau.';
+  const message = String(error?.message || error || 'Không thể kết nối nguồn truyện.');
+  if (/Failed to fetch|NetworkError|Load failed/i.test(message)) {
+    return 'Không kết nối được nguồn truyện. Có thể nguồn đang bảo trì hoặc chặn truy cập tạm thời.';
+  }
+  return message;
+}
+
+async function fetchOnlineStoryJson(path, params, options = {}) {
+  const retries = Number.isFinite(options.retries) ? options.retries : 2;
+  let lastError = null;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    onlineStoryAbortController?.abort();
+    onlineStoryAbortController = controller;
+    const timeout = setTimeout(() => controller.abort(), ONLINE_STORY_FETCH_TIMEOUT);
+    try {
+      const url = new URL(`${ONLINE_STORY_API_BASE}/${path}`, window.location.origin);
+      Object.entries(params || {}).forEach(([key, value]) => url.searchParams.set(key, value));
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: { Accept: 'application/json' },
+        cache: 'no-store'
+      });
+      if (!response.ok) {
+        const error = new Error(
+          response.status >= 500
+            ? `Nguồn truyện đang lỗi (HTTP ${response.status}).`
+            : `Yêu cầu bị từ chối (HTTP ${response.status}).`
+        );
+        error.retryable = response.status === 429 || response.status >= 500;
+        throw error;
+      }
+      const payload = await response.json();
+      if (!payload || payload.success !== true || !payload.data) {
+        throw new Error(payload?.error || payload?.message || 'Nguồn truyện trả về dữ liệu không hợp lệ.');
+      }
+      return payload;
+    } catch (error) {
+      lastError = error;
+      const retryable = error?.retryable || error?.name === 'AbortError' || /Failed to fetch|NetworkError/i.test(String(error?.message));
+      if (!retryable || attempt >= retries) break;
+      await new Promise(resolve => setTimeout(resolve, 450 * (attempt + 1)));
+    } finally {
+      clearTimeout(timeout);
+      if (onlineStoryAbortController === controller) onlineStoryAbortController = null;
+    }
+  }
+
+  throw lastError || new Error('Không thể tải dữ liệu từ nguồn truyện.');
+}
+
+function renderOnlineStoryResults() {
+  const container = document.getElementById('online-story-results');
+  const detail = document.getElementById('online-story-detail');
+  if (!container) return;
+  if (detail) detail.hidden = true;
+
+  if (!onlineStoryPickerState.results.length) {
+    container.innerHTML = '<div class="reader-tools-empty">Không tìm thấy truyện phù hợp.</div>';
+    return;
+  }
+
+  container.innerHTML = onlineStoryPickerState.results.map((story, index) => {
+    const isSelected = onlineStoryPickerState.story?.storyId === (story.story_id || story.storyId);
+    return `
+    <button type="button" class="online-story-result ${isSelected ? 'selected' : ''}" data-online-result="${index}">
+      <div class="online-story-result-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+      </div>
+      <div class="online-story-result-content">
+        <strong>${escapeHtml(story.title || 'Chưa có tên')}</strong>
+        <span>
+          <span class="online-story-source-badge">${escapeHtml(getOnlineSourceLabel(story.source))}</span>
+          ${escapeHtml(story.author || 'Không rõ tác giả')}${story.latest_chapter ? ` · ${escapeHtml(story.latest_chapter)}` : ''}
+        </span>
+      </div>
+      <div class="online-story-result-action">
+        <span>Xem chương</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </button>
+  `; }).join('');
+
+  container.querySelectorAll('[data-online-result]').forEach(button => {
+    button.addEventListener('click', () => selectOnlineStoryResult(Number(button.dataset.onlineResult)));
+  });
+}
+
+function getFilteredOnlineChapters() {
+  const chapters = onlineStoryPickerState.story?.chapters || [];
+  const query = onlineStoryPickerState.chapterFilter.trim().toLocaleLowerCase('vi');
+  if (!query) return chapters.map((chapter, index) => ({ chapter, index }));
+  return chapters
+    .map((chapter, index) => ({ chapter, index }))
+    .filter(({ chapter, index }) => `${index + 1} ${chapter.title || ''}`.toLocaleLowerCase('vi').includes(query));
+}
+
+function renderOnlineStoryDetail() {
+  const container = document.getElementById('online-story-detail');
+  const story = onlineStoryPickerState.story;
+  if (!container || !story) return;
+
+  const filtered = getFilteredOnlineChapters();
+  const pageCount = Math.max(1, Math.ceil(filtered.length / ONLINE_STORY_CHAPTERS_PER_PAGE));
+  onlineStoryPickerState.chapterPage = Math.min(Math.max(1, onlineStoryPickerState.chapterPage), pageCount);
+  const start = (onlineStoryPickerState.chapterPage - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE;
+  const visible = filtered.slice(start, start + ONLINE_STORY_CHAPTERS_PER_PAGE);
+
+  container.hidden = false;
+  container.innerHTML = `
+    <div class="online-story-detail-head">
+      <div class="online-story-detail-info">
+        <div class="online-story-detail-badge-row">
+          <span class="online-story-source-badge">${escapeHtml(getOnlineSourceLabel(story.source))}</span>
+          <span class="online-story-chapter-count-pill">${story.chapters.length} chương</span>
+        </div>
+        <h4>${escapeHtml(story.title)}</h4>
+        <p>Tác giả: <b>${escapeHtml(story.author || 'Không rõ tác giả')}</b></p>
+      </div>
+      <button type="button" class="online-story-primary" data-online-open-chapter="0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <span>Đọc từ chương 1</span>
+      </button>
+    </div>
+    <div class="online-story-chapter-tools">
+      <div class="online-story-filter-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input class="online-story-chapter-search" id="online-story-chapter-search" type="search" value="${escapeHtml(onlineStoryPickerState.chapterFilter)}" placeholder="Lọc theo số hoặc tên chương...">
+      </div>
+    </div>
+    <div class="online-story-chapter-list">
+      ${visible.length ? visible.map(({ chapter, index }) => `
+        <button type="button" class="online-story-chapter" data-online-open-chapter="${index}">
+          <div class="online-story-chapter-left">
+            <span class="online-story-ch-num">#${index + 1}</span>
+            <div>
+              <strong>${escapeHtml(chapter.title || `Chương ${index + 1}`)}</strong>
+              <span>Chương ${index + 1}</span>
+            </div>
+          </div>
+          <span class="online-story-ch-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+        </button>
+      `).join('') : '<div class="reader-tools-empty">Không có chương phù hợp.</div>'}
+    </div>
+    <div class="online-story-pager">
+      <button type="button" class="online-story-page-button" data-online-page="${onlineStoryPickerState.chapterPage - 1}" ${onlineStoryPickerState.chapterPage <= 1 ? 'disabled' : ''}>← Trước</button>
+      <span class="online-story-page-indicator">Trang <b>${onlineStoryPickerState.chapterPage}</b>/${pageCount} · ${filtered.length} chương</span>
+      <button type="button" class="online-story-page-button" data-online-page="${onlineStoryPickerState.chapterPage + 1}" ${onlineStoryPickerState.chapterPage >= pageCount ? 'disabled' : ''}>Sau →</button>
+    </div>`;
+
+  container.querySelector('#online-story-chapter-search')?.addEventListener('input', event => {
+    onlineStoryPickerState.chapterFilter = event.target.value;
+    onlineStoryPickerState.chapterPage = 1;
+    renderOnlineStoryDetail();
+    setTimeout(() => document.getElementById('online-story-chapter-search')?.focus(), 0);
+  });
+  container.querySelectorAll('[data-online-page]').forEach(button => button.addEventListener('click', () => {
+    onlineStoryPickerState.chapterPage = Number(button.dataset.onlinePage) || 1;
+    renderOnlineStoryDetail();
+  }));
+  container.querySelectorAll('[data-online-open-chapter]').forEach(button => button.addEventListener('click', () => {
+    loadOnlineStoryChapter(story, Number(button.dataset.onlineOpenChapter));
+  }));
+}
+
+async function selectOnlineStoryResult(index) {
+  const result = onlineStoryPickerState.results[index];
+  if (!result || onlineStoryPickerState.busy) return;
+
+  document.querySelectorAll('.online-story-result').forEach((el, i) => {
+    el.classList.toggle('selected', i === index);
+  });
+
+  onlineStoryPickerState.busy = true;
+  setOnlineStoryStatus(`Đang tải danh sách chương của “${result.title}”...`);
+  try {
+    const payload = await fetchOnlineStoryJson('story', {
+      story: result.story_id,
+      source: result.source
+    });
+    const data = payload.data;
+    const chapters = Array.isArray(data.chapters)
+      ? data.chapters.filter(chapter => chapter && chapter.chapter_id)
+      : [];
+    if (!chapters.length) throw new Error('Truyện này chưa có chương có thể đọc.');
+    onlineStoryPickerState.story = {
+      source: data.source || result.source,
+      storyId: data.story_id || result.story_id,
+      title: data.title || result.title,
+      author: data.author || result.author || '',
+      chapters: chapters.map(chapter => ({
+        title: chapter.title || '',
+        chapterId: chapter.chapter_id
+      }))
+    };
+    onlineStoryPickerState.chapterFilter = '';
+    onlineStoryPickerState.chapterPage = 1;
+    setOnlineStoryStatus(`Đã tìm thấy ${chapters.length} chương của “${result.title}”. Chọn chương để đọc:`);
+    renderOnlineStoryDetail();
+  } catch (error) {
+    setOnlineStoryStatus(normalizeOnlineApiError(error), 'error');
+  } finally {
+    onlineStoryPickerState.busy = false;
+  }
+}
+
+function buildOnlineStoryToc(story) {
+  return story.chapters.map((chapter, index) => ({
+    title: chapter.title || `Chương ${index + 1}`,
+    page: index + 1,
+    globalIndex: 0,
+    chapterId: chapter.chapterId
+  }));
+}
+
+async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
+  if (!story || !Array.isArray(story.chapters) || !story.chapters.length) return false;
+  updateOnlineChapterNextButton(null, false);
+  const safeIndex = Math.min(Math.max(0, Number(chapterIndex) || 0), story.chapters.length - 1);
+  const chapter = story.chapters[safeIndex];
+  if (!chapter?.chapterId) return false;
+
+  saveCurrentBookmark();
+  showLoading(`Đang tải ${chapter.title || `chương ${safeIndex + 1}`}...`);
+  if (document.getElementById('online-story-picker')) {
+    showPortalUploadProgress(`Đang tải: ${story.title}`, chapter.title || `Chương ${safeIndex + 1}`, 45);
+  }
+
+  try {
+    const payload = await fetchOnlineStoryJson('chapter', {
+      story: story.storyId,
+      chapter: chapter.chapterId,
+      source: story.source
+    });
+    const paragraphs = Array.isArray(payload.data.paragraphs)
+      ? payload.data.paragraphs.filter(hasReadableChunkText)
+      : [];
+    const texts = paragraphs.flatMap(paragraph => splitTextIntoChunks(paragraph));
+    if (!texts.length) throw new Error('Chương này không có nội dung văn bản để hiển thị.');
+
+    const page = safeIndex + 1;
+    state.pdfDoc = null;
+    state.pdfFileName = story.title;
+    state.documentId = `online:${story.source}:${story.storyId}`;
+    state.documentFileSize = 0;
+    state.documentFileType = 'online';
+    state.documentCreatedAt = state.documentCreatedAt || Date.now();
+    state.onlineStory = {
+      source: story.source,
+      storyId: story.storyId,
+      title: story.title,
+      author: story.author || '',
+      chapters: story.chapters,
+      currentChapterIndex: safeIndex
+    };
+    state.documentToc = buildOnlineStoryToc(story);
+    state.documentImages = {};
+    state.allChunks = texts.map((text, index) => ({
+      text,
+      page,
+      indexInPage: index,
+      globalIndex: index
+    }));
+    state.rawText = texts.join('\n\n');
+    state.pageStartIndices = { [page]: 0 };
+    state.currentPage = page;
+    state.totalPages = story.chapters.length;
+    state.loadedPages = story.chapters.length;
+    state.currentGlobalIndex = Math.min(Math.max(0, Number(options.globalIndex) || 0), texts.length - 1);
+    state.isPdfProcessing = false;
+    state.searchResults = [];
+    state.searchResultCursor = -1;
+
+    applyTheme(state.theme);
+    renderContinuousView(false, state.currentGlobalIndex);
+    const activeContainer = getActiveScrollContainer();
+    if (activeContainer) {
+      stopReadingScrollAnimation(activeContainer);
+      activeContainer.scrollTop = state.currentGlobalIndex === 0 ? 0 : activeContainer.scrollTop;
+      activeContainer._onlineLastScrollTop = activeContainer.scrollTop;
+    }
+    updateOnlineChapterNextButton(activeContainer);
+    updatePaginationUI();
+    saveState();
+    await persistDocumentCache();
+    await updatePortalUploadUI();
+    updatePortalUploadProgress(100, `Đã tải ${chapter.title || `chương ${page}`}`);
+    setTimeout(hidePortalUploadProgress, 350);
+    showPageFlipToast(`Đã mở <b>${escapeHtml(chapter.title || `Chương ${page}`)}</b>.`);
+    return true;
+  } catch (error) {
+    hidePortalUploadProgress();
+    const message = normalizeOnlineApiError(error);
+    setOnlineStoryStatus(message, 'error');
+    showReaderError('Không thể tải chương truyện', message, error, chapter.title || `Chương ${safeIndex + 1}`, null);
+    return false;
+  } finally {
+    hideLoading();
+  }
+}
+
+async function loadOnlineStoryChapterByIndex(index, options = {}) {
+  if (!state.onlineStory) return false;
+  return loadOnlineStoryChapter(state.onlineStory, index, options);
+}
+
+function initOnlineStoryPicker() {
+  const picker = document.getElementById('online-story-picker');
+  const toggle = document.getElementById('online-story-toggle');
+  const body = document.getElementById('online-story-body');
+  const form = document.getElementById('online-story-search-form');
+  if (!picker || !toggle || !body || !form) return;
+
+  function setExpanded(expanded) {
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.textContent = expanded ? 'Thu gọn' : 'Tìm truyện';
+    picker.classList.toggle('is-open', expanded);
+    body.hidden = !expanded;
+    if (expanded) setTimeout(() => document.getElementById('online-story-query')?.focus(), 0);
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    setExpanded(!expanded);
+  });
+
+  const header = picker.querySelector('.online-story-header');
+  if (header) {
+    header.addEventListener('click', (e) => {
+      if (e.target.closest('#online-story-toggle')) return;
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      setExpanded(!expanded);
+    });
+  }
+
+  // Quick suggestion tags
+  picker.querySelectorAll('.online-story-tag-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const query = btn.getAttribute('data-query');
+      const input = document.getElementById('online-story-query');
+      if (input && query) {
+        input.value = query;
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit();
+        } else {
+          form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        }
+      }
+    });
+  });
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (onlineStoryPickerState.busy) return;
+    const query = document.getElementById('online-story-query')?.value.trim() || '';
+    const source = document.getElementById('online-story-source')?.value || 'all';
+    const button = document.getElementById('online-story-search-button');
+    if (query.length < 2) {
+      setOnlineStoryStatus('Nhập ít nhất 2 ký tự để tìm truyện.', 'error');
+      return;
+    }
+
+    onlineStoryPickerState.busy = true;
+    if (button) button.disabled = true;
+    setOnlineStoryStatus('Đang tìm truyện...');
+    document.getElementById('online-story-results').innerHTML = '';
+    document.getElementById('online-story-detail').hidden = true;
+    try {
+      const payload = await fetchOnlineStoryJson('search', { q: query, source });
+      onlineStoryPickerState.results = Array.isArray(payload.data) ? payload.data : [];
+      setOnlineStoryStatus(`Tìm thấy ${onlineStoryPickerState.results.length} kết quả phù hợp.`);
+      renderOnlineStoryResults();
+    } catch (error) {
+      onlineStoryPickerState.results = [];
+      setOnlineStoryStatus(normalizeOnlineApiError(error), 'error');
+    } finally {
+      onlineStoryPickerState.busy = false;
+      if (button) button.disabled = false;
+    }
+  });
+}
+
 function hasLoadedDocument() {
   return Boolean(
     state.pdfFileName &&
@@ -4083,6 +4557,7 @@ async function deletePortalBook(docId, docTitle) {
         state.allChunks = [];
         state.totalPages = 0;
         state.documentToc = [];
+        state.onlineStory = null;
         state.pageStartIndices = { 1: 0 };
         sessionStorage.removeItem(ACTIVE_DOCUMENT_SESSION_KEY);
         saveState();
@@ -4211,11 +4686,12 @@ async function updatePortalUploadUI() {
       </div>
       <div class="portal-books-list">
         ${displayList.map(rec => {
+          const isOnline = rec.documentFileType === 'online' || String(rec.documentId || '').startsWith('online:');
           const isSelected = rec.documentId === currentDocId || (displayList.length === 1 && !currentDocId);
-          const pagesInfo = rec.totalPages && rec.totalPages > 1 ? `${rec.totalPages} trang` : '';
+          const pagesInfo = rec.totalPages && rec.totalPages > 1 ? `${rec.totalPages} ${isOnline ? 'chương' : 'trang'}` : '';
           const chunksCount = (rec.chunks || []).length;
           const chunksInfo = chunksCount ? `${chunksCount} đoạn` : '';
-          const metaParts = [pagesInfo, chunksInfo].filter(Boolean);
+          const metaParts = [isOnline ? 'Truyện online' : '', pagesInfo, chunksInfo].filter(Boolean);
           const timeText = rec.savedAt ? new Date(rec.savedAt).toLocaleDateString('vi-VN') : '';
           if (timeText) metaParts.push(timeText);
           const fullMeta = metaParts.join(' • ');
@@ -4226,18 +4702,26 @@ async function updatePortalUploadUI() {
                   ${isSelected ? '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
                 </div>
               </div>
-              <div class="portal-book-icon-box">
+              <div class="portal-book-icon-box ${isOnline ? 'is-online' : ''}">
+                ${isOnline ? `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                ` : `
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                   <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                 </svg>
+                `}
               </div>
               <div class="portal-book-details">
                 <div class="portal-book-title-row">
                   <span class="portal-book-title" title="${escapeHtml(rec.documentName || '')}">${escapeHtml(rec.documentName || 'Không tên')}</span>
                   <span class="portal-book-pill ${isSelected ? 'active' : ''}">${isSelected ? 'Đang chọn' : 'Chọn đọc'}</span>
                 </div>
-                <span class="portal-book-meta">${escapeHtml(fullMeta || 'Đã lưu trên máy')}</span>
+                <span class="portal-book-meta">${escapeHtml(fullMeta || (isOnline ? 'Truyện online' : 'Đã lưu trên máy'))}</span>
               </div>
               <button class="portal-book-delete-btn" data-delete-id="${escapeHtml(rec.documentId)}" title="Xóa truyện khỏi danh sách">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -5509,6 +5993,25 @@ function initEventListeners() {
     } else if (e.key === 'ArrowUp' || e.key === 'k' || e.key === 'K') {
       e.preventDefault();
       navigateRow(-1);
+    } else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') {
+      e.preventDefault();
+      if (state.onlineStory) {
+        triggerOnlineNextChapter();
+      } else {
+        changePage(1);
+      }
+    } else if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') {
+      e.preventDefault();
+      if (state.onlineStory) {
+        const currIdx = Number(state.onlineStory.currentChapterIndex) || 0;
+        if (currIdx > 0) {
+          loadOnlineStoryChapterByIndex(currIdx - 1);
+        } else {
+          showPageFlipToast('Đang ở chương đầu tiên.');
+        }
+      } else {
+        changePage(-1);
+      }
     } else if (e.key === 'PageDown') {
       e.preventDefault();
       changePage(1);
@@ -6173,6 +6676,7 @@ function prepareDocumentLoad(file, documentId = '') {
     pageStartIndices: state.pageStartIndices,
     documentToc: state.documentToc,
     documentImages: state.documentImages,
+    onlineStory: state.onlineStory,
     currentGlobalIndex: state.currentGlobalIndex
   };
   const loadToken = ++state.pdfLoadToken;
@@ -6187,6 +6691,8 @@ function prepareDocumentLoad(file, documentId = '') {
   state.documentCreatedAt = Date.now();
   state.documentToc = [];
   state.documentImages = {};
+  state.onlineStory = null;
+  updateOnlineChapterNextButton(null, false);
   state.searchResults = [];
   state.searchResultCursor = -1;
 
@@ -6257,7 +6763,7 @@ async function processDocumentFile(file) {
 async function isTextWorkerAvailable() {
   if (!window.Worker) return false;
   if (!textWorkerAvailabilityPromise) {
-    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261015-3', { cache: 'no-store' })
+    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261016-4', { cache: 'no-store' })
       .then(response => {
         const contentType = response.headers.get('content-type') || '';
         return response.ok && /javascript|ecmascript|text\/plain/i.test(contentType);
@@ -6287,7 +6793,7 @@ async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) 
   return new Promise((resolve, reject) => {
     let worker;
     try {
-      worker = new Worker('text-worker.js?v=20261015-3');
+      worker = new Worker('text-worker.js?v=20261016-4');
     } catch (error) {
       resolve(splitTextWithoutWorker(source, mode, workerOptions));
       return;
@@ -7465,6 +7971,8 @@ function splitTextIntoChunks(text, mode = state.chunkMode, options = {}) {
 
 // Build unified continuous stream across all pages
 function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
+  state.onlineStory = null;
+  updateOnlineChapterNextButton(null, false);
   state.allChunks = [];
   state.pageStartIndices = {};
   state.totalPages = totalPages;
@@ -7512,6 +8020,8 @@ function initStoryFromPages(pagesData, totalPages, firstStoryPage = 1) {
 }
 
 function initStoryFromChunks(chunks, options = {}) {
+  state.onlineStory = null;
+  updateOnlineChapterNextButton(null, false);
   state.allChunks = [];
   state.pageStartIndices = { 1: 0 };
   state.totalPages = 1;
@@ -7580,6 +8090,7 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null,
     const el = document.getElementById(id);
     if (el) el.replaceChildren();
   });
+  document.getElementById('online-chapter-next-row')?.remove();
 
   state.renderStartIndex = renderStart;
   state.renderedCount = renderStart;
@@ -7602,6 +8113,9 @@ function renderContinuousView(preserveActiveRow = false, targetScrollIdx = null,
 function renderNextBatch(count = 100) {
   getThemeRenderer().append(count);
   applyStyles();
+  if (state.onlineStory) {
+    updateOnlineChapterNextButton(getActiveScrollContainer());
+  }
 }
 
 function isChunkRendered(index) {
@@ -8356,9 +8870,18 @@ function updatePaginationUI() {
   syncUniversalNavbar();
 }
 
-function goToPage(pageNum) {
+async function goToPage(pageNum) {
   pageNum = parseInt(pageNum);
   if (isNaN(pageNum) || pageNum < 1 || pageNum > state.totalPages) return;
+
+  if (state.onlineStory) {
+    if (pageNum === state.currentPage) {
+      jumpToChunk(0);
+      return;
+    }
+    await loadOnlineStoryChapterByIndex(pageNum - 1);
+    return;
+  }
 
   const targetIdx = state.pageStartIndices[pageNum];
   if (targetIdx === undefined) {
@@ -8377,7 +8900,7 @@ function goToPage(pageNum) {
   showPageFlipToast(`📖 Đang xem <b>Trang ${pageNum} / ${state.totalPages}</b>`);
 }
 
-function changePage(delta) {
+async function changePage(delta) {
   let currPage = state.currentPage;
   const currentChunk = state.allChunks[state.currentGlobalIndex];
   if (currentChunk && currentChunk.page) {
@@ -8389,7 +8912,7 @@ function changePage(delta) {
     target = target + 1;
   }
   target = Math.max(1, Math.min(state.totalPages, target));
-  goToPage(target);
+  await goToPage(target);
 }
 
 function navigateRow(delta) {
@@ -8404,6 +8927,8 @@ function navigateRow(delta) {
     }
     suppressScrollSyncUntil = Date.now() + 650;
     setActiveRow(next, true);
+  } else if (delta > 0 && state.onlineStory) {
+    updateOnlineChapterNextButton(getActiveScrollContainer(), true);
   }
 }
 
@@ -8415,6 +8940,178 @@ let suppressScrollSyncUntil = 0;
 let readingScrollFrame = 0;
 let readingScrollContainer = null;
 let readingScrollTargetTop = 0;
+let onlineChapterNavigationPending = false;
+
+function getOnlineNextChapterInfo() {
+  const story = state.onlineStory;
+  if (!story || !Array.isArray(story.chapters)) return null;
+  const currentIndex = Number(story.currentChapterIndex) || 0;
+  if (currentIndex >= story.chapters.length - 1) return null;
+  const nextChapter = story.chapters[currentIndex + 1];
+  return {
+    index: currentIndex + 1,
+    title: nextChapter?.title || `Chương ${currentIndex + 2}`
+  };
+}
+
+async function triggerOnlineNextChapter() {
+  const story = state.onlineStory;
+  if (!story || onlineChapterNavigationPending) return;
+  const currentIndex = Number(story.currentChapterIndex) || 0;
+  if (currentIndex >= story.chapters.length - 1) return;
+
+  const btn = document.getElementById('online-chapter-next-button');
+  onlineChapterNavigationPending = true;
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add('is-loading');
+  }
+  try {
+    await loadOnlineStoryChapterByIndex(currentIndex + 1);
+  } finally {
+    onlineChapterNavigationPending = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.classList.remove('is-loading');
+    }
+    updateOnlineChapterNextButton(getActiveScrollContainer());
+  }
+}
+
+function ensureOnlineChapterNextRow() {
+  const nextInfo = getOnlineNextChapterInfo();
+  if (!nextInfo) return null;
+
+  let row = document.getElementById('online-chapter-next-row');
+  if (row) {
+    const titleEl = row.querySelector('.online-chapter-title-tag');
+    if (titleEl) titleEl.textContent = nextInfo.title;
+    return row;
+  }
+
+  const isSpreadsheet = !THEME_RENDERERS[state.theme] || state.theme === 'theme-googlesheets' || state.theme === 'theme-excel';
+
+  if (isSpreadsheet) {
+    const tbody = document.getElementById('story-tbody');
+    if (!tbody) return null;
+
+    row = document.createElement('tr');
+    row.id = 'online-chapter-next-row';
+    row.className = 'story-row online-chapter-next-row';
+    const nextIdx = state.allChunks.length;
+    row.dataset.index = nextIdx;
+    row.dataset.page = state.currentPage;
+
+    const rowNumber = nextIdx + 2;
+    const auditId = (state.theme === 'theme-googlesheets' ? `TSK-${10000 + nextIdx * 2}` : `AUD-${10000 + nextIdx * 3}`);
+    const baseTimestamp = new Date();
+    baseTimestamp.setHours(9, 15, 0, 0);
+    const rowTime = new Date(baseTimestamp.getTime() + nextIdx * 85000);
+    const timeStr = rowTime.toISOString().replace('T', ' ').substring(0, 19);
+
+    row.innerHTML = `
+      <td class="row-header">${rowNumber}</td>
+      <td style="font-family: monospace; font-size: 10px; color: #444;">${auditId}</td>
+      <td style="font-weight: 500; font-size: 11px; color: #1a73e8;">Navigation</td>
+      <td style="color: #666; font-size: 10px;">${timeStr}</td>
+      <td class="story-cell online-chapter-cell" tabindex="0">
+        <div class="online-chapter-inline-wrap">
+          <span class="online-chapter-title-tag">${escapeHtml(nextInfo.title)}</span>
+          <button type="button" id="online-chapter-next-button" class="online-chapter-next-button stealth-reading-ctrls" aria-label="Mở chương tiếp theo (Phím tắt: N hoặc →)" title="Chương sau (Phím tắt: N hoặc →)">
+            <span>Chương sau</span>
+            <span class="online-chapter-kbd">N</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </td>
+      <td><span class="badge-status st-review">READY</span></td>
+      <td style="text-align: right; color: #0F9D58">+100%</td>
+      <td style="color: #555;">Auto-sync</td>
+    `;
+    const btn = row.querySelector('#online-chapter-next-button');
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      triggerOnlineNextChapter();
+    });
+    row.addEventListener('click', () => {
+      triggerOnlineNextChapter();
+    });
+    tbody.appendChild(row);
+    return row;
+  }
+
+  // Other themes (VS Code, Slack, ChatGPT, Claude, Docs, etc.)
+  const streamId = (state.theme === 'theme-vscode')
+    ? 'vsc-code-lines'
+    : (THEME_RENDERERS[state.theme]?.streams?.[0] || 'grid-scroll-container');
+  const stream = document.getElementById(streamId);
+  if (!stream) return null;
+
+  row = document.createElement('div');
+  row.id = 'online-chapter-next-row';
+  row.className = 'online-chapter-next-row online-chapter-inline-block stealth-reading-ctrls';
+  row.dataset.index = state.allChunks.length;
+  row.dataset.page = state.currentPage;
+
+  row.innerHTML = `
+    <div class="online-chapter-inline-wrap">
+      <span class="online-chapter-title-tag">${escapeHtml(nextInfo.title)}</span>
+      <button type="button" id="online-chapter-next-button" class="online-chapter-next-button stealth-reading-ctrls" aria-label="Mở chương tiếp theo (Phím tắt: N hoặc →)" title="Chương sau (Phím tắt: N hoặc →)">
+        <span>Chương sau</span>
+        <span class="online-chapter-kbd">N</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  `;
+  const btn = row.querySelector('#online-chapter-next-button');
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    triggerOnlineNextChapter();
+  });
+  row.addEventListener('click', () => {
+    triggerOnlineNextChapter();
+  });
+  stream.appendChild(row);
+  return row;
+}
+
+function ensureOnlineChapterNextButton() {
+  const row = ensureOnlineChapterNextRow();
+  return row?.querySelector('#online-chapter-next-button') || document.getElementById('online-chapter-next-button');
+}
+
+function updateOnlineChapterNextButton(container = getActiveScrollContainer(), forceVisible = false) {
+  const story = state.onlineStory;
+  const existingRow = document.getElementById('online-chapter-next-row');
+  const existingButton = document.getElementById('online-chapter-next-button');
+
+  if (!story || state.bossModeActive) {
+    if (existingRow) existingRow.hidden = true;
+    if (existingButton) existingButton.hidden = true;
+    return;
+  }
+
+  const currentIndex = Number(story.currentChapterIndex) || 0;
+  const hasNextChapter = currentIndex < story.chapters.length - 1;
+  const allRowsRendered = state.renderedCount >= state.allChunks.length;
+
+  if (!hasNextChapter || !allRowsRendered) {
+    if (existingRow) existingRow.hidden = true;
+    if (existingButton) existingButton.hidden = true;
+    return;
+  }
+
+  const row = ensureOnlineChapterNextRow();
+  const button = row?.querySelector('#online-chapter-next-button') || existingButton;
+
+  const distanceToBottom = container
+    ? container.scrollHeight - (container.scrollTop + container.clientHeight)
+    : Number.POSITIVE_INFINITY;
+
+  const shouldBeVisible = (forceVisible || distanceToBottom <= 360);
+  if (row) row.hidden = !shouldBeVisible;
+  if (button) button.hidden = !shouldBeVisible;
+}
 
 function stopReadingScrollAnimation(container = null) {
   if (container && readingScrollContainer && readingScrollContainer !== container) return;
@@ -8560,6 +9257,8 @@ function getActiveScrollContainer() {
 function handleContainerScroll(container) {
   if (!container || state.bossModeActive) return;
 
+  container._onlineLastScrollTop = container.scrollTop;
+
   // Infinite scroll upward: load previous batch when near top
   if (
     container.scrollTop <= 150 &&
@@ -8588,6 +9287,8 @@ function handleContainerScroll(container) {
       renderNextBatch(state.BATCH_SIZE);
     }
   }
+
+  updateOnlineChapterNextButton(container);
 
   // 2. Viewport detection: detect current page from top third of viewport
   if (Date.now() < suppressScrollSyncUntil) return;

@@ -16,6 +16,23 @@ import importlib
 import document_processing
 from document_processing import extract_pdf_payload
 from hybrid_sync import handle_api_request
+from online_story_proxy import handle_online_story_proxy, proxy_configured
+
+
+def load_local_environment():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env.local")
+    if not os.path.isfile(path):
+        return
+    with open(path, "r", encoding="utf-8") as handle:
+        for raw_line in handle:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+load_local_environment()
 
 class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -48,7 +65,12 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         if self._handle_hybrid_api():
             return
         if self.path == '/api/health':
-            data_bytes = json.dumps({"ok": True, "pdfExtraction": True, "hybridSync": True}).encode('utf-8')
+            data_bytes = json.dumps({
+                "ok": True,
+                "pdfExtraction": True,
+                "hybridSync": True,
+                "onlineStoryProxy": proxy_configured(),
+            }).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.send_header('Content-Length', str(len(data_bytes)))
@@ -133,7 +155,13 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         headers = {key.lower(): value for key, value in self.headers.items()}
         if self.server.server_address[0] in {'127.0.0.1', 'localhost'} or self.headers.get('Host', '').startswith(('localhost', '127.0.0.1')):
             headers.setdefault('x-forwarded-proto', 'http')
-        response = handle_api_request(self.command, self.path, headers, body)
+        response = handle_online_story_proxy(
+            self.command,
+            self.path,
+            self.client_address[0] if self.client_address else "",
+        )
+        if response is None:
+            response = handle_api_request(self.command, self.path, headers, body)
         if response is None:
             return False
 

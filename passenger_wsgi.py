@@ -7,6 +7,7 @@ from urllib.parse import unquote
 
 from document_processing import extract_pdf_payload
 from hybrid_sync import handle_api_request, status_line
+from online_story_proxy import handle_online_story_proxy, proxy_configured
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -130,7 +131,13 @@ def application(environ, start_response):
     api_body = b""
     if request_method in {"POST", "PUT", "PATCH"} and request_path != "/api/extract-pdf":
         api_body = environ["wsgi.input"].read(int(environ.get("CONTENT_LENGTH") or 0))
-    api_response = handle_api_request(request_method, raw_path, request_headers, api_body)
+    api_response = handle_online_story_proxy(
+        request_method,
+        raw_path,
+        environ.get("REMOTE_ADDR", ""),
+    )
+    if api_response is None:
+        api_response = handle_api_request(request_method, raw_path, request_headers, api_body)
     if api_response is not None:
         data = api_response.body()
         response_headers = list(api_response.headers or [])
@@ -144,7 +151,12 @@ def application(environ, start_response):
         return [data]
 
     if request_method == "GET" and request_path == "/api/health":
-        return json_response(start_response, {"ok": True, "pdfExtraction": True, "hybridSync": True})
+        return json_response(start_response, {
+            "ok": True,
+            "pdfExtraction": True,
+            "hybridSync": True,
+            "onlineStoryProxy": proxy_configured(),
+        })
 
     if request_method == "POST" and request_path == "/api/extract-pdf":
         try:

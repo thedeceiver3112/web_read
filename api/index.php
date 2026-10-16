@@ -5,6 +5,8 @@ const SESSION_COOKIE = 'sr_session';
 const OAUTH_STATE_COOKIE = 'sr_oauth_state';
 const SESSION_DAYS = 30;
 const MAX_JSON_BODY = 524288;
+const MAX_STORY_RESPONSE_BODY = 5242880;
+const STORY_PROXY_RATE_LIMIT = 120;
 const DEFAULT_ANALYTICS_ADMIN_EMAILS = ['nguyentranhaiphong2@gmail.com'];
 
 header('X-Content-Type-Options: nosniff');
@@ -29,6 +31,181 @@ function configured(array $config): bool
         }
     }
     return true;
+}
+
+function online_story_base(array $config): string
+{
+    $value = trim((string)($config['online_story_upstream_base'] ?? getenv('ONLINE_STORY_UPSTREAM_BASE') ?: ''));
+    return rtrim($value, '/');
+}
+
+function online_story_proxy_configured(array $config): bool
+{
+    return online_story_base($config) !== '';
+}
+
+function online_story_cache_path(string $action, array $params): string
+{
+    $directory = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'web_read_story_cache';
+    if (!is_dir($directory)) {
+        @mkdir($directory, 0700, true);
+    }
+    return $directory . DIRECTORY_SEPARATOR . hash('sha256', $action . '|' . json_encode($params)) . '.json';
+}
+
+function online_story_cache_get(string $action, array $params): ?array
+{
+    $path = online_story_cache_path($action, $params);
+    if (!is_file($path)) {
+        return null;
+    }
+    $cached = json_decode((string)@file_get_contents($path), true);
+    if (!is_array($cached) || (int)($cached['expires'] ?? 0) <= time() || !is_array($cached['payload'] ?? null)) {
+        @unlink($path);
+        return null;
+    }
+    return $cached['payload'];
+}
+
+function online_story_cache_put(string $action, array $params, array $payload, int $ttl): void
+{
+    $path = online_story_cache_path($action, $params);
+    $temporary = $path . '.' . bin2hex(random_bytes(4)) . '.tmp';
+    $body = json_encode(['expires' => time() + $ttl, 'payload' => $payload], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    if (@file_put_contents($temporary, $body, LOCK_EX) !== false) {
+        @rename($temporary, $path);
+    }
+    @unlink($temporary);
+}
+
+function online_story_rate_allowed(): bool
+{
+    $client = substr((string)($_SERVER['REMOTE_ADDR'] ?? 'unknown'), 0, 100);
+    $path = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'web_read_story_rate_' . hash('sha256', $client) . '.json';
+    $handle = @fopen($path, 'c+');
+    if ($handle === false) {
+        return true;
+    }
+    try {
+        if (!flock($handle, LOCK_EX)) {
+            return true;
+        }
+        $raw = stream_get_contents($handle);
+        $events = json_decode($raw === false ? '[]' : $raw, true);
+        $cutoff = microtime(true) - 60;
+        $events = array_values(array_filter(is_array($events) ? $events : [], static function ($timestamp) use ($cutoff): bool {
+            return is_numeric($timestamp) && (float)$timestamp >= $cutoff;
+        }));
+        if (count($events) >= STORY_PROXY_RATE_LIMIT) {
+            flock($handle, LOCK_UN);
+            return false;
+        }
+        $events[] = microtime(true);
+        rewind($handle);
+        ftruncate($handle, 0);
+        fwrite($handle, json_encode($events));
+        fflush($handle);
+        flock($handle, LOCK_UN);
+        return true;
+    } finally {
+        fclose($handle);
+    }
+}
+
+function online_story_identifier_valid(string $value): bool
+{
+    return $value !== '' && strlen($value) <= 300 && !preg_match('/[\x00-\x1F\x7F]/', $value);
+}
+
+function handle_online_story_proxy(array $config, string $path, string $method): void
+{
+    if ($method !== 'GET') {
+        json_response(405, ['success' => false, 'error' => 'Phương thức không được hỗ trợ.']);
+    }
+    if (!online_story_rate_allowed()) {
+        json_response(429, ['success' => false, 'error' => 'Bạn thao tác quá nhanh. Hãy thử lại sau.']);
+    }
+
+    $action = trim(substr($path, strlen('/api/online-story/')), '/');
+    $rules = [
+        'search' => ['required' => ['q'], 'ttl' => 300],
+        'story' => ['required' => ['story'], 'ttl' => 3600],
+        'chapter' => ['required' => ['story', 'chapter'], 'ttl' => 21600],
+    ];
+    if (!isset($rules[$action])) {
+        json_response(404, ['success' => false, 'error' => 'API không tồn tại.']);
+    }
+
+    $params = [];
+    foreach (['q', 'story', 'chapter', 'source'] as $key) {
+        $params[$key] = trim((string)($_GET[$key] ?? ''));
+    }
+    foreach ($rules[$action]['required'] as $required) {
+        if ($params[$required] === '') {
+            json_response(400, ['success' => false, 'error' => 'Thiếu tham số ' . $required . '.']);
+        }
+    }
+    if ($action === 'search' && (strlen($params['q']) < 2 || strlen($params['q']) > 300)) {
+        json_response(400, ['success' => false, 'error' => 'Từ khóa tìm kiếm phải có từ 2 đến 100 ký tự.']);
+    }
+    if ($action !== 'search' && !online_story_identifier_valid($params['story'])) {
+        json_response(400, ['success' => false, 'error' => 'Mã truyện không hợp lệ.']);
+    }
+    if ($action === 'chapter' && !online_story_identifier_valid($params['chapter'])) {
+        json_response(400, ['success' => false, 'error' => 'Mã chương không hợp lệ.']);
+    }
+    $params['source'] = $params['source'] === '' ? 'all' : $params['source'];
+    if (!in_array($params['source'], ['all', 's1', 's2'], true)) {
+        json_response(400, ['success' => false, 'error' => 'Nguồn truyện không hợp lệ.']);
+    }
+    $params = array_intersect_key($params, array_flip(array_merge($rules[$action]['required'], ['source'])));
+
+    $cached = online_story_cache_get($action, $params);
+    if ($cached !== null) {
+        json_response(200, $cached);
+    }
+
+    $base = online_story_base($config);
+    if ($base === '') {
+        json_response(503, ['success' => false, 'error' => 'Nguồn truyện chưa được cấu hình trên máy chủ.']);
+    }
+
+    $body = '';
+    $curl = curl_init($base . '/' . $action . '?' . http_build_query($params));
+    $curlOptions = [
+        CURLOPT_CONNECTTIMEOUT => 4,
+        CURLOPT_TIMEOUT => 15,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_HTTPHEADER => ['Accept: application/json', 'User-Agent: StealthReader/1.0'],
+        CURLOPT_WRITEFUNCTION => static function ($handle, string $chunk) use (&$body): int {
+            if (strlen($body) + strlen($chunk) > MAX_STORY_RESPONSE_BODY) {
+                return 0;
+            }
+            $body .= $chunk;
+            return strlen($chunk);
+        },
+    ];
+    $caBundle = trim((string)($config['online_story_ca_bundle'] ?? getenv('ONLINE_STORY_CA_BUNDLE') ?: ''));
+    if ($caBundle !== '' && is_file($caBundle)) {
+        $curlOptions[CURLOPT_CAINFO] = $caBundle;
+    }
+    curl_setopt_array($curl, $curlOptions);
+    $completed = curl_exec($curl);
+    $status = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if ($completed === false || $status !== 200) {
+        $responseStatus = $status === 429 ? 429 : 502;
+        $message = $status === 429 ? 'Nguồn truyện đang giới hạn truy cập.' : 'Nguồn truyện tạm thời không khả dụng.';
+        json_response($responseStatus, ['success' => false, 'error' => $message]);
+    }
+    $payload = json_decode($body, true);
+    if (!is_array($payload) || ($payload['success'] ?? false) !== true || !array_key_exists('data', $payload)) {
+        json_response(502, ['success' => false, 'error' => 'Nguồn truyện tạm thời không khả dụng.']);
+    }
+
+    online_story_cache_put($action, $params, $payload, (int)$rules[$action]['ttl']);
+    json_response(200, $payload);
 }
 
 function json_response(int $status, array $payload): void
@@ -486,7 +663,10 @@ $config = config();
 
 try {
     if ($path === '/api/health' && $method === 'GET') {
-        json_response(200, ['ok' => true, 'pdfExtraction' => false, 'hybridSync' => configured($config), 'runtime' => 'php']);
+        json_response(200, ['ok' => true, 'pdfExtraction' => false, 'hybridSync' => configured($config), 'onlineStoryProxy' => online_story_proxy_configured($config), 'runtime' => 'php']);
+    }
+    if (strpos($path, '/api/online-story/') === 0) {
+        handle_online_story_proxy($config, $path, $method);
     }
     if ($path === '/api/auth/status' && $method === 'GET') {
         if (!configured($config)) json_response(200, ['enabled' => false, 'authenticated' => false]);

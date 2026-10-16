@@ -12,4 +12,7 @@ return [
     'google_client_secret' => '',
     'google_redirect_uri' => 'https://thedeceiver.site/api/auth/google/callback',
     'analytics_admin_emails' => ['nguyentranhaiphong2@gmail.com'],
+    'online_story_upstream_base' => '',
+    // Usually blank on cPanel. Set only when PHP needs a custom CA bundle.
+    'online_story_ca_bundle' => '',
 ];
