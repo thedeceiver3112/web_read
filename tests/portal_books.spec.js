@@ -195,7 +195,7 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     const header = page.locator('#portal-top-navbar');
     await expect(header).toBeVisible();
     await expect(header.locator('.duo-brand-titles h1')).toHaveText('Stealth Reader');
-    await expect(header.locator('.portal-version-pill')).toBeVisible();
+    await expect(header.locator('.portal-version-pill')).toHaveCount(0);
 
     // Verify Google sign-in button with colorful SVG
     const authBtn = page.locator('#hybrid-auth-button');
@@ -206,7 +206,7 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     // Verify announcement card
     const announcement = page.locator('#portal-announcement');
     await expect(announcement).toBeVisible();
-    await expect(announcement).toContainText(/BIG UPDATE|Cải tiến giao diện|tìm truyện/);
+    await expect(announcement).toContainText(/BIG UPDATE|Cải tiến giao diện|tìm truyện|Cột D/);
 
     // 2. Verify modern simple footer
     const footer = page.locator('#portal-footer');

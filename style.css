@@ -1270,6 +1270,271 @@ body.theme-googlesheets .story-col-header {
   color: #185abc;
 }
 
+/* ==================================================
+   COLUMN D RESIZING & FILLER COLUMN (GSHEET & EXCEL)
+   ================================================== */
+.col-header, .data-col-title {
+  position: relative;
+}
+
+.col-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 30;
+  user-select: none;
+}
+
+.col-resize-handle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background-color: transparent;
+  transition: background-color 0.12s ease;
+}
+
+.col-resize-handle:hover::after,
+.col-resize-handle.active::after {
+  background-color: #1a73e8;
+}
+
+body.theme-excel .col-resize-handle:hover::after,
+body.theme-excel .col-resize-handle.active::after {
+  background-color: #107c41;
+}
+
+/* Guideline during drag */
+.col-resize-guideline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #1a73e8;
+  z-index: 999;
+  pointer-events: none;
+  box-shadow: 0 0 5px rgba(26, 115, 232, 0.45);
+}
+
+body.theme-excel .col-resize-guideline {
+  background-color: #107c41;
+  box-shadow: 0 0 5px rgba(16, 124, 65, 0.45);
+}
+
+/* Floating tooltip during drag */
+.col-resize-tooltip {
+  position: absolute;
+  top: 2px;
+  transform: translateX(-50%);
+  background: #202124;
+  color: #ffffff;
+  font-size: 11px;
+  font-family: monospace;
+  padding: 2px 6px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 1000;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Table layout adjustments when column D has explicit width */
+.excel-grid-table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: max-content;
+  min-width: 100%;
+  background-color: white;
+}
+
+/* Column H filler to avoid empty space */
+.col-filler-header {
+  min-width: 180px;
+  background-color: #f8f9fa;
+  color: #5f6368;
+  border: 1px solid #e0e0e0;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  user-select: none;
+}
+
+body.theme-excel .col-filler-header {
+  background-color: #f3f2f1;
+  border-color: #d2d0ce;
+  color: #605e5c;
+}
+
+.col-filler-title {
+  border: 1px solid #d3e3fd;
+  background-color: #edf2fa;
+  color: #041e49;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 4px 8px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+body.theme-excel .col-filler-title {
+  border-color: #c3decb;
+  background-color: #e7f2eb;
+  color: var(--excel-green-dark);
+}
+
+.col-filler-cell {
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  padding: 5px 8px;
+  font-size: 11px;
+  color: #555555;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: text;
+}
+
+body.theme-excel .col-filler-cell {
+  border-color: #e1dfdd;
+}
+
+table.col-d-auto .col-filler-header,
+table.col-d-auto .col-filler-title,
+table.col-d-auto .col-filler-cell {
+  display: none !important;
+}
+
+/* Column D quick resize modal / dialog */
+.col-d-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.col-d-dialog {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  width: 360px;
+  max-width: 92vw;
+  padding: 18px 20px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #202124;
+}
+
+.col-d-dialog h4 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.col-d-presets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.col-d-preset-btn {
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  background: #f8f9fa;
+  cursor: pointer;
+  color: #3c4043;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.col-d-preset-btn:hover {
+  background: #e8f0fe;
+  border-color: #1a73e8;
+  color: #1a73e8;
+}
+
+.col-d-preset-btn.active {
+  background: #e8f0fe;
+  border-color: #1a73e8;
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+.col-d-custom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.col-d-custom-row label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #5f6368;
+}
+
+.col-d-custom-input {
+  width: 90px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-family: monospace;
+  font-weight: 600;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  outline: none;
+}
+
+.col-d-custom-input:focus {
+  border-color: #1a73e8;
+}
+
+.col-d-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.col-d-dialog-btn {
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.col-d-dialog-btn.cancel {
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+}
+
+.col-d-dialog-btn.save {
+  background: #1a73e8;
+  border: 1px solid #1a73e8;
+  color: #ffffff;
+}
+
+body.theme-excel .col-d-dialog-btn.save {
+  background: #107c41;
+  border-color: #107c41;
+}
+
+
 .story-cell.cell-focused {
   outline: 2px solid var(--gs-blue);
   outline-offset: -2px;
@@ -7076,7 +7341,7 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
 }
 
 /* ==================================================
-   THEME: GOOGLE DOCS (GOOGLE TÀI LIỆU)
+   THEME: GOOGLE DOCS (GOOGLE TÃ€I LIá»†U)
    ================================================== */
 body.theme-googledocs {
   font-family: 'Google Sans', Roboto, Arial, sans-serif;
@@ -8155,7 +8420,7 @@ body.theme-zalo {
   color: #0068ff;
 }
 
-/* FILTER TABS: ƯU TIÊN | KHÁC | PHÂN LOẠI ▾ */
+/* FILTER TABS: Æ¯U TIÃŠN | KHÃ�C | PHÃ‚N LOáº I â–¾ */
 .msg-filters-bar {
   border-bottom: 1px solid #f1f3f6;
   font-size: 13px;
@@ -8804,7 +9069,7 @@ body.theme-zalo {
   cursor: pointer;
 }
 
-/* 4. RIGHT SIDEBAR: "THÔNG TIN NHÓM" (ISSUE WMS) */
+/* 4. RIGHT SIDEBAR: "THÃ”NG TIN NHÃ“M" (ISSUE WMS) */
 .zalo-info-sidebar {
   width: 280px;
   background: #ffffff;
@@ -8852,7 +9117,7 @@ body.theme-zalo {
   margin-bottom: 14px;
 }
 
-/* 4 ACTION BUTTONS: TẮT THÔNG BÁO | GHIM | THÊM TV | QUẢN LÝ */
+/* 4 ACTION BUTTONS: Táº®T THÃ”NG BÃ�O | GHIM | THÃŠM TV | QUáº¢N LÃ� */
 .zalo-quick-action-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -8883,7 +9148,7 @@ body.theme-zalo {
   background: #e2e8f0;
 }
 
-/* SECTIONS: THÀNH VIÊN NHÓM | BẢNG TIN NHÓM | ẢNH/VIDEO | FILE */
+/* SECTIONS: THÃ€NH VIÃŠN NHÃ“M | Báº¢NG TIN NHÃ“M | áº¢NH/VIDEO | FILE */
 .zalo-sidebar-section {
   padding: 12px 14px;
   border-bottom: 8px solid #f4f5f7;
@@ -9515,7 +9780,7 @@ body.theme-figma {
   min-width: max-content;
 }
 
-/* Travel Web Frame: Trang chủ */
+/* Travel Web Frame: Trang chá»§ */
 .figma-design-frame-wrapper {
   display: flex;
   flex-direction: column;
@@ -11087,7 +11352,7 @@ body.theme-powerpoint {
   align-items: start;
 }
 
-/* Left Graphics Panel (Sticky - cuộn theo trang khi đọc truyện) */
+/* Left Graphics Panel (Sticky - cuá»™n theo trang khi Ä‘á»�c truyá»‡n) */
 .ppt-visuals-panel {
   display: flex;
   flex-direction: column;
@@ -11101,7 +11366,7 @@ body.theme-powerpoint {
   scrollbar-width: thin;
 }
 
-/* 1. Chart 1: Bar Chart (Doanh thu & Tăng trưởng quý) */
+/* 1. Chart 1: Bar Chart (Doanh thu & TÄƒng trÆ°á»Ÿng quÃ½) */
 .ppt-chart-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -11122,7 +11387,7 @@ body.theme-powerpoint {
   height: 120px;
 }
 
-/* 2. Chart 2: Donut Chart (Cơ cấu nguồn lực) */
+/* 2. Chart 2: Donut Chart (CÆ¡ cáº¥u nguá»“n lá»±c) */
 .ppt-donut-chart-row {
   display: flex;
   align-items: center;
@@ -11287,10 +11552,10 @@ body.theme-powerpoint {
 .ppt-kpi-val { font-size: 26px; font-weight: 800; color: #111827; margin: 4px 0; }
 
 
-/* Thư Viện Pháp Luật (TVPL - Classic Authentic Replica based on User Screenshot) */
+/* ThÆ° Viá»‡n PhÃ¡p Luáº­t (TVPL - Classic Authentic Replica based on User Screenshot) */
 
 /* ==========================================================
-   THEME 13: THƯ VIỆN PHÁP LUẬT CLASSIC STYLES
+   THEME 13: THÆ¯ VIá»†N PHÃ�P LUáº¬T CLASSIC STYLES
    - Top Header: Warm Orange Gradient (#ff8a00 to #e52d27)
    - Nav Bar: Sky Blue Gradient (#2980b9 to #6dd5fa)
    - Left Sidebar: White with Red title (#c0392b)
@@ -11300,10 +11565,10 @@ body.theme-powerpoint {
    - Main Background: #eceef1
    ========================================================== */
 
-/* Thư Viện Pháp Luật (TVPL - thuvienphapluat.vn) Authentic Fixed-Width Layout with Centered Margins */
+/* ThÆ° Viá»‡n PhÃ¡p Luáº­t (TVPL - thuvienphapluat.vn) Authentic Fixed-Width Layout with Centered Margins */
 
 /* ==========================================================
-   THEME 13: THƯ VIỆN PHÁP LUẬT CLASSIC STYLES
+   THEME 13: THÆ¯ VIá»†N PHÃ�P LUáº¬T CLASSIC STYLES
    - Fixed standard container width (1200px) centered with equal margins on both sides
    - Background of the entire page: #e9ebef
    - Background of the page container: #ffffff / clean bordered layout
@@ -11667,7 +11932,7 @@ body.theme-thuvienphapluat {
   color: #b71c1c;
 }
 
-/* 4. WORKSPACE 3-COLUMN LAYOUT (CỘT TRÁI | NỘI DUNG VĂN BẢN | CỘT PHẢI) */
+/* 4. WORKSPACE 3-COLUMN LAYOUT (Cá»˜T TRÃ�I | Ná»˜I DUNG VÄ‚N Báº¢N | Cá»˜T PHáº¢I) */
 .tvpl-workspace-3col {
   flex: 1;
   display: flex;
@@ -11677,7 +11942,7 @@ body.theme-thuvienphapluat {
   gap: 10px;
 }
 
-/* CỘT TRÁI: TƯ VẤN PHÁP LUẬT & CÂY MỤC LỤC BÀI VIẾT */
+/* Cá»˜T TRÃ�I: TÆ¯ Váº¤N PHÃ�P LUáº¬T & CÃ‚Y Má»¤C Lá»¤C BÃ€I VIáº¾T */
 .tvpl-col-left-sidebar {
   width: 215px;
   background: #ffffff;
@@ -11745,7 +12010,7 @@ body.theme-thuvienphapluat {
   font-weight: bold;
 }
 
-/* CỘT GIỮA: KHUNG VĂN BẢN CHÍNH THỨC (CHỨA TRUYỆN ĐỌC) */
+/* Cá»˜T GIá»®A: KHUNG VÄ‚N Báº¢N CHÃ�NH THá»¨C (CHá»¨A TRUYá»†N Ä�á»ŒC) */
 .tvpl-col-center-viewport {
   flex: 1;
   display: flex;
@@ -11756,7 +12021,7 @@ body.theme-thuvienphapluat {
   overflow: hidden;
 }
 
-/* Tabs: [Thuộc tính] [Nội dung ★] [Tiếng Anh] [Văn bản gốc/PDF] [Lược đồ] [Liên quan hiệu lực] [Tải về] */
+/* Tabs: [Thuá»™c tÃ­nh] [Ná»™i dung â˜…] [Tiáº¿ng Anh] [VÄƒn báº£n gá»‘c/PDF] [LÆ°á»£c Ä‘á»“] [LiÃªn quan hiá»‡u lá»±c] [Táº£i vá»�] */
 .tvpl-tab-bar-classic {
   height: 30px;
   background: #f1f3f5;
@@ -11797,7 +12062,7 @@ body.theme-thuvienphapluat {
   font-weight: bold;
 }
 
-/* Sub-header: MỤC LỤC VĂN BẢN (Đỏ đậm) */
+/* Sub-header: Má»¤C Lá»¤C VÄ‚N Báº¢N (Ä�á»� Ä‘áº­m) */
 .tvpl-toc-bar {
   height: 24px;
   background: #fdf2e9;
@@ -11822,7 +12087,7 @@ body.theme-thuvienphapluat {
   scroll-behavior: smooth;
 }
 
-/* Official Vietnamese State Header per Decree 30/2020/NĐ-CP */
+/* Official Vietnamese State Header per Decree 30/2020/NÄ�-CP */
 .tvpl-doc-state-head {
   display: flex;
   justify-content: space-between;
@@ -11906,7 +12171,7 @@ body.theme-thuvienphapluat {
   background: #fef3c7;
 }
 
-/* STAMP WATERMARK BOX (Dấu mộc chứng nhận văn bản chính thức) */
+/* STAMP WATERMARK BOX (Dáº¥u má»™c chá»©ng nháº­n vÄƒn báº£n chÃ­nh thá»©c) */
 .tvpl-stamp-container {
   display: flex;
   justify-content: flex-end;
@@ -11996,7 +12261,7 @@ body.theme-thuvienphapluat {
   user-select: text;
 }
 
-/* CỘT PHẢI: LOGIN BOX, SOCIAL BUTTONS & ACTION BUTTONS */
+/* Cá»˜T PHáº¢I: LOGIN BOX, SOCIAL BUTTONS & ACTION BUTTONS */
 .tvpl-col-right-sidebar {
   width: 210px;
   display: flex;
@@ -12006,7 +12271,7 @@ body.theme-thuvienphapluat {
   overflow-y: auto;
 }
 
-/* Login Box (Đăng nhập) */
+/* Login Box (Ä�Äƒng nháº­p) */
 .tvpl-login-card {
   background: #ffffff;
   border: 1px solid #d1d5db;
@@ -12070,7 +12335,7 @@ body.theme-thuvienphapluat {
   cursor: pointer;
 }
 
-/* Quick Tools Grid (Lưu trữ, Ghi chú, Ý kiến...) */
+/* Quick Tools Grid (LÆ°u trá»¯, Ghi chÃº, Ã� kiáº¿n...) */
 .tvpl-tools-grid {
   background: #ffffff;
   border: 1px solid #d1d5db;
@@ -12100,7 +12365,7 @@ body.theme-thuvienphapluat {
   font-size: 16px;
 }
 
-/* Yellow Action Buttons (Theo dõi hiệu lực VB, Văn bản song ngữ) */
+/* Yellow Action Buttons (Theo dÃµi hiá»‡u lá»±c VB, VÄƒn báº£n song ngá»¯) */
 .tvpl-action-banner-btn {
   width: 100%;
   height: 28px;
@@ -16398,11 +16663,7 @@ body.theme-gmail *::after {
 }
 
 .gmail-para-meta {
-  display: block;
-  font-size: 11px;
-  color: #5f6368;
-  margin-top: 4px;
-  user-select: none;
+  display: none !important;
 }
 
 .gmail-section-heading {
@@ -17032,11 +17293,7 @@ body.theme-outlook *::after {
 }
 
 .outlook-para-meta {
-  display: block;
-  font-size: 11px;
-  color: #605e5c;
-  margin-top: 4px;
-  user-select: none;
+  display: none !important;
 }
 
 .outlook-section-heading {

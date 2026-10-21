@@ -76,6 +76,7 @@ test.describe('Theme Slack Workspace', () => {
     // 8. Verify messages stream into #slack-story-stream
     const msgItems = page.locator('#slack-story-stream .slack-msg-item');
     await expect(msgItems.first()).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('#loading-spinner')).toBeHidden({ timeout: 10000 });
     const initialCount = await msgItems.count();
     expect(initialCount).toBeGreaterThanOrEqual(100);
 

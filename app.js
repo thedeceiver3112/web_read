@@ -145,6 +145,19 @@ const STATUSES = [
 
 const AUDITORS = ['System_Bot', 'Auditor_04', 'Sec_Engine', 'Compliance_Lead', 'Audit_AI'];
 
+const REMARKS = [
+  'Auto-resolved by rule engine',
+  'No discrepancy flagged',
+  'Signed off in Q3 review',
+  'Escalated to Tier-2 SecOps',
+  'Routine trace passed',
+  'Pending secondary sign-off',
+  'Audit trail checksum verified',
+  'Synced with ledger replica',
+  'Compliance policy OK',
+  'Snapshot archived to cold storage'
+];
+
 // Complex Python code for Boss Key in VS Code (Shows 100% real backend code)
 const VSCODE_BOSS_CODE = [
   'import asyncio',
@@ -1835,9 +1848,8 @@ async function renderDocumentLibrary(content) {
     }
     content.innerHTML = `${storageText}<div class="reader-tools-list">${records.map(record => {
       const active = record.documentId === getCurrentDocumentId();
-      const date = record.savedAt ? new Date(record.savedAt).toLocaleString('vi-VN') : '';
       return `<article class="reader-tools-item${active ? ' current' : ''}">
-        <div class="reader-tools-item-main"><strong>${escapeHtml(record.documentName || 'Tài liệu')}</strong><small>${record.totalPages || 1} trang · ${(record.chunks || []).length} đoạn · ${escapeHtml(date)}</small></div>
+        <div class="reader-tools-item-main"><strong>${escapeHtml(record.documentName || 'Tài liệu')}</strong></div>
         <div class="reader-tools-actions"><button data-library-open="${escapeHtml(record.documentId)}">Mở</button>${active ? '<button disabled>Đang mở</button>' : `<button class="danger" data-library-delete="${escapeHtml(record.documentId)}">Xóa</button>`}</div>
       </article>`;
     }).join('')}</div>`;
@@ -2037,6 +2049,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initControlsVisibilityToggle();
   initVersionReloadButton();
   initFeedbackListeners();
+  initSpreadsheetColDResize();
   if (state.theme === 'theme-zalo' || document.body.classList.contains('theme-zalo')) {
     initZaloResponsivePanes();
   }
@@ -3163,6 +3176,15 @@ function getStealthSettingsModalHTML() {
                 <option value="Georgia">Georgia (Truyện chữ)</option>
               </select>
             </div>
+
+            <div class="font-settings-row" id="modal-row-col-d-width" style="margin-top: 6px;">
+              <span style="font-weight: 600; width: 90px; color: #3c4043;" title="Độ rộng cột D (Google Sheets / Excel)">Cột D (Bảng):</span>
+              <button class="font-step-ctrl-btn" id="modal-btn-col-d-dec" title="Thu hẹp cột D">−</button>
+              <span class="font-size-badge" id="modal-badge-col-d-width" style="min-width: 55px;">680px</span>
+              <button class="font-step-ctrl-btn" id="modal-btn-col-d-inc" title="Nới rộng cột D">+</button>
+              <input type="range" id="modal-slider-col-d-width" class="font-slider" min="300" max="1400" step="25" value="680" title="Kéo để đổi độ rộng cột D">
+              <button type="button" class="font-step-ctrl-btn" id="modal-btn-col-d-auto" style="width: auto; padding: 0 8px; font-size: 11px;" title="Tự động giãn đầy màn hình">Tự động</button>
+            </div>
           </div>
           <p class="guide-text" style="margin-top: 8px; font-size: 11px; color: #5f6368;">
             <b>Mẹo đọc nhanh:</b> Nhấn phím <kbd style="padding: 1px 5px; font-size: 11px;">[</kbd> để giảm cỡ chữ, phím <kbd style="padding: 1px 5px; font-size: 11px;">]</kbd> để tăng cỡ chữ trực tiếp khi đang đọc!
@@ -3363,6 +3385,8 @@ const THEME_DOC_CONFIGS = {
       const headerTitle = document.getElementById('story-header-title');
       if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_gsheet_0') || 'Trang tính1';
       if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_gsheet') || 'Log Description & Execution Details';
+      initSpreadsheetColDResize();
+      applySpreadsheetColDWidth(getSpreadsheetColDWidth(), false);
     }
   },
   'theme-googledocs': {
@@ -3381,6 +3405,8 @@ const THEME_DOC_CONFIGS = {
       const headerTitle = document.getElementById('story-header-title');
       if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_excel_0') || 'Audit_Finding_Q3';
       if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_excel') || 'Audit Log Finding & Notes (Story Text)';
+      initSpreadsheetColDResize();
+      applySpreadsheetColDWidth(getSpreadsheetColDWidth(), false);
     }
   },
   'theme-vscode': {
@@ -4879,13 +4905,6 @@ async function updatePortalUploadUI() {
         ${displayList.map(rec => {
           const isOnline = rec.documentFileType === 'online' || String(rec.documentId || '').startsWith('online:');
           const isSelected = rec.documentId === currentDocId || (displayList.length === 1 && !currentDocId);
-          const pagesInfo = rec.totalPages && rec.totalPages > 1 ? `${rec.totalPages} ${isOnline ? 'chương' : 'trang'}` : '';
-          const chunksCount = (rec.chunks || []).length;
-          const chunksInfo = chunksCount ? `${chunksCount} đoạn` : '';
-          const metaParts = [isOnline ? 'Truyện online' : '', pagesInfo, chunksInfo].filter(Boolean);
-          const timeText = rec.savedAt ? new Date(rec.savedAt).toLocaleDateString('vi-VN') : '';
-          if (timeText) metaParts.push(timeText);
-          const fullMeta = metaParts.join(' • ');
           return `
             <div class="portal-book-item ${isSelected ? 'selected' : ''}" data-doc-id="${escapeHtml(rec.documentId)}">
               <div class="portal-book-select-indicator">
@@ -4912,7 +4931,6 @@ async function updatePortalUploadUI() {
                   <span class="portal-book-title" title="${escapeHtml(rec.documentName || '')}">${escapeHtml(rec.documentName || 'Không tên')}</span>
                   <span class="portal-book-pill ${isSelected ? 'active' : ''}">${isSelected ? 'Đang chọn' : 'Chọn đọc'}</span>
                 </div>
-                <span class="portal-book-meta">${escapeHtml(fullMeta || (isOnline ? 'Truyện online' : 'Đã lưu trên máy'))}</span>
               </div>
               <button class="portal-book-delete-btn" data-delete-id="${escapeHtml(rec.documentId)}" title="Xóa truyện khỏi danh sách">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -5698,16 +5716,12 @@ async function renderUniversalBooksDropdown() {
     <div class="unav-dropdown-list">
       ${records.map(rec => {
         const isCurrent = rec.documentId === currentDocId;
-        const pageText = rec.totalPages && rec.totalPages > 1 ? `${rec.totalPages} trang` : '';
-        const chunkText = (rec.chunks || []).length ? `${(rec.chunks || []).length} đoạn` : '';
-        const meta = [pageText, chunkText].filter(Boolean).join(' • ');
         return `
           <div class="unav-dropdown-item ${isCurrent ? 'selected' : ''}" data-doc-id="${escapeHtml(rec.documentId)}">
             <div class="unav-dropdown-item-left">
               <span class="unav-dropdown-check">${isCurrent ? '✓' : ''}</span>
               <div class="unav-dropdown-item-text">
                 <span class="unav-dropdown-item-title" title="${escapeHtml(rec.documentName || '')}">${escapeHtml(rec.documentName || 'Không tên')}</span>
-                <span class="unav-dropdown-item-meta">${escapeHtml(meta || 'Đã lưu trên máy')}</span>
               </div>
             </div>
             <div class="unav-dropdown-item-actions">
@@ -6434,6 +6448,51 @@ function initEventListeners() {
     }
   });
 
+  // Column D Width Controls in Settings Modal
+  const modalColDSlider = document.getElementById('modal-slider-col-d-width');
+  const modalColDBadge = document.getElementById('modal-badge-col-d-width');
+  const btnColDDec = document.getElementById('modal-btn-col-d-dec');
+  const btnColDInc = document.getElementById('modal-btn-col-d-inc');
+  const btnColDAuto = document.getElementById('modal-btn-col-d-auto');
+
+  if (modalColDSlider) {
+    modalColDSlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      applySpreadsheetColDWidth(val, true);
+      if (modalColDBadge) modalColDBadge.textContent = `${val}px`;
+    });
+  }
+
+  if (btnColDDec) {
+    btnColDDec.addEventListener('click', () => {
+      let val = parseInt(modalColDSlider ? modalColDSlider.value : getSpreadsheetColDWidth(), 10) || 680;
+      val = Math.max(300, val - 50);
+      if (modalColDSlider) modalColDSlider.value = val;
+      applySpreadsheetColDWidth(val, true);
+      if (modalColDBadge) modalColDBadge.textContent = `${val}px`;
+      showPageFlipToast(`Độ rộng cột D: <b>${val}px</b>`);
+    });
+  }
+
+  if (btnColDInc) {
+    btnColDInc.addEventListener('click', () => {
+      let val = parseInt(modalColDSlider ? modalColDSlider.value : getSpreadsheetColDWidth(), 10) || 680;
+      val = Math.min(1400, val + 50);
+      if (modalColDSlider) modalColDSlider.value = val;
+      applySpreadsheetColDWidth(val, true);
+      if (modalColDBadge) modalColDBadge.textContent = `${val}px`;
+      showPageFlipToast(`Độ rộng cột D: <b>${val}px</b>`);
+    });
+  }
+
+  if (btnColDAuto) {
+    btnColDAuto.addEventListener('click', () => {
+      applySpreadsheetColDWidth('auto', true);
+      if (modalColDBadge) modalColDBadge.textContent = 'Tự động';
+      showPageFlipToast(`Độ rộng cột D: <b>Tự động (Full)</b>`);
+    });
+  }
+
   const stealthTab = document.getElementById('tab-stealth-settings-excel');
   if (stealthTab) stealthTab.addEventListener('click', openModal);
 
@@ -6564,6 +6623,291 @@ function syncControls() {
   const w2 = document.getElementById('excel-btn-wrap');
   if (w1) w1.classList.toggle('active-toggle', state.wrapText);
   if (w2) w2.classList.toggle('active-toggle', state.wrapText);
+
+  // Sync Column D width in settings modal
+  const currColD = getSpreadsheetColDWidth();
+  const currColDNum = parseInt(currColD, 10) || 680;
+  const modalColDSlider = document.getElementById('modal-slider-col-d-width');
+  const modalColDBadge = document.getElementById('modal-badge-col-d-width');
+  if (modalColDSlider && currColD !== 'auto') modalColDSlider.value = currColDNum;
+  if (modalColDBadge) modalColDBadge.textContent = currColD === 'auto' ? 'Tự động' : `${currColDNum}px`;
+}
+
+// ==================================================
+// SPREADSHEET COLUMN D WIDTH MANAGEMENT & RESIZING
+// ==================================================
+const DEFAULT_SPREADSHEET_COL_D_WIDTH = '680px';
+
+function getSpreadsheetColDWidth() {
+  const saved = localStorage.getItem('stealth_col_d_width');
+  if (saved !== null && saved !== undefined && saved !== '') {
+    return saved;
+  }
+  return DEFAULT_SPREADSHEET_COL_D_WIDTH;
+}
+
+function applySpreadsheetColDWidth(width, saveToStorage = false) {
+  let finalWidth = width;
+  if (typeof finalWidth === 'number') {
+    finalWidth = `${Math.round(finalWidth)}px`;
+  } else if (!finalWidth) {
+    finalWidth = DEFAULT_SPREADSHEET_COL_D_WIDTH;
+  } else if (finalWidth !== 'auto' && !finalWidth.endsWith('px')) {
+    finalWidth = `${parseInt(finalWidth, 10)}px`;
+  }
+
+  const thColD = document.getElementById('th-col-d') || document.querySelector('.story-col-header');
+  const thTitleD = document.getElementById('story-header-title');
+  const thFiller = document.getElementById('th-col-filler');
+  const thTitleFiller = document.getElementById('th-title-filler');
+  const table = document.getElementById('excel-table');
+
+  if (table) {
+    table.style.setProperty('--col-d-width', finalWidth);
+    table.classList.toggle('col-d-auto', finalWidth === 'auto');
+  }
+
+  if (finalWidth === 'auto') {
+    if (thColD) thColD.style.width = 'auto';
+    if (thTitleD) thTitleD.style.width = 'auto';
+    if (thFiller) {
+      thFiller.style.width = '0px';
+      thFiller.style.display = 'none';
+    }
+    if (thTitleFiller) {
+      thTitleFiller.style.display = 'none';
+    }
+    document.querySelectorAll('.col-filler-cell').forEach(td => {
+      td.style.display = 'none';
+    });
+  } else {
+    if (thColD) thColD.style.width = finalWidth;
+    if (thTitleD) thTitleD.style.width = finalWidth;
+    if (thFiller) {
+      thFiller.style.width = 'auto';
+      thFiller.style.display = '';
+    }
+    if (thTitleFiller) {
+      thTitleFiller.style.display = '';
+    }
+    document.querySelectorAll('.col-filler-cell').forEach(td => {
+      td.style.display = '';
+    });
+  }
+
+  // Update settings modal controls if present
+  const modalColDSlider = document.getElementById('modal-slider-col-d-width');
+  const modalColDBadge = document.getElementById('modal-badge-col-d-width');
+  if (modalColDSlider && finalWidth !== 'auto') {
+    modalColDSlider.value = parseInt(finalWidth, 10) || 680;
+  }
+  if (modalColDBadge) {
+    modalColDBadge.textContent = finalWidth === 'auto' ? 'Tự động' : finalWidth;
+  }
+
+  if (saveToStorage) {
+    localStorage.setItem('stealth_col_d_width', finalWidth);
+  }
+}
+
+function openColDWidthDialog() {
+  const currentWidth = getSpreadsheetColDWidth();
+  const currentNum = parseInt(currentWidth, 10) || 680;
+
+  const existing = document.getElementById('col-d-dialog-overlay');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'col-d-dialog-overlay';
+  overlay.className = 'col-d-dialog-overlay';
+
+  overlay.innerHTML = `
+    <div class="col-d-dialog" role="dialog" aria-modal="true" aria-labelledby="col-d-dialog-title">
+      <h4 id="col-d-dialog-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4 14 10 14 10 20"></polyline>
+          <polyline points="20 10 14 10 14 4"></polyline>
+          <line x1="14" y1="10" x2="21" y2="3"></line>
+          <line x1="3" y1="21" x2="10" y2="14"></line>
+        </svg>
+        <span>Đổi kích thước Cột D (Đọc truyện)</span>
+      </h4>
+      <p style="margin: 0 0 12px 0; font-size: 12px; color: #5f6368;">
+        Căn chỉnh chiều rộng vừa tầm mắt để theo dõi truyện thoải mái nhất:
+      </p>
+      <div class="col-d-presets">
+        <button type="button" class="col-d-preset-btn ${currentNum >= 480 && currentNum <= 540 && currentWidth !== 'auto' ? 'active' : ''}" data-width="500">Hẹp (500px)</button>
+        <button type="button" class="col-d-preset-btn ${currentNum >= 650 && currentNum <= 720 && currentWidth !== 'auto' ? 'active' : ''}" data-width="680">Vừa mắt (680px)</button>
+        <button type="button" class="col-d-preset-btn ${currentNum >= 850 && currentNum <= 950 && currentWidth !== 'auto' ? 'active' : ''}" data-width="900">Rộng (900px)</button>
+        <button type="button" class="col-d-preset-btn ${currentWidth === 'auto' ? 'active' : ''}" data-width="auto">Tự động (Full)</button>
+      </div>
+      <div class="col-d-custom-row">
+        <label for="col-d-custom-num">Nhập độ rộng:</label>
+        <input type="number" id="col-d-custom-num" class="col-d-custom-input" min="250" max="2200" step="10" value="${currentNum}" ${currentWidth === 'auto' ? 'disabled' : ''}>
+        <span style="font-size: 13px; color: #5f6368;">px</span>
+      </div>
+      <div class="col-d-dialog-actions">
+        <button type="button" class="col-d-dialog-btn cancel" id="col-d-dialog-cancel">Hủy</button>
+        <button type="button" class="col-d-dialog-btn save" id="col-d-dialog-save">Áp dụng</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const numInput = overlay.querySelector('#col-d-custom-num');
+  overlay.querySelectorAll('.col-d-preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      overlay.querySelectorAll('.col-d-preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const w = btn.dataset.width;
+      if (w === 'auto') {
+        numInput.disabled = true;
+      } else {
+        numInput.disabled = false;
+        numInput.value = w;
+      }
+    });
+  });
+
+  const closeDialog = () => overlay.remove();
+
+  overlay.querySelector('#col-d-dialog-cancel').addEventListener('click', closeDialog);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeDialog();
+  });
+
+  overlay.querySelector('#col-d-dialog-save').addEventListener('click', () => {
+    const activePreset = overlay.querySelector('.col-d-preset-btn.active');
+    let chosenWidth;
+    if (activePreset && activePreset.dataset.width === 'auto') {
+      chosenWidth = 'auto';
+    } else {
+      const val = parseInt(numInput.value, 10);
+      chosenWidth = isNaN(val) ? 680 : Math.max(200, Math.min(2400, val));
+    }
+    applySpreadsheetColDWidth(chosenWidth, true);
+    showPageFlipToast(`Độ rộng cột D: <b>${chosenWidth === 'auto' ? 'Tự động' : chosenWidth + 'px'}</b>`);
+    closeDialog();
+  });
+}
+
+function initSpreadsheetColDResize() {
+  const workspace = document.getElementById('spreadsheet-workspace');
+  const table = document.getElementById('excel-table');
+  if (!table) return;
+
+  // Apply initial saved width
+  applySpreadsheetColDWidth(getSpreadsheetColDWidth(), false);
+
+  if (table._colDResizeInitialized) return;
+  table._colDResizeInitialized = true;
+
+  // Setup drag on handles
+  table.addEventListener('mousedown', (e) => {
+    const handle = e.target.closest('.col-resize-handle');
+    if (!handle) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const thD = document.getElementById('th-col-d') || document.querySelector('.story-col-header');
+    if (!thD) return;
+
+    const startX = e.clientX;
+    const startWidth = thD.getBoundingClientRect().width;
+    const scrollContainer = document.getElementById('grid-scroll-container') || workspace || document.body;
+    const containerRect = scrollContainer.getBoundingClientRect();
+
+    // Create guideline & tooltip
+    let guideline = document.querySelector('.col-resize-guideline');
+    if (!guideline) {
+      guideline = document.createElement('div');
+      guideline.className = 'col-resize-guideline';
+      scrollContainer.appendChild(guideline);
+    }
+
+    let tooltip = document.querySelector('.col-resize-tooltip');
+    if (!tooltip) {
+      tooltip = document.createElement('div');
+      tooltip.className = 'col-resize-tooltip';
+      scrollContainer.appendChild(tooltip);
+    }
+
+    const updateVisuals = (currentThWidth) => {
+      const thRect = thD.getBoundingClientRect();
+      const relativeX = thRect.right - containerRect.left + (scrollContainer.scrollLeft || 0);
+      guideline.style.left = `${relativeX}px`;
+      tooltip.style.left = `${relativeX}px`;
+      tooltip.textContent = `${Math.round(currentThWidth)} px`;
+    };
+
+    updateVisuals(startWidth);
+    handle.classList.add('active');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    let hasDragged = false;
+    let lastCalculatedWidth = startWidth;
+
+    const onMouseMove = (moveEvt) => {
+      const deltaX = moveEvt.clientX - startX;
+      if (Math.abs(deltaX) > 2) {
+        hasDragged = true;
+      }
+      if (!hasDragged) return;
+
+      lastCalculatedWidth = Math.max(220, Math.min(2200, Math.round(startWidth + deltaX)));
+      applySpreadsheetColDWidth(lastCalculatedWidth, false);
+      updateVisuals(lastCalculatedWidth);
+    };
+
+    const onMouseUp = () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+
+      handle.classList.remove('active');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+
+      if (guideline) guideline.remove();
+      if (tooltip) tooltip.remove();
+
+      if (hasDragged) {
+        applySpreadsheetColDWidth(lastCalculatedWidth, true);
+        showPageFlipToast(`Độ rộng cột D: <b>${lastCalculatedWidth}px</b>`);
+      }
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  });
+
+  // Double click handle: toggle between comfortable 680px and auto
+  table.addEventListener('dblclick', (e) => {
+    const handle = e.target.closest('.col-resize-handle');
+    if (!handle) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const current = getSpreadsheetColDWidth();
+    const nextWidth = (current === 'auto' || parseInt(current, 10) > 1200) ? 680 : 'auto';
+    applySpreadsheetColDWidth(nextWidth, true);
+    showPageFlipToast(`Độ rộng cột D: <b>${nextWidth === 'auto' ? 'Tự động giãn đầy' : nextWidth + 'px'}</b>`);
+  });
+
+  // Right-click context menu on Column D headers
+  const bindContextMenu = (el) => {
+    if (!el) return;
+    el.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      openColDWidthDialog();
+    });
+  };
+
+  bindContextMenu(document.getElementById('th-col-d'));
+  bindContextMenu(document.querySelector('.story-col-header'));
+  bindContextMenu(document.getElementById('story-header-title'));
 }
 
 function showBanner(html) {
@@ -8357,6 +8701,7 @@ function appendSpreadsheetBatch(count) {
     const variance = (Math.sin(chunk.globalIndex) * 2.5).toFixed(1);
     const varianceText = (variance >= 0 ? '+' : '') + variance + '%';
     const auditor = AUDITORS[chunk.globalIndex % AUDITORS.length];
+    const remark = REMARKS[chunk.globalIndex % REMARKS.length];
 
     let colDContent = chunk.text;
     if (state.theme !== 'theme-googlesheets' && state.readingMode === 'formula') {
@@ -8372,6 +8717,7 @@ function appendSpreadsheetBatch(count) {
       <td><span class="badge-status ${st.cls}">${st.text}</span></td>
       <td style="text-align: right; color: ${variance >= 0 ? '#0F9D58' : '#d93025'}">${varianceText}</td>
       <td style="color: #555;">${auditor}</td>
+      <td class="col-filler-cell">${remark}</td>
     `;
 
     const gIdx = chunk.globalIndex;
@@ -8449,12 +8795,12 @@ function appendVSCodeBatch(count) {
     if (chunk.indexInPage === 0 && chunk.page > 1) {
       addVSCLine('');
       addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># ----------------------------------------------------------------------</span>`);
-      addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># PIPELINE STREAM SEGMENT: TRANG ${chunk.page} / ${state.totalPages} (OFFSET #${chunk.globalIndex + 1})</span>`);
+      addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># PIPELINE STREAM SEGMENT: BATCH ${chunk.page} (OFFSET #${chunk.globalIndex + 1})</span>`);
       addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># ----------------------------------------------------------------------</span>`);
     }
 
     const varName = `record_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
-    addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># [Trang ${chunk.page} - Dòng ${chunk.indexInPage + 1}]</span>`);
+    addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># [Item #${chunk.globalIndex + 1}]</span>`);
     addVSCLine(`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">${varName}</span> = (`);
 
     const storyHtml = `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"${formatChunkText(chunk.text)}"</span>`;
@@ -8611,7 +8957,7 @@ function appendLinkedInBatch(count) {
         <div>
           <h5>${author.name} • 1st</h5>
           <span>${author.role}</span>
-          <span style="font-size: 10px; color: #888;">${hoursAgo} giờ trước • 🌐 • ${pageSpan}</span>
+          <span style="font-size: 10px; color: #888;">${hoursAgo} giờ trước • 🌐</span>
         </div>
       </div>
       <div class="ln-post-paragraphs-wrapper">
@@ -8852,7 +9198,7 @@ function appendZaloBatch(count) {
         <div class="zalo-msg-sender-name">
           <span>${sender.name}</span>
           ${sender.isOwner ? '<span style="color:#0068ff; font-size:10px;">(Trưởng nhóm)</span>' : ''}
-          <span class="zalo-msg-time">${timeStr} • Trang ${chunk.page}</span>
+          <span class="zalo-msg-time">${timeStr}</span>
         </div>
         <div class="zalo-msg-bubble">
           <div class="zalo-msg-text">${formatChunkText(chunk.text)}</div>
@@ -8874,7 +9220,7 @@ function appendFigmaBatch(count) {
     layer.innerHTML = `
       <div class="figma-layer-meta">
         <span class="figma-meta-name">${layerName}</span>
-        <span class="figma-meta-spec">AutoLayout • Trang ${chunk.page}</span>
+        <span class="figma-meta-spec">AutoLayout</span>
       </div>
       <div class="figma-text-layer">${formatChunkText(chunk.text)}</div>
     `;
@@ -8890,7 +9236,7 @@ function appendCanvaBatch(count) {
     box.id = `canva-block-${chunk.globalIndex}`;
     box.innerHTML = `
       <div class="canva-block-header">
-        <span class="canva-block-label">Mục ${chunk.globalIndex + 1} • Trang ${chunk.page}</span>
+        <span class="canva-block-label">Slide Block #${chunk.globalIndex + 1}</span>
       </div>
       <div class="canva-text-box">${formatChunkText(chunk.text)}</div>
     `;
@@ -9222,6 +9568,7 @@ function ensureOnlineChapterNextRow() {
       <td><span class="badge-status st-review">READY</span></td>
       <td style="text-align: right; color: #0F9D58">+100%</td>
       <td style="color: #555;">Auto-sync</td>
+      <td class="col-filler-cell" style="color: #1a73e8; font-weight: 500;">Next Chapter Ready</td>
     `;
     const btn = row.querySelector('#online-chapter-next-button');
     btn?.addEventListener('click', (e) => {
@@ -10169,7 +10516,6 @@ function appendTeamsBatch(count) {
     cardEl.innerHTML = `
       ${headingHtml}
       <div class="teams-doc-body">${formatChunkText(chunk.text)}</div>
-      <div class="teams-doc-meta">&bull; Trang ${chunk.page} - Đoạn #${chunk.globalIndex + 1}</div>
     `;
     return cardEl;
   });
@@ -10271,7 +10617,7 @@ function appendGmailBatch(count) {
     el.className = 'gmail-story-para';
     el.id = `gmail-para-${chunk.globalIndex}`;
     const heading = (chunk.indexInPage === 0) ? `<div class="gmail-section-heading">§ Phần ${chunk.page} — Phân đoạn tài liệu kỹ thuật</div>` : '';
-    el.innerHTML = `${heading}<div class="gmail-para-text">${formatChunkText(chunk.text)}</div><span class="gmail-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
+    el.innerHTML = `${heading}<div class="gmail-para-text">${formatChunkText(chunk.text)}</div>`;
     return el;
   });
 }
@@ -10282,7 +10628,7 @@ function appendOutlookBatch(count) {
     el.className = 'outlook-story-para';
     el.id = `outlook-para-${chunk.globalIndex}`;
     const heading = (chunk.indexInPage === 0) ? `<div class="outlook-section-heading">Mục ${chunk.page}: Đặc tả yêu cầu kỹ thuật &amp; phân tích</div>` : '';
-    el.innerHTML = `${heading}<div class="outlook-para-text">${formatChunkText(chunk.text)}</div><span class="outlook-para-meta">Đoạn #${chunk.globalIndex + 1} • Trang ${chunk.page}</span>`;
+    el.innerHTML = `${heading}<div class="outlook-para-text">${formatChunkText(chunk.text)}</div>`;
     return el;
   });
 }
@@ -10292,11 +10638,10 @@ function appendJiraBatch(count) {
     const el = document.createElement('div');
     el.className = 'jira-log-item';
     el.id = `jira-log-item-${chunk.globalIndex}`;
-    const heading = (chunk.indexInPage === 0) ? `<div class="jira-section-heading">§ Trang ${chunk.page} — Kịch bản nghiệm thu &amp; Phân tích [NUC-342]</div>` : '';
+    const heading = (chunk.indexInPage === 0) ? `<div class="jira-section-heading">§ Issue NUC-342 — Kịch bản nghiệm thu &amp; Phân tích [Phần ${chunk.page}]</div>` : '';
     el.innerHTML = `${heading}
       <div class="jira-log-header">
         <span class="jira-log-badge">NUC-342-L${String(chunk.globalIndex + 1).padStart(3, '0')}</span>
-        <span class="jira-log-meta">Đoạn #${chunk.globalIndex + 1} &bull; Trang ${chunk.page}</span>
       </div>
       <div class="jira-log-body">${formatChunkText(chunk.text)}</div>`;
     return el;
@@ -10361,7 +10706,7 @@ function appendSlackBatch(count) {
     item.id = `slack-msg-${chunk.globalIndex}`;
 
     const dateDivider = (chunk.indexInPage === 0)
-      ? `<div class="slack-date-divider"><span>Trang ${chunk.page} — #social-media updates</span></div>`
+      ? `<div class="slack-date-divider"><span>#social-media updates</span></div>`
       : '';
 
     item.innerHTML = `
@@ -10374,7 +10719,6 @@ function appendSlackBatch(count) {
           <span class="slack-msg-sender">${sender.name}</span>
           ${sender.isApp ? '<span class="slack-app-badge">APP</span>' : ''}
           <span class="slack-msg-time">${timeStr}</span>
-          <span class="slack-msg-meta-tag">&bull; Trang ${chunk.page} #${chunk.globalIndex + 1}</span>
         </div>
         <div class="slack-msg-text">${formatChunkText(chunk.text)}</div>
       </div>

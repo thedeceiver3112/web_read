@@ -438,7 +438,7 @@ test('modal tìm truyện online: mở modal, chọn truyện, chọn chương, 
   const bookItem = booksList.locator('.portal-book-item').first();
   await expect(bookItem).toBeVisible();
   await expect(bookItem.locator('.portal-book-title')).toHaveText('Mao Sơn Tróc Quỷ Nhân');
-  await expect(bookItem.locator('.portal-book-meta')).toContainText('Truyện online');
+  await expect(bookItem.locator('.portal-book-icon-box')).toHaveClass(/is-online/);
 
   // "Bắt Đầu Đọc Ngay" button is ready
   const enterBtn = page.locator('#btn-portal-enter');
