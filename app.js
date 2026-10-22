@@ -122,7 +122,7 @@ const state = {
   linkedinTitle: localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn',
   autocadTitle: localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg',
   zaloTitle: localStorage.getItem('stealth_title_zalo') || 'Dự án Sprint Q3 - Tech Lead & Team Sync',
-  figmaTitle: localStorage.getItem('stealth_title_figma') || 'Mobile_Banking_Design_System_v4.2',
+  figmaTitle: localStorage.getItem('stealth_title_figma') || 'WEMAKEFOOD',
   canvaTitle: localStorage.getItem('stealth_title_canva') || 'Báo Cáo Chiến Lược Thương Hiệu 2026',
   powerpointTitle: localStorage.getItem('stealth_title_powerpoint') || 'Q3_Business_Review_Strategic_Plan.pptx',
   tvplTitle: localStorage.getItem('stealth_title_tvpl') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ',
@@ -2063,6 +2063,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (state.theme === 'theme-indesign' || document.body.classList.contains('theme-indesign')) {
     setupInDesignControls();
   }
+  if (state.theme === 'theme-figma' || document.body.classList.contains('theme-figma')) {
+    initFigmaThemeMode();
+  }
   
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
@@ -2428,6 +2431,8 @@ const StealthImageManager = {
       const canva = document.querySelector('.canva-canvas-viewport');
       if (canva) canva.style.backgroundImage = '';
     } else if (theme === 'theme-figma') {
+      const placedImg = document.getElementById('figma-placed-image');
+      if (placedImg) placedImg.src = dataUrl;
       const mockup = document.querySelector('.figma-mockup-canvas');
       if (mockup) {
         mockup.style.backgroundImage = `url("${dataUrl}")`;
@@ -2591,6 +2596,8 @@ const StealthImageManager = {
       const canva = document.querySelector('.canva-canvas-viewport');
       if (canva) canva.style.backgroundImage = '';
     } else if (theme === 'theme-figma') {
+      const placedImg = document.getElementById('figma-placed-image');
+      if (placedImg) placedImg.src = 'static/header-workspace-background-v1.png';
       const mockup = document.querySelector('.figma-mockup-canvas');
       if (mockup) mockup.style.backgroundImage = '';
       const tourImgs = document.querySelectorAll('.btn-card-img-box');
@@ -2655,7 +2662,7 @@ const StealthImageManager = {
     else if (theme === 'theme-premiere') container = document.querySelector('.pr-frame') || document.querySelector('.pr-monitor');
     else if (theme === 'theme-blender') container = document.querySelector('.b-viewport-pane');
     else if (theme === 'theme-canva') container = document.querySelector('.canva-pinned-visual-header') || document.querySelector('.canva-slide-deck-card');
-    else if (theme === 'theme-figma') container = document.querySelector('.figma-artboard-frame') || document.querySelector('.figma-mockup-canvas');
+    else if (theme === 'theme-figma') container = document.getElementById('figma-food-hero-box') || document.querySelector('.figma-food-artboard') || document.querySelector('.figma-artboard-frame');
     else if (theme === 'theme-powerpoint') container = document.querySelector('.ppt-slide-sheet') || document.querySelector('.ppt-canvas-viewport');
 
     if (container && !document.getElementById('stealth-img-ctrl-pill')) {
@@ -3524,7 +3531,7 @@ const THEME_DOC_CONFIGS = {
   },
   'theme-figma': {
     prop: 'figmaTitle',
-    defaultTitle: 'Mobile_Banking_Design_System_v4.2',
+    defaultTitle: 'WEMAKEFOOD',
     formatTabTitle: t => `${t} – Figma`,
     titleId: 'figma-doc-title'
   },
@@ -3847,7 +3854,7 @@ function initTitleEditing() {
   if (fTitle) {
     fTitle.addEventListener('blur', () => {
       let val = fTitle.textContent.trim();
-      if (!val) val = 'Mobile_Banking_Design_System_v4.2';
+      if (!val) val = 'WEMAKEFOOD';
       fTitle.textContent = val;
       state.figmaTitle = val;
       localStorage.setItem('stealth_title_figma', val);
@@ -6287,6 +6294,11 @@ function initEventListeners() {
         toggleChatGPTThemeMode();
         return;
       }
+      if (state.theme === 'theme-figma' || document.body.classList.contains('theme-figma')) {
+        e.preventDefault();
+        toggleFigmaThemeMode();
+        return;
+      }
     }
 
     if (state.bossModeActive) return;
@@ -7204,6 +7216,15 @@ function switchSheet(targetId) {
 
 function updateBossButton(btn, bossModeActive) {
   if (!btn) return;
+  if (btn.id === 'btn-boss-key-figma') {
+    btn.innerHTML = bossModeActive
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5.903C6 4.43 7.604 3.517 8.87 4.269l10.15 6.028c1.307.776 1.305 2.669-.003 3.442l-10.15 5.995c-1.228.724-2.768-.11-2.863-1.5L6 18.098zm1 12.195a.9.9 0 0 0 1.357.774l10.152-5.995a1 1 0 0 0 .002-1.72L8.359 5.129A.9.9 0 0 0 7 5.903z"/></svg>';
+    btn.title = bossModeActive ? 'Exit Prototype Present (ESC)' : 'Present (Prototype view / Boss Key)';
+    btn.classList.toggle('active', bossModeActive);
+    btn.style.backgroundColor = '';
+    return;
+  }
   if (btn.id === 'univ-btn-boss') {
     const text = btn.querySelector('.unav-boss-text');
     if (text) text.textContent = bossModeActive ? 'Quay lại' : 'Báo cáo nhanh';
@@ -10635,6 +10656,63 @@ function initChatGPTThemeMode() {
           menu.style.display = 'none';
         }
       }
+    });
+  }
+}
+
+
+
+function setFigmaThemeMode(isDark, showToast = false) {
+  const mode = isDark ? 'dark' : 'light';
+  try {
+    localStorage.setItem('figma_theme_mode', mode);
+  } catch (e) {}
+
+  if (isDark) {
+    document.body.classList.add('dark', 'dark-mode');
+    document.documentElement.classList.add('dark', 'dark-mode');
+  } else {
+    document.body.classList.remove('dark', 'dark-mode');
+    document.documentElement.classList.remove('dark', 'dark-mode');
+  }
+
+  const hexInput = document.getElementById('figma-page-color-hex');
+  const swatch = document.getElementById('figma-page-color-swatch');
+  if (hexInput) hexInput.value = isDark ? '1E1E1E' : 'F5F5F5';
+  if (swatch) swatch.style.backgroundColor = isDark ? '#1E1E1E' : '#F5F5F5';
+
+  const toggleBtn = document.getElementById('figma-theme-toggle-btn');
+  if (toggleBtn) {
+    const label = toggleBtn.querySelector('.figma-theme-toggle-label');
+    const icon = toggleBtn.querySelector('.figma-theme-toggle-icon');
+    if (label) label.textContent = isDark ? 'Light mode' : 'Dark mode';
+    if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+    toggleBtn.setAttribute('title', isDark ? 'Chuyển sang giao diện Sáng (Alt+D)' : 'Chuyển sang giao diện Tối (Alt+D)');
+  }
+
+  if (showToast) {
+    showPageFlipToast(isDark ? '🌙 Đã chuyển sang giao diện tối Figma (Dark Mode)' : '☀️ Đã chuyển sang giao diện sáng Figma (Light Mode)');
+  }
+}
+
+function toggleFigmaThemeMode() {
+  const isCurrentlyDark = document.body.classList.contains('dark') || 
+                          document.documentElement.classList.contains('dark') || 
+                          localStorage.getItem('figma_theme_mode') === 'dark';
+  setFigmaThemeMode(!isCurrentlyDark, true);
+}
+
+function initFigmaThemeMode() {
+  const savedMode = localStorage.getItem('figma_theme_mode');
+  const isDark = savedMode === 'dark';
+  setFigmaThemeMode(isDark, false);
+
+  const toggleBtn = document.getElementById('figma-theme-toggle-btn');
+  if (toggleBtn && !toggleBtn._figmaModeBound) {
+    toggleBtn._figmaModeBound = true;
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFigmaThemeMode();
     });
   }
 }

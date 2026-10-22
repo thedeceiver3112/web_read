@@ -7,387 +7,623 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <script src="version-check.js?v=20261016-4" data-app-version="20261016-4"></script>
-  <title>BẮC TRUNG NAM – Figma</title>
+  <title>WEMAKEFOOD – Figma</title>
   <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%2318181B%22/%3E%20%3Cg%20transform%3D%22translate%2810%2C%205%29%20scale%280.74%29%22%3E%20%3Cpath%20d%3D%22M19%2028.5C19%2023.3%2023.3%2019%2028.5%2019C33.7%2019%2038%2023.3%2038%2028.5C38%2033.7%2033.7%2038%2028.5%2038C23.3%2038%2019%2033.7%2019%2028.5Z%22%20fill%3D%22%231ABCFE%22/%3E%20%3Cpath%20d%3D%22M0%2047.5C0%2042.3%204.3%2038%209.5%2038H19V47.5C19%2052.7%2014.7%2057%209.5%2057C4.3%2057%200%2052.7%200%2047.5Z%22%20fill%3D%22%230ACF83%22/%3E%20%3Cpath%20d%3D%22M19%200V19H28.5C33.7%2019%2038%2014.7%2038%209.5C38%204.3%2033.7%200%2028.5%200H19Z%22%20fill%3D%22%23FF7262%22/%3E%20%3Cpath%20d%3D%22M0%209.5C0%2014.7%204.3%2019%209.5%2019H19V0H9.5C4.3%200%200%204.3%200%209.5Z%22%20fill%3D%22%23F24E1E%22/%3E%20%3Cpath%20d%3D%22M0%2028.5C0%2033.7%204.3%2038%209.5%2038H19V19H9.5C4.3%2019%200%2023.3%200%2028.5Z%22%20fill%3D%22%23A259FF%22/%3E%20%3C/g%3E%20%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20261016-4">
 </head>
-<body class="theme-figma">
+<body class="theme-figma figma-ui3">
 
   <div class="figma-app-container">
-    <!-- 1. FIGMA TOP NAVIGATION BAR (Light Mode, Authentic Figma UI3) -->
-    <header class="figma-top-bar">
-      <div class="figma-top-left">
-        <div class="figma-logo-btn" title="Figma Main Menu"><svg class="figma-logo-svg" width="22" height="22" viewBox="0 0 48 48">
-            <g transform="translate(4, 2) scale(0.85)">
-              <path d="M19 28.5C19 23.3 23.3 19 28.5 19C33.7 19 38 23.3 38 28.5C38 33.7 33.7 38 28.5 38C23.3 38 19 33.7 19 28.5Z" fill="#1ABCFE"/>
-              <path d="M0 47.5C0 42.3 4.3 38 9.5 38H19V47.5C19 52.7 14.7 57 9.5 57C4.3 57 0 52.7 0 47.5Z" fill="#0ACF83"/>
-              <path d="M19 0V19H28.5C33.7 19 38 14.7 38 9.5C38 4.3 33.7 0 28.5 0H19Z" fill="#FF7262"/>
-              <path d="M0 9.5C0 14.7 4.3 19 9.5 19H19V0H9.5C4.3 0 0 4.3 0 9.5Z" fill="#F24E1E"/>
-              <path d="M0 28.5C0 33.7 4.3 38 9.5 38H19V19H9.5C4.3 19 0 23.3 0 28.5Z" fill="#A259FF"/>
-            </g>
-          </svg></div>
-        <div class="figma-file-title-group">
-          <span id="figma-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên file thiết kế Figma">BẮC TRUNG NAM</span>
-          <span class="figma-title-caret">▾</span>
-        </div>
-        <button class="figma-icon-action-btn" title="Toggle left sidebar">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+    
+    <!-- =========================================================
+         1. FIGMA UI3 LEFT RAIL NAVIGATION BAR (Width: 57px)
+         ========================================================= -->
+    <nav class="figma-nav-rail" aria-label="Navigation Bar" role="toolbar" aria-orientation="vertical">
+      <div class="figma-rail-top">
+        <!-- Main menu (Figma Icon) -->
+        <button class="figma-rail-btn figma-rail-menu-btn" aria-label="Main menu" title="Main menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path fill="currentColor" fill-rule="evenodd" d="M7 7c0 1.043.533 1.963 1.341 2.5A3 3 0 0 0 7 12c0 1.043.533 1.963 1.341 2.5A3 3 0 1 0 13 17v-2.764A3 3 0 1 0 16.659 9.5 3 3 0 0 0 15 4h-5a3 3 0 0 0-3 3m8 2a2 2 0 1 0 0-4h-2v4zm-2 3a2 2 0 1 0 4 0 2 2 0 0 0-4 0m-1 2h-2a2 2 0 1 1 0-4h2zm-2 1h2v2a2 2 0 1 1-2-2m2-6h-2a2 2 0 1 1 0-4h2z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+
+        <div class="figma-rail-divider"></div>
+
+        <!-- File Tab (Active) -->
+        <button class="figma-rail-btn active" aria-label="File" title="File (Alt+1)">
+          <div class="figma-rail-icon-box">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12.598 5.01a.5.5 0 0 1 .255.136l4 4A.5.5 0 0 1 16.5 10h-4a.5.5 0 0 1-.5-.5V6H8.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 1 1 0v6a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 7 17.5v-11A1.5 1.5 0 0 1 8.5 5h4zM13 9h2.293L13 6.707z"/>
+            </svg>
+          </div>
+          <span class="figma-rail-label">File</span>
+        </button>
+
+        <!-- Agents (AI Assistant) -->
+        <button class="figma-rail-btn" aria-label="Agents" title="Agents (Ctrl+Enter)">
+          <div class="figma-rail-icon-box">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+              <path fill="currentColor" fill-rule="evenodd" d="M10.39 6.057c.598-1.407 2.623-1.407 3.222 0l.056.146L14.7 9.302l3.1 1.034c1.6.534 1.6 2.799 0 3.333L14.7 14.7l-1.032 3.1-.055.145c-.619 1.454-2.76 1.405-3.278-.145L9.3 14.7l-3.099-1.032c-1.551-.517-1.6-2.66-.145-3.279l.145-.054L9.3 9.301l1.034-3.099zm2.3.387c-.256-.59-1.123-.59-1.378 0l-.034.087-1.029 3.087-.158.474-.474.158-3.099 1.034c-.69.23-.69 1.206 0 1.436l3.1 1.032.473.158.158.475 1.034 3.1.052.12c.297.566 1.168.525 1.384-.12l1.032-3.1.158-.475.475-.158 3.1-1.032.12-.051c.566-.298.526-1.17-.12-1.385l-3.1-1.034-.475-.158-.158-.475-1.032-3.099h-.001z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <span class="figma-rail-label">Agents</span>
+        </button>
+
+        <!-- Assets -->
+        <button class="figma-rail-btn" aria-label="Assets" title="Assets (Alt+2)">
+          <div class="figma-rail-icon-box">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+              <path fill="currentColor" fill-rule="evenodd" d="M17 11.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0m1 0a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0m-6-2a.5.5 0 0 0-1 0V11H9.5a.5.5 0 0 0 0 1H11v1.5a.5.5 0 0 0 1 0V12h1.5a.5.5 0 0 0 0-1H12z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <span class="figma-rail-label">Assets</span>
+        </button>
+
+        <!-- Tools -->
+        <button class="figma-rail-btn" aria-label="Tools" title="Tools">
+          <div class="figma-rail-icon-box">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M13.5 5A1.5 1.5 0 0 1 15 6.5V7h1.086a1.5 1.5 0 0 1 1.06.44l1.414 1.414a1.5 1.5 0 0 1 .44 1.06V16.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 16.5V9.914c0-.398.158-.78.44-1.06l1.413-1.415A1.5 1.5 0 0 1 7.913 7H9v-.5A1.5 1.5 0 0 1 10.5 5zM6 16.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V13h-3v1a.5.5 0 0 1-1 0v-1h-4v1a.5.5 0 0 1-1 0v-1H6zM7.914 8a.5.5 0 0 0-.354.146L6.146 9.561A.5.5 0 0 0 6 9.914V12h3v-1a.5.5 0 0 1 1 0v1h4v-1a.5.5 0 0 1 1 0v1h3V9.914a.5.5 0 0 0-.147-.353L16.44 8.146A.5.5 0 0 0 16.086 8zM10.5 6a.5.5 0 0 0-.5.5V7h4v-.5a.5.5 0 0 0-.5-.5z"/>
+            </svg>
+          </div>
+          <span class="figma-rail-label">Tools</span>
+        </button>
+
+        <div class="figma-rail-divider"></div>
+
+        <!-- Variables -->
+        <button class="figma-rail-btn" aria-label="Variables" title="Variables">
+          <div class="figma-rail-icon-box">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M11.117 5.586A2 2 0 0 1 13 5.649l4 2.31.113.07A2 2 0 0 1 18 9.69v4.62a2 2 0 0 1-.887 1.66l-.113.072-4 2.309a2 2 0 0 1-1.883.063L11 18.351l-4-2.309a2 2 0 0 1-1-1.732V9.69a2 2 0 0 1 1-1.73l4-2.31zm1.383.93a1 1 0 0 0-1 0l-4 2.308-.11.074A1 1 0 0 0 7 9.69v4.62l.009.132c.04.305.22.578.491.734l4 2.31c.27.155.597.175.88.058l.12-.059 4-2.31a1 1 0 0 0 .491-.733L17 14.31V9.69a1 1 0 0 0-.39-.792l-.11-.074zM12 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4m0 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+            </svg>
+          </div>
+          <span class="figma-rail-label">Variables</span>
         </button>
       </div>
 
-      <!-- Stealth Reading Controls in Figma Header (Lightweight pills) -->
-      <div class="figma-top-center">
+      <div class="figma-rail-bottom">
+        <!-- Help / Resource button -->
+        <button class="figma-rail-btn-sm" title="Help & Resources">?</button>
       </div>
+    </nav>
 
-      <div class="figma-top-right">
-        <div class="figma-user-avatar" title="Tài khoản người dùng">
-          <span>N</span>
-          <span class="avatar-caret">▾</span>
-        </div>
-        <button class="figma-icon-action-btn" title="Audio / Huddle">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </button>
-        <button class="figma-share-btn">Share</button>
-        <div class="figma-zoom-pill" title="Mức thu phóng Canvas">
-          <span>47%</span>
-          <span class="zoom-caret">▾</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- 2. FIGMA WORKSPACE LAYOUT (3 CỘT: LAYERS | CANVAS VÔ TẬN | DESIGN INSPECT) -->
-    <div class="figma-workspace-layout">
-      <!-- Cột Trái: Pages & Layers Panel (Exact Replica from Image 1) -->
-      <aside class="figma-left-panel">
-        <!-- Pages Section -->
-        <div class="figma-pages-header">
-          <span class="figma-panel-title">Pages</span>
-          <button class="figma-panel-mini-btn" title="Tìm kiếm trang">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <!-- =========================================================
+         2. FIGMA LEFT PANEL: PAGES & LAYERS (Width: 240px)
+         ========================================================= -->
+    <aside class="figma-left-panel" id="figma-left-panel">
+      <!-- File Title & Minimize Header -->
+      <div class="figma-panel-file-header">
+        <div class="figma-file-title-wrap">
+          <span class="figma-file-title stealth-editable" id="figma-doc-title" contenteditable="true" spellcheck="false" title="Nhấp để đổi tên file thiết kế Figma" data-stealth-key="stealth_figma_doc_title">WEMAKEFOOD</span>
+          <button class="figma-file-menu-chevron" title="Edit file menu">
+            <svg width="14" height="14" fill="none" viewBox="0 0 16 16"><path fill="currentColor" d="M9.768 6.768a.5.5 0 0 1 .707.707l-2.12 2.121a.5.5 0 0 1-.708 0L5.525 7.475a.5.5 0 0 1 .708-.707l1.768 1.767z"/></svg>
           </button>
         </div>
+        <button class="figma-btn-minimize" id="figma-btn-toggle-left" title="Minimize UI">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M17.653 7.008A1.5 1.5 0 0 1 19 8.5v7a1.5 1.5 0 0 1-1.347 1.492L17.5 17h-11a1.5 1.5 0 0 1-1.492-1.347L5 15.5v-7A1.5 1.5 0 0 1 6.5 7h11zM6.5 8a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .5.5H9V8zm3.5 8h7.5a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.5-.5H10z"/></svg>
+        </button>
+      </div>
+
+      <!-- Pages Section -->
+      <div class="figma-pages-section">
+        <div class="figma-section-header">
+          <div class="figma-section-title-wrap">
+            <span class="figma-section-caret">▾</span>
+            <span class="figma-section-title">Pages</span>
+          </div>
+          <div class="figma-section-actions">
+            <button class="figma-panel-icon-btn" title="Tìm kiếm trang">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M11.5 6a5.5 5.5 0 0 1 4.226 9.019l2.127 2.127a.5.5 0 1 1-.707.707l-2.127-2.127A5.5 5.5 0 1 1 11.5 6m0 1a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9"/></svg>
+            </button>
+            <button class="figma-panel-icon-btn" title="Add new page">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M11.5 6a.5.5 0 0 1 .5.5V11h4.5a.5.5 0 0 1 0 1H12v4.5a.5.5 0 0 1-1 0V12H6.5a.5.5 0 0 1 0-1H11V6.5a.5.5 0 0 1 .5-.5" clip-rule="evenodd"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="figma-pages-list">
-          <div class="figma-page-row active">
-            <span class="page-title-text">Page 1</span>
+          <div class="figma-page-item active">
+            <span class="figma-page-name">Page 1</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="figma-panel-divider"></div>
+
+      <!-- Layers Section (Exact tree from user snippet) -->
+      <div class="figma-layers-section">
+        <div class="figma-section-header">
+          <div class="figma-section-title-wrap">
+            <span class="figma-section-caret">▾</span>
+            <span class="figma-section-title">Layers</span>
+          </div>
+          <div class="figma-section-actions">
+            <button class="figma-panel-icon-btn" title="Collapse layers">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12.5 16a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm3.725-1.918a.5.5 0 0 1 .628.064l2 2a.5.5 0 1 1-.707.707L16.5 15.208l-1.646 1.646a.5.5 0 1 1-.707-.707l2-2zM12.5 13a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm0-3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm5.647-2.854a.5.5 0 1 1 .707.708l-2 2a.5.5 0 0 1-.63.064l-.078-.064-2-2a.5.5 0 1 1 .707-.708L16.5 8.793zM12.5 7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"/></svg>
+            </button>
           </div>
         </div>
 
-        <div class="figma-panel-divider"></div>
+        <!-- Layers Tree -->
+        <div class="figma-layers-tree" id="figma-layers-tree">
+          <!-- Row 1: Vector 1 -->
+          <div class="figma-tree-row" style="--indent: 0px;" data-layer="Vector 1">
+            <span class="figma-row-icon icon-vector">⤹</span>
+            <span class="figma-row-name">Vector 1</span>
+            <div class="figma-row-actions">
+              <span class="figma-action-lock" title="Lock layer">🔓</span>
+              <span class="figma-action-vis" title="Toggle visibility">👁</span>
+            </div>
+          </div>
 
-        <!-- Layers Section -->
-        <div class="figma-layers-header">
-          <span class="figma-panel-title">Layers</span>
-        </div>
-        <div class="figma-layers-tree">
-          <div class="figma-layer-node"><span class="figma-node-icon icon-img">🖼️</span> Image 3</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-rect">▭</span> Rectangle 1147</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-text">T</span> Anh Tuấn Huy</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-rect">▭</span> Rectangle 114</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-frame">#</span> Frame 1</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 45</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 48</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 55</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 61</div>
-          <div class="figma-layer-node comp-node"><span class="figma-node-icon icon-comp">❖</span> Component 42</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-rect">▭</span> Rectangle 1181</div>
-          <div class="figma-layer-node active"><span class="figma-node-icon icon-frame">#</span> Trang chủ</div>
-          <div class="figma-layer-node"><span class="figma-node-icon icon-frame">#</span> Editorial Spec &amp; Copywriting Stream</div>
-        </div>
-      </aside>
+          <!-- Row 2: image 28 -->
+          <div class="figma-tree-row" style="--indent: 0px;" data-layer="image 28">
+            <span class="figma-row-icon icon-img">🖼</span>
+            <span class="figma-row-name">image 28</span>
+            <div class="figma-row-actions">
+              <span class="figma-action-lock" title="Lock layer">🔓</span>
+              <span class="figma-action-vis" title="Toggle visibility">👁</span>
+            </div>
+          </div>
 
-      <!-- Cột Giữa: Canvas vô tận & Artboard thiết kế du lịch + Đọc truyện -->
-      <main class="figma-canvas-viewport" id="figma-canvas-scroll-container">
-        <!-- Normal reading view -->
-        <div id="figma-story-view">
-          <div class="figma-canvas-board-layout">
+          <!-- Row 3: About (Component ❖) -->
+          <div class="figma-tree-row comp-row active" style="--indent: 0px;" data-layer="About">
+            <span class="figma-row-caret">▾</span>
+            <span class="figma-row-icon icon-comp">❖</span>
+            <span class="figma-row-name">About</span>
+            <div class="figma-row-actions">
+              <span class="figma-action-lock" title="Lock layer">🔓</span>
+              <span class="figma-action-vis" title="Toggle visibility">👁</span>
+            </div>
+          </div>
+
+          <!-- Children of About -->
+          <!-- HEADER -->
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="HEADER">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">HEADER</span>
+            <div class="figma-row-actions">
+              <span class="figma-action-lock">🔓</span>
+              <span class="figma-action-vis">👁</span>
+            </div>
+          </div>
+
+          <!-- FOOTER -->
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="FOOTER">
+            <span class="figma-row-caret">▾</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">FOOTER</span>
+            <div class="figma-row-actions">
+              <span class="figma-action-lock">🔓</span>
+              <span class="figma-action-vis">👁</span>
+            </div>
+          </div>
+
+          <!-- Children of FOOTER -->
+          <div class="figma-tree-row comp-child" style="--indent: 38px;" data-layer="Great">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">Great</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 38px;" data-layer="Line 2">
+            <span class="figma-row-icon icon-line">―</span>
+            <span class="figma-row-name">Line 2</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 38px;" data-layer="food-picture">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">food-picture</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 38px;" data-layer="Group 36">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">Group 36</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 38px;" data-layer="contact">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">contact</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 38px;" data-layer="Rectangle 5">
+            <span class="figma-row-icon icon-rect">▭</span>
+            <span class="figma-row-name">Rectangle 5</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+
+          <!-- Other children of About -->
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="EVALUTE">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">EVALUTE</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="Evalute-list">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">Evalute-list</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="Evaluate">
+            <span class="figma-row-icon icon-text">T</span>
+            <span class="figma-row-name">Evaluate</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="Line 6">
+            <span class="figma-row-icon icon-line">―</span>
+            <span class="figma-row-name">Line 6</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="BANNER">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">BANNER</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="ABOUT">
+            <span class="figma-row-icon icon-text">T</span>
+            <span class="figma-row-name">ABOUT</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="image 16">
+            <span class="figma-row-icon icon-img">🖼</span>
+            <span class="figma-row-name">image 16</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="Rectangle 59">
+            <span class="figma-row-icon icon-rect">▭</span>
+            <span class="figma-row-name">Rectangle 59</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="EVERYGOOD..">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">EVERYGOOD..</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="Rectangle 57">
+            <span class="figma-row-icon icon-rect">▭</span>
+            <span class="figma-row-name">Rectangle 57</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="WEMAKEFOOD">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">WEMAKEFOOD</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+          <div class="figma-tree-row comp-child" style="--indent: 20px;" data-layer="WEMAKE">
+            <span class="figma-row-caret">▸</span>
+            <span class="figma-row-icon icon-group">⚏</span>
+            <span class="figma-row-name">WEMAKE</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+
+          <!-- Editorial Spec & Copywriting Stream layer -->
+          <div class="figma-tree-row" style="--indent: 0px;" data-layer="Editorial Spec & Copywriting Stream">
+            <span class="figma-row-icon icon-frame">#</span>
+            <span class="figma-row-name">Editorial Spec & Copywriting Stream</span>
+            <div class="figma-row-actions"><span class="figma-action-lock">🔓</span><span class="figma-action-vis">👁</span></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- =========================================================
+         3. FIGMA CANVAS VIEWPORT (Infinite Workspace)
+         ========================================================= -->
+    <main class="figma-canvas-viewport" id="figma-canvas-scroll-container">
+      <div id="figma-story-view">
+        <div class="figma-canvas-board-layout">
+          
+          <!-- ARTBOARD 1: WEMAKEFOOD - About Component Frame -->
+          <div class="figma-design-frame-wrapper" id="figma-wemakefood-frame">
+            <div class="figma-canvas-frame-label comp-label">
+              <span class="comp-icon">❖</span> About <span class="figma-auto-layout-badge">Component • 720px</span>
+            </div>
             
-            <!-- Travel Web Frame: Trang chủ (Replicating Image 1) -->
-            <div class="figma-design-frame-wrapper" id="figma-travel-website-frame">
-              <div class="figma-canvas-frame-label stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tên Artboard Frame" data-stealth-key="stealth_figma_frame_label">Trang chủ</div>
-              <div class="figma-travel-artboard">
-                <!-- BTN Top Header -->
-                <div class="btn-top-info-bar">
-                  <div class="btn-info-left">
-                    <span>✉ baotrangnguyen.travel@gmail.com</span>
-                    <span>📍 18 Phố Vọng, P. Phương Liệt, Q. Thanh Xuân, TP. Hà Nội</span>
+            <div class="figma-food-artboard">
+              <!-- Food Brand Nav -->
+              <div class="food-top-navbar">
+                <div class="food-logo-wrap">
+                  <span class="food-logo-badge">WEMAKEFOOD</span>
+                  <span class="food-logo-tagline">Fresh Gourmet Kitchen</span>
+                </div>
+                <nav class="food-nav-menu">
+                  <a href="javascript:void(0)" class="active">Trang chủ</a>
+                  <a href="javascript:void(0)">Thực đơn</a>
+                  <a href="javascript:void(0)">Về chúng tôi</a>
+                  <a href="javascript:void(0)">Đầu bếp</a>
+                  <a href="javascript:void(0)">Liên hệ</a>
+                  <button class="food-order-btn">Đặt bàn ngay</button>
+                </nav>
+              </div>
+
+              <!-- Hero Food Banner -->
+              <div class="food-hero-section">
+                <div class="figma-food-hero-box" id="figma-food-hero-box">
+                  <img id="figma-placed-image" src="static/header-workspace-background-v1.png" alt="WEMAKEFOOD Gourmet Culinary Art">
+                  <button class="figma-img-replace-pill" id="btn-replace-image-figma" title="Đổi ảnh đại diện thiết kế (hoặc kéo thả ảnh vào đây)">
+                    📷 Đổi ảnh
+                  </button>
+                  <div class="food-hero-overlay-text">
+                    <span class="food-badge-pill">🌿 100% Nguyên liệu hữu cơ tươi ngon</span>
+                    <h2 class="food-hero-title stealth-editable" contenteditable="true" spellcheck="false" data-stealth-key="stealth_figma_food_title">Nghệ Thuật Ẩm Thực Tinh Hoa & Trải Nghiệm Thượng Hạng</h2>
+                    <p class="food-hero-desc stealth-editable" contenteditable="true" spellcheck="false" data-stealth-key="stealth_figma_food_desc">Khám phá hương vị truyền thống kết hợp phong cách hiện đại trong từng món ăn được chuẩn bị bởi bếp trưởng 5 sao.</p>
                   </div>
-                  <div class="btn-info-right">
-                    <span>☎ Hotline: <b>094 568 99 88</b></span>
+                </div>
+              </div>
+
+              <!-- Food Dishes Feature Showcase Grid -->
+              <div class="food-features-grid">
+                <!-- Dish 1 -->
+                <div class="food-card">
+                  <div class="food-card-thumb dish-1">
+                    <span class="dish-tag">Bán chạy nhất</span>
+                  </div>
+                  <div class="food-card-body">
+                    <h4>Bò Wagyu Nướng Sốt Nấm Truffle</h4>
+                    <p>Thịt bò Wagyu vân mỡ thượng hạng ướp thảo mộc Pháp</p>
+                    <div class="food-card-price">850,000 đ</div>
                   </div>
                 </div>
 
-                <div class="btn-main-nav-bar">
-                  <div class="btn-logo-area">
-                    <span class="btn-logo-badge">BTN</span>
-                    <span class="btn-logo-sub">Travel &amp; Tour</span>
+                <!-- Dish 2 -->
+                <div class="food-card">
+                  <div class="food-card-thumb dish-2">
+                    <span class="dish-tag">Đặc sản</span>
                   </div>
-                  <nav class="btn-nav-links">
-                    <a href="javascript:void(0)" class="active">Trang chủ</a>
-                    <a href="javascript:void(0)">Tour trong nước</a>
-                    <a href="javascript:void(0)">Tour quốc tế</a>
-                    <a href="javascript:void(0)">Combo du lịch</a>
-                    <a href="javascript:void(0)">Tin tức &amp; sự kiện</a>
-                  </nav>
-                </div>
-
-                <!-- Hero Banner -->
-                <div class="btn-hero-banner">
-                  <div class="btn-hero-overlay">
-                    <h2 class="btn-hero-title stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tiêu đề banner web" data-stealth-key="stealth_figma_hero_title">TÌM KIẾM TOUR DU LỊCH BẠN MONG MUỐN</h2>
-                    
-                    <!-- Search Widget -->
-                    <div class="btn-search-widget">
-                      <div class="btn-search-field">
-                        <label>Loại tour bạn muốn đi:</label>
-                        <div class="btn-field-input">Chọn loại tour ▾</div>
-                      </div>
-                      <div class="btn-search-field">
-                        <label>Ngày khởi hành:</label>
-                        <div class="btn-field-input">dd / mm / yyyy 📅</div>
-                      </div>
-                      <div class="btn-search-field">
-                        <label>Khoảng giá: <b>5,000,000đ</b></label>
-                        <input type="range" class="btn-range" min="1" max="50" value="10">
-                      </div>
-                      <button class="btn-search-submit">🔍 Tìm tour ngay</button>
-                    </div>
+                  <div class="food-card-body">
+                    <h4>Cá Hồi Na Uy Áp Chảo Sốt Bơ Chanh</h4>
+                    <p>Phi lê cá hồi tươi ngon kèm măng tây và khoai tây nghiền</p>
+                    <div class="food-card-price">520,000 đ</div>
                   </div>
                 </div>
 
-                <!-- Tour Khởi Hành Hàng Tuần Section -->
-                <div class="btn-tours-section">
-                  <div class="btn-section-header-row">
-                    <div class="btn-section-title-wrap">
-                      <h3 class="btn-section-title stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa tiêu đề mục website" data-stealth-key="stealth_figma_section_title">TOUR KHỞI HÀNH HÀNG TUẦN</h3>
-                      <p class="btn-section-subtitle stealth-editable" contenteditable="true" spellcheck="false" title="Nhấp để sửa mô tả mục website" data-stealth-key="stealth_figma_section_sub">Những điểm dừng chân lý tưởng nhất</p>
-                    </div>
-                    <div class="btn-filter-pills">
-                      <button class="btn-pill-filter active">Trong Nước</button>
-                      <button class="btn-pill-filter">Quốc Tế</button>
-                    </div>
+                <!-- Dish 3 -->
+                <div class="food-card">
+                  <div class="food-card-thumb dish-3">
+                    <span class="dish-tag">Mới</span>
                   </div>
-
-                  <!-- 4 Tour Cards Grid (Replicating Image 1) -->
-                  <div class="btn-cards-grid">
-                    <!-- Card 1 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-mocchau">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Mộc Châu</div>
-                        <h4 class="btn-tour-name">TOUR DU LỊCH MỘC CHÂU - ĐIỆN BIÊN</h4>
-                        <div class="btn-tour-meta">📅 3N2Đ • Khởi hành từ Hà Nội</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-halong">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Hạ Long</div>
-                        <h4 class="btn-tour-name">TOUR DU THUYỀN VỊNH HẠ LONG 5 SAO</h4>
-                        <div class="btn-tour-meta">📅 2N1Đ • Khởi hành từ Hà Nội</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-sapa">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Sa Pa</div>
-                        <h4 class="btn-tour-name">TOUR DU LỊCH SAPA - FANSIPAN LEGEND</h4>
-                        <div class="btn-tour-meta">📅 3N2Đ • Khởi hành từ Hà Nội</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
-
-                    <!-- Card 4 -->
-                    <div class="btn-tour-card">
-                      <div class="btn-card-img-box img-danang">
-                        <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                      </div>
-                      <div class="btn-card-content">
-                        <div class="btn-tour-location">📍 Đà Nẵng</div>
-                        <h4 class="btn-tour-name">TOUR ĐÀ NẴNG - BÀ NÀ HILLS - HỘI AN</h4>
-                        <div class="btn-tour-meta">📅 4N3Đ • Khởi hành từ TP.HCM</div>
-                        <div class="btn-tour-price">16,000,000 đ</div>
-                        <button class="btn-card-cta">Xem Chi Tiết</button>
-                      </div>
-                    </div>
+                  <div class="food-card-body">
+                    <h4>Mì Ý Hải Sản Tươi Sốt Cà Chua Rượu Vang</h4>
+                    <p>Tôm sú, mực tươi, vẹm xanh nấu cùng sốt rượu vang trắng</p>
+                    <div class="food-card-price">390,000 đ</div>
                   </div>
                 </div>
               </div>
             </div>
-
-            <!-- Component 45 Tour Card (Bottom-Left matching Image 1) -->
-            <div class="figma-component-wrapper">
-              <div class="figma-comp-label">❖ Component 45</div>
-              <div class="btn-tour-card comp-card">
-                <div class="btn-card-img-box img-mocchau">
-                  <span class="btn-date-badge">12 - 15 Tháng Tám</span>
-                </div>
-                <div class="btn-card-content">
-                  <div class="btn-tour-location">📍 Mộc Châu</div>
-                  <h4 class="btn-tour-name">TOUR DU LỊCH MỘC CHÂU - ĐIỆN BIÊN</h4>
-                  <div class="btn-tour-meta">📅 3N2Đ • Khởi hành từ Hà Nội</div>
-                  <div class="btn-tour-price">16,000,000 đ</div>
-                  <button class="btn-card-cta">Xem Chi Tiết</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Story Reading Frame: Editorial Spec & Content Architecture -->
-            <div class="figma-artboard-frame" id="figma-reading-artboard">
-              <div class="figma-frame-header-tag">
-                <span># Editorial Spec &amp; Copywriting Stream</span>
-                <span class="figma-auto-layout-badge">Auto layout (Vertical • 760px)</span>
-              </div>
-
-              <div class="figma-frame-title-block">
-                <h2>BẮC TRUNG NAM - TRAVEL CONTENT &amp; NOVEL STREAM SPEC</h2>
-                <div class="figma-spec-meta">Version 4.2 • Updated by Design System Core • Clean Typographic Grid • 8pt System</div>
-              </div>
-
-              <!-- Novel stream container inside Figma artboard -->
-              <div class="figma-story-stream" id="figma-story-stream">
-                <!-- Rendered by app.js -->
-              </div>
-            </div>
-
           </div>
-        </div>
 
-        <!-- Boss Key View (Full Mobile App UI Screen Prototype Mockup) -->
-        <div class="figma-boss-view" id="figma-boss-view" style="display: none;">
-          <div class="figma-mockup-canvas">
-            <div class="figma-phone-screen">
-              <div class="figma-phone-header">
-                <div>9:41</div>
-                <div style="font-weight: 700;">DIGITAL BANK PRO</div>
-                <div>100% 🔋</div>
-              </div>
-              <div class="figma-balance-card">
-                <div style="font-size: 11px; opacity: 0.85;">TỔNG TÀI SẢN KHẢ DỤNG</div>
-                <div style="font-size: 24px; font-weight: 800; margin: 4px 0;">1,482,950,000 VND</div>
-                <div style="font-size: 10px; color: #a7f3d0;">+ 12.4% so với tháng trước</div>
-              </div>
-              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0; text-align: center; font-size: 10px;">
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">💸 Chuyển tiền</div>
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">📈 Đầu tư</div>
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">💳 Thẻ tín dụng</div>
-                <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">🧾 Hóa đơn</div>
-              </div>
+          <!-- ARTBOARD 2: Disguised Reading Story Stream (Novel paragraphs) -->
+          <div class="figma-artboard-frame" id="figma-reading-artboard">
+            <div class="figma-frame-header-tag">
+              <span># Editorial Spec &amp; Copywriting Stream</span>
+              <span class="figma-auto-layout-badge">Auto layout (Vertical • 620px)</span>
+            </div>
+
+            <div class="figma-frame-title-block">
+              <h2 class="stealth-editable" contenteditable="true" spellcheck="false" data-stealth-key="stealth_figma_stream_heading">WEMAKEFOOD - BRAND STORY &amp; EDITORIAL MANUSCRIPT</h2>
+              <div class="figma-spec-meta">Auto layout (Gap: 14px) • Padding: 32px • Font: Inter / Segoe UI • Clean Typographic Grid • 8pt System</div>
+            </div>
+
+            <!-- Novel stream container inside Figma artboard -->
+            <div class="figma-story-stream" id="figma-story-stream">
+              <!-- Rendered by app.js (appendFigmaBatch) -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Boss Key View (Full Mobile App UI Prototype Mockup) -->
+      <div class="figma-boss-view" id="figma-boss-view" style="display: none;">
+        <div class="figma-mockup-canvas">
+          <div class="figma-phone-screen">
+            <div class="figma-phone-header">
+              <div>9:41</div>
+              <div style="font-weight: 700;">WEMAKEFOOD MOBILE</div>
+              <div>100% 🔋</div>
+            </div>
+            <div class="figma-balance-card">
+              <div style="font-size: 11px; opacity: 0.85;">ĐIỂM TÍCH LŨY THÀNH VIÊN VIP</div>
+              <div style="font-size: 24px; font-weight: 800; margin: 4px 0;">1,482,950 PTS</div>
+              <div style="font-size: 10px; color: #a7f3d0;">Hạng Kim Cương • Ưu đãi 20% toàn hệ thống</div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0; text-align: center; font-size: 10px;">
+              <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">🍽️ Đặt bàn</div>
+              <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">🛵 Giao hàng</div>
+              <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">🎁 Voucher</div>
+              <div style="background: #27272a; padding: 10px 4px; border-radius: 6px;">⭐ Đánh giá</div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </main>
 
-      <!-- Cột Phải: Comments & Properties Panel (Matching Image 1) -->
-      <aside class="figma-right-panel">
-        <div class="figma-inspect-tabs">
-          <div class="figma-inspect-tab active" id="figma-tab-comments">Comments</div>
-          <div class="figma-inspect-tab" id="figma-tab-props">Properties</div>
+    <!-- =========================================================
+         4. FIGMA RIGHT PROPERTIES PANEL (Width: 241px)
+         ========================================================= -->
+    <aside class="figma-right-panel" id="figma-right-panel">
+      <!-- Top Action Controls Row -->
+      <div class="figma-right-header-controls">
+        <div class="figma-multiplayer-user" title="nguyễn trần hải phong (You)">
+          <div class="figma-avatar-circle" title="nguyễn trần hải phong (You)">
+            <span>N</span>
+          </div>
+          <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
         </div>
 
-        <!-- Comments Tab Body (Active in Image 1) -->
-        <div class="figma-comments-panel" id="figma-comments-panel">
-          <div class="figma-search-box">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8c8c8c" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search" readonly>
-            <span class="search-filter-icon">⚙️</span>
-            <span class="search-more-icon">•••</span>
-          </div>
+        <div class="figma-right-action-group">
+          <!-- Prototype Present / Boss Key button -->
+          <button class="figma-btn-icon-circle" id="btn-boss-key-figma" title="Present (Prototype view / Boss Key)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5.903C6 4.43 7.604 3.517 8.87 4.269l10.15 6.028c1.307.776 1.305 2.669-.003 3.442l-10.15 5.995c-1.228.724-2.768-.11-2.863-1.5L6 18.098zm1 12.195a.9.9 0 0 0 1.357.774l10.152-5.995a1 1 0 0 0 .002-1.72L8.359 5.129A.9.9 0 0 0 7 5.903z"/></svg>
+          </button>
+          
+          <!-- Share button -->
+          <button class="figma-primary-share-btn" title="Share file">Share</button>
+        </div>
+      </div>
 
-          <div class="figma-empty-comments">
-            <div class="figma-comment-bubble-icon">💬</div>
-            <p class="figma-comment-hint">
-              Give feedback, ask a question, or just leave a note of appreciation. Click anywhere in the file to leave a comment.
-            </p>
+      <!-- Tab Header: Design / Prototype + Zoom -->
+      <div class="figma-props-tab-header">
+        <div class="figma-tabs-wrap">
+          <button class="figma-prop-tab active" id="figma-tab-design">Design</button>
+          <button class="figma-prop-tab" id="figma-tab-proto">Prototype</button>
+        </div>
+        <div class="figma-zoom-select-box" title="Zoom and view options">
+          <span>43%</span>
+          <svg width="10" height="10" fill="currentColor" viewBox="0 0 16 16"><path d="M9.768 6.768a.5.5 0 0 1 .707.707l-2.12 2.121a.5.5 0 0 1-.708 0L5.525 7.475a.5.5 0 0 1 .708-.707l1.768 1.767z"/></svg>
+        </div>
+      </div>
+
+      <!-- Properties Body Scroll Area -->
+      <div class="figma-props-body-scroll">
+        <!-- Page Section -->
+        <div class="figma-prop-section">
+          <div class="figma-prop-section-header">
+            <span class="figma-prop-section-title">Page</span>
+            <button class="figma-theme-toggle-btn" id="figma-theme-toggle-btn" title="Chuyển đổi Dark / Light mode (Alt+D)">
+              <span class="figma-theme-toggle-icon">🌙</span>
+              <span class="figma-theme-toggle-label">Dark mode</span>
+            </button>
+          </div>
+          <div class="figma-prop-row">
+            <div class="figma-color-field">
+              <span class="figma-color-swatch" id="figma-page-color-swatch" style="background-color: #F5F5F5;"></span>
+              <input type="text" class="figma-hex-input" id="figma-page-color-hex" value="F5F5F5" readonly>
+            </div>
+            <div class="figma-opacity-field">
+              <input type="text" value="100" readonly>
+              <span>%</span>
+            </div>
+            <button class="figma-btn-eye" title="Toggle visibility">👁</button>
           </div>
         </div>
 
-        <!-- Properties Tab Body -->
-        <div class="figma-inspect-body" id="figma-props-panel" style="display: none;">
-          <div class="figma-inspect-section">
-            <h6>FRAME</h6>
-            <div class="figma-dim-grid">
-              <div>W: <b>1440</b></div>
-              <div>H: <b>Auto</b></div>
-              <div>X: <b>0</b></div>
-              <div>Y: <b>0</b></div>
-            </div>
-          </div>
-          <div class="figma-inspect-section">
-            <h6>AUTO LAYOUT</h6>
-            <div style="font-size: 10px; color: #64748b; display: flex; flex-direction: column; gap: 4px;">
-              <div>Direction: <b>Vertical ↓</b></div>
-              <div>Item Spacing: <b>16px</b></div>
-              <div>Padding: <b>40px, 48px</b></div>
-            </div>
-          </div>
-          <div class="figma-inspect-section">
-            <h6>TYPOGRAPHY SPEC</h6>
-            <div style="font-size: 10px; color: #64748b; display: flex; flex-direction: column; gap: 4px;">
-              <div>Font: <b>Inter / Segoe UI</b></div>
-              <div>Weight: <b>Regular (400)</b></div>
-              <div>Line Height: <b>175%</b></div>
-            </div>
-          </div>
-          <div class="figma-inspect-section">
-            <h6>FILL</h6>
-            <div style="display: flex; align-items: center; gap: 6px; font-size: 10px;">
-              <span style="width: 14px; height: 14px; background: #ffffff; border: 1px solid #d1d5db; border-radius: 2px;"></span>
-              <span>#FFFFFF • 100%</span>
-            </div>
+        <div class="figma-prop-divider"></div>
+
+        <!-- Styles Section -->
+        <div class="figma-prop-section">
+          <div class="figma-prop-section-header">
+            <span class="figma-prop-section-title">Styles</span>
+            <button class="figma-mini-plus-btn" title="Create style">+</button>
           </div>
         </div>
-      </aside>
+
+        <div class="figma-prop-divider"></div>
+
+        <!-- Export Section -->
+        <div class="figma-prop-section">
+          <div class="figma-prop-section-header">
+            <span class="figma-prop-section-title">Export</span>
+            <button class="figma-mini-plus-btn" title="Add export settings">+</button>
+          </div>
+        </div>
+
+        <div class="figma-prop-divider"></div>
+
+        <!-- Bring third-party agents to Figma Callout Card -->
+        <div class="figma-agents-callout-card">
+          <div class="figma-callout-header">
+            <div class="figma-agent-logos">
+              <span class="figma-agent-badge cursor-badge" title="Cursor">⚡</span>
+              <span class="figma-agent-badge codex-badge" title="Codex">⌘</span>
+              <span class="figma-agent-badge claude-badge" title="Claude Code">✦</span>
+            </div>
+            <button class="figma-callout-close" title="Close">✕</button>
+          </div>
+          <h5 class="figma-callout-title">Bring third-party agents to Figma</h5>
+          <p class="figma-callout-desc">Agents can write to the canvas or build from designs with MCP tools and skills.</p>
+          <button class="figma-callout-btn" title="Set up agents">Set up agents</button>
+        </div>
+
+        <!-- Typography spec section -->
+        <div class="figma-prop-section">
+          <div class="figma-prop-section-title">TYPOGRAPHY SPEC</div>
+          <div class="figma-prop-spec-list">
+            <div>Font: <b>Inter, Segoe UI, Roboto</b></div>
+            <div class="figma-font-spec-row">
+              <span>Font size:</span>
+              <span class="figma-font-stepper">
+                <button class="figma-stepper-btn" id="figma-btn-font-dec" title="Giảm cỡ chữ ( [ )">-</button>
+                <b id="figma-spec-font-size"><span id="figma-font-val">11pt</span></b>
+                <button class="figma-stepper-btn" id="figma-btn-font-inc" title="Tăng cỡ chữ ( ] )">+</button>
+              </span>
+            </div>
+            <div>Line height: <b>175%</b></div>
+            <div>Text auto layout: <b>Hug contents</b></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- =========================================================
+         5. FIGMA UI3 FLOATING DESIGN TOOLBELT (Bottom Center)
+         ========================================================= -->
+    <div class="positioned_design_toolbelt" id="positioned_design_toolbelt">
+      <div class="figma-ui3-toolbelt">
+        <!-- Move tool (V) -->
+        <button class="figma-tool-btn active" title="Move tool (V)" data-tool="move">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M4.586 4.586a2 2 0 0 1 2.005-.497l.14.05 13 5.107a2 2 0 0 1 1.267 1.779v.159a2 2 0 0 1-1.26 1.782l-.15.053-5.024 1.545-1.545 5.024a2 2 0 0 1-1.677 1.398l-.158.012a2 2 0 0 1-1.938-1.267l-5.107-13a2 2 0 0 1 .447-2.145m1.78.484a1 1 0 0 0-1.073.223l-.097.112a1 1 0 0 0-.127.96l5.108 13a1 1 0 0 0 .811.628l.158.006a1 1 0 0 0 .859-.558l.058-.147 1.7-5.53 5.531-1.701a1 1 0 0 0 .687-.76l.018-.157a1 1 0 0 0-.492-.9l-.142-.069z"/></svg>
+        </button>
+
+        <!-- Frame tool (F) -->
+        <button class="figma-tool-btn" title="Frame tool (F)" data-tool="frame">
+          <span style="font-weight: 700; font-size: 14px;">#</span>
+        </button>
+
+        <!-- Shape tool (Rectangle R) -->
+        <button class="figma-tool-btn" title="Rectangle (R)" data-tool="rect">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+
+        <!-- Pen tool (P) -->
+        <button class="figma-tool-btn" title="Pen tool (P)" data-tool="pen">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z" stroke="currentColor" stroke-width="2"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+
+        <!-- Text tool (T) -->
+        <button class="figma-tool-btn" title="Text tool (T)" data-tool="text">
+          <span style="font-weight: 800; font-size: 15px;">T</span>
+        </button>
+
+        <!-- Resources / Components (Shift+I) -->
+        <button class="figma-tool-btn" title="Components &amp; Resources (Shift+I)" data-tool="resources">
+          <span style="color: #7b61ff; font-size: 15px; font-weight: 800;">❖</span>
+        </button>
+
+        <!-- Hand tool (H) -->
+        <button class="figma-tool-btn" title="Hand tool (H)" data-tool="hand">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8M18 8a2 2 0 0 1 4 4v4a8 8 0 0 1-16 0v-2" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+
+        <!-- Comment tool (C) -->
+        <button class="figma-tool-btn" title="Add comment (C)" data-tool="comment">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12.5 3a8.5 8.5 0 0 1 0 17H7.09c-.89 0-1.39 0-1.767-.121l-.154-.06a2 2 0 0 1-.906-.828l-.082-.16c-.136-.297-.17-.657-.178-1.248L4 16.909V11.5A8.5 8.5 0 0 1 12.5 3m0 1A7.5 7.5 0 0 0 5 11.5v5.41c0 .523 0 .861.02 1.12.018.247.05.34.07.385a1 1 0 0 0 .495.494c.045.02.138.053.386.072.258.019.596.019 1.12.019H12.5a7.5 7.5 0 0 0 0-15"/></svg>
+        </button>
+
+        <span class="figma-toolbelt-divider"></span>
+
+        <!-- Actions / Quick Settings -->
+        <button class="figma-tool-btn" title="Actions">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+      </div>
     </div>
 
-    <!-- 3. FIGMA FLOATING BOTTOM TOOLBAR (UI3 - Exact Replica from Image 1) -->
-    <div class="figma-floating-toolbar" id="figma-floating-toolbar">
-      <button class="figma-tool-pill-btn active" title="Move tool (V)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3l7 18 3-7 7-3L3 3z"/></svg>
-      </button>
-      <button class="figma-tool-pill-btn" title="Hand tool (H)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-4 0v5"/><path d="M14 10V4a2 2 0 0 0-4 0v6"/><path d="M10 10.5V6a2 2 0 0 0-4 0v8"/><path d="M18 8a2 2 0 0 1 4 4v4a8 8 0 0 1-16 0v-2"/></svg>
-      </button>
-      <button class="figma-tool-pill-btn" title="Frame tool (F)">#</button>
-      <button class="figma-tool-pill-btn" title="Rectangle (R)">▭</button>
-      <button class="figma-tool-pill-btn" title="Comment (C)">💬</button>
-      
-      <button class="figma-ask-edit-btn" title="Yêu cầu quyền chỉnh sửa">
-        Ask to edit
-      </button>
-
-      <span class="figma-tb-divider"></span>
-
-      <button class="figma-tool-pill-btn" title="Resources / Components (Shift+I)">❖</button>
-      <button class="figma-tool-pill-btn" title="Actions">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      </button>
-      <button class="figma-tool-pill-btn" title="Dev mode (Shift+D)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      </button>
-    </div>
-
-    <!-- 4. BOTTOM RIGHT HELP QUESTION MARK -->
-    <button class="figma-help-btn" title="Help &amp; Resources">?</button>
   </div>
 
+  <!-- Hidden universal document loader -->
   <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip" style="display: none;">
-
-
 
   <!-- Loading Overlay -->
   <div class="loading-overlay" id="loading-spinner" style="display: none;">
@@ -397,50 +633,124 @@
     </div>
   </div>
 
-    <!-- =========================================================
-       MODAL: TÁC GIẢ & ỦNG HỘ (DONATE)
-       ========================================================= -->
-  
-
-  <!-- Floating Quick Controls Visibility Toggle -->
-  <button id="btn-toggle-ctrls-floating" class="floating-stealth-toggle" title="Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)">
-    <span class="stealth-toggle-icon">👁</span>
-    <span class="stealth-toggle-text">Điều khiển (H)</span>
-  </button>
-
-  <!-- Toast Notification for Seamless Page Navigation -->
+  <!-- Toast Notification -->
   <div id="page-flip-toast" class="page-flip-toast"></div>
 
   <script src="app.js?v=20261016-4" defer></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const tabComments = document.getElementById('figma-tab-comments');
-      const tabProps = document.getElementById('figma-tab-props');
-      const panelComments = document.getElementById('figma-comments-panel');
-      const panelProps = document.getElementById('figma-props-panel');
-      if (tabComments && tabProps && panelComments && panelProps) {
-        tabComments.addEventListener('click', () => {
-          tabComments.classList.add('active');
-          tabProps.classList.remove('active');
-          panelComments.style.display = 'block';
-          panelProps.style.display = 'none';
-        });
-        tabProps.addEventListener('click', () => {
-          tabProps.classList.add('active');
-          tabComments.classList.remove('active');
-          panelComments.style.display = 'none';
-          panelProps.style.display = 'block';
-        });
-      }
-
-      document.querySelectorAll('.figma-tool-pill-btn').forEach(btn => {
+      // 1. Toolbelt tool buttons toggle
+      document.querySelectorAll('.figma-tool-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          document.querySelectorAll('.figma-tool-pill-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.figma-tool-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
         });
       });
+
+      // 2 & 3. Rail navigation & Minimize left panel toggle
+      const toggleLeftBtn = document.getElementById('figma-btn-toggle-left');
+      const leftPanel = document.getElementById('figma-left-panel');
+      const fileRailBtn = document.querySelector('.figma-rail-btn[aria-label="File"]');
+
+      document.querySelectorAll('.figma-rail-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn === fileRailBtn && btn.classList.contains('active')) {
+            // Toggle panel if already active
+            if (leftPanel) leftPanel.classList.toggle('minimized');
+            return;
+          }
+          document.querySelectorAll('.figma-rail-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (leftPanel && leftPanel.classList.contains('minimized')) {
+            leftPanel.classList.remove('minimized');
+          }
+        });
+      });
+
+      if (toggleLeftBtn && leftPanel) {
+        toggleLeftBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          leftPanel.classList.add('minimized');
+          if (fileRailBtn) fileRailBtn.classList.remove('active');
+        });
+      }
+
+      // 4. Layers tree selection
+      document.querySelectorAll('.figma-tree-row').forEach(row => {
+        row.addEventListener('click', (e) => {
+          if (e.target.closest('.figma-row-actions')) return;
+          document.querySelectorAll('.figma-tree-row').forEach(r => r.classList.remove('active'));
+          row.classList.add('active');
+        });
+      });
+
+      // 5. Design vs Prototype tabs
+      const tabDesign = document.getElementById('figma-tab-design');
+      const tabProto = document.getElementById('figma-tab-proto');
+      if (tabDesign && tabProto) {
+        tabDesign.addEventListener('click', () => {
+          tabDesign.classList.add('active');
+          tabProto.classList.remove('active');
+        });
+        tabProto.addEventListener('click', () => {
+          tabProto.classList.add('active');
+          tabDesign.classList.remove('active');
+        });
+      }
+
+      // 6. Boss view click to dismiss
+      const bossView = document.getElementById('figma-boss-view');
+      if (bossView) {
+        bossView.addEventListener('click', () => {
+          if (typeof toggleBossKey === 'function') {
+            toggleBossKey();
+          }
+        });
+      }
+
+      // 7. Figma Dark Mode Toggle (Delegated to toggleFigmaThemeMode)
+      const themeToggleBtn = document.getElementById('figma-theme-toggle-btn');
+      if (themeToggleBtn && !themeToggleBtn._figmaModeBound) {
+        themeToggleBtn._figmaModeBound = true;
+        themeToggleBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (typeof toggleFigmaThemeMode === 'function') {
+            toggleFigmaThemeMode();
+          }
+        });
+      }
+
+      // 8. Replace image button & drag drop
+      const replaceImgBtn = document.getElementById('btn-replace-image-figma');
+      if (replaceImgBtn) {
+        replaceImgBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (window.StealthImageManager) {
+            window.StealthImageManager.triggerFileInput('theme-figma');
+          }
+        });
+      }
+
+      const heroBox = document.getElementById('figma-food-hero-box');
+      if (heroBox) {
+        heroBox.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          heroBox.style.outline = '2px dashed #0d99ff';
+        });
+        heroBox.addEventListener('dragleave', () => {
+          heroBox.style.outline = '';
+        });
+        heroBox.addEventListener('drop', (e) => {
+          e.preventDefault();
+          heroBox.style.outline = '';
+          if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+            if (window.StealthImageManager) {
+              window.StealthImageManager.processImageFile(e.dataTransfer.files[0], 'theme-figma');
+            }
+          }
+        });
+      }
     });
   </script>
 </body>
 </html>
-
