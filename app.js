@@ -117,6 +117,7 @@ const state = {
   excelTitle: localStorage.getItem('stealth_title_excel') || 'Copy of Salary formula (Gửi IT).xlsx',
   vscodeTitle: localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py',
   photoshopTitle: localStorage.getItem('stealth_title_photoshop') || 'Brand_Campaign_KeyVisual_v2.psd',
+  indesignTitle: localStorage.getItem('stealth_title_indesign') || 'Untitled-3.indd',
   blenderTitle: localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend',
   linkedinTitle: localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn',
   autocadTitle: localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg',
@@ -278,6 +279,7 @@ const THEME_PAGES = {
   'theme-excel': 'excel.html',
   'theme-vscode': 'vscode.html',
   'theme-photoshop': 'photoshop.html',
+  'theme-indesign': 'indesign.html',
   'theme-blender': 'blender.html',
   'theme-linkedin': 'linkedin.html',
   'theme-autocad': 'autocad.html',
@@ -304,7 +306,7 @@ const THEME_PAGES = {
 // Control ids follow the pattern `${prefix}-${suffix}` (e.g. 'vsc-btn-next').
 // To add a theme, add its prefix here instead of editing every id list.
 const THEME_CONTROL_PREFIXES = [
-  'gs', 'gdocs', 'excel', 'vsc', 'ps', 'blender', 'linkedin',
+  'gs', 'gdocs', 'excel', 'vsc', 'ps', 'id', 'blender', 'linkedin',
   'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack'
 ];
 
@@ -314,7 +316,7 @@ function themeControlIds(suffix) {
 
 // Boss-key button ids use full theme names rather than the short prefixes above.
 const BOSS_KEY_BUTTON_IDS = [
-  'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'blender', 'linkedin',
+  'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'indesign', 'blender', 'linkedin',
   'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat',
   'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'jira'
 ].map(name => `btn-boss-key-${name}`);
@@ -1017,6 +1019,7 @@ function getThemeForCurrentPage() {
   if (path.endsWith('excel.html')) return 'theme-excel';
   if (path.endsWith('vscode.html')) return 'theme-vscode';
   if (path.endsWith('photoshop.html')) return 'theme-photoshop';
+  if (path.endsWith('indesign.html')) return 'theme-indesign';
   if (path.endsWith('blender.html')) return 'theme-blender';
   if (path.endsWith('linkedin.html')) return 'theme-linkedin';
   if (path.endsWith('autocad.html')) return 'theme-autocad';
@@ -1482,7 +1485,8 @@ const FAVICONS = {
   'theme-googledocs': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M37%2045H11c-2.2%200-4-1.8-4-4V7c0-2.2%201.8-4%204-4h18l12%2012v26c0%202.2-1.8%204-4%204z%22/%3E%20%3Cpath%20fill%3D%22%23A1C2FA%22%20d%3D%22M29%203l12%2012H29V3z%22/%3E%20%3Cpath%20fill%3D%22%231A73E8%22%20d%3D%22M29%2015h12l-12-12v12z%22%20opacity%3D%220.2%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2222%22%20width%3D%2220%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2227.5%22%20width%3D%2220%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3Crect%20fill%3D%22%23FFFFFF%22%20x%3D%2214%22%20y%3D%2233%22%20width%3D%2213%22%20height%3D%222.5%22%20rx%3D%221.25%22/%3E%20%3C/svg%3E",
   'theme-excel': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22ex-g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23107C41%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230B552C%22/%3E%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22ex-g2%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2321A366%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23107C41%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20x%3D%2215%22%20y%3D%227%22%20width%3D%2227%22%20height%3D%2234%22%20rx%3D%224%22%20fill%3D%22url%28%23ex-g1%29%22/%3E%20%3Crect%20x%3D%2221%22%20y%3D%2213%22%20width%3D%2215%22%20height%3D%2222%22%20rx%3D%221%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.15%22/%3E%20%3Cpath%20d%3D%22M21%2019h15M21%2025h15M21%2030h15M28%2013v22%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20opacity%3D%220.9%22/%3E%20%3Crect%20x%3D%226%22%20y%3D%2211%22%20width%3D%2221%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22url%28%23ex-g2%29%22%20filter%3D%22drop-shadow%280%203px%206px%20rgba%280%2C0%2C0%2C0.35%29%29%22/%3E%20%3Cpath%20d%3D%22M11.5%2018l4.8%206-4.8%206h3.2l3.2-4.4%203.2%204.4h3.2l-4.8-6%204.8-6h-3.2l-3.2%204.4-3.2-4.4h-3.2z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
   'theme-vscode': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cpath%20fill%3D%22%230065A9%22%20d%3D%22M35.2%2045.3L44.8%2040.5c1.4-.7%202.2-2.1%202.2-3.6V11.1c0-1.5-.8-2.9-2.2-3.6L35.2%202.7c-1.2-.6-2.6-.4-3.5.5L16.2%2016.5l-7.4-5.6c-.9-.7-2.1-.7-3%20.1L1.6%2014.3c-.9.8-1.1%202.1-.5%203.1l6.7%209.8-6.7%209.8c-.6%201-.4%202.3.5%203.1l4.2%203.3c.9.8%202.1.8%203%20.1l7.4-5.6%2015.5%2013.3c.9.9%202.3%201.1%203.5.5z%22/%3E%20%3Cpath%20fill%3D%22%23007ACC%22%20d%3D%22M35.2%202.7c-1.2-.6-2.6-.4-3.5.5L16.2%2016.5l8.5%207.5L37%2012V4.5l-1.8-1.8z%22/%3E%20%3Cpath%20fill%3D%22%231F9CF0%22%20d%3D%22M35.2%2045.3c-1.2.6-2.6.4-3.5-.5L16.2%2031.5l8.5-7.5L37%2036v7.5l-1.8%201.8z%22/%3E%20%3Cpath%20fill%3D%22%23005B9E%22%20opacity%3D%220.3%22%20d%3D%22M24.7%2024L37%2012v24L24.7%2024z%22/%3E%20%3C/svg%3E",
-  'theme-photoshop': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%23001E36%22/%3E%20%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2244%22%20height%3D%2244%22%20rx%3D%228%22%20stroke%3D%22%2331A8FF%22%20stroke-width%3D%222.5%22%20fill%3D%22none%22/%3E%20%3Cpath%20d%3D%22M13%2014h8c4.2%200%207%202.6%207%206.6s-2.8%206.6-7%206.6h-4.2V34H13V14zm3.8%209.8H21c2.2%200%203.4-1.3%203.4-3.2s-1.2-3.2-3.4-3.2h-4.2v6.4z%22%20fill%3D%22%2331A8FF%22/%3E%20%3Cpath%20d%3D%22M28.8%2029.6c1.2%201.4%203%202.2%205.2%202.2%202.2%200%203.6-1.1%203.6-2.7%200-3.6-8.2-2.6-8.2-8.8%200-3.3%202.8-5.5%206.8-5.5%202.8%200%205%201.1%206.2%202.7l-2.4%202.2c-.9-1.2-2.2-1.9-3.8-1.9-1.9%200-3%201-3%202.1%200%203.3%208.2%202.4%208.2%208.7%200%203.6-2.9%205.8-7.2%205.8-3.4%200-6.1-1.3-7.5-3.3l2.3-2.3z%22%20fill%3D%22%2331A8FF%22/%3E%20%3C/svg%3E",
+  'theme-indesign': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%20width%3D%2264%22%20height%3D%2264%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%2333001A%22/%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2244%22%20height%3D%2244%22%20rx%3D%228%22%20stroke%3D%22%23FF3366%22%20stroke-width%3D%223%22%20fill%3D%22none%22/%3E%3Cpath%20d%3D%22M11%2013h4.5v22H11V13z%22%20fill%3D%22%23FF3366%22/%3E%3Cpath%20d%3D%22M31.5%2013h4.5v22h-4.5v-2.5c-1.3%201.8-3.4%203-6%203-4.8%200-8.5-3.8-8.5-9.2s3.7-9.2%208.5-9.2c2.6%200%204.7%201.2%206%203V13zm-6%2018.2c3.2%200%205.5-2.5%205.5-5.5s-2.3-5.5-5.5-5.5-5.5%202.5-5.5%205.5%202.3%205.5%205.5%205.5z%22%20fill%3D%22%23FF3366%22/%3E%3C/svg%3E",
+    'theme-photoshop': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%23001E36%22/%3E%20%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2244%22%20height%3D%2244%22%20rx%3D%228%22%20stroke%3D%22%2331A8FF%22%20stroke-width%3D%222.5%22%20fill%3D%22none%22/%3E%20%3Cpath%20d%3D%22M13%2014h8c4.2%200%207%202.6%207%206.6s-2.8%206.6-7%206.6h-4.2V34H13V14zm3.8%209.8H21c2.2%200%203.4-1.3%203.4-3.2s-1.2-3.2-3.4-3.2h-4.2v6.4z%22%20fill%3D%22%2331A8FF%22/%3E%20%3Cpath%20d%3D%22M28.8%2029.6c1.2%201.4%203%202.2%205.2%202.2%202.2%200%203.6-1.1%203.6-2.7%200-3.6-8.2-2.6-8.2-8.8%200-3.3%202.8-5.5%206.8-5.5%202.8%200%205%201.1%206.2%202.7l-2.4%202.2c-.9-1.2-2.2-1.9-3.8-1.9-1.9%200-3%201-3%202.1%200%203.3%208.2%202.4%208.2%208.7%200%203.6-2.9%205.8-7.2%205.8-3.4%200-6.1-1.3-7.5-3.3l2.3-2.3z%22%20fill%3D%22%2331A8FF%22/%3E%20%3C/svg%3E",
   'theme-blender': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2222%22%20fill%3D%22%23222222%22/%3E%20%3Cpath%20d%3D%22M24%206c1.2%200%202.2%201%202.2%202.2v9.6c0%201.2-1%202.2-2.2%202.2s-2.2-1-2.2-2.2V8.2c0-1.2%201-2.2%202.2-2.2zm-12.7%205.2c.9-.9%202.3-.9%203.1%200l6.8%206.8c.9.9.9%202.3%200%203.1s-2.3.9-3.1%200l-6.8-6.8c-.9-.8-.9-2.2%200-3.1zm25.4%200c.9.9.9%202.3%200%203.1l-6.8%206.8c-.9.9-2.3.9-3.1%200s-.9-2.3%200-3.1l6.8-6.8c.8-.9%202.2-.9%203.1%200z%22%20fill%3D%22%23EA7600%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%2212%22%20fill%3D%22%23EA7600%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%226%22%20fill%3D%22%2322578A%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%222.8%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
   'theme-linkedin': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%230A66C2%22/%3E%20%3Ccircle%20cx%3D%2215.5%22%20cy%3D%2214.5%22%20r%3D%223.2%22%20fill%3D%22%23FFFFFF%22/%3E%20%3Crect%20x%3D%2212.5%22%20y%3D%2220%22%20width%3D%226%22%20height%3D%2215%22%20rx%3D%221%22%20fill%3D%22%23FFFFFF%22/%3E%20%3Cpath%20d%3D%22M23%2020h5.5v2.3h.1c.8-1.5%202.8-2.8%205.6-2.8%205.8%200%207%203.8%207%208.8V35h-6v-7.8c0-2.2-.1-4.2-2.8-4.2s-3.2%202.1-3.2%204.2V35H23V20z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
   'theme-autocad': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%231C1E24%22/%3E%20%3Cpath%20d%3D%22M24%206L8%2038h9l4-9h10l-5-11-2-12z%22%20fill%3D%22%23E51937%22/%3E%20%3Cpath%20d%3D%22M24%206l9%2018H23l1-18z%22%20fill%3D%22%23FF334B%22/%3E%20%3Cpath%20d%3D%22M33%2024l7%2014h-9l-4-9%206-5z%22%20fill%3D%22%23B81126%22/%3E%20%3Cpath%20d%3D%22M21%2029h10l3%206H18l3-6z%22%20fill%3D%22%23800A18%22/%3E%20%3C/svg%3E",
@@ -2056,6 +2060,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (state.theme === 'theme-chatgpt' || document.body.classList.contains('theme-chatgpt')) {
     initChatGPTThemeMode();
   }
+  if (state.theme === 'theme-indesign' || document.body.classList.contains('theme-indesign')) {
+    setupInDesignControls();
+  }
   
   state.bossModeActive = false;
   switchSheet('view-sheet-story');
@@ -2092,6 +2099,7 @@ function loadSavedState() {
     state.excelTitle = localStorage.getItem('stealth_title_excel') || 'Copy of Salary formula (Gửi IT).xlsx';
     state.vscodeTitle = localStorage.getItem('stealth_title_vscode') || 'stream_pipeline_processor.py';
     state.photoshopTitle = localStorage.getItem('stealth_title_photoshop') || 'Brand_Campaign_KeyVisual_v2.psd';
+    state.indesignTitle = localStorage.getItem('stealth_title_indesign') || 'Untitled-3.indd';
     state.blenderTitle = localStorage.getItem('stealth_title_blender') || 'cyberpunk_city_scene_v4.blend';
     state.linkedinTitle = localStorage.getItem('stealth_title_linkedin') || 'Feed | LinkedIn';
     state.autocadTitle = localStorage.getItem('stealth_title_autocad') || 'LAYOUT_MASTER_PLAN_Q3.dwg';
@@ -2271,7 +2279,29 @@ const StealthImageManager = {
   applyImage(theme, dataUrl) {
     if (!dataUrl) return;
 
-    if (theme === 'theme-photoshop') {
+    if (theme === 'theme-indesign') {
+      const img = document.getElementById('id-placed-image');
+      if (img) {
+        img.src = dataUrl;
+        img.style.display = 'block';
+      }
+      const cross = document.getElementById('id-frame-cross');
+      if (cross) cross.style.display = 'none';
+      const nameEl = document.getElementById('id-image-filename');
+      if (nameEl) {
+        const savedName = localStorage.getItem('stealth_id_image_name') || 'Custom_Placed_Visual.png';
+        nameEl.textContent = savedName;
+      }
+    } else if (theme === 'theme-indesign') {
+      const img = document.getElementById('id-placed-image');
+      if (img) {
+        img.src = 'static/header-workspace-background-v1.png';
+        img.style.display = 'block';
+      }
+      const nameEl = document.getElementById('id-image-filename');
+      if (nameEl) nameEl.textContent = 'Editorial_Spatial_Framework.png';
+      localStorage.removeItem('stealth_id_image_name');
+    } else if (theme === 'theme-photoshop') {
       const canvas = document.querySelector('.ps-visual-canvas');
       if (canvas) {
         canvas.style.backgroundImage = `url("${dataUrl}")`;
@@ -2471,7 +2501,29 @@ const StealthImageManager = {
   },
 
   resetImage(theme) {
-    if (theme === 'theme-photoshop') {
+    if (theme === 'theme-indesign') {
+      const img = document.getElementById('id-placed-image');
+      if (img) {
+        img.src = dataUrl;
+        img.style.display = 'block';
+      }
+      const cross = document.getElementById('id-frame-cross');
+      if (cross) cross.style.display = 'none';
+      const nameEl = document.getElementById('id-image-filename');
+      if (nameEl) {
+        const savedName = localStorage.getItem('stealth_id_image_name') || 'Custom_Placed_Visual.png';
+        nameEl.textContent = savedName;
+      }
+    } else if (theme === 'theme-indesign') {
+      const img = document.getElementById('id-placed-image');
+      if (img) {
+        img.src = 'static/header-workspace-background-v1.png';
+        img.style.display = 'block';
+      }
+      const nameEl = document.getElementById('id-image-filename');
+      if (nameEl) nameEl.textContent = 'Editorial_Spatial_Framework.png';
+      localStorage.removeItem('stealth_id_image_name');
+    } else if (theme === 'theme-photoshop') {
       const canvas = document.querySelector('.ps-visual-canvas');
       if (canvas) canvas.style.backgroundImage = '';
       const bossHero = document.querySelector('.ps-boss-hero-svg');
@@ -2568,6 +2620,7 @@ const StealthImageManager = {
   async init() {
     const currentTheme = state.theme || 'theme-googlesheets';
     const isVisualTheme = [
+      'theme-indesign',
       'theme-photoshop',
       'theme-autocad',
       'theme-capcut',
@@ -2595,7 +2648,8 @@ const StealthImageManager = {
 
   setupUI(theme, hasCustom) {
     let container = null;
-    if (theme === 'theme-photoshop') container = document.querySelector('.ps-visual-artboard');
+    if (theme === 'theme-indesign') container = document.querySelector('.id-graphic-frame');
+    else if (theme === 'theme-photoshop') container = document.querySelector('.ps-visual-artboard');
     else if (theme === 'theme-autocad') container = document.querySelector('.cad-canvas-vector-box');
     else if (theme === 'theme-capcut') container = document.querySelector('.cc-monitor-panel');
     else if (theme === 'theme-premiere') container = document.querySelector('.pr-frame') || document.querySelector('.pr-monitor');
@@ -2772,6 +2826,19 @@ function getThemePickerModalHTML() {
                 </svg>
               </div>
               <span class="theme-card-title">VS Code</span>
+              <div class="theme-card-check">✓</div>
+            </div>
+                        <!-- Theme: InDesign -->
+            <div class="theme-card" data-theme="theme-indesign">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#33001A"/>
+                  <rect x="2" y="2" width="44" height="44" rx="8" stroke="#FF3366" stroke-width="2.5" fill="none"/>
+                  <path d="M13 14h3.8v20H13V14z" fill="#FF3366"/>
+                  <path d="M30.5 14h3.8v20h-3.8v-2.2c-1.1 1.6-2.9 2.6-5.2 2.6-4.2 0-7.3-3.4-7.3-8.2s3.1-8.2 7.3-8.2c2.3 0 4.1 1 5.2 2.6V14zm-5.3 16.8c2.8 0 4.8-2.2 4.8-4.8s-2-4.8-4.8-4.8-4.8 2.2-4.8 4.8 2 4.8 4.8 4.8z" fill="#FF3366"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">InDesign</span>
               <div class="theme-card-check">✓</div>
             </div>
             <!-- Theme 5: Photoshop -->
@@ -3419,6 +3486,12 @@ const THEME_DOC_CONFIGS = {
       if (tabName) tabName.textContent = t;
     }
   },
+    'theme-indesign': {
+    prop: 'indesignTitle',
+    defaultTitle: 'Untitled-3.indd',
+    formatTabTitle: t => `*${t} @ 78% (CMYK/Preview) - Adobe InDesign 2026`,
+    titleId: 'id-doc-title'
+  },
   'theme-photoshop': {
     prop: 'photoshopTitle',
     defaultTitle: 'Brand_Campaign_KeyVisual_v2.psd',
@@ -3657,6 +3730,28 @@ function initTitleEditing() {
       if (e.key === 'Enter') {
         e.preventDefault();
         vTab.blur();
+      }
+    });
+  }
+
+    const idTitle = document.getElementById('id-doc-title');
+  if (idTitle) {
+    idTitle.addEventListener('blur', () => {
+      let val = idTitle.textContent.trim();
+      if (!val) val = 'Untitled-3.indd';
+      if (!val.toLowerCase().endsWith('.indd')) val += '.indd';
+      idTitle.textContent = val;
+      state.indesignTitle = val;
+      localStorage.setItem('stealth_title_indesign', val);
+      if (state.theme === 'theme-indesign') {
+        document.title = `*${val} @ 78% (CMYK/Preview) - Adobe InDesign 2026`;
+      }
+      showPageFlipToast(`✅ Đã đổi tên project InDesign: <b>${escapeHtml(val)}</b>`);
+    });
+    idTitle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        idTitle.blur();
       }
     });
   }
@@ -6980,19 +7075,28 @@ function applyStyles() {
     if (state.lineHeight) el.style.lineHeight = state.lineHeight;
   });
 
-  // 3. Document, Email, Chat & Prose reading themes (Gmail, Outlook, Google Docs, Zalo, LinkedIn, Figma, Canva, PPT, Captions, Notes)
+  // 3. Document, Email, Chat & Prose reading themes (Gmail, Outlook, Google Docs, InDesign, Zalo, LinkedIn, Figma, Canva, PPT, Captions, Notes)
   // Text in these themes MUST ALWAYS wrap naturally within their containers and NEVER produce horizontal scrollbars.
   const proseWhiteSpace = isNowrap ? (state.preserveIndents ? 'pre-wrap' : 'normal') : 'normal';
-  restyle('.gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .jira-log-body, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .cad-note-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text', el => {
+  restyle('.id-story-paragraph, .gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .jira-log-body, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .cad-note-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text', el => {
     el.style.whiteSpace = proseWhiteSpace;
     el.style.wordBreak = 'break-word';
     el.style.overflowX = 'hidden';
-    if (state.fontFamily && (el.classList.contains('gdocs-story-paragraph') || el.classList.contains('gmail-story-para') || el.classList.contains('outlook-story-para') || el.classList.contains('jira-log-body'))) {
+    if (state.fontFamily && (el.classList.contains('id-story-paragraph') || el.classList.contains('gdocs-story-paragraph') || el.classList.contains('gmail-story-para') || el.classList.contains('outlook-story-para') || el.classList.contains('jira-log-body'))) {
       el.style.fontFamily = state.fontFamily;
     }
     if (state.fontSize) el.style.fontSize = `${state.fontSize}pt`;
     if (state.lineHeight) el.style.lineHeight = state.lineHeight;
   });
+
+  const idFsSelect = document.getElementById('id-select-font-size');
+  if (idFsSelect && state.fontSize) {
+    idFsSelect.value = String(state.fontSize);
+  }
+  const idSpec = document.getElementById('id-editorial-spec');
+  if (idSpec && state.fontSize) {
+    idSpec.textContent = `Style: [Editorial Body Text] • Lora Serif ${state.fontSize} pt • Optical Margin Alignment • Hyphenation Off`;
+  }
 }
 
 // ==========================================================
@@ -7114,6 +7218,7 @@ function updateBossButton(btn, bossModeActive) {
 
 const BOSS_VIEW_CONFIGS = [
   { story: 'gdocs-story-view', boss: 'gdocs-boss-view', storyDisplay: 'block', bossDisplay: 'block' },
+  { story: 'id-spread-view', boss: 'id-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
   { story: 'ps-artboard-view', boss: 'ps-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
   { story: 'blender-story-view', boss: 'blender-boss-view', storyDisplay: 'block', bossDisplay: 'flex' },
   { story: 'linkedin-story-stream', boss: 'linkedin-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
@@ -7918,11 +8023,12 @@ function cleanAndRepairVietnameseText(text) {
   s = s.replace(/([a-zA-ZáàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵÁÀẢÃẠẮẰẲẴẶẤẦẨẪẬÉÈẺẼẸẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌỐỒỔỖỘỚỜỞỠỢÚÙỦŨỤỨỪỬỮỰÝỲỶỸỴ])\s+([\u0300-\u036f\u1dc0-\u1dff\u20d0-\u20ff\ufe20-\ufe2f])/g, '$1$2').normalize('NFC');
 
   // 3. Set of syllables/characters that CANNOT be independent standalone words in Vietnamese
+  // Note: 'ở' (ở nhà, ở đâu), 'ạ' (vâng ạ), 'ổ' (ổ khóa) ARE valid standalone words and must NOT be merged!
   const invalidStandalones = new Set([
     'b', 'c', 'd', 'đ', 'g', 'h', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'x',
     'ch', 'gh', 'gi', 'kh', 'nh', 'ng', 'ngh', 'ph', 'qu', 'th', 'tr',
-    'ử', 'ộ', 'ậ', 'ủ', 'ể', 'ứ', 'ọ', 'ừa', 'ỏ', 'ố', 'ấ', 'ệu', 'ầ', 'ệ', 'ạ', 'ữa',
-    'ẳng', 'ản', 'ớ', 'ắ', 'ồi', 'ảng', 'ức', 'ực', 'ẹp', 'ợ', 'ở', 'ỡ',
+    'ử', 'ộ', 'ậ', 'ủ', 'ể', 'ứ', 'ọ', 'ừa', 'ỏ', 'ố', 'ấ', 'ệu', 'ầ', 'ệ', 'ữa',
+    'ẳng', 'ản', 'ớ', 'ắ', 'ồi', 'ảng', 'ức', 'ực', 'ẹp', 'ợ', 'ỡ',
     'ẽ', 'ẻ', 'ị', 'ỉ', 'ĩ', 'ụ', 'ũ', 'ừ', 'ử', 'ữ', 'ỳ', 'ỷ', 'ỹ', 'ỵ',
     'chuy', 'nguy', 'tho', 'truo', 'thuo', 'khuy', 'tuye', 'nhie', 'bie', 'chi'
   ]);
@@ -8589,7 +8695,14 @@ function initStoryFromChunks(chunks, options = {}) {
 const THEME_RENDERERS = {
   'theme-vscode': { append: appendVSCodeBatch, streams: ['vsc-line-numbers', 'vsc-code-lines'] },
   'theme-googledocs': { append: appendGoogleDocsBatch, streams: ['gdocs-story-stream'] },
-  'theme-photoshop': { append: appendPhotoshopBatch, streams: ['ps-story-stream'] },
+    'theme-indesign': {
+    prop: 'indesignTitle',
+    defaultTitle: 'Untitled-3.indd',
+    formatTabTitle: t => `*${t} @ 78% (CMYK/Preview) - Adobe InDesign 2026`,
+    titleId: 'id-doc-title'
+  },
+  'theme-indesign': { append: appendIndesignBatch, streams: ['id-story-stream'] },
+    'theme-photoshop': { append: appendPhotoshopBatch, streams: ['ps-story-stream'] },
   'theme-blender': { append: appendBlenderBatch, streams: ['blender-story-stream'] },
   'theme-linkedin': { append: appendLinkedInBatch, streams: ['linkedin-story-stream'] },
   'theme-autocad': { append: appendAutoCADBatch, streams: ['autocad-story-stream'] },
@@ -8870,6 +8983,17 @@ function appendSimpleThemeBatch(count, streamId, makeItem) {
 }
 
 // 4. Adobe Photoshop Artboard Typography Batch Renderer
+// Adobe InDesign CC Editorial Magazine Batch Renderer
+function appendIndesignBatch(count) {
+  appendSimpleThemeBatch(count, 'id-story-stream', chunk => {
+    const p = document.createElement('div');
+    p.className = 'id-story-paragraph';
+    p.id = `id-story-para-${chunk.globalIndex}`;
+    p.innerHTML = `<div class="id-para-body">${formatChunkText(chunk.text)}</div>`;
+    return p;
+  });
+}
+
 function appendPhotoshopBatch(count) {
   appendSimpleThemeBatch(count, 'ps-story-stream', chunk => {
     const p = document.createElement('div');
@@ -9279,7 +9403,14 @@ function appendTVPLBatch(count) {
 // Per-theme spec: element id prefix + the CSS class marking the active item.
 const ACTIVE_ROW_SPECS = {
   'theme-vscode': { id: 'vsc-story-line-', cls: 'active-line' },
-  'theme-photoshop': { id: 'ps-story-para-', cls: 'active-paragraph' },
+    'theme-indesign': {
+    prop: 'indesignTitle',
+    defaultTitle: 'Untitled-3.indd',
+    formatTabTitle: t => `*${t} @ 78% (CMYK/Preview) - Adobe InDesign 2026`,
+    titleId: 'id-doc-title'
+  },
+  'theme-indesign': { id: 'id-story-para-', cls: 'active-paragraph' },
+    'theme-photoshop': { id: 'ps-story-para-', cls: 'active-paragraph' },
   'theme-blender': { id: 'blender-story-line-', cls: 'active-line' },
   'theme-googledocs': { id: 'gdocs-story-para-', cls: 'active-paragraph' },
   'theme-autocad': { id: 'autocad-note-', cls: 'active-note' },
@@ -9737,6 +9868,7 @@ function getActiveScrollContainer() {
     'theme-excel': 'grid-scroll-container',
     'theme-googledocs': 'gdocs-canvas-scroll-container',
     'theme-vscode': 'vsc-code-scroll-container',
+    'theme-indesign': 'id-canvas-scroll-container',
     'theme-photoshop': 'ps-canvas-scroll-container',
     'theme-blender': 'blender-viewport-scroll-container',
     'theme-linkedin': 'linkedin-feed-scroll-container',
@@ -10051,13 +10183,13 @@ function escapeHtml(text) {
 }
 
 function formatPlainTextChunk(text) {
-  const raw = upgradeLegacyImagePlaceholder(String(text ?? ''));
+  const raw = upgradeLegacyImagePlaceholder(String(text ?? '').normalize('NFC'));
   if (!raw.includes('[[STEALTH_IMG:')) return raw;
   return raw.replace(/\[\[STEALTH_IMG:([^|\]]+)\|([^\]]+)\]\]/g, '[$2]');
 }
 
 function formatChunkText(text) {
-  const raw = upgradeLegacyImagePlaceholder(String(text ?? ''));
+  const raw = upgradeLegacyImagePlaceholder(String(text ?? '').normalize('NFC'));
   if (!raw.includes('[[STEALTH_IMG:')) {
     return escapeHtml(raw);
   }
@@ -10728,3 +10860,225 @@ function appendSlackBatch(count) {
 }
 
 
+
+
+// Setup Adobe InDesign interactive workspace controls
+function setupInDesignControls() {
+  if (state.theme !== 'theme-indesign') return;
+
+  // 1. Upload custom image button (Paper 1)
+  const uploadBtn = document.getElementById('id-btn-upload-img');
+  const uploadInput = document.getElementById('id-image-upload-input');
+  if (uploadInput) {
+    if (uploadBtn) uploadBtn.addEventListener('click', () => uploadInput.click());
+    uploadInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target.result;
+        const placedImg = document.getElementById('id-placed-image');
+        if (placedImg) placedImg.src = dataUrl;
+        const nameEl = document.getElementById('id-image-filename');
+        if (nameEl) nameEl.textContent = file.name;
+        localStorage.setItem('stealth_custom_img_theme-indesign', dataUrl);
+        localStorage.setItem('stealth_id_image_name', file.name);
+        // Clear active preset buttons
+        document.querySelectorAll('.id-preset-btn').forEach(btn => btn.classList.remove('active'));
+        showPageFlipToast(`🖼️ Đã thay ảnh InDesign: <b>${escapeHtml(file.name)}</b>`);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // 2. Preset image buttons (Paper 1)
+  const presetBtns = document.querySelectorAll('.id-preset-btn:not(.id-preset-btn-2)');
+  presetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const src = btn.getAttribute('data-src');
+      if (!src) return;
+      const placedImg = document.getElementById('id-placed-image');
+      if (placedImg) placedImg.src = src;
+      const filename = src.split('/').pop();
+      const nameEl = document.getElementById('id-image-filename');
+      if (nameEl) nameEl.textContent = filename;
+      localStorage.setItem('stealth_custom_img_theme-indesign', src);
+      localStorage.setItem('stealth_id_image_name', filename);
+      presetBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showPageFlipToast(`🖼️ Đã chọn mẫu ảnh: <b>${btn.textContent}</b>`);
+    });
+  });
+
+  // 2b. Secondary Paper Controls (Paper 2 - Khoanh đỏ)
+  const uploadBtn2 = document.getElementById('id-btn-upload-img-2');
+  const uploadInput2 = document.getElementById('id-image-upload-input-2');
+  if (uploadInput2) {
+    if (uploadBtn2) uploadBtn2.addEventListener('click', () => uploadInput2.click());
+    uploadInput2.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataUrl = event.target.result;
+        const placedImg2 = document.getElementById('id-placed-image-2');
+        if (placedImg2) placedImg2.src = dataUrl;
+        const nameEl2 = document.getElementById('id-image-filename-2');
+        if (nameEl2) nameEl2.textContent = file.name;
+        localStorage.setItem('stealth_custom_img_theme-indesign_2', dataUrl);
+        localStorage.setItem('stealth_id_image_name_2', file.name);
+        document.querySelectorAll('.id-preset-btn-2').forEach(btn => btn.classList.remove('active'));
+        showPageFlipToast(`🖼️ Đã thay ảnh InDesign trang 2: <b>${escapeHtml(file.name)}</b>`);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  const presetBtns2 = document.querySelectorAll('.id-preset-btn-2');
+  presetBtns2.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const src = btn.getAttribute('data-src');
+      if (!src) return;
+      const placedImg2 = document.getElementById('id-placed-image-2');
+      if (placedImg2) placedImg2.src = src;
+      const filename = src.split('/').pop();
+      const nameEl2 = document.getElementById('id-image-filename-2');
+      if (nameEl2) nameEl2.textContent = filename;
+      localStorage.setItem('stealth_custom_img_theme-indesign_2', src);
+      localStorage.setItem('stealth_id_image_name_2', filename);
+      presetBtns2.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showPageFlipToast(`🖼️ Đã chọn mẫu ảnh trang 2: <b>${btn.textContent}</b>`);
+    });
+  });
+
+  // Floating pill for Paper 2 (to match Paper 1)
+  const frame2 = document.getElementById('id-graphic-frame-2');
+  if (frame2 && !document.getElementById('stealth-img-ctrl-pill-2')) {
+    const pill2 = document.createElement('div');
+    pill2.id = 'stealth-img-ctrl-pill-2';
+    pill2.className = 'stealth-img-ctrl-pill';
+    pill2.innerHTML = `
+      <button class="stealth-img-btn" id="btn-upload-stealth-img-2" title="Đổi ảnh nhanh Paper 2">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+        <span>Đổi ảnh</span>
+      </button>
+    `;
+    frame2.style.position = 'relative';
+    frame2.appendChild(pill2);
+    const pillBtn2 = pill2.querySelector('#btn-upload-stealth-img-2');
+    if (pillBtn2) {
+      pillBtn2.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const input2 = document.getElementById('id-image-upload-input-2');
+        if (input2) input2.click();
+      });
+    }
+  }
+
+  // Drag and drop for Paper 2
+  if (frame2 && !frame2._hasDropListener) {
+    frame2._hasDropListener = true;
+    ['dragenter', 'dragover'].forEach(name => {
+      frame2.addEventListener(name, (e) => {
+        if (e.dataTransfer && e.dataTransfer.types.includes('Files')) {
+          e.preventDefault();
+          frame2.classList.add('stealth-img-dragover');
+        }
+      });
+    });
+    ['dragleave', 'drop'].forEach(name => {
+      frame2.addEventListener(name, () => frame2.classList.remove('stealth-img-dragover'));
+    });
+    frame2.addEventListener('drop', (e) => {
+      if (!e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files.length) return;
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        e.preventDefault();
+        e.stopPropagation();
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const dataUrl = event.target.result;
+          const placedImg2 = document.getElementById('id-placed-image-2');
+          if (placedImg2) placedImg2.src = dataUrl;
+          const nameEl2 = document.getElementById('id-image-filename-2');
+          if (nameEl2) nameEl2.textContent = file.name;
+          localStorage.setItem('stealth_custom_img_theme-indesign_2', dataUrl);
+          localStorage.setItem('stealth_id_image_name_2', file.name);
+          document.querySelectorAll('.id-preset-btn-2').forEach(btn => btn.classList.remove('active'));
+          showPageFlipToast(`🖼️ Đã thay ảnh InDesign trang 2: <b>${escapeHtml(file.name)}</b>`);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // 3. InDesign font size controls
+  const decBtn = document.getElementById('id-btn-font-dec');
+  const incBtn = document.getElementById('id-btn-font-inc');
+  const sizeSelect = document.getElementById('id-select-font-size');
+  const stream = document.getElementById('id-story-stream');
+
+  const updateFontSize = (sizePt) => {
+    const num = parseFloat(sizePt) || 11;
+    setFontSize(num);
+    if (stream) {
+      stream.style.setProperty('--id-story-font-size', `${num}pt`);
+      stream.style.fontSize = `${num}pt`;
+    }
+    if (sizeSelect) sizeSelect.value = String(num);
+    localStorage.setItem('stealth_id_font_size', String(num));
+  };
+
+  const savedSize = localStorage.getItem('stealth_id_font_size');
+  if (savedSize) {
+    updateFontSize(savedSize);
+  } else if (state.fontSize) {
+    updateFontSize(state.fontSize);
+  }
+
+  if (sizeSelect) {
+    sizeSelect.addEventListener('change', () => updateFontSize(sizeSelect.value));
+  }
+  if (decBtn) {
+    decBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      changeFontSize(-1);
+    });
+  }
+  if (incBtn) {
+    incBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      changeFontSize(1);
+    });
+  }
+
+  // 4. Page navigation arrows
+  const prevBtn = document.getElementById('id-btn-prev-page');
+  const nextBtn = document.getElementById('id-btn-next-page');
+  const firstBtn = document.getElementById('id-btn-first-page');
+  const lastBtn = document.getElementById('id-btn-last-page');
+  if (prevBtn) prevBtn.addEventListener('click', () => window.scrollBy({ top: -400, behavior: 'smooth' }));
+  if (nextBtn) nextBtn.addEventListener('click', () => window.scrollBy({ top: 400, behavior: 'smooth' }));
+  if (firstBtn) firstBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  if (lastBtn) lastBtn.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
+
+  // 5. Restore saved images on load
+  const savedImg = localStorage.getItem('stealth_custom_img_theme-indesign');
+  if (savedImg) {
+    const placedImg = document.getElementById('id-placed-image');
+    if (placedImg) placedImg.src = savedImg;
+    const savedName = localStorage.getItem('stealth_id_image_name');
+    const nameEl = document.getElementById('id-image-filename');
+    if (nameEl && savedName) nameEl.textContent = savedName;
+  }
+
+  const savedImg2 = localStorage.getItem('stealth_custom_img_theme-indesign_2');
+  if (savedImg2) {
+    const placedImg2 = document.getElementById('id-placed-image-2');
+    if (placedImg2) placedImg2.src = savedImg2;
+    const savedName2 = localStorage.getItem('stealth_id_image_name_2');
+    const nameEl2 = document.getElementById('id-image-filename-2');
+    if (nameEl2 && savedName2) nameEl2.textContent = savedName2;
+  }
+}
