@@ -8,6 +8,7 @@ import threading
 import time
 from collections import OrderedDict, defaultdict, deque
 from dataclasses import dataclass
+from html import unescape
 from typing import Any
 from urllib.parse import parse_qs, urlsplit
 
@@ -15,7 +16,7 @@ import requests
 
 
 PROXY_PREFIX = "/api/online-story/"
-ALLOWED_SOURCES = {"all", "s1", "s2"}
+ALLOWED_SOURCES = {"all", "s1", "s2", "hh3d"}
 ACTION_RULES = {
     "search": {"required": ("q",), "ttl": 5 * 60},
     "story": {"required": ("story",), "ttl": 60 * 60},
@@ -119,13 +120,9 @@ def _cache_put(key, payload, ttl: int) -> None:
             _cache.popitem(last=False)
 
 
-def _fetch_upstream(action: str, params: dict[str, str]) -> dict[str, Any]:
-    base_url = os.environ.get("ONLINE_STORY_UPSTREAM_BASE", "").strip().rstrip("/")
-    if not base_url:
-        raise RuntimeError("proxy_not_configured")
-
+def _request_upstream_json(url: str, params: dict[str, str]) -> dict[str, Any]:
     response = requests.get(
-        f"{base_url}/{action}",
+        url,
         params=params,
         headers={"Accept": "application/json", "User-Agent": "StealthReader/1.0"},
         timeout=(4, 15),
@@ -151,7 +148,101 @@ def _fetch_upstream(action: str, params: dict[str, str]) -> dict[str, Any]:
     finally:
         response.close()
 
-    if not isinstance(payload, dict) or payload.get("success") is not True or "data" not in payload:
+    if not isinstance(payload, dict):
+        raise RuntimeError("invalid_upstream_response")
+    return payload
+
+
+def _is_hh3d_provider(base_url: str) -> bool:
+    configured = os.environ.get("ONLINE_STORY_PROVIDER", "").strip().lower()
+    if configured:
+        return configured == "hh3d"
+    return (urlsplit(base_url).hostname or "").lower() == "truyenhh3d.com"
+
+
+def _hh3d_chapter(base_url: str, story_id: str, chapter_id: str) -> dict[str, Any]:
+    payload = _request_upstream_json(
+        f"{base_url}/api/doc-len/chuong",
+        {"slug": story_id, "idx": chapter_id},
+    )
+    if payload.get("ok") is not True:
+        raise RuntimeError("invalid_upstream_response")
+    return payload
+
+
+def _fetch_hh3d(action: str, params: dict[str, str], base_url: str) -> dict[str, Any]:
+    if action == "search":
+        upstream = _request_upstream_json(f"{base_url}/api/suggest", {"q": params["q"]})
+        items = upstream.get("items")
+        if not isinstance(items, list):
+            raise RuntimeError("invalid_upstream_response")
+        data = []
+        for item in items:
+            if not isinstance(item, dict) or not item.get("slug"):
+                continue
+            chapter_count = max(0, int(item.get("chapters") or 0))
+            data.append({
+                "source": "hh3d",
+                "story_id": str(item["slug"]),
+                "title": str(item.get("title") or "Chưa có tên"),
+                "author": str(item.get("author") or ""),
+                "latest_chapter": f"Chương {chapter_count}" if chapter_count else "",
+                "chapter_count": chapter_count,
+            })
+        return {"success": True, "total": len(data), "data": data}
+
+    chapter_id = params.get("chapter") or "1"
+    upstream = _hh3d_chapter(base_url, params["story"], chapter_id)
+    total = max(0, int(upstream.get("total") or 0))
+    novel = upstream.get("novel") if isinstance(upstream.get("novel"), dict) else {}
+
+    if action == "story":
+        chapters = [
+            {"title": f"Chương {index}", "chapter_id": str(index)}
+            for index in range(1, total + 1)
+        ]
+        return {"success": True, "data": {
+            "source": "hh3d",
+            "story_id": params["story"],
+            "title": str(novel.get("title") or params["story"]),
+            "author": str(novel.get("author") or ""),
+            "chapters": chapters,
+        }}
+
+    paragraphs = upstream.get("paragraphs")
+    if not isinstance(paragraphs, list):
+        raise RuntimeError("invalid_upstream_response")
+    chapter_number = int(upstream.get("idx") or chapter_id)
+    chapter_title = str(upstream.get("title") or "").strip()
+    display_title = f"Chương {chapter_number}"
+    if chapter_title:
+        display_title += f": {unescape(chapter_title)}"
+    normalized_paragraphs = [
+        unescape(str(paragraph)).strip()
+        for paragraph in paragraphs
+        if str(paragraph).strip()
+    ]
+    return {"success": True, "data": {
+        "source": "hh3d",
+        "story_id": params["story"],
+        "chapter_id": str(chapter_number),
+        "truyen_title": str(novel.get("title") or params["story"]),
+        "chapter_title": display_title,
+        "total_lines": len(normalized_paragraphs),
+        "paragraphs": normalized_paragraphs,
+    }}
+
+
+def _fetch_upstream(action: str, params: dict[str, str]) -> dict[str, Any]:
+    base_url = os.environ.get("ONLINE_STORY_UPSTREAM_BASE", "").strip().rstrip("/")
+    if not base_url:
+        raise RuntimeError("proxy_not_configured")
+
+    if _is_hh3d_provider(base_url):
+        return _fetch_hh3d(action, params, base_url)
+
+    payload = _request_upstream_json(f"{base_url}/{action}", params)
+    if payload.get("success") is not True or "data" not in payload:
         raise RuntimeError("invalid_upstream_response")
     return payload
 

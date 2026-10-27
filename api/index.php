@@ -44,6 +44,15 @@ function online_story_proxy_configured(array $config): bool
     return online_story_base($config) !== '';
 }
 
+function online_story_provider(array $config): string
+{
+    $configured = strtolower(trim((string)($config['online_story_provider'] ?? getenv('ONLINE_STORY_PROVIDER') ?: '')));
+    if ($configured !== '') {
+        return $configured;
+    }
+    return strtolower((string)parse_url(online_story_base($config), PHP_URL_HOST)) === 'truyenhh3d.com' ? 'hh3d' : 'legacy';
+}
+
 function online_story_cache_path(string $action, array $params): string
 {
     $directory = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . 'web_read_story_cache';
@@ -117,6 +126,132 @@ function online_story_identifier_valid(string $value): bool
     return $value !== '' && strlen($value) <= 300 && !preg_match('/[\x00-\x1F\x7F]/', $value);
 }
 
+function online_story_request_json(array $config, string $url, array $params): array
+{
+    $body = '';
+    $curl = curl_init($url . '?' . http_build_query($params));
+    $curlOptions = [
+        CURLOPT_CONNECTTIMEOUT => 4,
+        CURLOPT_TIMEOUT => 15,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_HTTPHEADER => ['Accept: application/json', 'User-Agent: StealthReader/1.0'],
+        CURLOPT_WRITEFUNCTION => static function ($handle, string $chunk) use (&$body): int {
+            if (strlen($body) + strlen($chunk) > MAX_STORY_RESPONSE_BODY) {
+                return 0;
+            }
+            $body .= $chunk;
+            return strlen($chunk);
+        },
+    ];
+    $caBundle = trim((string)($config['online_story_ca_bundle'] ?? getenv('ONLINE_STORY_CA_BUNDLE') ?: ''));
+    if ($caBundle !== '' && is_file($caBundle)) {
+        $curlOptions[CURLOPT_CAINFO] = $caBundle;
+    }
+    curl_setopt_array($curl, $curlOptions);
+    $completed = curl_exec($curl);
+    $status = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    if ($completed === false || $status !== 200) {
+        throw new RuntimeException('upstream_unavailable', $status);
+    }
+    $payload = json_decode($body, true);
+    if (!is_array($payload)) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    return $payload;
+}
+
+function online_story_fetch_hh3d(array $config, string $action, array $params, string $base): array
+{
+    if ($action === 'search') {
+        $upstream = online_story_request_json($config, $base . '/api/suggest', ['q' => $params['q']]);
+        if (!is_array($upstream['items'] ?? null)) {
+            throw new RuntimeException('invalid_upstream_response');
+        }
+        $items = [];
+        foreach ($upstream['items'] as $item) {
+            if (!is_array($item) || trim((string)($item['slug'] ?? '')) === '') {
+                continue;
+            }
+            $chapterCount = max(0, (int)($item['chapters'] ?? 0));
+            $items[] = [
+                'source' => 'hh3d',
+                'story_id' => (string)$item['slug'],
+                'title' => (string)($item['title'] ?? 'Chưa có tên'),
+                'author' => (string)($item['author'] ?? ''),
+                'latest_chapter' => $chapterCount > 0 ? 'Chương ' . $chapterCount : '',
+                'chapter_count' => $chapterCount,
+            ];
+        }
+        return ['success' => true, 'total' => count($items), 'data' => $items];
+    }
+
+    $chapterId = (string)($params['chapter'] ?? '1');
+    $upstream = online_story_request_json(
+        $config,
+        $base . '/api/doc-len/chuong',
+        ['slug' => $params['story'], 'idx' => $chapterId]
+    );
+    if (($upstream['ok'] ?? false) !== true) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    $total = max(0, (int)($upstream['total'] ?? 0));
+    $novel = is_array($upstream['novel'] ?? null) ? $upstream['novel'] : [];
+
+    if ($action === 'story') {
+        $chapters = [];
+        for ($index = 1; $index <= $total; $index++) {
+            $chapters[] = ['title' => 'Chương ' . $index, 'chapter_id' => (string)$index];
+        }
+        return ['success' => true, 'data' => [
+            'source' => 'hh3d',
+            'story_id' => $params['story'],
+            'title' => (string)($novel['title'] ?? $params['story']),
+            'author' => (string)($novel['author'] ?? ''),
+            'chapters' => $chapters,
+        ]];
+    }
+
+    if (!is_array($upstream['paragraphs'] ?? null)) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    $chapterNumber = (int)($upstream['idx'] ?? $chapterId);
+    $chapterTitle = trim((string)($upstream['title'] ?? ''));
+    $displayTitle = 'Chương ' . $chapterNumber;
+    if ($chapterTitle !== '') {
+        $displayTitle .= ': ' . html_entity_decode($chapterTitle, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+    $paragraphs = [];
+    foreach ($upstream['paragraphs'] as $paragraph) {
+        $text = trim(html_entity_decode((string)$paragraph, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        if ($text !== '') {
+            $paragraphs[] = $text;
+        }
+    }
+    return ['success' => true, 'data' => [
+        'source' => 'hh3d',
+        'story_id' => $params['story'],
+        'chapter_id' => (string)$chapterNumber,
+        'truyen_title' => (string)($novel['title'] ?? $params['story']),
+        'chapter_title' => $displayTitle,
+        'total_lines' => count($paragraphs),
+        'paragraphs' => $paragraphs,
+    ]];
+}
+
+function online_story_fetch(array $config, string $action, array $params, string $base): array
+{
+    if (online_story_provider($config) === 'hh3d') {
+        return online_story_fetch_hh3d($config, $action, $params, $base);
+    }
+    $payload = online_story_request_json($config, $base . '/' . $action, $params);
+    if (($payload['success'] ?? false) !== true || !array_key_exists('data', $payload)) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    return $payload;
+}
+
 function handle_online_story_proxy(array $config, string $path, string $method): void
 {
     if ($method !== 'GET') {
@@ -155,7 +290,7 @@ function handle_online_story_proxy(array $config, string $path, string $method):
         json_response(400, ['success' => false, 'error' => 'Mã chương không hợp lệ.']);
     }
     $params['source'] = $params['source'] === '' ? 'all' : $params['source'];
-    if (!in_array($params['source'], ['all', 's1', 's2'], true)) {
+    if (!in_array($params['source'], ['all', 's1', 's2', 'hh3d'], true)) {
         json_response(400, ['success' => false, 'error' => 'Nguồn truyện không hợp lệ.']);
     }
     $params = array_intersect_key($params, array_flip(array_merge($rules[$action]['required'], ['source'])));
@@ -170,37 +305,15 @@ function handle_online_story_proxy(array $config, string $path, string $method):
         json_response(503, ['success' => false, 'error' => 'Nguồn truyện chưa được cấu hình trên máy chủ.']);
     }
 
-    $body = '';
-    $curl = curl_init($base . '/' . $action . '?' . http_build_query($params));
-    $curlOptions = [
-        CURLOPT_CONNECTTIMEOUT => 4,
-        CURLOPT_TIMEOUT => 15,
-        CURLOPT_FOLLOWLOCATION => false,
-        CURLOPT_HTTPHEADER => ['Accept: application/json', 'User-Agent: StealthReader/1.0'],
-        CURLOPT_WRITEFUNCTION => static function ($handle, string $chunk) use (&$body): int {
-            if (strlen($body) + strlen($chunk) > MAX_STORY_RESPONSE_BODY) {
-                return 0;
-            }
-            $body .= $chunk;
-            return strlen($chunk);
-        },
-    ];
-    $caBundle = trim((string)($config['online_story_ca_bundle'] ?? getenv('ONLINE_STORY_CA_BUNDLE') ?: ''));
-    if ($caBundle !== '' && is_file($caBundle)) {
-        $curlOptions[CURLOPT_CAINFO] = $caBundle;
-    }
-    curl_setopt_array($curl, $curlOptions);
-    $completed = curl_exec($curl);
-    $status = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-
-    if ($completed === false || $status !== 200) {
+    try {
+        $payload = online_story_fetch($config, $action, $params, $base);
+    } catch (RuntimeException $error) {
+        $status = $error->getCode();
         $responseStatus = $status === 429 ? 429 : 502;
         $message = $status === 429 ? 'Nguồn truyện đang giới hạn truy cập.' : 'Nguồn truyện tạm thời không khả dụng.';
         json_response($responseStatus, ['success' => false, 'error' => $message]);
     }
-    $payload = json_decode($body, true);
-    if (!is_array($payload) || ($payload['success'] ?? false) !== true || !array_key_exists('data', $payload)) {
+    if (($payload['success'] ?? false) !== true || !array_key_exists('data', $payload)) {
         json_response(502, ['success' => false, 'error' => 'Nguồn truyện tạm thời không khả dụng.']);
     }
 

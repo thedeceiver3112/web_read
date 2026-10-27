@@ -4677,11 +4677,7 @@ body.theme-photoshop {
   border-left: 3px solid #31a8ff;
 }
 .ps-chunk-meta {
-  font-size: 10px;
-  color: #888;
-  font-family: monospace;
-  margin-bottom: 2px;
-  display: block;
+  display: none !important;
 }
 
 .ps-right-sidebar {
@@ -6286,11 +6282,7 @@ body.theme-photoshop {
   box-shadow: none;
 }
 .ps-chunk-meta {
-  margin-bottom: 4px;
-  color: #8a8a8a;
-  font-family: "Segoe UI", sans-serif;
-  font-size: 8px;
-  letter-spacing: 0;
+  display: none !important;
 }
 .ps-chunk-body {
   font-size: var(--story-font-size, 14px);
@@ -10203,9 +10195,7 @@ body.theme-figma.controls-hidden {
 }
 
 .figma-layer-meta {
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
+  display: none !important;
 }
 .figma-meta-name {
   font-size: 10px;
@@ -12974,7 +12964,7 @@ body.theme-thuvienphapluat {
   overflow-x: hidden;
   padding: 24px 36px 50px 36px;
   background: #ffffff;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 /* Official Vietnamese State Header per Decree 30/2020/NÄ�-CP */

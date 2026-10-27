@@ -1,927 +1,1182 @@
-/* Thư Viện Pháp Luật (TVPL - thuvienphapluat.vn) Authentic Fixed-Width Layout with Centered Margins */
+/* ==========================================================================
+   THƯ VIỆN PHÁP LUẬT (thuvienphapluat.vn) - AUTHENTIC 960PX PORTAL THEME
+   Replicates the exact homepage structure, colors, typography and layout.
+   Novel paragraphs are seamlessly disguised inside "VĂN BẢN PHÁP LUẬT MỚI" items.
+   ========================================================================== */
 
-/* ==========================================================
-   THEME 13: THƯ VIỆN PHÁP LUẬT CLASSIC STYLES
-   - Fixed standard container width (1200px) centered with equal margins on both sides
-   - Background of the entire page: #e9ebef
-   - Background of the page container: #ffffff / clean bordered layout
-   - Top Header: Warm Orange Gradient (#ff9000 to #e65100)
-   - Nav Bar: Blue Utility Bar (#1976d2 to #1565c0)
-   - Search Row: Clean White with Yellow Action buttons
-   - Content Area: 3-column structured portal layout
-   ========================================================== */
+/* ---------------- Root Variables & Colors ---------------- */
+:root {
+  --tvpl-bg-portal: #e9eef2;
+  --tvpl-primary-red: #b71c1c;
+  --tvpl-header-dark: #8c0945;
+  --tvpl-header-red: #c00000;
+  --tvpl-nav-blue: #0b4a8b;
+  --tvpl-link-blue: #003399;
+  --tvpl-link-hover: #c00000;
+  --tvpl-tab-active: #c71b1b;
+  --tvpl-border-color: #d8e2e9;
+  --tvpl-border-gold: #e2c884;
+  --tvpl-bg-gold-light: #fdfae8;
+  --tvpl-text-main: #333333;
+  --tvpl-text-muted: #666666;
+  --tvpl-status-known: #8c0945;
+  --tvpl-hot-badge: #e61919;
+  --tvpl-zebra-0: #ffffff;
+  --tvpl-zebra-1: #f8fafc;
+  --tvpl-active-clause-bg: #fff9e6;
+  --tvpl-active-clause-border: #d32f2f;
+  --story-font-size: 13px;
+  --story-line-height: 1.5;
+}
 
+/* ---------------- Dark Mode Variables ---------------- */
+body.theme-thuvienphapluat.dark-mode {
+  --tvpl-bg-portal: #121316;
+  --tvpl-primary-red: #ef4444;
+  --tvpl-header-dark: #2a111a;
+  --tvpl-header-red: #5c1414;
+  --tvpl-nav-blue: #1e3a5f;
+  --tvpl-link-blue: #60a5fa;
+  --tvpl-link-hover: #f87171;
+  --tvpl-tab-active: #991b1b;
+  --tvpl-border-color: #2e353d;
+  --tvpl-border-gold: #5a4b22;
+  --tvpl-bg-gold-light: #1f1d16;
+  --tvpl-text-main: #e2e8f0;
+  --tvpl-text-muted: #94a3b8;
+  --tvpl-status-known: #f472b6;
+  --tvpl-hot-badge: #ef4444;
+  --tvpl-zebra-0: #1a1c22;
+  --tvpl-zebra-1: #21242c;
+  --tvpl-active-clause-bg: #272c3d;
+  --tvpl-active-clause-border: #f59e0b;
+}
+
+/* ---------------- Base Reset & Page Wrapper ---------------- */
 body.theme-thuvienphapluat {
-  background-color: #dbe0e6;
-  color: #333333;
-  font-family: Arial, Tahoma, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--tvpl-bg-portal);
+  font-family: Arial, Tahoma, Helvetica, sans-serif;
+  font-size: 12px;
+  color: var(--tvpl-text-main);
+  line-height: 1.4;
   overflow: hidden;
+}
+
+.tvpl-app-container {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background-color: var(--tvpl-bg-portal);
+  box-sizing: border-box;
+  scroll-behavior: auto !important;
+}
+
+.tvpl-page-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  flex: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding-bottom: 25px;
+}
+
+/* ---------------- 960px Authentic Portal Container ---------------- */
+#tblcontainer {
+  width: 960px;
+  max-width: 960px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-left: 1px solid var(--tvpl-border-color);
+  border-right: 1px solid var(--tvpl-border-color);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+body.theme-thuvienphapluat.dark-mode #tblcontainer {
+  background-color: #1a1c22;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------------- Header (80px Authentic Height) ---------------- */
+#header {
+  height: 80px;
+  position: relative;
+  background: #990000 url(https://cdn.thuvienphapluat.vn/images/bg_head_tvpl.png) no-repeat top right;
+  background-size: cover;
+  overflow: hidden;
+  border-bottom: 1px solid #700000;
+}
+
+body.theme-thuvienphapluat.dark-mode #header {
+  background: #2b0f15 url(https://cdn.thuvienphapluat.vn/images/bg_head_tvpl.png) no-repeat top right;
+  border-bottom: 1px solid #4a141b;
+}
+
+.tvpl-header-brand-title {
+  color: red;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: 'Times New Roman', serif;
+  text-shadow: -1px -1px 3px #ffffff, 1px -1px 3px #ffffff, -1px 1px 3px #ffffff, 1px 1px 3px #ffffff;
+  position: absolute;
+  top: 6px;
+  left: 90px;
+  text-decoration: none;
+  line-height: 1.15;
+}
+
+.tvpl-header-brand-title span {
+  display: block;
+  font-size: 11px;
+  text-shadow: none;
+  color: #ffffff;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 2px;
+}
+
+.tvpl-header-logo-img {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  width: 76px;
+  height: auto;
+}
+
+.tvpl-header-slogan-wrap {
+  position: absolute;
+  top: 48px;
+  left: 90px;
+  text-decoration: none;
+}
+
+.tvpl-header-slogan-wrap .slogan {
+  font-family: 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 12px;
+  color: #ffffdd;
+  letter-spacing: 0.3px;
+}
+
+/* Top Menus */
+#top_menu {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#top_menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#top_menu li.liMenu {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: bold;
+}
+
+#top_menu li.liMenu a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+#top_menu li.liMenu a:hover {
+  text-decoration: underline;
+  color: #ffdf73;
+}
+
+#top_menu li.liLine {
+  width: 1px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tvpl-header-lang-flags {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+.tvpl-header-lang-flags span {
+  padding: 1px 4px;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 2px;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+/* Secondary Top Links */
+#toplinks {
+  position: absolute;
+  bottom: 6px;
+  right: 12px;
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+}
+
+#toplinks a {
+  color: #ffffff;
+  text-decoration: none;
+  opacity: 0.9;
+}
+
+#toplinks a:hover {
+  text-decoration: underline;
+  opacity: 1;
+  color: #ffeb99;
+}
+
+/* Stealth Mode Toggle Controls in Header */
+.tvpl-stealth-ctrls {
+  position: absolute;
+  bottom: 5px;
+  left: 360px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 5;
+}
+
+.tvpl-stealth-pill-btn {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.tvpl-stealth-pill-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: #ffd700;
+  color: #ffd700;
+}
+
+/* ---------------- Search & Member Table Row ---------------- */
+.tvpl-search-table-row {
+  width: 100%;
+  border-bottom: 1px solid var(--tvpl-border-color);
+  background: #fdfdfd;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-search-table-row {
+  background: #1e2129;
+}
+
+#idTabs-Home-tab {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 10px;
+  display: flex;
+  height: 27px;
+  background: #eaeef1;
+  border-bottom: 2px solid var(--tvpl-header-red);
+}
+
+body.theme-thuvienphapluat.dark-mode #idTabs-Home-tab {
+  background: #232833;
+}
+
+#idTabs-Home-tab li {
+  margin-right: 2px;
+}
+
+#idTabs-Home-tab li a {
+  display: block;
+  line-height: 27px;
+  padding: 0 10px;
+  font-size: 11.5px;
+  font-weight: bold;
+  color: #333333;
+  text-decoration: none;
+  background: #d8e0e7;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+body.theme-thuvienphapluat.dark-mode #idTabs-Home-tab li a {
+  background: #2b3240;
+  color: #cbd5e1;
+}
+
+#idTabs-Home-tab li a.current,
+#idTabs-Home-tab li a:hover {
+  background: var(--tvpl-header-red);
+  color: #ffffff;
+}
+
+.idTabs-Home-Mid {
+  padding: 8px 12px 10px 12px;
+  background-color: #fff9e6;
+  border-bottom: 1px solid var(--tvpl-border-gold);
+}
+
+body.theme-thuvienphapluat.dark-mode .idTabs-Home-Mid {
+  background-color: var(--tvpl-bg-gold-light);
+}
+
+.tvpl-search-prompt {
+  font-size: 11px;
+  color: var(--tvpl-text-muted);
+  margin: 0 0 6px 0;
+}
+
+.divSearchVBPL {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.txt-search-Home {
+  flex: 1;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+  border: 1px solid #c4b57b;
+  border-radius: 2px;
+  background: #ffffff;
+  color: #333333;
+  outline: none;
+}
+
+body.theme-thuvienphapluat.dark-mode .txt-search-Home {
+  background: #14161b;
+  border-color: #554d32;
+  color: #e2e8f0;
+}
+
+.button-search-Home {
+  height: 30px;
+  padding: 0 16px;
+  background: linear-gradient(to bottom, #d32f2f, #a00);
+  border: 1px solid #800;
+  border-radius: 2px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.button-search-Home:hover {
+  background: linear-gradient(to bottom, #e53935, #b71c1c);
+}
+
+.divTimNhanh {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--tvpl-text-muted);
+}
+
+.divTimNhanh a {
+  color: var(--tvpl-link-blue);
+  text-decoration: none;
+  margin: 0 3px;
+}
+
+.divTimNhanh a:hover {
+  text-decoration: underline;
+  color: var(--tvpl-link-hover);
+}
+
+/* Support and Hotline Block */
+.tvpl-support-hotline-box {
+  padding: 8px 12px;
+  font-size: 11.5px;
+  color: #444444;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--tvpl-border-color);
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-support-hotline-box {
+  background: #1a1c22;
+  color: #cbd5e1;
+}
+
+.tvpl-support-hotline-box b {
+  color: var(--tvpl-primary-red);
+}
+
+/* User Card / Login Right Column */
+.tvpl-member-card {
+  padding: 8px 10px;
+  border-left: 1px solid var(--tvpl-border-color);
+  background: #f7fafc;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-member-card {
+  background: #1e2129;
+}
+
+.tvpl-member-card-title {
+  font-weight: bold;
+  font-size: 11.5px;
+  color: var(--tvpl-nav-blue);
+  margin-bottom: 5px;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-member-card-title {
+  color: #60a5fa;
+}
+
+.tvpl-user-greeting {
+  font-size: 11px;
+  color: var(--tvpl-text-muted);
+}
+
+.tvpl-user-greeting b {
+  color: var(--tvpl-primary-red);
+}
+
+/* ---------------- Top News Teaser Cards Row (#news) ---------------- */
+#news {
+  width: 100%;
+  padding: 8px 10px;
+  background: #ffffff;
+  border-bottom: 2px solid var(--tvpl-border-color);
+  box-sizing: border-box;
+}
+
+body.theme-thuvienphapluat.dark-mode #news {
+  background: #1a1c22;
+}
+
+.tvpl-news-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.tvpl-news-card {
+  border: 1px solid #dce4eb;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-news-card {
+  background: #21242c;
+  border-color: #2e353d;
+}
+
+.tvpl-news-card-header {
+  background: #f1f5f8;
+  padding: 5px 8px;
+  font-weight: bold;
+  font-size: 11.5px;
+  color: var(--tvpl-header-red);
+  border-bottom: 1px solid #dce4eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-news-card-header {
+  background: #2b303c;
+  border-color: #38414e;
+  color: #f87171;
+}
+
+.tvpl-news-card-body {
+  padding: 6px 8px;
+  font-size: 11px;
+}
+
+.tvpl-news-card-body p {
+  margin: 0 0 5px 0;
+  line-height: 1.4;
+}
+
+.tvpl-news-card-body a {
+  color: var(--tvpl-link-blue);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-news-card-body a {
+  color: #93c5fd;
+}
+
+.tvpl-news-card-body a:hover {
+  text-decoration: underline;
+  color: var(--tvpl-link-hover);
+}
+
+.tvpl-news-card-sublinks {
+  list-style: square;
+  margin: 5px 0 0 16px;
+  padding: 0;
+  font-size: 11px;
+  color: var(--tvpl-text-muted);
+}
+
+.tvpl-news-card-sublinks li {
+  margin-bottom: 3px;
+}
+
+.tvpl-news-card-sublinks a {
+  font-weight: normal;
+  color: #444444;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-news-card-sublinks a {
+  color: #cbd5e1;
+}
+
+/* ---------------- 3-Column Portal Body Layout ---------------- */
+.tvpl-main-portal-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tvpl-main-portal-table td {
+  vertical-align: top;
+  padding: 0;
+}
+
+/* ---------------- Left Sticky Column (~195px) ---------------- */
+td.loadHomeLeftControl {
+  width: 195px;
+  max-width: 195px;
+  border-right: 1px solid var(--tvpl-border-color);
+  background-color: #f9fbfd;
+}
+
+body.theme-thuvienphapluat.dark-mode td.loadHomeLeftControl {
+  background-color: #191c23;
+}
+
+.homeLeftControl {
+  width: 195px;
+  padding: 6px 4px;
+  box-sizing: border-box;
+  position: sticky;
+  top: 10px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar for sticky columns */
+.homeLeftControl::-webkit-scrollbar,
+.homeRightControl::-webkit-scrollbar {
+  width: 4px;
+}
+
+.homeLeftControl::-webkit-scrollbar-thumb,
+.homeRightControl::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+
+/* 25 Legal Utilities Widget (.divTienIch) */
+.divTienIch {
+  border: 1px solid #b7c8d6;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #ffffff;
+  margin-bottom: 8px;
+}
+
+body.theme-thuvienphapluat.dark-mode .divTienIch {
+  background: #21242c;
+  border-color: #333a46;
+}
+
+.title-left {
+  background: linear-gradient(to bottom, #d32f2f, #b71c1c);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 6px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tvpl-utility-list {
+  list-style: none;
   margin: 0;
   padding: 0;
 }
 
-/* Outer wrapper taking 100vw and 100vh, centering the fixed 1200px container */
-/* Outer wrapper taking 100vw and 100vh, centering the fixed 1200px container with clear blank margins */
-.tvpl-app-container {
+.tvpl-utility-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  background-color: #eaedf1;
-}
-
-/* Inner fixed-width container: centered with authentic margins on both sides */
-.tvpl-page-wrapper {
-  width: 1200px;
-  max-width: 96vw;
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  max-height: 100vh;
-  box-shadow: 0 0 24px rgba(0, 0, 0, 0.12);
-  border-left: 1px solid #d0d5dc;
-  border-right: 1px solid #d0d5dc;
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-/* 1. TOP HEADER WITH WHITE LOGO SECTION AND RIGHT ORANGE + BLUE BARS */
-.tvpl-header-top {
-  height: 62px;
-  background: #ffffff;
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  padding: 0;
+  padding: 4px 6px;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 11px;
   color: #333333;
-  flex-shrink: 0;
-  border-bottom: 1px solid #d9d9d9;
-  z-index: 30;
+  text-decoration: none;
 }
 
-.tvpl-header-brand-wrap {
+body.theme-thuvienphapluat.dark-mode .tvpl-utility-item {
+  color: #e2e8f0;
+  border-bottom-color: #2b303c;
+}
+
+.tvpl-utility-item:hover {
+  background: #fff8e7;
+  color: #c00000;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-utility-item:hover {
+  background: #2f3442;
+  color: #f87171;
+}
+
+.tvpl-util-num {
+  display: inline-block;
+  width: 16px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #888888;
+}
+
+.tvpl-util-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Left Banners */
+.tvpl-left-banner-link {
+  display: block;
+  margin-bottom: 6px;
+  border: 1px solid #dce4eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tvpl-left-banner-link img {
+  width: 100%;
+  display: block;
+}
+
+/* ---------------- Right Sticky Column (~200px) ---------------- */
+td.loadHomeRightControl {
+  width: 200px;
+  max-width: 200px;
+  border-left: 1px solid var(--tvpl-border-color);
+  background-color: #f9fbfd;
+}
+
+body.theme-thuvienphapluat.dark-mode td.loadHomeRightControl {
+  background-color: #191c23;
+}
+
+.homeRightControl {
+  width: 200px;
+  padding: 6px 4px;
+  box-sizing: border-box;
+  position: sticky;
+  top: 10px;
+  max-height: calc(100vh - 20px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* MST Tax Search Widget */
+.tvpl-mst-widget {
+  border: 1px solid #c8d4db;
+  border-radius: 4px;
+  background: #ffffff;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-mst-widget {
+  background: #21242c;
+  border-color: #333a46;
+}
+
+.tvpl-mst-title {
+  font-weight: bold;
+  font-size: 11.5px;
+  color: var(--tvpl-primary-red);
+  margin-bottom: 5px;
+}
+
+.tvpl-mst-input {
+  width: 100%;
+  height: 24px;
+  border: 1px solid #c8d4db;
+  border-radius: 2px;
+  font-size: 11px;
+  padding: 0 5px;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-mst-input {
+  background: #14161b;
+  border-color: #3a424e;
+  color: #e2e8f0;
+}
+
+.tvpl-mst-btn {
+  width: 100%;
+  height: 24px;
+  background: #0b4a8b;
+  border: none;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tvpl-mst-btn:hover {
+  background: #003399;
+}
+
+/* Right Feature Boxes */
+.tvpl-right-feature-box {
+  border: 1px solid #c8d4db;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background: #ffffff;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-right-feature-box {
+  background: #21242c;
+  border-color: #333a46;
+}
+
+.tvpl-right-box-title {
+  font-weight: bold;
+  font-size: 11.5px;
+  color: #003399;
+  border-bottom: 1px solid #edf2f7;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-right-box-title {
+  color: #60a5fa;
+  border-bottom-color: #2e353d;
+}
+
+.tvpl-right-links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+}
+
+.tvpl-right-links-list li {
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+
+.tvpl-right-links-list a {
+  color: #444444;
+  text-decoration: none;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-right-links-list a {
+  color: #cbd5e1;
+}
+
+.tvpl-right-links-list a:hover {
+  text-decoration: underline;
+  color: var(--tvpl-primary-red);
+}
+
+/* ---------------- Middle Column: Disguised Reading Stream ---------------- */
+td.middle-home {
+  width: 565px;
+  max-width: 565px;
+  padding: 6px 8px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+body.theme-thuvienphapluat.dark-mode td.middle-home {
+  background-color: #1a1c22;
+}
+
+/* Center Section Header: "VĂN BẢN PHÁP LUẬT MỚI" */
+.title-center-wrap {
+  border-bottom: 2px solid var(--tvpl-header-red);
+  margin-bottom: 6px;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-  background: #ffffff;
-  flex-shrink: 0;
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
-/* Red Scales of Justice Emblem */
-.tvpl-emblem-badge {
-  width: 44px;
-  height: 44px;
-  background: #ffffff;
-  border-radius: 50%;
-  border: 2px solid #b71c1c;
+.title-center-badge {
+  background: var(--tvpl-header-red);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 12.5px;
+  padding: 5px 12px;
+  text-transform: uppercase;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  letter-spacing: 0.4px;
+}
+
+.title-center-subtabs {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  padding-bottom: 4px;
+}
+
+.title-center-subtabs a {
+  color: #555555;
+  text-decoration: none;
+}
+
+body.theme-thuvienphapluat.dark-mode .title-center-subtabs a {
+  color: #94a3b8;
+}
+
+.title-center-subtabs a.active,
+.title-center-subtabs a:hover {
+  color: var(--tvpl-header-red);
+  font-weight: bold;
+}
+
+/* Continuous Reading Stream */
+.tvpl-story-stream {
+  width: 100%;
+}
+
+/* Authentic Legal Item: .content-0 / .content-1 */
+.tvpl-clause-item {
+  width: 100%;
+  display: flex;
+  padding: 8px 6px;
+  border-bottom: 1px dashed #dbe3ea;
+  box-sizing: border-box;
+  transition: background-color 0.12s ease;
+  position: relative;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-clause-item {
+  border-bottom-color: #2b303c;
+}
+
+.tvpl-clause-item.content-0 {
+  background-color: var(--tvpl-zebra-0);
+}
+
+.tvpl-clause-item.content-1 {
+  background-color: var(--tvpl-zebra-1);
+}
+
+/* Active Clause Highlight (When reader is focused on this paragraph) */
+.tvpl-clause-item.active-clause {
+  background-color: var(--tvpl-active-clause-bg) !important;
+  border-left: 3px solid var(--tvpl-active-clause-border) !important;
+  padding-left: 5px !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Item Left Column: Number Badge + Novel Text + Links */
+.tvpl-clause-item .left-col {
+  width: 76%;
+  display: flex;
+  gap: 8px;
+  padding-right: 6px;
+  box-sizing: border-box;
+}
+
+/* Badge: .number (standard) or .numberHot ("HOT") */
+.tvpl-clause-item .numberHot {
+  width: 26px;
+  height: 20px;
+  background: var(--tvpl-hot-badge);
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: bold;
+  border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-.tvpl-emblem-badge svg {
-  width: 32px;
-  height: 32px;
-}
-
-.tvpl-header-text-block {
-  display: flex;
-  flex-direction: column;
-}
-
-.tvpl-brand-headline {
-  font-size: 20px;
-  font-weight: 900;
-  color: #b71c1c;
-  letter-spacing: 0.5px;
-  line-height: 1.15;
-  font-family: Arial, sans-serif;
-}
-
-.tvpl-sub-headline {
-  font-size: 10px;
-  color: #555555;
-  font-weight: 500;
-}
-
-.tvpl-slogan-italic {
-  font-size: 10.5px;
-  color: #b71c1c;
-  font-style: italic;
+  flex-shrink: 0;
   margin-top: 1px;
 }
 
-/* Right Header Menu: Top Orange Bar + Bottom Blue Utility Bar */
-.tvpl-header-right-col {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.tvpl-header-orange-bar {
-  height: 31px;
-  background: linear-gradient(180deg, #f57c00 0%, #e65100 100%);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 14px;
-  gap: 12px;
+.tvpl-clause-item .number {
+  width: 26px;
+  height: 20px;
+  background: #8b99a8;
   color: #ffffff;
-}
-
-.tvpl-top-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: #ffffff;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 3px;
-  transition: background 0.15s;
-}
-
-.tvpl-top-nav-item:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.tvpl-lang-flags {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  margin-left: 6px;
-  cursor: pointer;
-}
-
-/* 2. SUB-BAR: SKY BLUE QUICK UTILITIES BAR */
-.tvpl-sub-nav-bar {
-  height: 31px;
-  background: linear-gradient(180deg, #0288d1 0%, #01579b 100%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px;
-  color: #ffffff;
-  font-size: 11px;
-  flex-shrink: 0;
-}
-
-.tvpl-sub-nav-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.tvpl-sub-btn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #ffffff;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.tvpl-sub-btn:hover {
-  text-decoration: underline;
-}
-
-/* Stealth reading controls in Sub-bar */
-.tvpl-stealth-ctrls-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tvpl-stealth-pill-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #ffffff;
-  border-radius: 3px;
-  font-size: 11px;
-  padding: 2px 7px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.tvpl-stealth-pill-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.tvpl-page-box {
-  display: flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  padding: 1px 4px;
-  gap: 4px;
-}
-
-.tvpl-nav-step-btn {
-  background: none;
-  border: none;
-  color: #ffffff;
-  cursor: pointer;
   font-size: 10px;
-  padding: 1px 4px;
-}
-
-.tvpl-nav-step-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.tvpl-font-box {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: rgba(0, 0, 0, 0.25);
-  border-radius: 3px;
-  padding: 1px 4px;
-}
-
-/* 3. SEARCH TABS & SEARCH BOX ROW */
-.tvpl-search-nav-tabs {
-  height: 28px;
-  background: #f8f9fa;
-  border-bottom: 2px solid #e65100;
-  display: flex;
-  align-items: flex-end;
-  padding: 0 12px;
-  gap: 3px;
-}
-
-.tvpl-search-tab-pill {
-  padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #4b5563;
-  background: #e5e7eb;
-  border: 1px solid #d1d5db;
-  border-bottom: none;
-  border-radius: 3px 3px 0 0;
-  cursor: pointer;
-}
-
-.tvpl-search-tab-pill.active {
-  background: #e65100;
-  color: #ffffff;
-  border-color: #e65100;
   font-weight: bold;
-}
-
-.tvpl-search-row {
-  height: 64px;
-  background: #ffffff;
-  border-bottom: 1px solid #d9d9d9;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  flex-shrink: 0;
-  gap: 16px;
-}
-
-.tvpl-search-box-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  max-width: 760px;
-}
-
-.tvpl-search-form-row {
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-.tvpl-search-input-field {
-  flex: 1;
-  height: 28px;
-  border: 1px solid #a6a6a6;
-  border-right: none;
-  padding: 0 8px;
-  font-size: 11.5px;
-  color: #333;
-  outline: none;
-}
-
-.tvpl-search-type-select {
-  height: 28px;
-  border: 1px solid #a6a6a6;
-  background: #f7f7f7;
-  padding: 0 6px;
-  font-size: 11.5px;
-  color: #333;
-  outline: none;
-}
-
-.tvpl-search-submit-btn {
-  height: 28px;
-  background: linear-gradient(180deg, #ffc107 0%, #ff9800 100%);
-  border: 1px solid #e65100;
-  color: #111111;
-  font-weight: bold;
-  font-size: 11.5px;
-  padding: 0 18px;
-  cursor: pointer;
-}
-
-.tvpl-search-submit-btn:hover {
-  background: linear-gradient(180deg, #ffb300 0%, #fb8c00 100%);
-}
-
-.tvpl-search-quick-links {
-  display: flex;
-  gap: 12px;
-  font-size: 10px;
-  color: #64748b;
-}
-
-.tvpl-search-quick-links span {
-  color: #b71c1c;
-  cursor: pointer;
-}
-
-/* Contact Support Box next to Search */
-.tvpl-contact-support-box {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 10.5px;
-  color: #334155;
-  border-left: 1px dashed #cbd5e1;
-  padding-left: 14px;
-}
-
-.tvpl-contact-support-box b {
-  color: #b71c1c;
-}
-
-/* 4. WORKSPACE 3-COLUMN LAYOUT (CỘT TRÁI | NỘI DUNG VĂN BẢN | CỘT PHẢI) */
-.tvpl-workspace-3col {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
-  background: #f0f2f5;
-  padding: 8px 10px;
-  gap: 10px;
-}
-
-/* CỘT TRÁI: TƯ VẤN PHÁP LUẬT & CÂY MỤC LỤC BÀI VIẾT */
-.tvpl-col-left-sidebar {
-  width: 215px;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-
-.tvpl-left-box-header {
-  height: 26px;
-  background: #ffffff;
-  border-bottom: 2px solid #b71c1c;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 8px;
-  font-size: 11.5px;
-  font-weight: bold;
-  color: #b71c1c;
-  text-transform: uppercase;
-}
-
-.tvpl-left-box-close {
-  color: #dc2626;
-  border: 1px solid #f87171;
-  width: 14px;
-  height: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  cursor: pointer;
   border-radius: 2px;
-}
-
-.tvpl-left-list-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.tvpl-left-article-link {
-  font-size: 11px;
-  line-height: 1.35;
-  color: #2563eb;
-  padding: 5px 6px;
-  border-bottom: 1px dashed #e5e7eb;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.tvpl-left-article-link:hover {
-  color: #b71c1c;
-  text-decoration: underline;
-}
-
-.tvpl-left-article-link.highlight {
-  color: #dc2626;
-  font-weight: bold;
-}
-
-/* CỘT GIỮA: KHUNG VĂN BẢN CHÍNH THỨC (CHỨA TRUYỆN ĐỌC) */
-.tvpl-col-center-viewport {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-/* Tabs: [Thuộc tính] [Nội dung ★] [Tiếng Anh] [Văn bản gốc/PDF] [Lược đồ] [Liên quan hiệu lực] [Tải về] */
-.tvpl-tab-bar-classic {
-  height: 30px;
-  background: #f1f3f5;
-  border-bottom: 2px solid #e67e22;
-  display: flex;
-  align-items: flex-end;
-  padding: 0 6px;
-  gap: 2px;
-  flex-shrink: 0;
-}
-
-.tvpl-tab-pill {
-  height: 26px;
-  padding: 0 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #4b5563;
-  background: #e5e7eb;
-  border: 1px solid #d1d5db;
-  border-bottom: none;
-  border-radius: 3px 3px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.tvpl-tab-pill:hover {
-  background: #f3f4f6;
-  color: #111827;
-}
-
-.tvpl-tab-pill.active {
-  background: #f39c12;
-  color: #ffffff;
-  border-color: #e67e22;
-  font-weight: bold;
-}
-
-/* Sub-header: MỤC LỤC VĂN BẢN (Đỏ đậm) */
-.tvpl-toc-bar {
-  height: 24px;
-  background: #fdf2e9;
-  border-bottom: 1px solid #fcd34d;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  font-size: 11px;
-  font-weight: bold;
-  color: #b71c1c;
-  text-transform: uppercase;
   flex-shrink: 0;
+  margin-top: 1px;
 }
 
-/* Document Paper Scroll Area */
-.tvpl-doc-scroll-pane {
+body.theme-thuvienphapluat.dark-mode .tvpl-clause-item .number {
+  background: #475569;
+}
+
+.tvpl-clause-item .nq {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 24px 36px 50px 36px;
-  background: #ffffff;
-  scroll-behavior: smooth;
 }
 
-/* Official Vietnamese State Header per Decree 30/2020/NĐ-CP */
+/* Novel Paragraph disguised as Law Document Title */
+.tvpl-clause-item .nqTitle {
+  margin: 0 0 4px 0;
+}
+
+.tvpl-clause-item .tvpl-law-title-text {
+  font-family: Arial, Tahoma, Helvetica, sans-serif;
+  font-size: var(--story-font-size, 13px) !important;
+  line-height: var(--story-line-height, 1.5) !important;
+  color: var(--tvpl-link-blue);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-clause-item .tvpl-law-title-text {
+  color: #93c5fd;
+}
+
+.tvpl-clause-item .tvpl-law-title-text:hover {
+  text-decoration: underline;
+  color: var(--tvpl-link-hover);
+}
+
+/* Bottom Utility Links under Clause */
+.tvpl-clause-item .links-bot {
+  margin: 0;
+  font-size: 11px;
+  color: #999999;
+  letter-spacing: -0.2px;
+}
+
+.tvpl-clause-item .links-bot a {
+  color: #666666;
+  text-decoration: none;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-clause-item .links-bot a {
+  color: #94a3b8;
+}
+
+.tvpl-clause-item .links-bot a:hover {
+  text-decoration: underline;
+  color: var(--tvpl-link-hover);
+}
+
+/* Item Right Column: Legal Metadata (Ban hành, Hiệu lực, Tình trạng, Cập nhật) */
+.tvpl-clause-item .right-col {
+  width: 24%;
+  font-size: 11px;
+  color: #555555;
+  line-height: 1.35;
+  border-left: 1px solid #edf2f7;
+  padding-left: 6px;
+  box-sizing: border-box;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-clause-item .right-col {
+  color: #94a3b8;
+  border-left-color: #2b303c;
+}
+
+.tvpl-clause-item .right-col p {
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+}
+
+.tvpl-clause-item .right-col .text-red {
+  color: var(--tvpl-primary-red);
+  font-weight: bold;
+}
+
+/* ---------------- Boss View (Emergency View: Authentic Decree) ---------------- */
+.tvpl-boss-view {
+  padding: 24px 30px;
+  background: #ffffff;
+  font-family: 'Times New Roman', serif;
+  box-sizing: border-box;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view {
+  background: #1e2129 !important;
+  color: #e2e8f0 !important;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view .org-title,
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view .doc-number,
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view .country-title,
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view .motto-title,
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view .doc-date-str,
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view h2,
+body.theme-thuvienphapluat.dark-mode .tvpl-boss-view .tvpl-boss-article {
+  color: #e2e8f0 !important;
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-head-left div[style*="background: #333"] {
+  background: #94a3b8 !important;
+}
+
 .tvpl-doc-state-head {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  font-family: "Times New Roman", Times, serif;
-  margin-bottom: 18px;
-}
-
-.tvpl-head-left {
-  width: 45%;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .tvpl-head-left .org-title {
-  font-size: 13.5px;
   font-weight: bold;
-  color: #111827;
+  font-size: 13.5px;
+  text-transform: uppercase;
 }
 
 .tvpl-head-left .doc-number {
   font-size: 12.5px;
-  color: #374151;
-  margin-top: 4px;
-}
-
-.tvpl-head-right {
-  width: 53%;
-  text-align: center;
 }
 
 .tvpl-head-right .country-title {
-  font-size: 13.5px;
   font-weight: bold;
-  color: #111827;
+  font-size: 13.5px;
 }
 
 .tvpl-head-right .motto-title {
-  font-size: 13px;
   font-weight: bold;
-  color: #111827;
-  border-bottom: 1px solid #111827;
-  display: inline-block;
-  padding-bottom: 2px;
-  margin-top: 2px;
+  font-size: 12.5px;
 }
 
 .tvpl-head-right .doc-date-str {
+  font-style: italic;
   font-size: 12.5px;
-  font-style: italic;
-  color: #4b5563;
-  margin-top: 5px;
-}
-
-/* Document Title */
-.tvpl-doc-main-title {
-  text-align: center;
-  margin: 18px 0 20px 0;
-  font-family: "Times New Roman", Times, serif;
-}
-
-.tvpl-doc-main-title .doc-type-label {
-  font-size: 17px;
-  font-weight: bold;
-  color: #111827;
-  text-transform: uppercase;
-}
-
-.tvpl-doc-main-title .doc-title-editable {
-  font-size: 14.5px;
-  font-weight: bold;
-  color: #111827;
-  text-transform: uppercase;
-  line-height: 1.45;
-  margin: 6px auto 0 auto;
-  max-width: 92%;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.tvpl-doc-main-title .doc-title-editable:hover {
-  background: #fef3c7;
-}
-
-/* STAMP WATERMARK BOX (Dấu mộc chứng nhận văn bản chính thức) */
-.tvpl-stamp-container {
-  display: flex;
-  justify-content: flex-end;
-  margin: 10px 0 20px 0;
-}
-
-.tvpl-stamp-box {
-  width: 210px;
-  border: 2px dashed #b71c1c;
-  border-radius: 6px;
-  padding: 6px 10px;
-  color: #b71c1c;
-  text-align: center;
-  font-family: "Times New Roman", Times, serif;
-  transform: rotate(-3deg);
-  background: rgba(254, 242, 242, 0.7);
-  box-shadow: 0 1px 3px rgba(183, 28, 28, 0.15);
-}
-
-.tvpl-stamp-name {
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.tvpl-stamp-status {
-  font-size: 10.5px;
-  font-weight: bold;
-  color: #047857;
-  margin-top: 2px;
-}
-
-.tvpl-stamp-date {
-  font-size: 9.5px;
-  font-style: italic;
-  margin-top: 1px;
-}
-
-/* Continuous Story Stream: Styled as official legal text */
-.tvpl-story-stream {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 380px;
-}
-
-.tvpl-clause-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 3px;
-  border-left: 3px solid transparent;
-  transition: all 0.15s;
-  cursor: pointer;
-}
-
-.tvpl-clause-item:hover {
-  background-color: #f9fafb;
-}
-
-.tvpl-clause-item.active-clause {
-  background-color: #fffbeb;
-  border-left-color: #f39c12;
-  box-shadow: 0 1px 4px rgba(243, 156, 18, 0.15);
-}
-
-.tvpl-clause-num {
-  font-family: "Times New Roman", Times, serif;
-  font-size: 13.5px;
-  font-weight: bold;
-  color: #111827;
-  flex-shrink: 0;
-  min-width: 60px;
-  margin-top: 1px;
-}
-
-.tvpl-clause-text {
-  flex: 1;
-  font-family: var(--story-font-family, "Times New Roman"), Times, serif;
-  font-size: var(--story-font-size, 13pt);
-  line-height: var(--story-line-height, 1.8);
-  letter-spacing: var(--story-letter-spacing, 0.1px);
-  color: #1f2937;
-  text-align: justify;
-  user-select: text;
-}
-
-/* CỘT PHẢI: LOGIN BOX, SOCIAL BUTTONS & ACTION BUTTONS */
-.tvpl-col-right-sidebar {
-  width: 210px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex-shrink: 0;
-  overflow-y: auto;
-}
-
-/* Login Box (Đăng nhập) */
-.tvpl-login-card {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 3px;
-  padding: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.tvpl-login-header {
-  font-size: 11.5px;
-  font-weight: bold;
-  color: #e65100;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.tvpl-login-input {
-  width: 100%;
-  box-sizing: border-box;
-  height: 24px;
-  border: 1px solid #cbd5e1;
-  border-radius: 2px;
-  padding: 0 6px;
-  font-size: 11px;
-  margin-bottom: 6px;
-  outline: none;
-}
-
-.tvpl-login-submit-btn {
-  width: 100%;
-  height: 24px;
-  background: linear-gradient(180deg, #ff9800 0%, #f57c00 100%);
-  border: 1px solid #e65100;
-  border-radius: 2px;
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.tvpl-social-login-row {
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.tvpl-social-btn {
-  flex: 1;
-  height: 22px;
-  border: 1px solid #d1d5db;
-  border-radius: 2px;
-  background: #f9fafb;
-  font-size: 10px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  cursor: pointer;
-}
-
-/* Quick Tools Grid (Lưu trữ, Ghi chú, Ý kiến...) */
-.tvpl-tools-grid {
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 3px;
-  padding: 8px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  text-align: center;
-}
-
-.tvpl-tool-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  font-size: 10px;
-  color: #4b5563;
-  cursor: pointer;
-}
-
-.tvpl-tool-item:hover {
-  color: #e65100;
-}
-
-.tvpl-tool-icon {
-  font-size: 16px;
-}
-
-/* Yellow Action Buttons (Theo dõi hiệu lực VB, Văn bản song ngữ) */
-.tvpl-action-banner-btn {
-  width: 100%;
-  height: 28px;
-  background: linear-gradient(180deg, #fef08a 0%, #fde047 100%);
-  border: 1px solid #eab308;
-  border-radius: 3px;
-  color: #713f12;
-  font-weight: bold;
-  font-size: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.tvpl-action-banner-btn:hover {
-  background: #fde047;
-}
-
-/* Ad Banner Card (Legal AI Recruitment) */
-.tvpl-ad-card {
-  background: linear-gradient(180deg, #4f46e5 0%, #3730a3 100%);
-  border-radius: 4px;
-  padding: 12px 10px;
-  color: #ffffff;
-  text-align: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-.tvpl-ad-title {
-  font-size: 10px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #c7d2fe;
-}
-
-.tvpl-ad-role {
-  font-size: 12px;
-  font-weight: bold;
-  margin: 4px 0;
-  line-height: 1.3;
-}
-
-.tvpl-ad-salary {
-  font-size: 14px;
-  font-weight: 800;
-  color: #fde047;
-  margin: 6px 0;
-}
-
-.tvpl-ad-cta-btn {
-  background: #ffffff;
-  color: #3730a3;
-  border: none;
-  border-radius: 12px;
-  padding: 3px 14px;
-  font-size: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 6px;
-}
-
-/* 5. BOTTOM STATUS BAR */
-.tvpl-status-bar {
-  height: 24px;
-  background: #263238;
-  color: #90a4ae;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  font-size: 10.5px;
-  flex-shrink: 0;
-  border-top: 1px solid #37474f;
-}
-
-/* BOSS MODE VIEW (OFFICIAL DECREE TEXT) */
-.tvpl-boss-view {
-  width: 100%;
-  background: #ffffff;
-  padding: 10px 0;
-  font-family: "Times New Roman", Times, serif;
-}
-
-.tvpl-boss-view h2 {
-  font-size: 16px;
-  font-weight: bold;
-  color: #111827;
-  text-align: center;
-  text-transform: uppercase;
-  margin: 14px 0 18px 0;
+  margin-top: 3px;
 }
 
 .tvpl-boss-article {
-  margin-bottom: 16px;
-  font-size: 13.5px;
-  line-height: 1.8;
-  color: #1f2937;
-  text-align: justify;
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
-/* Floating Sticky Support Tab (as in real thuvienphapluat.vn) */
-.tvpl-sticky-help-tab {
-  position: fixed;
-  right: 24px;
-  bottom: 0;
-  background: #ff9800;
-  color: #ffffff;
+/* ---------------- Authentic Portal Footer ---------------- */
+.tvpl-portal-footer {
+  width: 960px;
+  margin: 0 auto;
+  background: #2b3a4a;
+  color: #cbd5e1;
+  padding: 14px 16px;
+  font-size: 11px;
+  box-sizing: border-box;
+  border-top: 2px solid var(--tvpl-primary-red);
+}
+
+body.theme-thuvienphapluat.dark-mode .tvpl-portal-footer {
+  background: #111419;
+  border-top-color: #991b1b;
+}
+
+.tvpl-footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.tvpl-footer-company-name {
   font-weight: bold;
   font-size: 12px;
-  padding: 6px 16px;
-  border-radius: 6px 6px 0 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.tvpl-footer-grid a {
+  color: #93c5fd;
+  text-decoration: none;
+}
+
+.tvpl-footer-grid a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------- Floating Controls & Overlays ---------------- */
+.floating-stealth-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: rgba(183, 28, 28, 0.9);
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 11px;
   cursor: pointer;
-  z-index: 100;
-  font-family: Arial, sans-serif;
-  letter-spacing: 0.2px;
-  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-.tvpl-sticky-help-tab:hover {
-  background: #f57c00;
+.floating-stealth-toggle:hover {
+  background: #b71c1c;
 }
 
+.page-flip-toast {
+  position: fixed;
+  bottom: 55px;
+  right: 20px;
+  background: rgba(30, 41, 59, 0.95);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  z-index: 10000;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive safeguard */
+@media (max-width: 980px) {
+  #tblcontainer,
+  .tvpl-portal-footer {
+    width: 100%;
+  }
+}

@@ -9020,10 +9020,7 @@ function appendPhotoshopBatch(count) {
     const p = document.createElement('div');
     p.className = 'ps-story-paragraph';
     p.id = `ps-story-para-${chunk.globalIndex}`;
-    p.innerHTML = `
-      <span class="ps-chunk-meta">T&nbsp;&nbsp;Editorial_Copy_${String(chunk.globalIndex + 1).padStart(4, '0')} &nbsp;•&nbsp; Artboard ${chunk.page}</span>
-      <div class="ps-chunk-body">${formatChunkText(chunk.text)}</div>
-    `;
+    p.innerHTML = `<div class="ps-chunk-body">${formatChunkText(chunk.text)}</div>`;
     return p;
   });
 }
@@ -9361,14 +9358,7 @@ function appendFigmaBatch(count) {
     const layer = document.createElement('div');
     layer.className = 'figma-layer-item';
     layer.id = `figma-layer-${chunk.globalIndex}`;
-    const layerName = `T Body_Copy_Block_${String(chunk.globalIndex + 1).padStart(4, '0')}`;
-    layer.innerHTML = `
-      <div class="figma-layer-meta">
-        <span class="figma-meta-name">${layerName}</span>
-        <span class="figma-meta-spec">AutoLayout</span>
-      </div>
-      <div class="figma-text-layer">${formatChunkText(chunk.text)}</div>
-    `;
+    layer.innerHTML = `<div class="figma-text-layer">${formatChunkText(chunk.text)}</div>`;
     return layer;
   });
 }
@@ -9407,11 +9397,39 @@ function appendPowerPointBatch(count) {
 function appendTVPLBatch(count) {
   appendSimpleThemeBatch(count, 'tvpl-story-stream', chunk => {
     const item = document.createElement('div');
-    item.className = 'tvpl-clause-item';
+    const isHot = (chunk.globalIndex % 4 === 0);
+    const contentClass = (chunk.globalIndex % 2 === 0) ? 'content-0' : 'content-1';
+    item.className = `${contentClass} tvpl-clause-item`;
     item.id = `tvpl-clause-${chunk.globalIndex}`;
+
+    // Realistic consecutive legal dates
+    const day = Math.max(1, 24 - (chunk.globalIndex % 20));
+    const issueDay = Math.max(1, day - 1);
+    const issueDate = `${String(issueDay).padStart(2, '0')}/10/2026`;
+    const updateDate = `${String(day).padStart(2, '0')}/10/2026`;
+
     item.innerHTML = `
-      <div class="tvpl-clause-num">Điều ${chunk.globalIndex + 1}.</div>
-      <div class="tvpl-clause-text">${formatChunkText(chunk.text)}</div>
+      <div class="left-col">
+        <div class="${isHot ? 'numberHot' : 'number'}">${isHot ? 'HOT' : (chunk.globalIndex + 1)}</div>
+        <div class="nq">
+          <p class="nqTitle">
+            <a href="javascript:void(0)" class="tvpl-law-title-text">${formatChunkText(chunk.text)}</a>
+          </p>
+          <p class="links-bot">
+            <a href="javascript:void(0)">Tiếng Anh</a> |
+            <a href="javascript:void(0)">Văn bản gốc</a> |
+            <a href="javascript:void(0)">Lược đồ</a> |
+            <a href="javascript:void(0)">Liên quan hiệu lực</a> |
+            <a href="javascript:void(0)">Tải về</a>
+          </p>
+        </div>
+      </div>
+      <div class="right-col">
+        <p><span style="color: #000">Ban hành:</span> ${issueDate}</p>
+        <p><span style="color: #000">Hiệu lực:</span> <span style="color: #8C0945">Đã biết</span></p>
+        <p><span style="color: #000">Tình trạng:</span> <span class="text-red">Đã biết</span></p>
+        <p><span style="color: #000">Cập nhật:</span> ${updateDate}</p>
+      </div>
     `;
     return item;
   });
@@ -9818,8 +9836,29 @@ function animateReadingScrollTo(container, targetTop, accumulate = false) {
   if (!container) return;
   if (readingScrollContainer !== container) stopReadingScrollAnimation(container);
 
-  const baseTop = accumulate && readingScrollFrame ? readingScrollTargetTop : container.scrollTop;
-  readingScrollTargetTop = clampReadingScrollTop(container, accumulate ? baseTop + targetTop : targetTop);
+  let baseTop = container.scrollTop;
+  if (accumulate && readingScrollFrame) {
+    const isCurrentlyMovingDown = readingScrollTargetTop > container.scrollTop;
+    const isMovingDownNew = targetTop > 0;
+    if (isCurrentlyMovingDown === isMovingDownNew) {
+      baseTop = readingScrollTargetTop;
+    } else {
+      // User reversed direction: stop runaway momentum immediately!
+      stopReadingScrollAnimation(container);
+      baseTop = container.scrollTop;
+    }
+  }
+
+  // Cap maximum forward accumulation so fast wheeling never overshoots wildly
+  const maxAhead = Math.max(200, container.clientHeight * 0.85);
+  let newTarget = accumulate ? baseTop + targetTop : targetTop;
+  if (newTarget > container.scrollTop + maxAhead) {
+    newTarget = container.scrollTop + maxAhead;
+  } else if (newTarget < container.scrollTop - maxAhead) {
+    newTarget = container.scrollTop - maxAhead;
+  }
+
+  readingScrollTargetTop = clampReadingScrollTop(container, newTarget);
   readingScrollContainer = container;
   if (readingScrollFrame) return;
 
@@ -9829,16 +9868,15 @@ function animateReadingScrollTo(container, targetTop, accumulate = false) {
       return;
     }
     const distance = readingScrollTargetTop - container.scrollTop;
-    // scrollTop is integer-rounded in several Chromium layouts; finish before
-    // easing produces a sub-pixel step that can never advance the container.
     if (Math.abs(distance) <= 1.5) {
       container.scrollTop = readingScrollTargetTop;
       readingScrollFrame = 0;
+      readingScrollContainer = null;
       return;
     }
 
-    // Low-resource mode uses fewer frames but retains the same easing in both directions.
-    const easing = document.documentElement.classList.contains('performance-lite') ? 0.34 : 0.26;
+    // Snappy easing so scrolling finishes crisply without floating
+    const easing = 0.42;
     container.scrollTop += distance * easing;
     readingScrollFrame = requestAnimationFrame(step);
   };
@@ -9853,6 +9891,25 @@ function scrollReadingTargetIntoView(target) {
   }
   const containerRect = container.getBoundingClientRect();
   const targetRect = target.getBoundingClientRect();
+
+  // If the target is ALREADY comfortably visible inside container, do NOT jump/scroll!
+  const topPadding = 30;
+  const bottomPadding = 30;
+  const isComfortablyVisible = (
+    targetRect.top >= containerRect.top + topPadding &&
+    targetRect.bottom <= containerRect.bottom - bottomPadding
+  );
+  if (isComfortablyVisible) {
+    return;
+  }
+
+  // If target is chunk 0 / start of document, align cleanly to top (scrollTop = 0)
+  // so official headers and document titles remain fully visible
+  if (target.dataset?.index === '0' || target.id?.endsWith('-0') || state.currentGlobalIndex === 0) {
+    animateReadingScrollTo(container, 0);
+    return;
+  }
+
   const centeredTop = container.scrollTop
     + (targetRect.top - containerRect.top)
     - ((container.clientHeight - targetRect.height) / 2);
@@ -10083,8 +10140,21 @@ function initContinuousScrollListeners() {
     }
 
     if (!isIndependentScroll) {
+      const cursorInsideActive = activeContainer.contains(e.target);
+      if (cursorInsideActive) {
+        // If user is wheeling UP near top, trigger immediate upward continuous loading
+        if (e.deltaY < 0 && activeContainer.scrollTop <= 150 && state.renderStartIndex > 0 && Date.now() >= suppressScrollSyncUntil) {
+          e.preventDefault();
+          const previousStart = state.renderStartIndex;
+          rerenderWindowPreservingAnchor(activeContainer, previousStart - 1, previousStart);
+          return;
+        }
+        // Inside active container: allow native browser scrolling for 100% natural, responsive physics
+        return;
+      }
+
+      // Cursor is over external chrome (headers, toolbars, sidebars) -> route wheel to active container
       e.preventDefault();
-      // If user is wheeling UP and active container is near or at top, trigger immediate upward continuous loading
       if (e.deltaY < 0 && activeContainer.scrollTop <= 150 && state.renderStartIndex > 0 && Date.now() >= suppressScrollSyncUntil) {
         const previousStart = state.renderStartIndex;
         rerenderWindowPreservingAnchor(activeContainer, previousStart - 1, previousStart);
