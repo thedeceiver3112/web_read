@@ -116,3 +116,15 @@ WHERE event_type = 'theme_view'
   AND theme <> ''
 GROUP BY usage_date, theme
 ORDER BY usage_date DESC, theme_views DESC;
+
+-- Hourly traffic trend by day (Thống kê khung giờ theo từng ngày).
+SELECT
+  DATE(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_date,
+  HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_hour,
+  COUNT(*) AS visits,
+  COUNT(DISTINCT visitor_hash) AS unique_browsers
+FROM analytics_events
+WHERE event_type = 'visit'
+  AND occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
+GROUP BY usage_date, usage_hour
+ORDER BY usage_date DESC, usage_hour ASC;

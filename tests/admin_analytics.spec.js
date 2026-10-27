@@ -34,6 +34,32 @@ const analyticsPayload = {
     { key: 'evening', label: 'Buổi tối', hours: '18:00–24:00', icon: '🌆', startHour: 18, endHour: 23, visits: 6, uniqueVisitors: 4 },
     { key: 'night', label: 'Đêm / Khuya', hours: '00:00–06:00', icon: '🌙', startHour: 0, endHour: 5, visits: 6, uniqueVisitors: 3 },
     { key: 'office', label: 'Giờ làm việc', hours: '08:00–17:00', icon: '💼', startHour: 8, endHour: 16, visits: 24, uniqueVisitors: 11 }
+  ],
+  dailyHourly: [
+    ...Array.from({ length: 24 }, (_, hour) => ({
+      date: '2026-10-14',
+      hour,
+      visits: hour === 14 ? 10 : hour === 8 ? 6 : 1,
+      uniqueVisitors: hour === 14 ? 7 : hour === 8 ? 5 : 1
+    })),
+    ...Array.from({ length: 24 }, (_, hour) => ({
+      date: '2026-10-13',
+      hour,
+      visits: hour === 10 ? 8 : 1,
+      uniqueVisitors: hour === 10 ? 6 : 1
+    }))
+  ],
+  dailyTimeSlots: [
+    { date: '2026-10-14', key: 'morning', visits: 11, uniqueVisitors: 7 },
+    { date: '2026-10-14', key: 'afternoon', visits: 10, uniqueVisitors: 7 },
+    { date: '2026-10-14', key: 'evening', visits: 2, uniqueVisitors: 2 },
+    { date: '2026-10-14', key: 'night', visits: 2, uniqueVisitors: 1 },
+    { date: '2026-10-14', key: 'office', visits: 16, uniqueVisitors: 9 },
+    { date: '2026-10-13', key: 'morning', visits: 8, uniqueVisitors: 6 },
+    { date: '2026-10-13', key: 'afternoon', visits: 5, uniqueVisitors: 3 },
+    { date: '2026-10-13', key: 'evening', visits: 2, uniqueVisitors: 2 },
+    { date: '2026-10-13', key: 'night', visits: 2, uniqueVisitors: 1 },
+    { date: '2026-10-13', key: 'office', visits: 10, uniqueVisitors: 7 }
   ]
 };
 
@@ -128,6 +154,54 @@ test('displays time-of-day slots and highlights hours when clicked', async ({ pa
   await expect(page.locator('#hourly-chart .hour-column').nth(0)).not.toHaveClass(/dimmed/);
 });
 
+test('supports filtering hourly traffic and time slots by specific date', async ({ page }) => {
+  await page.route('**/api/auth/status', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ enabled: true, authenticated: true, user: { email: 'nguyentranhaiphong2@gmail.com', displayName: 'Hai Phong' } })
+  }));
+  await page.route('**/api/admin/analytics?range=30', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify(analyticsPayload)
+  }));
+
+  await page.goto('/admin-analytics.html');
+
+  const hourlyFilter = page.locator('#hourly-date-filter');
+  await expect(hourlyFilter).toBeVisible();
+  await expect(hourlyFilter.locator('option')).toHaveCount(3); // 'all', '2026-10-14', '2026-10-13'
+
+  // Select 2026-10-14 for hourly
+  await hourlyFilter.selectOption('2026-10-14');
+
+  // Peak hour should update to 2026-10-14 peak (hour 14 has 10 visits)
+  await expect(page.locator('#peak-hour')).toContainText('14:00–15:00');
+  await expect(page.locator('#peak-hour')).toContainText('2026-10-14');
+
+  // Time slots grid should reflect 2026-10-14 (morning has 11 visits)
+  const morningCard = page.locator('#time-slots-grid .time-slot-card').filter({ hasText: 'Buổi sáng' });
+  await expect(morningCard.locator('.time-slot-visits')).toHaveText('11 lượt');
+
+  // Click date link in daily table for 2026-10-13
+  const dateBtn13 = page.locator('#daily-table .date-filter-button', { hasText: '2026-10-13' });
+  await dateBtn13.click();
+
+  // Hourly filter should now be 2026-10-13
+  await expect(hourlyFilter).toHaveValue('2026-10-13');
+  await expect(page.locator('#peak-hour')).toContainText('10:00–11:00');
+  await expect(page.locator('#peak-hour')).toContainText('2026-10-13');
+
+  // Theme filter should also be synced to 2026-10-13
+  await expect(page.locator('#theme-date-filter')).toHaveValue('2026-10-13');
+
+  // Capture screenshot of daily filtered state
+  await page.screenshot({
+    path: 'C:/Users/j05468/.gemini/antigravity/brain/88e0db82-1f24-44a6-b0e4-51188e29e49a/admin_analytics_filtered_day.png',
+    fullPage: true
+  });
+});
+
 test('displays daily theme breakdown and supports filtering themes by date', async ({ page }) => {
   await page.route('**/api/auth/status', route => route.fulfill({
     status: 200,
@@ -168,11 +242,4 @@ test('displays daily theme breakdown and supports filtering themes by date', asy
   await expect(filter).toHaveValue('2026-10-13');
   await expect(themeTable.getByText('Outlook', { exact: true })).toBeVisible();
   await expect(themeTable.getByRole('cell', { name: '10', exact: true })).toBeVisible();
-
-  // Reset filter to all to take full page screenshot
-  await filter.selectOption('all');
-  await page.screenshot({
-    path: 'C:/Users/j05468/.gemini/antigravity/brain/88e0db82-1f24-44a6-b0e4-51188e29e49a/admin_analytics_dashboard.png',
-    fullPage: true
-  });
 });

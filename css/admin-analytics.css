@@ -357,7 +357,7 @@ h2 { font-size: 16px; }
 .legend-dot.slot-peak { background: var(--green); }
 
 /* Theme section & filter */
-.theme-controls {
+.theme-controls, .hourly-filter-row {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -436,6 +436,23 @@ tbody tr:last-child td { border-bottom: 0; }
 .daily-theme-pill strong {
   font-weight: 700;
   color: #0f172a;
+}
+
+.date-filter-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--blue);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.date-filter-button:hover {
+  color: #1d4ed8;
 }
 
 .text-muted {

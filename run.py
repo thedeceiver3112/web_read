@@ -224,6 +224,25 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     {"key": "night", "label": "Đêm / Khuya", "hours": "00:00–06:00", "icon": "🌙", "startHour": 0, "endHour": 5, "visits": 6, "uniqueVisitors": 3},
                     {"key": "office", "label": "Giờ làm việc", "hours": "08:00–17:00", "icon": "💼", "startHour": 8, "endHour": 16, "visits": 24, "uniqueVisitors": 11},
                 ],
+                "dailyHourly": [
+                    {"date": "2026-10-14", "hour": hour, "visits": 12 if hour == 9 else (hour * 2) % 6 + 1, "uniqueVisitors": 8 if hour == 9 else (hour % 3) + 1}
+                    for hour in range(24)
+                ] + [
+                    {"date": "2026-10-13", "hour": hour, "visits": 9 if hour == 14 else (hour * 3) % 5 + 1, "uniqueVisitors": 6 if hour == 14 else (hour % 3) + 1}
+                    for hour in range(24)
+                ],
+                "dailyTimeSlots": [
+                    {"date": "2026-10-14", "key": "morning", "visits": 11, "uniqueVisitors": 7},
+                    {"date": "2026-10-14", "key": "afternoon", "visits": 8, "uniqueVisitors": 5},
+                    {"date": "2026-10-14", "key": "evening", "visits": 4, "uniqueVisitors": 2},
+                    {"date": "2026-10-14", "key": "night", "visits": 2, "uniqueVisitors": 1},
+                    {"date": "2026-10-14", "key": "office", "visits": 15, "uniqueVisitors": 8},
+                    {"date": "2026-10-13", "key": "morning", "visits": 5, "uniqueVisitors": 3},
+                    {"date": "2026-10-13", "key": "afternoon", "visits": 6, "uniqueVisitors": 4},
+                    {"date": "2026-10-13", "key": "evening", "visits": 2, "uniqueVisitors": 2},
+                    {"date": "2026-10-13", "key": "night", "visits": 4, "uniqueVisitors": 2},
+                    {"date": "2026-10-13", "key": "office", "visits": 9, "uniqueVisitors": 5},
+                ],
             })
 
         if path == '/api/sync/document' and self.command == 'GET':

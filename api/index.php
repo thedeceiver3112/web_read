@@ -1009,6 +1009,63 @@ function analytics_summary(array $config, int $days): array
         ],
     ];
 
+    $stmt = $pdo->prepare(
+        "SELECT DATE(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_date, "
+        . "HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_hour, "
+        . "COUNT(*) AS visits, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='visit' "
+        . "GROUP BY usage_date, usage_hour ORDER BY usage_date DESC, usage_hour ASC"
+    );
+    $stmt->execute([$startAt]);
+    $dailyHourly = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $dailyHourly[] = [
+            'date' => (string)$row['usage_date'],
+            'hour' => (int)$row['usage_hour'],
+            'visits' => (int)$row['visits'],
+            'uniqueVisitors' => (int)$row['unique_visitors'],
+        ];
+    }
+
+    $stmt = $pdo->prepare(
+        "SELECT DATE(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_date, "
+        . "CASE "
+        . "  WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 0 AND 5 THEN 'night' "
+        . "  WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 6 AND 11 THEN 'morning' "
+        . "  WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 12 AND 17 THEN 'afternoon' "
+        . "  ELSE 'evening' END AS slot_key, "
+        . "COUNT(*) AS visits, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='visit' "
+        . "GROUP BY usage_date, slot_key"
+    );
+    $stmt->execute([$startAt]);
+    $dailyTimeSlots = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $dailyTimeSlots[] = [
+            'date' => (string)$row['usage_date'],
+            'key' => (string)$row['slot_key'],
+            'visits' => (int)$row['visits'],
+            'uniqueVisitors' => (int)$row['unique_visitors'],
+        ];
+    }
+
+    $stmtOffice = $pdo->prepare(
+        "SELECT DATE(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) AS usage_date, "
+        . "COUNT(*) AS visits, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='visit' "
+        . "AND HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 8 AND 16 "
+        . "GROUP BY usage_date"
+    );
+    $stmtOffice->execute([$startAt]);
+    foreach ($stmtOffice->fetchAll() as $row) {
+        $dailyTimeSlots[] = [
+            'date' => (string)$row['usage_date'],
+            'key' => 'office',
+            'visits' => (int)$row['visits'],
+            'uniqueVisitors' => (int)$row['unique_visitors'],
+        ];
+    }
+
     return [
         'ok' => true,
         'rangeDays' => $days,
@@ -1027,6 +1084,8 @@ function analytics_summary(array $config, int $days): array
         'themes' => $themes,
         'dailyThemes' => $dailyThemes,
         'timeSlots' => $timeSlots,
+        'dailyHourly' => $dailyHourly,
+        'dailyTimeSlots' => $dailyTimeSlots,
     ];
 }
 

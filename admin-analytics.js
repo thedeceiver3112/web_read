@@ -5,6 +5,7 @@ const state = {
   data: null,
   user: null,
   selectedThemeDate: 'all',
+  selectedHourlyDate: 'all',
   activeSlotKey: null
 };
 
@@ -167,7 +168,7 @@ function renderTimeSlots(hourly, timeSlotsFromApi) {
   });
 }
 
-function renderHourly(hourly) {
+function renderHourly(hourly, customPeakText = null) {
   const chart = byId('hourly-chart');
   const peakLabel = byId('peak-hour');
   chart.replaceChildren();
@@ -183,9 +184,14 @@ function renderHourly(hourly) {
 
   const maxVisits = Math.max(1, ...values.map(item => item.visits));
   const peak = values.reduce((best, item) => item.visits > best.visits ? item : best, values[0]);
-  peakLabel.textContent = peak.visits
-    ? `Đông nhất: ${String(peak.hour).padStart(2, '0')}:00–${String((peak.hour + 1) % 24).padStart(2, '0')}:00 · ${numberFormat.format(peak.visits)} lượt`
-    : 'Chưa có dữ liệu';
+
+  if (customPeakText !== null) {
+    peakLabel.textContent = customPeakText;
+  } else {
+    peakLabel.textContent = peak.visits
+      ? `Đông nhất: ${String(peak.hour).padStart(2, '0')}:00–${String((peak.hour + 1) % 24).padStart(2, '0')}:00 · ${numberFormat.format(peak.visits)} lượt`
+      : 'Chưa có dữ liệu';
+  }
 
   const activeDef = state.activeSlotKey ? defaultSlots.find(s => s.key === state.activeSlotKey) : null;
 
@@ -222,6 +228,85 @@ function renderHourly(hourly) {
     column.append(value, bar, label);
     chart.append(column);
   });
+}
+
+function renderHourlyView() {
+  if (!state.data) return;
+
+  if (state.selectedHourlyDate === 'all') {
+    renderTimeSlots(state.data.hourly || [], state.data.timeSlots || []);
+    renderHourly(state.data.hourly || []);
+  } else {
+    const date = state.selectedHourlyDate;
+    const dayHourlyMap = new Map();
+    (state.data.dailyHourly || []).filter(h => h.date === date).forEach(h => {
+      dayHourlyMap.set(Number(h.hour), h);
+    });
+
+    const hourlyData = Array.from({ length: 24 }, (_, hour) => {
+      const found = dayHourlyMap.get(hour) || {};
+      return {
+        hour,
+        visits: Number(found.visits) || 0,
+        uniqueVisitors: Number(found.uniqueVisitors) || 0
+      };
+    });
+
+    const timeSlotsData = (state.data.dailyTimeSlots || []).filter(s => s.date === date);
+
+    const values = hourlyData;
+    const peak = values.reduce((best, item) => item.visits > best.visits ? item : best, values[0]);
+    const peakText = peak && peak.visits
+      ? `Đông nhất ngày ${date}: ${String(peak.hour).padStart(2, '0')}:00–${String((peak.hour + 1) % 24).padStart(2, '0')}:00 · ${numberFormat.format(peak.visits)} lượt`
+      : `Ngày ${date}: Chưa có dữ liệu truy cập`;
+
+    renderTimeSlots(hourlyData, timeSlotsData);
+    renderHourly(hourlyData, peakText);
+  }
+}
+
+function populateHourlyDateFilter(daily, dailyHourly) {
+  const select = byId('hourly-date-filter');
+  if (!select) return;
+
+  const currentVal = state.selectedHourlyDate;
+  select.replaceChildren();
+
+  const allOption = document.createElement('option');
+  allOption.value = 'all';
+  allOption.textContent = `Toàn bộ kỳ (${daily.length} ngày)`;
+  select.append(allOption);
+
+  // Group visits per date from daily or dailyHourly
+  const dateVisits = new Map();
+  (daily || []).forEach(d => {
+    dateVisits.set(d.date, Number(d.visits) || 0);
+  });
+  (dailyHourly || []).forEach(dh => {
+    if (!dateVisits.has(dh.date)) {
+      dateVisits.set(dh.date, (dateVisits.get(dh.date) || 0) + Number(dh.visits || 0));
+    }
+  });
+
+  const dates = Array.from(new Set([
+    ...daily.map(d => d.date),
+    ...(dailyHourly || []).map(dh => dh.date)
+  ])).sort().reverse();
+
+  dates.forEach(date => {
+    const visits = dateVisits.get(date) || 0;
+    const opt = document.createElement('option');
+    opt.value = date;
+    opt.textContent = `${date} (${numberFormat.format(visits)} lượt)`;
+    select.append(opt);
+  });
+
+  if (dates.includes(currentVal) || currentVal === 'all') {
+    select.value = currentVal;
+  } else {
+    state.selectedHourlyDate = 'all';
+    select.value = 'all';
+  }
 }
 
 function renderThemes(themes, filterDate = null) {
@@ -300,7 +385,6 @@ function populateThemeDateFilter(daily, dailyThemes) {
     dateCounts.set(dt.date, (dateCounts.get(dt.date) || 0) + Number(dt.views));
   });
 
-  // Unique sorted dates descending
   const dates = Array.from(new Set([
     ...daily.map(d => d.date),
     ...(dailyThemes || []).map(dt => dt.date)
@@ -335,7 +419,31 @@ function renderDailyTable(daily, dailyThemes) {
 
   [...daily].reverse().forEach(item => {
     const row = body.insertRow();
-    row.insertCell().textContent = item.date;
+
+    // Date cell with link to filter both sections
+    const dateCell = row.insertCell();
+    const dateBtn = document.createElement('button');
+    dateBtn.type = 'button';
+    dateBtn.className = 'date-filter-button';
+    dateBtn.textContent = item.date;
+    dateBtn.title = `Nhấp để lọc khung giờ và theme cho ngày ${item.date}`;
+    dateBtn.addEventListener('click', () => {
+      // Update hourly
+      state.selectedHourlyDate = item.date;
+      const hourlySelect = byId('hourly-date-filter');
+      if (hourlySelect) hourlySelect.value = item.date;
+      renderHourlyView();
+
+      // Update theme
+      state.selectedThemeDate = item.date;
+      const themeSelect = byId('theme-date-filter');
+      if (themeSelect) themeSelect.value = item.date;
+      renderThemesFiltered();
+
+      byId('hourly-chart')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    dateCell.append(dateBtn);
+
     row.insertCell().textContent = numberFormat.format(item.visits);
     row.insertCell().textContent = numberFormat.format(item.uniqueVisitors);
     row.insertCell().textContent = numberFormat.format(item.sessions);
@@ -362,6 +470,13 @@ function renderDailyTable(daily, dailyThemes) {
           const select = byId('theme-date-filter');
           if (select) select.value = item.date;
           renderThemesFiltered();
+
+          // Also update hourly to match
+          state.selectedHourlyDate = item.date;
+          const hourlySelect = byId('hourly-date-filter');
+          if (hourlySelect) hourlySelect.value = item.date;
+          renderHourlyView();
+
           const themeSection = byId('theme-table');
           if (themeSection) {
             themeSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -385,8 +500,9 @@ function renderDashboard(data) {
 
   renderSummary(data.summary || {});
   renderChart(data.daily || []);
-  renderTimeSlots(data.hourly || [], data.timeSlots || []);
-  renderHourly(data.hourly || []);
+
+  populateHourlyDateFilter(data.daily || [], data.dailyHourly || []);
+  renderHourlyView();
 
   populateThemeDateFilter(data.daily || [], data.dailyThemes || []);
   renderThemesFiltered();
@@ -437,6 +553,16 @@ function exportCsv() {
   rows.push(['Khung giờ chi tiết (UTC+7)', 'Lượt vào', 'Người dùng duy nhất']);
   (state.data.hourly || []).forEach(item => rows.push([`${String(item.hour).padStart(2, '0')}:00`, item.visits, item.uniqueVisitors]));
   rows.push([]);
+
+  // Hourly by day
+  if (state.data.dailyHourly && state.data.dailyHourly.length) {
+    rows.push(['Khung giờ theo từng ngày (UTC+7)']);
+    rows.push(['Ngày', 'Khung giờ', 'Lượt vào', 'Người dùng duy nhất']);
+    state.data.dailyHourly.forEach(item => {
+      rows.push([item.date, `${String(item.hour).padStart(2, '0')}:00`, item.visits, item.uniqueVisitors]);
+    });
+    rows.push([]);
+  }
 
   // Theme usage overall
   rows.push(['Theme (Toàn bộ kỳ)', 'Lượt mở', 'Người dùng']);
@@ -498,6 +624,14 @@ if (themeDateFilter) {
   themeDateFilter.addEventListener('change', function () {
     state.selectedThemeDate = this.value;
     renderThemesFiltered();
+  });
+}
+
+const hourlyDateFilter = byId('hourly-date-filter');
+if (hourlyDateFilter) {
+  hourlyDateFilter.addEventListener('change', function () {
+    state.selectedHourlyDate = this.value;
+    renderHourlyView();
   });
 }
 
