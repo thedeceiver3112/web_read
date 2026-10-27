@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>Thống kê Stealth Reader</title>
-  <link rel="stylesheet" href="/css/admin-analytics.css?v=20261027-1">
+  <link rel="stylesheet" href="/css/admin-analytics.css?v=20261027-2">
 </head>
 <body>
   <header class="topbar">
@@ -64,13 +64,27 @@
             <span class="timezone-label">Giờ Việt Nam UTC+7</span>
           </div>
         </div>
+        <div id="time-slots-grid" class="time-slots-grid" aria-label="Các khoảng giờ trong ngày"></div>
         <div id="hourly-chart" class="hourly-chart" aria-label="Biểu đồ người dùng theo 24 khung giờ"></div>
-        <p class="chart-note">Mỗi lượt được ghi nhận khi người dùng bắt đầu một phiên truy cập mới.</p>
+        <div class="chart-legend" id="hourly-legend">
+          <span class="legend-item"><span class="legend-dot slot-night"></span>Đêm (00h–06h)</span>
+          <span class="legend-item"><span class="legend-dot slot-morning"></span>Sáng (06h–12h)</span>
+          <span class="legend-item"><span class="legend-dot slot-afternoon"></span>Chiều (12h–18h)</span>
+          <span class="legend-item"><span class="legend-dot slot-evening"></span>Tối (18h–24h)</span>
+          <span class="legend-item"><span class="legend-dot slot-peak"></span>Cao điểm</span>
+        </div>
+        <p class="chart-note">Mỗi lượt được ghi nhận khi người dùng bắt đầu một phiên truy cập mới. Nhấp vào thẻ khoảng giờ để làm nổi bật trên biểu đồ.</p>
       </section>
 
       <section class="data-section">
         <div class="section-heading">
           <div><p class="eyebrow">GIAO DIỆN</p><h2>Theme được sử dụng</h2></div>
+          <div class="theme-controls">
+            <label for="theme-date-filter" class="theme-filter-label">Xem theo ngày:</label>
+            <select id="theme-date-filter" class="theme-select">
+              <option value="all">Toàn bộ khoảng thời gian</option>
+            </select>
+          </div>
         </div>
         <div class="table-wrap">
           <table>
@@ -86,7 +100,7 @@
         </div>
         <div class="table-wrap daily-table-wrap">
           <table>
-            <thead><tr><th>Ngày</th><th>Lượt truy cập</th><th>Người dùng</th><th>Phiên</th><th>Đã đăng nhập</th></tr></thead>
+            <thead><tr><th>Ngày</th><th>Lượt truy cập</th><th>Người dùng</th><th>Phiên</th><th>Đã đăng nhập</th><th>Theme được sử dụng</th></tr></thead>
             <tbody id="daily-table"></tbody>
           </table>
         </div>
@@ -94,6 +108,6 @@
     </div>
   </main>
 
-  <script src="/admin-analytics.js?v=20261027-1" defer></script>
+  <script src="/admin-analytics.js?v=20261027-2" defer></script>
 </body>
 </html>

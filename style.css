@@ -7014,6 +7014,26 @@ body.theme-autocad { font-family: "Segoe UI", Arial, sans-serif; background: #20
   box-shadow: 0 2px 6px rgba(16, 185, 129, 0.15);
 }
 
+.nav-msg-badge {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  line-height: 1.2;
+  margin-left: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseBadge 2s infinite;
+}
+
+@keyframes pulseBadge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3); }
+}
+
 /* =========================================================
    Portal Simple & Modern Footer (Full Width & Edge-to-Edge)
    ========================================================= */

@@ -210,6 +210,20 @@ class StealthHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
                     {"theme": "vscode", "views": 16, "uniqueVisitors": 8},
                     {"theme": "outlook", "views": 10, "uniqueVisitors": 6},
                 ],
+                "dailyThemes": [
+                    {"date": "2026-10-14", "theme": "googlesheets", "views": 18, "uniqueVisitors": 8},
+                    {"date": "2026-10-14", "theme": "vscode", "views": 7, "uniqueVisitors": 4},
+                    {"date": "2026-10-13", "theme": "googlesheets", "views": 12, "uniqueVisitors": 4},
+                    {"date": "2026-10-13", "theme": "vscode", "views": 9, "uniqueVisitors": 4},
+                    {"date": "2026-10-13", "theme": "outlook", "views": 10, "uniqueVisitors": 6},
+                ],
+                "timeSlots": [
+                    {"key": "morning", "label": "Buổi sáng", "hours": "06:00–12:00", "icon": "🌅", "startHour": 6, "endHour": 11, "visits": 16, "uniqueVisitors": 9},
+                    {"key": "afternoon", "label": "Buổi chiều", "hours": "12:00–18:00", "icon": "☀️", "startHour": 12, "endHour": 17, "visits": 14, "uniqueVisitors": 8},
+                    {"key": "evening", "label": "Buổi tối", "hours": "18:00–24:00", "icon": "🌆", "startHour": 18, "endHour": 23, "visits": 6, "uniqueVisitors": 4},
+                    {"key": "night", "label": "Đêm / Khuya", "hours": "00:00–06:00", "icon": "🌙", "startHour": 0, "endHour": 5, "visits": 6, "uniqueVisitors": 3},
+                    {"key": "office", "label": "Giờ làm việc", "hours": "08:00–17:00", "icon": "💼", "startHour": 8, "endHour": 16, "visits": 24, "uniqueVisitors": 11},
+                ],
             })
 
         if path == '/api/sync/document' and self.command == 'GET':

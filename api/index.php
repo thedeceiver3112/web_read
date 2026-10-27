@@ -915,6 +915,100 @@ function analytics_summary(array $config, int $days): array
         ];
     }
 
+    $stmt = $pdo->prepare(
+        "SELECT DATE(occurred_at) AS usage_date, theme, COUNT(*) AS views, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='theme_view' AND theme<>'' "
+        . "GROUP BY usage_date, theme ORDER BY usage_date DESC, views DESC, theme ASC"
+    );
+    $stmt->execute([$startAt]);
+    $dailyThemes = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $dailyThemes[] = [
+            'date' => (string)$row['usage_date'],
+            'theme' => (string)$row['theme'],
+            'views' => (int)$row['views'],
+            'uniqueVisitors' => (int)$row['unique_visitors'],
+        ];
+    }
+
+    $stmt = $pdo->prepare(
+        "SELECT "
+        . "CASE "
+        . "  WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 0 AND 5 THEN 'night' "
+        . "  WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 6 AND 11 THEN 'morning' "
+        . "  WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 12 AND 17 THEN 'afternoon' "
+        . "  ELSE 'evening' END AS slot_key, "
+        . "COUNT(*) AS visits, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='visit' "
+        . "GROUP BY slot_key"
+    );
+    $stmt->execute([$startAt]);
+    $slotMap = [];
+    foreach ($stmt->fetchAll() as $row) {
+        $slotMap[(string)$row['slot_key']] = $row;
+    }
+
+    $stmtOffice = $pdo->prepare(
+        "SELECT COUNT(*) AS visits, COUNT(DISTINCT visitor_hash) AS unique_visitors "
+        . "FROM analytics_events WHERE occurred_at>=? AND event_type='visit' "
+        . "AND HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 8 AND 16"
+    );
+    $stmtOffice->execute([$startAt]);
+    $officeRow = $stmtOffice->fetch() ?: [];
+
+    $timeSlots = [
+        [
+            'key' => 'morning',
+            'label' => 'Buổi sáng',
+            'hours' => '06:00–12:00',
+            'icon' => '🌅',
+            'startHour' => 6,
+            'endHour' => 11,
+            'visits' => (int)($slotMap['morning']['visits'] ?? 0),
+            'uniqueVisitors' => (int)($slotMap['morning']['unique_visitors'] ?? 0),
+        ],
+        [
+            'key' => 'afternoon',
+            'label' => 'Buổi chiều',
+            'hours' => '12:00–18:00',
+            'icon' => '☀️',
+            'startHour' => 12,
+            'endHour' => 17,
+            'visits' => (int)($slotMap['afternoon']['visits'] ?? 0),
+            'uniqueVisitors' => (int)($slotMap['afternoon']['unique_visitors'] ?? 0),
+        ],
+        [
+            'key' => 'evening',
+            'label' => 'Buổi tối',
+            'hours' => '18:00–24:00',
+            'icon' => '🌆',
+            'startHour' => 18,
+            'endHour' => 23,
+            'visits' => (int)($slotMap['evening']['visits'] ?? 0),
+            'uniqueVisitors' => (int)($slotMap['evening']['unique_visitors'] ?? 0),
+        ],
+        [
+            'key' => 'night',
+            'label' => 'Đêm / Khuya',
+            'hours' => '00:00–06:00',
+            'icon' => '🌙',
+            'startHour' => 0,
+            'endHour' => 5,
+            'visits' => (int)($slotMap['night']['visits'] ?? 0),
+            'uniqueVisitors' => (int)($slotMap['night']['unique_visitors'] ?? 0),
+        ],
+        [
+            'key' => 'office',
+            'label' => 'Giờ làm việc',
+            'hours' => '08:00–17:00',
+            'icon' => '💼',
+            'startHour' => 8,
+            'endHour' => 16,
+            'visits' => (int)($officeRow['visits'] ?? 0),
+            'uniqueVisitors' => (int)($officeRow['unique_visitors'] ?? 0),
+        ],
+    ];
+
     return [
         'ok' => true,
         'rangeDays' => $days,
@@ -931,6 +1025,8 @@ function analytics_summary(array $config, int $days): array
         'daily' => $daily,
         'hourly' => $hourly,
         'themes' => $themes,
+        'dailyThemes' => $dailyThemes,
+        'timeSlots' => $timeSlots,
     ];
 }
 

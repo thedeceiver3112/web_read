@@ -742,7 +742,9 @@ function renderHybridAuthButton() {
       return;
     }
     button.classList.remove('needs-setup');
-    const name = hybridSyncState.user?.displayName || hybridSyncState.user?.email || 'Tài khoản';
+    let rawName = hybridSyncState.user?.displayName || hybridSyncState.user?.email || 'Tài khoản';
+    let name = rawName;
+    try { name = decodeURIComponent(rawName); } catch(e) {}
     const initial = name.trim().charAt(0).toUpperCase() || 'U';
     button.innerHTML = `
       <span class="hybrid-user-avatar">${escapeHtml(initial)}</span>
@@ -771,7 +773,9 @@ function openHybridAccountDropdown(button) {
     document.body.appendChild(dropdown);
   }
 
-  const name = hybridSyncState.user?.displayName || 'Tài khoản';
+  let rawName = hybridSyncState.user?.displayName || 'Tài khoản';
+  let name = rawName;
+  try { name = decodeURIComponent(rawName); } catch(e) {}
   const email = hybridSyncState.user?.email || '';
   const initial = (name || email).trim().charAt(0).toUpperCase() || 'U';
 
@@ -1554,6 +1558,43 @@ function getProgressSheetUrl() {
 function openProgressSheet() {
   const url = getProgressSheetUrl();
   window.open(url, '_blank', 'noopener,noreferrer');
+  const badge = document.getElementById('nav-sheet-badge');
+  if (badge) badge.style.display = 'none';
+  if (window._latestSheetRowCount) {
+    localStorage.setItem('stealth_last_seen_sheet_rows', String(window._latestSheetRowCount));
+  }
+  showPageFlipToast('💡 Mẹo: Nhấp chuột phải vào ô trên Google Sheet → Chọn "Thêm nhận xét" (Ctrl+Alt+M) để chat trực tiếp với Admin!');
+}
+
+async function checkGoogleSheetUpdates() {
+  try {
+    const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/126sjvPWcDbwGrtrObHFdcCZ1KzQ7cfeaTozgfyESHOA/export?format=csv&gid=1898748271';
+    const resp = await fetch(sheetCsvUrl, { cache: 'no-store' });
+    if (!resp.ok) return;
+    const text = await resp.text();
+    const rows = text.split('\n').filter(r => r.trim().length > 0);
+    const rowCount = rows.length;
+    window._latestSheetRowCount = rowCount;
+
+    const lastSeenStr = localStorage.getItem('stealth_last_seen_sheet_rows');
+    const badge = document.getElementById('nav-sheet-badge');
+    if (!lastSeenStr) {
+      localStorage.setItem('stealth_last_seen_sheet_rows', String(rowCount));
+    } else {
+      const lastSeen = parseInt(lastSeenStr, 10) || 0;
+      if (rowCount > lastSeen && badge) {
+        const diff = rowCount - lastSeen;
+        badge.textContent = diff > 0 ? `+${diff}` : 'Mới';
+        badge.style.display = 'inline-flex';
+        const sheetBtn = document.getElementById('btn-open-progress-nav');
+        if (sheetBtn) {
+          sheetBtn.title = `Có ${diff} cập nhật / phản hồi mới từ Admin trên Google Sheet! Nhấp để xem và chat.`;
+        }
+      }
+    }
+  } catch (e) {
+    // Silent fail
+  }
 }
 
 function configProgressSheetUrl() {
@@ -1584,6 +1625,11 @@ function initFeedbackListeners() {
 
   const configSheetBtn = document.getElementById('btn-config-progress-url');
   if (configSheetBtn) configSheetBtn.addEventListener('click', configProgressSheetUrl);
+
+  checkGoogleSheetUpdates();
+  if (!window._sheetPollInterval) {
+    window._sheetPollInterval = setInterval(checkGoogleSheetUpdates, 30000);
+  }
 }
 
 function initReaderToolsUI() {

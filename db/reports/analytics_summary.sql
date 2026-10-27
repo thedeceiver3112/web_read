@@ -34,7 +34,51 @@ WHERE event_type = 'visit'
 GROUP BY usage_hour
 ORDER BY usage_hour;
 
--- Theme popularity. Each theme counts at most once per browser tab session.
+-- Visits by time slots of day (Vietnam UTC+7): Đêm, Sáng, Chiều, Tối.
+SELECT
+  CASE
+    WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 0 AND 5 THEN '1. Đêm (00:00 - 05:59)'
+    WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 6 AND 11 THEN '2. Buổi sáng (06:00 - 11:59)'
+    WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 12 AND 17 THEN '3. Buổi chiều (12:00 - 17:59)'
+    ELSE '4. Buổi tối (18:00 - 23:59)'
+  END AS time_slot,
+  COUNT(*) AS visits,
+  COUNT(DISTINCT visitor_hash) AS unique_browsers,
+  ROUND(COUNT(*) * 100.0 / NULLIF(totals.total_visits, 0), 1) AS percent_visits
+FROM analytics_events
+CROSS JOIN (
+  SELECT COUNT(*) AS total_visits
+  FROM analytics_events
+  WHERE event_type = 'visit'
+    AND occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
+) AS totals
+WHERE event_type = 'visit'
+  AND occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
+GROUP BY time_slot, totals.total_visits
+ORDER BY time_slot;
+
+-- Visits during office hours vs outside office hours (08:00 - 17:00 UTC+7).
+SELECT
+  CASE
+    WHEN HOUR(DATE_ADD(occurred_at, INTERVAL 7 HOUR)) BETWEEN 8 AND 16 THEN 'Giờ làm việc (08:00 - 17:00)'
+    ELSE 'Ngoài giờ làm việc'
+  END AS period_type,
+  COUNT(*) AS visits,
+  COUNT(DISTINCT visitor_hash) AS unique_browsers,
+  ROUND(COUNT(*) * 100.0 / NULLIF(totals.total_visits, 0), 1) AS percent_visits
+FROM analytics_events
+CROSS JOIN (
+  SELECT COUNT(*) AS total_visits
+  FROM analytics_events
+  WHERE event_type = 'visit'
+    AND occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
+) AS totals
+WHERE event_type = 'visit'
+  AND occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
+GROUP BY period_type, totals.total_visits
+ORDER BY period_type;
+
+-- Theme popularity (Overall for the period).
 SELECT
   grouped.theme,
   grouped.theme_sessions,
@@ -60,3 +104,15 @@ CROSS JOIN (
 ) AS totals
 ORDER BY grouped.theme_sessions DESC, grouped.theme ASC;
 
+-- Theme popularity by day (Thống kê theme theo ngày).
+SELECT
+  DATE(occurred_at) AS usage_date,
+  theme,
+  COUNT(*) AS theme_views,
+  COUNT(DISTINCT visitor_hash) AS unique_browsers
+FROM analytics_events
+WHERE event_type = 'theme_view'
+  AND occurred_at >= UTC_TIMESTAMP() - INTERVAL @days DAY
+  AND theme <> ''
+GROUP BY usage_date, theme
+ORDER BY usage_date DESC, theme_views DESC;
