@@ -449,3 +449,81 @@ test('modal tìm truyện online: mở modal, chọn truyện, chọn chương, 
   await page.screenshot({ path: 'test-results/portal-library-story-loaded.png' });
 });
 
+test('nguồn TruyenFull tải danh sách chương theo từng nhóm và giữ đúng chương bị khuyết', async ({ page }) => {
+  const requestedStoryPages = [];
+  const requestedChapters = [];
+  await page.route('**/api/online-story/**', async route => {
+    const url = new URL(route.request().url());
+    const endpoint = url.pathname.split('/').pop();
+    if (endpoint === 'search') {
+      return route.fulfill({ json: {
+        success: true,
+        data: [{ source: 's1', story_id: 'van-co-chi-ton', title: 'Vạn Cổ Chí Tôn', author: '' }]
+      } });
+    }
+    if (endpoint === 'story') {
+      const storyPage = Number(url.searchParams.get('page') || 1);
+      requestedStoryPages.push(storyPage);
+      const chapters = storyPage === 1
+        ? Array.from({ length: 50 }, (_, index) => ({
+          title: `Chương ${index + 1}`,
+          chapter_id: String(index + 1)
+        }))
+        : [
+          { title: 'Chương 51', chapter_id: '51' },
+          { title: 'Chương 53 (nguồn không có chương 52)', chapter_id: '53' }
+        ];
+      return route.fulfill({ json: {
+        success: true,
+        data: {
+          source: 's1',
+          story_id: 'van-co-chi-ton',
+          title: 'Vạn Cổ Chí Tôn',
+          author: 'Thái Nhất Sinh Thủy',
+          chapters,
+          paged: true,
+          chapter_page: storyPage,
+          chapter_pages: 2,
+          chapter_count: 52,
+          chapter_page_size: 50
+        }
+      } });
+    }
+    if (endpoint === 'chapter') {
+      const chapterId = url.searchParams.get('chapter');
+      requestedChapters.push(chapterId);
+      return route.fulfill({ json: {
+        success: true,
+        data: {
+          source: 's1',
+          story_id: 'van-co-chi-ton',
+          chapter_id: chapterId,
+          truyen_title: 'Vạn Cổ Chí Tôn',
+          chapter_title: `Chương ${chapterId}`,
+          paragraphs: [`Nội dung thật của chương ${chapterId}.`]
+        }
+      } });
+    }
+    return route.abort();
+  });
+
+  await page.goto('/index.html?portal=1');
+  await page.click('#online-story-toggle');
+  await page.fill('#online-story-query', 'vạn cổ chí tôn');
+  await page.click('#online-story-search-button');
+  await page.click('.online-story-result');
+  await expect(page.locator('.online-story-chapter')).toHaveCount(50);
+
+  await page.locator('[data-online-page="2"]').first().click();
+  await expect(page.locator('.online-story-chapter')).toHaveCount(2);
+  await expect(page.locator('.online-story-chapter').nth(1)).toContainText('Chương 53');
+  expect(requestedStoryPages).toEqual([1, 2]);
+
+  await page.locator('.online-story-chapter').first().click();
+  await expect.poll(() => page.evaluate(() => state.currentPage)).toBe(51);
+  await page.evaluate(() => changePage(1));
+  await expect.poll(() => page.evaluate(() => state.currentPage)).toBe(52);
+  await expect.poll(() => page.evaluate(() => state.allChunks[0]?.text)).toContain('chương 53');
+  expect(requestedChapters).toEqual(['51', '53']);
+});
+

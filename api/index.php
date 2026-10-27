@@ -50,7 +50,11 @@ function online_story_provider(array $config): string
     if ($configured !== '') {
         return $configured;
     }
-    return strtolower((string)parse_url(online_story_base($config), PHP_URL_HOST)) === 'truyenhh3d.com' ? 'hh3d' : 'legacy';
+    $host = strtolower((string)parse_url(online_story_base($config), PHP_URL_HOST));
+    if ($host === 'truyenhh3d.com') {
+        return 'hh3d';
+    }
+    return $host === 'truyenfull.live' ? 'truyenfull' : 'legacy';
 }
 
 function online_story_cache_path(string $action, array $params): string
@@ -162,6 +166,227 @@ function online_story_request_json(array $config, string $url, array $params): a
     return $payload;
 }
 
+function online_story_request_text(array $config, string $url, array $params = []): string
+{
+    $body = '';
+    $requestUrl = $url . ($params ? '?' . http_build_query($params) : '');
+    $curl = curl_init($requestUrl);
+    $curlOptions = [
+        CURLOPT_CONNECTTIMEOUT => 4,
+        CURLOPT_TIMEOUT => 20,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_HTTPHEADER => [
+            'Accept: text/html,application/xhtml+xml',
+            'Accept-Language: vi,en-US;q=0.8,en;q=0.7',
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/155.0 Safari/537.36',
+        ],
+        CURLOPT_WRITEFUNCTION => static function ($handle, string $chunk) use (&$body): int {
+            if (strlen($body) + strlen($chunk) > MAX_STORY_RESPONSE_BODY) {
+                return 0;
+            }
+            $body .= $chunk;
+            return strlen($chunk);
+        },
+    ];
+    $caBundle = trim((string)($config['online_story_ca_bundle'] ?? getenv('ONLINE_STORY_CA_BUNDLE') ?: ''));
+    if ($caBundle !== '' && is_file($caBundle)) {
+        $curlOptions[CURLOPT_CAINFO] = $caBundle;
+    }
+    curl_setopt_array($curl, $curlOptions);
+    $completed = curl_exec($curl);
+    $status = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+    if ($completed === false || $status !== 200) {
+        throw new RuntimeException('upstream_unavailable', $status);
+    }
+    return $body;
+}
+
+function online_story_html_text(string $html): string
+{
+    $html = (string)preg_replace('~<(script|style)\b[^>]*>.*?</\1>~is', ' ', $html);
+    $html = (string)preg_replace('~<br\s*/?>~i', "\n", $html);
+    $text = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $text = str_replace("\xC2\xA0", ' ', $text);
+    $text = (string)preg_replace('/[ \t\f\v]+/', ' ', $text);
+    $text = (string)preg_replace('/\s*\R\s*/u', "\n", $text);
+    return trim((string)preg_replace('/\n{3,}/', "\n\n", $text));
+}
+
+function online_story_html_attr(string $tag, string $name): string
+{
+    if (!preg_match('~\b' . preg_quote($name, '~') . '\s*=\s*(["\'])(.*?)\1~is', $tag, $match)) {
+        return '';
+    }
+    return trim(html_entity_decode((string)$match[2], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+}
+
+function online_story_truyenfull_slug(string $value): string
+{
+    if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $value)) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    return $value;
+}
+
+function online_story_truyenfull_chapters(string $html, string $storyId): array
+{
+    $pattern = '~<a\b(?P<tag>[^>]*href=["\'](?:https://truyenfull\.live)?/'
+        . preg_quote($storyId, '~')
+        . '/chuong-(?P<chapter>\d+)/?["\'][^>]*)>(?P<body>.*?)</a>~is';
+    preg_match_all($pattern, $html, $matches, PREG_SET_ORDER);
+    $chapters = [];
+    $seen = [];
+    foreach ($matches as $match) {
+        $chapterId = (string)$match['chapter'];
+        if (isset($seen[$chapterId])) {
+            continue;
+        }
+        $seen[$chapterId] = true;
+        $title = online_story_html_attr((string)$match['tag'], 'title');
+        $separator = strpos($title, ' - ');
+        if ($separator !== false) {
+            $title = substr($title, $separator + 3);
+        }
+        if ($title === '') {
+            $title = online_story_html_text((string)$match['body']);
+        }
+        $chapters[] = [
+            'title' => $title !== '' ? $title : 'Chương ' . $chapterId,
+            'chapter_id' => $chapterId,
+        ];
+    }
+    return $chapters;
+}
+
+function online_story_fetch_truyenfull(array $config, string $action, array $params, string $base): array
+{
+    if (strtolower((string)parse_url($base, PHP_URL_HOST)) !== 'truyenfull.live') {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    $base = rtrim($base, '/');
+
+    if ($action === 'search') {
+        $html = online_story_request_text($config, $base . '/ajax.php', [
+            'type' => 'quick_search',
+            'str' => $params['q'],
+        ]);
+        preg_match_all('~<a\b(?P<tag>[^>]*)>(?P<body>.*?)</a>~is', $html, $matches, PREG_SET_ORDER);
+        $items = [];
+        $seen = [];
+        foreach ($matches as $match) {
+            $href = online_story_html_attr((string)$match['tag'], 'href');
+            $host = strtolower((string)parse_url($href, PHP_URL_HOST));
+            if ($host !== '' && $host !== 'truyenfull.live') {
+                continue;
+            }
+            $path = $host !== '' ? (string)parse_url($href, PHP_URL_PATH) : $href;
+            if (!preg_match('~^/([a-z0-9]+(?:-[a-z0-9]+)*)/?$~', $path, $slugMatch)) {
+                continue;
+            }
+            $storyId = (string)$slugMatch[1];
+            if (isset($seen[$storyId])) {
+                continue;
+            }
+            $seen[$storyId] = true;
+            $title = online_story_html_attr((string)$match['tag'], 'title');
+            if ($title === '') {
+                $title = online_story_html_text((string)$match['body']);
+            }
+            $items[] = [
+                'source' => 's1',
+                'story_id' => $storyId,
+                'title' => $title !== '' ? $title : ucwords(str_replace('-', ' ', $storyId)),
+                'author' => '',
+                'latest_chapter' => '',
+            ];
+        }
+        return ['success' => true, 'total' => count($items), 'data' => $items];
+    }
+
+    $storyId = online_story_truyenfull_slug((string)$params['story']);
+    if ($action === 'story') {
+        $requestedPage = max(1, (int)($params['page'] ?? 1));
+        $path = $requestedPage === 1 ? '/' . $storyId . '/' : '/' . $storyId . '/trang-' . $requestedPage . '/';
+        $html = online_story_request_text($config, $base . $path);
+        preg_match('~<h3\b[^>]*class=["\'][^"\']*\btitle\b[^"\']*["\'][^>]*>(.*?)</h3>~is', $html, $titleMatch);
+        preg_match('~<a\b[^>]*itemprop=["\']author["\'][^>]*>(.*?)</a>~is', $html, $authorMatch);
+        preg_match('~<input\b[^>]*id=["\']total-page["\'][^>]*value=["\'](\d+)["\']~is', $html, $totalMatch);
+        $pageCount = max(1, (int)($totalMatch[1] ?? 1));
+        if ($requestedPage > $pageCount) {
+            throw new RuntimeException('invalid_upstream_response');
+        }
+        $chapters = online_story_truyenfull_chapters($html, $storyId);
+        if (!$chapters) {
+            throw new RuntimeException('invalid_upstream_response');
+        }
+        $chapterCount = $requestedPage === $pageCount ? ($pageCount - 1) * 50 + count($chapters) : 0;
+        if ($requestedPage === 1 && $pageCount > 1) {
+            $lastHtml = online_story_request_text($config, $base . '/' . $storyId . '/trang-' . $pageCount . '/');
+            $lastChapters = online_story_truyenfull_chapters($lastHtml, $storyId);
+            if ($lastChapters) {
+                $chapterCount = ($pageCount - 1) * 50 + count($lastChapters);
+            }
+        }
+        $data = [
+            'source' => 's1',
+            'story_id' => $storyId,
+            'title' => isset($titleMatch[1]) ? online_story_html_text((string)$titleMatch[1]) : ucwords(str_replace('-', ' ', $storyId)),
+            'author' => isset($authorMatch[1]) ? online_story_html_text((string)$authorMatch[1]) : '',
+            'chapters' => $chapters,
+            'paged' => true,
+            'chapter_page' => $requestedPage,
+            'chapter_pages' => $pageCount,
+            'chapter_page_size' => 50,
+        ];
+        if ($chapterCount > 0) {
+            $data['chapter_count'] = $chapterCount;
+        }
+        return ['success' => true, 'data' => $data];
+    }
+
+    $chapterId = (string)$params['chapter'];
+    if (!preg_match('/^\d{1,8}$/', $chapterId) || (int)$chapterId < 1) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    $html = online_story_request_text($config, $base . '/' . $storyId . '/chuong-' . $chapterId . '/');
+    if (!preg_match('~<div\b[^>]*id=["\']chapter-c["\'][^>]*>(.*?)<hr\b[^>]*class=["\'][^"\']*chapter-end~is', $html, $contentMatch)) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    $content = (string)preg_replace('~<div\b[^>]*id=["\']ads-chapter-top["\'][^>]*>.*?</div>~is', '', (string)$contentMatch[1]);
+    $parts = preg_split('~(?:<br\s*/?>\s*){2,}~is', $content) ?: [];
+    $paragraphs = [];
+    foreach ($parts as $part) {
+        $text = online_story_html_text((string)$part);
+        if ($text !== '') {
+            $paragraphs[] = $text;
+        }
+    }
+    if (!$paragraphs) {
+        throw new RuntimeException('invalid_upstream_response');
+    }
+    preg_match('~<a\b[^>]*class=["\'][^"\']*chapter-title[^"\']*["\'][^>]*>(.*?)</a>~is', $html, $chapterTitleMatch);
+    preg_match('~<a\b[^>]*class=["\'][^"\']*truyen-title[^"\']*["\'][^>]*>(.*?)</a>~is', $html, $storyTitleMatch);
+    $data = [
+        'source' => 's1',
+        'story_id' => $storyId,
+        'chapter_id' => $chapterId,
+        'truyen_title' => isset($storyTitleMatch[1]) ? online_story_html_text((string)$storyTitleMatch[1]) : ucwords(str_replace('-', ' ', $storyId)),
+        'chapter_title' => isset($chapterTitleMatch[1]) ? online_story_html_text((string)$chapterTitleMatch[1]) : 'Chương ' . $chapterId,
+        'total_lines' => count($paragraphs),
+        'paragraphs' => $paragraphs,
+    ];
+    foreach (['previous_chapter_id' => 'prev_chap', 'next_chapter_id' => 'next_chap'] as $key => $elementId) {
+        if (preg_match('~<a\b(?=[^>]*\bid=["\']' . $elementId . '["\'])[^>]*>~is', $html, $tagMatch)) {
+            $href = online_story_html_attr((string)$tagMatch[0], 'href');
+            if (preg_match('~/chuong-(\d+)/?~', $href, $navigationMatch)) {
+                $data[$key] = (string)$navigationMatch[1];
+            }
+        }
+    }
+    return ['success' => true, 'data' => $data];
+}
+
 function online_story_fetch_hh3d(array $config, string $action, array $params, string $base): array
 {
     if ($action === 'search') {
@@ -242,8 +467,12 @@ function online_story_fetch_hh3d(array $config, string $action, array $params, s
 
 function online_story_fetch(array $config, string $action, array $params, string $base): array
 {
-    if (online_story_provider($config) === 'hh3d') {
+    $provider = online_story_provider($config);
+    if ($provider === 'hh3d') {
         return online_story_fetch_hh3d($config, $action, $params, $base);
+    }
+    if ($provider === 'truyenfull') {
+        return online_story_fetch_truyenfull($config, $action, $params, $base);
     }
     $payload = online_story_request_json($config, $base . '/' . $action, $params);
     if (($payload['success'] ?? false) !== true || !array_key_exists('data', $payload)) {
@@ -272,7 +501,7 @@ function handle_online_story_proxy(array $config, string $path, string $method):
     }
 
     $params = [];
-    foreach (['q', 'story', 'chapter', 'source'] as $key) {
+    foreach (['q', 'story', 'chapter', 'source', 'page'] as $key) {
         $params[$key] = trim((string)($_GET[$key] ?? ''));
     }
     foreach ($rules[$action]['required'] as $required) {
@@ -289,11 +518,15 @@ function handle_online_story_proxy(array $config, string $path, string $method):
     if ($action === 'chapter' && !online_story_identifier_valid($params['chapter'])) {
         json_response(400, ['success' => false, 'error' => 'Mã chương không hợp lệ.']);
     }
+    if ($action === 'story' && $params['page'] !== '' && (!ctype_digit($params['page']) || (int)$params['page'] < 1 || (int)$params['page'] > 5000)) {
+        json_response(400, ['success' => false, 'error' => 'Trang danh sách chương không hợp lệ.']);
+    }
     $params['source'] = $params['source'] === '' ? 'all' : $params['source'];
-    if (!in_array($params['source'], ['all', 's1', 's2', 'hh3d'], true)) {
+    if (!in_array($params['source'], ['all', 's1', 's2', 'hh3d', 'truyenfull'], true)) {
         json_response(400, ['success' => false, 'error' => 'Nguồn truyện không hợp lệ.']);
     }
-    $params = array_intersect_key($params, array_flip(array_merge($rules[$action]['required'], ['source'])));
+    $optional = $action === 'story' ? ['source', 'page'] : ['source'];
+    $params = array_intersect_key($params, array_flip(array_merge($rules[$action]['required'], $optional)));
 
     $cached = online_story_cache_get($action, $params);
     if ($cached !== null) {

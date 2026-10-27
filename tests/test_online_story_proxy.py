@@ -9,6 +9,7 @@ class FakeResponse:
     def __init__(self, payload, status_code=200):
         self.status_code = status_code
         self._body = payload.encode("utf-8")
+        self.encoding = "utf-8"
         self.closed = False
 
     def iter_content(self, chunk_size=65536):
@@ -149,6 +150,85 @@ class OnlineStoryProxyTests(unittest.TestCase):
         self.assertEqual(data["chapter_title"], "Chương 2: Khai quan")
         self.assertEqual(data["paragraphs"], ['Lão đạo nói "được".'])
         self.assertEqual(data["total_lines"], 1)
+
+    @patch("online_story_proxy.requests.get")
+    def test_truyenfull_search_normalizes_quick_search_html(self, request_get):
+        os.environ["ONLINE_STORY_UPSTREAM_BASE"] = "https://truyenfull.live"
+        os.environ["ONLINE_STORY_PROVIDER"] = "truyenfull"
+        request_get.return_value = FakeResponse(
+            '<a href="https://truyenfull.live/van-co-chi-ton/" '
+            'class="list-group-item" title="Vạn Cổ Chí Tôn">Vạn Cổ Chí Tôn</a>'
+        )
+
+        response = proxy.handle_online_story_proxy(
+            "GET", "/api/online-story/search?q=van+co&source=all", "client-truyenfull-search"
+        )
+
+        self.assertEqual(response.status, 200)
+        self.assertEqual(response.payload["data"][0]["story_id"], "van-co-chi-ton")
+        self.assertEqual(response.payload["data"][0]["title"], "Vạn Cổ Chí Tôn")
+        self.assertEqual(request_get.call_args.args[0], "https://truyenfull.live/ajax.php")
+        self.assertEqual(
+            request_get.call_args.kwargs["params"],
+            {"type": "quick_search", "str": "van co"},
+        )
+
+    @patch("online_story_proxy.requests.get")
+    def test_truyenfull_story_loads_only_requested_and_last_chapter_pages(self, request_get):
+        os.environ["ONLINE_STORY_UPSTREAM_BASE"] = "https://truyenfull.live"
+        os.environ["ONLINE_STORY_PROVIDER"] = "truyenfull"
+        first_page = """
+            <h3 class="title" itemprop="name">Vạn Cổ Chí Tôn</h3>
+            <a itemprop="author">Thái Nhất Sinh Thủy</a>
+            <a href="https://truyenfull.live/van-co-chi-ton/chuong-1/" title="Vạn Cổ Chí Tôn - Chương 1: Mở đầu">1</a>
+            <a href="https://truyenfull.live/van-co-chi-ton/chuong-2/" title="Vạn Cổ Chí Tôn - Chương 2: Thức tỉnh">2</a>
+            <input id="total-page" type="hidden" value="2">
+        """
+        last_page = """
+            <a href="https://truyenfull.live/van-co-chi-ton/chuong-51/" title="Chương 51: Cuối">51</a>
+            <input id="total-page" type="hidden" value="2">
+        """
+        request_get.side_effect = [FakeResponse(first_page), FakeResponse(last_page)]
+
+        response = proxy.handle_online_story_proxy(
+            "GET", "/api/online-story/story?story=van-co-chi-ton&page=1&source=truyenfull",
+            "client-truyenfull-story",
+        )
+        data = response.payload["data"]
+
+        self.assertEqual(response.status, 200)
+        self.assertTrue(data["paged"])
+        self.assertEqual(data["chapter_pages"], 2)
+        self.assertEqual(data["chapter_count"], 51)
+        self.assertEqual(data["chapters"][0]["chapter_id"], "1")
+        self.assertEqual(request_get.call_count, 2)
+
+    @patch("online_story_proxy.requests.get")
+    def test_truyenfull_chapter_extracts_paragraphs_and_navigation(self, request_get):
+        os.environ["ONLINE_STORY_UPSTREAM_BASE"] = "https://truyenfull.live"
+        os.environ["ONLINE_STORY_PROVIDER"] = "truyenfull"
+        request_get.return_value = FakeResponse("""
+            <a class="truyen-title">Vạn Cổ Chí Tôn</a>
+            <h2><a class="chapter-title"><span class="chapter-text"><span>Chương </span></span>2044: Thiết khấu tử (2)</a></h2>
+            <a id="prev_chap" href="https://truyenfull.live/van-co-chi-ton/chuong-2043/">Trước</a>
+            <div id="chapter-c" class="chapter-c"><div id="ads-chapter-top"></div>
+              Đoạn thứ nhất &amp; nội dung.<br><br>Đoạn thứ hai.
+            <hr class="chapter-end">
+            <a id="next_chap" href="https://truyenfull.live/van-co-chi-ton/chuong-2045/">Sau</a>
+        """)
+
+        response = proxy.handle_online_story_proxy(
+            "GET",
+            "/api/online-story/chapter?story=van-co-chi-ton&chapter=2044&source=truyenfull",
+            "client-truyenfull-chapter",
+        )
+        data = response.payload["data"]
+
+        self.assertEqual(response.status, 200)
+        self.assertEqual(data["chapter_title"], "Chương 2044: Thiết khấu tử (2)")
+        self.assertEqual(data["paragraphs"], ["Đoạn thứ nhất & nội dung.", "Đoạn thứ hai."])
+        self.assertEqual(data["previous_chapter_id"], "2043")
+        self.assertEqual(data["next_chapter_id"], "2045")
 
 
 if __name__ == "__main__":

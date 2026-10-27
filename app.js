@@ -4145,7 +4145,7 @@ function setOnlineStoryStatus(message = '', type = '') {
 }
 
 function getOnlineSourceLabel(source) {
-  return source === 's1' ? 'TruyenFull' : source === 's2' ? 'VivuTruyen' : 'Nguồn online';
+  return source === 's1' || source === 'truyenfull' ? 'TruyenFull' : source === 's2' ? 'VivuTruyen' : 'Nguồn online';
 }
 
 function normalizeOnlineApiError(error) {
@@ -4202,6 +4202,71 @@ async function fetchOnlineStoryJson(path, params, options = {}) {
   throw lastError || new Error('Không thể tải dữ liệu từ nguồn truyện.');
 }
 
+function isPagedOnlineStory(story) {
+  return Boolean(story?.paged && Number(story.chapterPages) > 0);
+}
+
+function getOnlineStoryPageSize(story) {
+  return Math.max(1, Number(story?.chapterPageSize) || ONLINE_STORY_CHAPTERS_PER_PAGE);
+}
+
+function getOnlineStoryPageOffset(story, page = story?.chapterPage) {
+  return (Math.max(1, Number(page) || 1) - 1) * getOnlineStoryPageSize(story);
+}
+
+function normalizeOnlineStoryPage(data, fallbackStory = {}) {
+  const chapters = Array.isArray(data?.chapters)
+    ? data.chapters.filter(chapter => chapter && chapter.chapter_id).map(chapter => ({
+      title: chapter.title || '',
+      chapterId: String(chapter.chapter_id)
+    }))
+    : [];
+  return {
+    ...fallbackStory,
+    source: data?.source || fallbackStory.source,
+    storyId: data?.story_id || fallbackStory.storyId,
+    title: data?.title || fallbackStory.title,
+    author: data?.author || fallbackStory.author || '',
+    chapters,
+    paged: Boolean(data?.paged),
+    chapterPage: Math.max(1, Number(data?.chapter_page) || 1),
+    chapterPages: Math.max(1, Number(data?.chapter_pages) || 1),
+    chapterCount: Math.max(chapters.length, Number(data?.chapter_count) || Number(fallbackStory.chapterCount) || chapters.length),
+    chapterPageSize: Math.max(1, Number(data?.chapter_page_size) || ONLINE_STORY_CHAPTERS_PER_PAGE)
+  };
+}
+
+async function fetchOnlineStoryPage(story, page) {
+  const safePage = Math.min(Math.max(1, Number(page) || 1), Math.max(1, Number(story.chapterPages) || 1));
+  const payload = await fetchOnlineStoryJson('story', {
+    story: story.storyId,
+    source: story.source,
+    page: safePage
+  });
+  return normalizeOnlineStoryPage(payload.data, story);
+}
+
+async function loadOnlineStoryPickerPage(page) {
+  const story = onlineStoryPickerState.story;
+  if (!isPagedOnlineStory(story) || onlineStoryPickerState.busy) return;
+  const safePage = Math.min(Math.max(1, Number(page) || 1), story.chapterPages);
+  if (safePage === story.chapterPage) {
+    renderOnlineStoryDetail();
+    return;
+  }
+  onlineStoryPickerState.busy = true;
+  setOnlineStoryStatus(`Đang tải nhóm chương ${safePage}/${story.chapterPages}...`);
+  try {
+    onlineStoryPickerState.story = await fetchOnlineStoryPage(story, safePage);
+    setOnlineStoryStatus(`Đã tải ${onlineStoryPickerState.story.chapters.length} chương trong nhóm ${safePage}.`);
+    renderOnlineStoryDetail();
+  } catch (error) {
+    setOnlineStoryStatus(normalizeOnlineApiError(error), 'error');
+  } finally {
+    onlineStoryPickerState.busy = false;
+  }
+}
+
 function renderOnlineStoryResults() {
   const container = document.getElementById('online-story-results');
   const detail = document.getElementById('online-story-detail');
@@ -4244,14 +4309,17 @@ function renderOnlineStoryResults() {
 }
 
 function getFilteredOnlineChapters() {
-  const chapters = onlineStoryPickerState.story?.chapters || [];
+  const story = onlineStoryPickerState.story;
+  const chapters = story?.chapters || [];
+  const offset = isPagedOnlineStory(story) ? getOnlineStoryPageOffset(story) : 0;
   const query = onlineStoryPickerState.chapterFilter.trim().toLocaleLowerCase('vi');
-  let list = chapters.map((chapter, index) => ({ chapter, index }));
+  let list = chapters.map((chapter, index) => ({ chapter, index, position: offset + index }));
   if (query) {
-    list = list.filter(({ chapter, index }) => {
-      const num = String(index + 1);
+    list = list.filter(({ chapter, position }) => {
+      const num = String(position + 1);
+      const chapterId = String(chapter.chapterId || '');
       const title = (chapter.title || '').toLocaleLowerCase('vi');
-      return num === query || num.includes(query) || title.includes(query);
+      return num === query || chapterId === query || num.includes(query) || title.includes(query);
     });
   }
   if (onlineStoryPickerState.sortOrder === 'desc') {
@@ -4265,16 +4333,23 @@ function renderOnlineStoryDetail() {
   const story = onlineStoryPickerState.story;
   if (!container || !story) return;
 
-  const totalChapters = story.chapters.length;
+  const remotePaged = isPagedOnlineStory(story);
+  const totalChapters = remotePaged ? story.chapterCount : story.chapters.length;
   const filtered = getFilteredOnlineChapters();
-  const pageCount = Math.max(1, Math.ceil(filtered.length / ONLINE_STORY_CHAPTERS_PER_PAGE));
-  onlineStoryPickerState.chapterPage = Math.min(Math.max(1, onlineStoryPickerState.chapterPage), pageCount);
-  const currentPage = onlineStoryPickerState.chapterPage;
-  const start = (currentPage - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE;
-  const visible = filtered.slice(start, start + ONLINE_STORY_CHAPTERS_PER_PAGE);
+  const pageCount = remotePaged
+    ? story.chapterPages
+    : Math.max(1, Math.ceil(filtered.length / ONLINE_STORY_CHAPTERS_PER_PAGE));
+  onlineStoryPickerState.chapterPage = remotePaged
+    ? story.chapterPage
+    : Math.min(Math.max(1, onlineStoryPickerState.chapterPage), pageCount);
+  const currentPage = remotePaged ? story.chapterPage : onlineStoryPickerState.chapterPage;
+  const start = remotePaged ? getOnlineStoryPageOffset(story) : (currentPage - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE;
+  const visible = remotePaged ? filtered : filtered.slice(start, start + ONLINE_STORY_CHAPTERS_PER_PAGE);
 
   const isCurrentStory = state.onlineStory?.storyId === story.storyId;
-  const currentChapterIdx = isCurrentStory ? (state.onlineStory?.currentChapterIndex ?? -1) : -1;
+  const currentChapterPosition = isCurrentStory
+    ? Number(state.onlineStory?.currentChapterPosition ?? state.onlineStory?.currentChapterIndex ?? -1)
+    : -1;
 
   // Build range tabs or dropdown selector
   let rangeSelectorHtml = '';
@@ -4285,7 +4360,7 @@ function renderOnlineStoryDetail() {
           ${Array.from({ length: pageCount }, (_, i) => {
             const p = i + 1;
             const rStart = (p - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE + 1;
-            const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, filtered.length);
+            const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, totalChapters);
             const isActive = p === currentPage;
             return `<button type="button" class="online-story-range-tab ${isActive ? 'active' : ''}" data-online-page="${p}">${rStart}–${rEnd}</button>`;
           }).join('')}
@@ -4299,7 +4374,7 @@ function renderOnlineStoryDetail() {
             ${Array.from({ length: pageCount }, (_, i) => {
               const p = i + 1;
               const rStart = (p - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE + 1;
-              const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, filtered.length);
+              const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, totalChapters);
               return `<option value="${p}" ${p === currentPage ? 'selected' : ''}>Chương ${rStart} – ${rEnd}</option>`;
             }).join('')}
           </select>
@@ -4322,7 +4397,7 @@ function renderOnlineStoryDetail() {
       <div class="online-story-detail-info">
         <div class="online-story-detail-badge-row">
           <span class="online-story-chapter-count-pill">${totalChapters} chương</span>
-          ${isCurrentStory && currentChapterIdx >= 0 ? `<span class="online-story-reading-tag">Đang đọc: Chương ${currentChapterIdx + 1}</span>` : ''}
+          ${isCurrentStory && currentChapterPosition >= 0 ? `<span class="online-story-reading-tag">Đang đọc: Chương ${currentChapterPosition + 1}</span>` : ''}
         </div>
         <h4>${escapeHtml(story.title)}</h4>
         <p class="online-story-author-line">
@@ -4333,18 +4408,18 @@ function renderOnlineStoryDetail() {
         </p>
       </div>
       <div class="online-story-detail-actions">
-        ${isCurrentStory && currentChapterIdx >= 0 ? `
-          <button type="button" class="online-story-resume-btn" data-online-open-chapter="${currentChapterIdx}" title="Đọc tiếp chương đang đọc dở">
+        ${isCurrentStory && currentChapterPosition >= 0 ? `
+          <button type="button" class="online-story-resume-btn" data-online-open-position="${currentChapterPosition}" title="Đọc tiếp chương đang đọc dở">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>Tiếp tục (C.${currentChapterIdx + 1})</span>
+            <span>Tiếp tục (C.${currentChapterPosition + 1})</span>
           </button>
         ` : ''}
-        <button type="button" class="online-story-primary" data-online-open-chapter="0" title="Đọc từ chương 1">
+        <button type="button" class="online-story-primary" data-online-open-position="0" title="Đọc từ chương đầu tiên">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
           <span>Đọc từ đầu</span>
         </button>
         ${totalChapters > 1 ? `
-          <button type="button" class="online-story-secondary" data-online-open-chapter="${totalChapters - 1}" title="Chuyển nhanh tới chương mới nhất">
+          <button type="button" class="online-story-secondary" data-online-open-position="${totalChapters - 1}" title="Chuyển nhanh tới chương mới nhất">
             <span>Mới nhất (C.${totalChapters})</span>
           </button>
         ` : ''}
@@ -4375,12 +4450,12 @@ function renderOnlineStoryDetail() {
     </div>
 
     <div class="online-story-chapter-list">
-      ${visible.length ? visible.map(({ chapter, index }) => {
-        const isReading = isCurrentStory && currentChapterIdx === index;
-        const displayTitle = (chapter.title || '').trim() || `Chương ${index + 1}`;
+      ${visible.length ? visible.map(({ chapter, index, position = index }) => {
+        const isReading = isCurrentStory && currentChapterPosition === position;
+        const displayTitle = (chapter.title || '').trim() || `Chương ${position + 1}`;
         return `
-          <button type="button" class="online-story-chapter ${isReading ? 'is-reading' : ''}" data-online-open-chapter="${index}" title="${escapeHtml(displayTitle)}">
-            <span class="online-story-ch-num">#${index + 1}</span>
+          <button type="button" class="online-story-chapter ${isReading ? 'is-reading' : ''}" data-online-open-position="${position}" title="${escapeHtml(displayTitle)}">
+            <span class="online-story-ch-num">#${position + 1}</span>
             <span class="online-story-ch-title">${escapeHtml(displayTitle)}</span>
             ${isReading ? '<span class="online-story-reading-pill">Đang đọc</span>' : ''}
           </button>
@@ -4390,7 +4465,7 @@ function renderOnlineStoryDetail() {
 
     <div class="online-story-pager">
       <button type="button" class="online-story-page-button" data-online-page="${currentPage - 1}" ${currentPage <= 1 ? 'disabled' : ''}>← Trước</button>
-      <span class="online-story-page-indicator">Chương <b>${filtered.length ? start + 1 : 0}–${Math.min(start + ONLINE_STORY_CHAPTERS_PER_PAGE, filtered.length)}</b> / ${filtered.length}</span>
+      <span class="online-story-page-indicator">Chương <b>${visible.length ? start + 1 : 0}–${Math.min(start + visible.length, totalChapters)}</b> / ${totalChapters}</span>
       <button type="button" class="online-story-page-button" data-online-page="${currentPage + 1}" ${currentPage >= pageCount ? 'disabled' : ''}>Sau →</button>
     </div>
   `;
@@ -4426,22 +4501,34 @@ function renderOnlineStoryDetail() {
 
   container.querySelector('#online-story-sort-btn')?.addEventListener('click', () => {
     onlineStoryPickerState.sortOrder = onlineStoryPickerState.sortOrder === 'asc' ? 'desc' : 'asc';
-    onlineStoryPickerState.chapterPage = 1;
-    renderOnlineStoryDetail();
+    if (remotePaged) {
+      loadOnlineStoryPickerPage(onlineStoryPickerState.sortOrder === 'desc' ? story.chapterPages : 1);
+    } else {
+      onlineStoryPickerState.chapterPage = 1;
+      renderOnlineStoryDetail();
+    }
   });
 
   container.querySelector('#online-story-range-select')?.addEventListener('change', event => {
-    onlineStoryPickerState.chapterPage = Number(event.target.value) || 1;
-    renderOnlineStoryDetail();
+    const page = Number(event.target.value) || 1;
+    if (remotePaged) loadOnlineStoryPickerPage(page);
+    else {
+      onlineStoryPickerState.chapterPage = page;
+      renderOnlineStoryDetail();
+    }
   });
 
   container.querySelectorAll('[data-online-page]').forEach(button => button.addEventListener('click', () => {
-    onlineStoryPickerState.chapterPage = Number(button.dataset.onlinePage) || 1;
-    renderOnlineStoryDetail();
+    const page = Number(button.dataset.onlinePage) || 1;
+    if (remotePaged) loadOnlineStoryPickerPage(page);
+    else {
+      onlineStoryPickerState.chapterPage = page;
+      renderOnlineStoryDetail();
+    }
   }));
 
-  container.querySelectorAll('[data-online-open-chapter]').forEach(button => button.addEventListener('click', () => {
-    loadOnlineStoryChapter(story, Number(button.dataset.onlineOpenChapter));
+  container.querySelectorAll('[data-online-open-position]').forEach(button => button.addEventListener('click', () => {
+    loadOnlineStoryChapterAtPosition(story, Number(button.dataset.onlineOpenPosition));
   }));
 }
 
@@ -4465,20 +4552,17 @@ async function selectOnlineStoryResult(index) {
       ? data.chapters.filter(chapter => chapter && chapter.chapter_id)
       : [];
     if (!chapters.length) throw new Error('Truyện này chưa có chương có thể đọc.');
-    onlineStoryPickerState.story = {
-      source: data.source || result.source,
-      storyId: data.story_id || result.story_id,
-      title: data.title || result.title,
-      author: data.author || result.author || '',
-      chapters: chapters.map(chapter => ({
-        title: chapter.title || '',
-        chapterId: chapter.chapter_id
-      }))
-    };
+    onlineStoryPickerState.story = normalizeOnlineStoryPage(data, {
+      source: result.source,
+      storyId: result.story_id,
+      title: result.title,
+      author: result.author || ''
+    });
     onlineStoryPickerState.chapterFilter = '';
     onlineStoryPickerState.chapterPage = 1;
     onlineStoryPickerState.sortOrder = 'asc';
-    setOnlineStoryStatus(`Đã tìm thấy ${chapters.length} chương của “${result.title}”. Chọn chương để đọc:`);
+    const chapterCount = onlineStoryPickerState.story.chapterCount || chapters.length;
+    setOnlineStoryStatus(`Đã tìm thấy ${chapterCount} chương của “${result.title}”. Chọn chương để đọc:`);
     const searchView = document.getElementById('online-story-search-view');
     if (searchView) searchView.hidden = true;
     renderOnlineStoryDetail();
@@ -4490,12 +4574,47 @@ async function selectOnlineStoryResult(index) {
 }
 
 function buildOnlineStoryToc(story) {
+  const offset = isPagedOnlineStory(story) ? getOnlineStoryPageOffset(story) : 0;
   return story.chapters.map((chapter, index) => ({
     title: chapter.title || `Chương ${index + 1}`,
-    page: index + 1,
+    page: offset + index + 1,
     globalIndex: 0,
     chapterId: chapter.chapterId
   }));
+}
+
+async function loadOnlineStoryChapterAtPosition(story, position, options = {}) {
+  if (!story) return false;
+  const total = isPagedOnlineStory(story) ? story.chapterCount : story.chapters.length;
+  const safePosition = Math.min(Math.max(0, Number(position) || 0), Math.max(0, total - 1));
+  if (!isPagedOnlineStory(story)) {
+    return loadOnlineStoryChapter(story, safePosition, { ...options, chapterPosition: safePosition });
+  }
+
+  const pageSize = getOnlineStoryPageSize(story);
+  const targetPage = Math.floor(safePosition / pageSize) + 1;
+  let targetStory = story;
+  if (targetPage !== story.chapterPage) {
+    showLoading(`Đang tải nhóm chương ${targetPage}/${story.chapterPages}...`);
+    try {
+      targetStory = await fetchOnlineStoryPage(story, targetPage);
+      if (onlineStoryPickerState.story?.storyId === targetStory.storyId) {
+        onlineStoryPickerState.story = targetStory;
+      }
+    } catch (error) {
+      hideLoading();
+      const message = normalizeOnlineApiError(error);
+      showReaderError('Không thể tải danh sách chương', message, error, story.title, null);
+      return false;
+    }
+  }
+  const localIndex = safePosition - getOnlineStoryPageOffset(targetStory);
+  if (localIndex < 0 || localIndex >= targetStory.chapters.length) {
+    hideLoading();
+    showReaderError('Không tìm thấy chương', 'Nguồn truyện không trả về chương tương ứng.', null, story.title, null);
+    return false;
+  }
+  return loadOnlineStoryChapter(targetStory, localIndex, { ...options, chapterPosition: safePosition });
 }
 
 async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
@@ -4504,6 +4623,9 @@ async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
   const safeIndex = Math.min(Math.max(0, Number(chapterIndex) || 0), story.chapters.length - 1);
   const chapter = story.chapters[safeIndex];
   if (!chapter?.chapterId) return false;
+  const chapterPosition = Number.isFinite(Number(options.chapterPosition))
+    ? Number(options.chapterPosition)
+    : (isPagedOnlineStory(story) ? getOnlineStoryPageOffset(story) + safeIndex : safeIndex);
 
   saveCurrentBookmark();
   showLoading(`Đang tải ${chapter.title || `chương ${safeIndex + 1}`}...`);
@@ -4523,7 +4645,7 @@ async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
     const texts = paragraphs.flatMap(paragraph => splitTextIntoChunks(paragraph));
     if (!texts.length) throw new Error('Chương này không có nội dung văn bản để hiển thị.');
 
-    const page = safeIndex + 1;
+    const page = chapterPosition + 1;
     state.pdfDoc = null;
     state.pdfFileName = story.title;
     state.documentId = `online:${story.source}:${story.storyId}`;
@@ -4536,7 +4658,13 @@ async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
       title: story.title,
       author: story.author || '',
       chapters: story.chapters,
-      currentChapterIndex: safeIndex
+      currentChapterIndex: safeIndex,
+      currentChapterPosition: chapterPosition,
+      paged: Boolean(story.paged),
+      chapterPage: story.chapterPage || 1,
+      chapterPages: story.chapterPages || 1,
+      chapterCount: story.chapterCount || story.chapters.length,
+      chapterPageSize: story.chapterPageSize || ONLINE_STORY_CHAPTERS_PER_PAGE
     };
     state.documentToc = buildOnlineStoryToc(story);
     state.documentImages = {};
@@ -4549,8 +4677,8 @@ async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
     state.rawText = texts.join('\n\n');
     state.pageStartIndices = { [page]: 0 };
     state.currentPage = page;
-    state.totalPages = story.chapters.length;
-    state.loadedPages = story.chapters.length;
+    state.totalPages = isPagedOnlineStory(story) ? story.chapterCount : story.chapters.length;
+    state.loadedPages = state.totalPages;
     state.currentGlobalIndex = Math.min(Math.max(0, Number(options.globalIndex) || 0), texts.length - 1);
     state.isPdfProcessing = false;
     state.searchResults = [];
@@ -4587,7 +4715,7 @@ async function loadOnlineStoryChapter(story, chapterIndex, options = {}) {
 
 async function loadOnlineStoryChapterByIndex(index, options = {}) {
   if (!state.onlineStory) return false;
-  return loadOnlineStoryChapter(state.onlineStory, index, options);
+  return loadOnlineStoryChapterAtPosition(state.onlineStory, index, options);
 }
 
 function openOnlineStoryModal() {
@@ -6320,8 +6448,9 @@ function initEventListeners() {
       e.preventDefault();
       if (state.onlineStory) {
         const currIdx = Number(state.onlineStory.currentChapterIndex) || 0;
-        if (currIdx > 0) {
-          loadOnlineStoryChapterByIndex(currIdx - 1);
+        const currPosition = Number(state.onlineStory.currentChapterPosition ?? currIdx) || 0;
+        if (currPosition > 0) {
+          loadOnlineStoryChapterByIndex(currPosition - 1);
         } else {
           showPageFlipToast('Đang ở chương đầu tiên.');
         }
@@ -7428,7 +7557,7 @@ async function processDocumentFile(file) {
 async function isTextWorkerAvailable() {
   if (!window.Worker) return false;
   if (!textWorkerAvailabilityPromise) {
-    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261016-4', { cache: 'no-store' })
+    textWorkerAvailabilityPromise = fetch('text-worker.js?v=20261027-1', { cache: 'no-store' })
       .then(response => {
         const contentType = response.headers.get('content-type') || '';
         return response.ok && /javascript|ecmascript|text\/plain/i.test(contentType);
@@ -7458,7 +7587,7 @@ async function runTextChunkWorker(source, mode = state.chunkMode, options = {}) 
   return new Promise((resolve, reject) => {
     let worker;
     try {
-      worker = new Worker('text-worker.js?v=20261016-4');
+      worker = new Worker('text-worker.js?v=20261027-1');
     } catch (error) {
       resolve(splitTextWithoutWorker(source, mode, workerOptions));
       return;
@@ -9657,11 +9786,13 @@ function getOnlineNextChapterInfo() {
   const story = state.onlineStory;
   if (!story || !Array.isArray(story.chapters)) return null;
   const currentIndex = Number(story.currentChapterIndex) || 0;
-  if (currentIndex >= story.chapters.length - 1) return null;
+  const currentPosition = Number(story.currentChapterPosition ?? currentIndex) || 0;
+  const total = isPagedOnlineStory(story) ? story.chapterCount : story.chapters.length;
+  if (currentPosition >= total - 1) return null;
   const nextChapter = story.chapters[currentIndex + 1];
   return {
-    index: currentIndex + 1,
-    title: nextChapter?.title || `Chương ${currentIndex + 2}`
+    index: currentPosition + 1,
+    title: nextChapter?.title || `Chương tiếp theo`
   };
 }
 
@@ -9669,7 +9800,9 @@ async function triggerOnlineNextChapter() {
   const story = state.onlineStory;
   if (!story || onlineChapterNavigationPending) return;
   const currentIndex = Number(story.currentChapterIndex) || 0;
-  if (currentIndex >= story.chapters.length - 1) return;
+  const currentPosition = Number(story.currentChapterPosition ?? currentIndex) || 0;
+  const total = isPagedOnlineStory(story) ? story.chapterCount : story.chapters.length;
+  if (currentPosition >= total - 1) return;
 
   const btn = document.getElementById('online-chapter-next-button');
   onlineChapterNavigationPending = true;
@@ -9678,7 +9811,7 @@ async function triggerOnlineNextChapter() {
     btn.classList.add('is-loading');
   }
   try {
-    await loadOnlineStoryChapterByIndex(currentIndex + 1);
+    await loadOnlineStoryChapterByIndex(currentPosition + 1);
   } finally {
     onlineChapterNavigationPending = false;
     if (btn) {
@@ -9804,7 +9937,9 @@ function updateOnlineChapterNextButton(container = getActiveScrollContainer(), f
   }
 
   const currentIndex = Number(story.currentChapterIndex) || 0;
-  const hasNextChapter = currentIndex < story.chapters.length - 1;
+  const currentPosition = Number(story.currentChapterPosition ?? currentIndex) || 0;
+  const total = isPagedOnlineStory(story) ? story.chapterCount : story.chapters.length;
+  const hasNextChapter = currentPosition < total - 1;
   const allRowsRendered = state.renderedCount >= state.allChunks.length;
 
   if (!hasNextChapter || !allRowsRendered) {
