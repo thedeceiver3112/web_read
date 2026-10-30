@@ -84,7 +84,14 @@ function online_story_cache_put(string $action, array $params, array $payload, i
 {
     $path = online_story_cache_path($action, $params);
     $temporary = $path . '.' . bin2hex(random_bytes(4)) . '.tmp';
-    $body = json_encode(['expires' => time() + $ttl, 'payload' => $payload], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+    if (defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+        $flags |= constant('JSON_INVALID_UTF8_SUBSTITUTE');
+    }
+    $body = json_encode(['expires' => time() + $ttl, 'payload' => $payload], $flags);
+    if (!is_string($body)) {
+        return;
+    }
     if (@file_put_contents($temporary, $body, LOCK_EX) !== false) {
         @rename($temporary, $path);
     }
@@ -558,7 +565,16 @@ function json_response(int $status, array $payload): void
 {
     http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES;
+    if (defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+        $flags |= constant('JSON_INVALID_UTF8_SUBSTITUTE');
+    }
+    $body = json_encode($payload, $flags);
+    if (!is_string($body)) {
+        http_response_code(500);
+        $body = '{"success":false,"error":"Máy chủ không thể mã hóa phản hồi JSON."}';
+    }
+    echo $body;
     exit;
 }
 

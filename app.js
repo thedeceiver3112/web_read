@@ -4229,7 +4229,20 @@ async function fetchOnlineStoryJson(path, params, options = {}) {
         error.retryable = response.status === 429 || response.status >= 500;
         throw error;
       }
-      const payload = await response.json();
+      const responseBody = await response.text();
+      if (!responseBody.trim()) {
+        const error = new Error('Máy chủ trả về phản hồi rỗng. Hãy thử lại sau.');
+        error.retryable = true;
+        throw error;
+      }
+      let payload;
+      try {
+        payload = JSON.parse(responseBody);
+      } catch {
+        const error = new Error('Máy chủ trả về dữ liệu không hợp lệ. Hãy thử lại sau.');
+        error.retryable = true;
+        throw error;
+      }
       if (!payload || payload.success !== true || !payload.data) {
         throw new Error(payload?.error || payload?.message || 'Nguồn truyện trả về dữ liệu không hợp lệ.');
       }
