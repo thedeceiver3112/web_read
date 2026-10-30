@@ -131,6 +131,7 @@ const state = {
 };
 
 const WORKSPACE_PERSONALIZATION_KEY = 'stealth_workspace_personalization_v1';
+const WORKSPACE_SHORTCUT_TIP_KEY = 'stealth_workspace_shortcut_tip_v1';
 const WORKSPACE_CUSTOM_PRESETS_KEY = 'stealth_workspace_custom_presets_v1';
 const SPREADSHEET_THEMES = new Set(['theme-googlesheets', 'theme-excel']);
 
@@ -2442,14 +2443,21 @@ function initSpreadsheetPersonalization() {
     button.type = 'button';
     button.id = 'workspace-personalization-button';
     button.className = theme === 'theme-excel' ? 'workspace-personalization-button excel-workspace-button' : 'gsheet-icon-btn workspace-personalization-button';
-    button.title = 'Cá nhân hóa workspace';
-    button.setAttribute('aria-label', 'Cá nhân hóa workspace');
+    button.title = 'Cá nhân hóa workspace (Alt+W)';
+    button.setAttribute('aria-label', 'Cá nhân hóa workspace, phím tắt Alt+W');
     button.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.13.37.35.7.64.96.3.26.68.4 1.08.4H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z"></path></svg>';
     const target = theme === 'theme-excel' ? document.querySelector('.right-window-controls') : document.querySelector('.docs-titlebar-badges');
     if (target) {
       if (theme === 'theme-excel') target.prepend(button); else target.appendChild(button);
       button.addEventListener('click', openWorkspacePersonalization);
     }
+  }
+
+  if (!localStorage.getItem(WORKSPACE_SHORTCUT_TIP_KEY)) {
+    localStorage.setItem(WORKSPACE_SHORTCUT_TIP_KEY, '1');
+    setTimeout(() => {
+      showPageFlipToast('Mẹo: Nhấn <b>Alt + W</b> để mở Cá nhân hóa workspace.');
+    }, 900);
   }
 
   const modal = document.getElementById('workspace-personalization-modal');
@@ -6926,7 +6934,17 @@ function initEventListeners() {
 
     const activeEl = document.activeElement;
     const tag = (activeEl?.tagName || e.target?.tagName || '').toUpperCase();
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || activeEl?.isContentEditable || e.target?.isContentEditable) {
+    const isEditing = tag === 'INPUT' || tag === 'TEXTAREA' || activeEl?.isContentEditable || e.target?.isContentEditable;
+
+    if (!isEditing && e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'w' || e.key === 'W')) {
+      if (getSpreadsheetWorkspaceTheme()) {
+        e.preventDefault();
+        openWorkspacePersonalization();
+        return;
+      }
+    }
+
+    if (isEditing) {
       if (!e.target?.id?.includes('jump')) return;
     }
 
