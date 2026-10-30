@@ -2168,7 +2168,7 @@ body.theme-excel .section-break-badge {
   padding-left: 100%;
   white-space: nowrap;
   color: #0f172a;
-  animation: portal-announcement-scroll-ltr 14s linear infinite;
+  animation: portal-announcement-scroll-rtl 14s linear infinite;
   will-change: transform;
 }
 
@@ -2176,12 +2176,12 @@ body.theme-excel .section-break-badge {
   animation-play-state: paused;
 }
 
-@keyframes portal-announcement-scroll-ltr {
+@keyframes portal-announcement-scroll-rtl {
   from {
-    transform: translateX(-100%);
+    transform: translateX(0);
   }
   to {
-    transform: translateX(0);
+    transform: translateX(-100%);
   }
 }
 
