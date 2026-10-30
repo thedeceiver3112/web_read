@@ -2163,13 +2163,23 @@ body.theme-excel .section-break-badge {
 }
 
 .portal-announcement-text strong {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   min-width: max-content;
   padding-left: 100%;
   white-space: nowrap;
   color: #0f172a;
   animation: portal-announcement-scroll-rtl 14s linear infinite;
   will-change: transform;
+}
+
+.portal-announcement-icon {
+  display: block;
+  width: auto;
+  height: 40px;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .portal-announcement-text:hover strong {
@@ -2196,6 +2206,10 @@ body.theme-excel .section-break-badge {
     white-space: normal;
     animation: none;
     will-change: auto;
+  }
+
+  .portal-announcement-icon {
+    height: 34px;
   }
 }
 

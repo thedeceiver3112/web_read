@@ -208,6 +208,7 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     await expect(announcement).toBeVisible();
     await expect(announcement).toContainText('Cập nhật công cụ cá nhân hóa');
     const announcementTicker = announcement.locator('.portal-announcement-text strong');
+    await expect(announcementTicker.locator('.portal-announcement-icon')).toBeVisible();
     await expect(announcementTicker).toHaveCSS('animation-name', 'portal-announcement-scroll-rtl');
     const startX = await announcementTicker.evaluate(element => element.getBoundingClientRect().x);
     await page.waitForTimeout(200);
