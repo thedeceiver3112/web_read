@@ -21322,3 +21322,73 @@ body.theme-indesign {
   color: #888;
   font-size: 10.5px;
 }
+
+/* Spreadsheet workspace personalization */
+.workspace-personalization-button { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; cursor: pointer; }
+.workspace-personalization-button.excel-workspace-button { width: 30px; height: 28px; padding: 0; border: 0; border-radius: 3px; color: #fff; background: transparent; }
+.workspace-personalization-button.excel-workspace-button:hover { background: rgba(255, 255, 255, 0.16); }
+.workspace-personalization-modal { position: fixed; inset: 0; z-index: 22000; display: none; align-items: center; justify-content: center; padding: 20px; font-family: Arial, sans-serif; color: #1f2937; }
+.workspace-personalization-modal.show { display: flex; }
+.workspace-personalization-backdrop { position: absolute; inset: 0; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px); }
+.workspace-personalization-dialog { position: relative; display: flex; flex-direction: column; width: min(880px, 96vw); max-height: min(850px, 92vh); overflow: hidden; border: 1px solid #d9e0ea; border-radius: 14px; background: #fff; box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28); }
+.workspace-personalization-header { display: flex; align-items: center; justify-content: space-between; min-height: 68px; padding: 14px 20px; border-bottom: 1px solid #e5e7eb; background: linear-gradient(135deg, #f8fafc, #fff); }
+.workspace-personalization-header > div { display: grid; gap: 3px; }
+.workspace-personalization-header strong { font-size: 17px; color: #111827; }
+.workspace-personalization-header small { font-size: 12px; color: #64748b; }
+.workspace-personalization-header > button { width: 34px; height: 34px; border: 0; border-radius: 50%; color: #475569; background: transparent; font-size: 24px; line-height: 1; cursor: pointer; }
+.workspace-personalization-header > button:hover { background: #eef2f7; }
+#workspace-personalization-form { display: flex; min-height: 0; flex: 1; flex-direction: column; }
+.workspace-personalization-body { display: grid; gap: 14px; min-height: 0; overflow: auto; padding: 18px 20px 22px; background: #f8fafc; }
+.workspace-settings-section { padding: 15px; border: 1px solid #e1e7ef; border-radius: 11px; background: #fff; }
+.workspace-section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
+.workspace-section-title > span { display: inline-flex; align-items: center; justify-content: center; width: 25px; height: 25px; border-radius: 50%; color: #fff; background: #0f9d58; font-size: 12px; font-weight: 700; }
+body.theme-excel .workspace-section-title > span { background: #107c41; }
+.workspace-section-title > div { display: grid; gap: 2px; }
+.workspace-section-title strong { font-size: 13px; color: #1f2937; }
+.workspace-section-title small { font-size: 11px; color: #718096; }
+.workspace-field-row, .workspace-display-grid, .workspace-fields-grid, .workspace-columns-grid { display: grid; gap: 10px; }
+.workspace-field-row { grid-template-columns: minmax(180px, 1fr) minmax(190px, 1fr) auto auto; align-items: end; }
+.workspace-fields-two { grid-template-columns: minmax(240px, 2fr) minmax(90px, .5fr) repeat(3, minmax(120px, 1fr)); }
+.workspace-columns-grid { grid-template-columns: repeat(4, minmax(150px, 1fr)); }
+.workspace-display-grid { grid-template-columns: repeat(4, minmax(120px, 1fr)) repeat(2, auto); align-items: end; }
+.workspace-field { display: grid; gap: 5px; min-width: 0; color: #475569; font-size: 11px; font-weight: 600; }
+.workspace-field b { color: #64748b; font-size: 10px; }
+.workspace-field input, .workspace-field select { width: 100%; height: 36px; min-width: 0; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 7px; outline: none; color: #1f2937; background: #fff; font: 12px Arial, sans-serif; }
+.workspace-field input:focus, .workspace-field select:focus { border-color: #0f9d58; box-shadow: 0 0 0 3px rgba(15, 157, 88, 0.12); }
+.workspace-primary-btn, .workspace-secondary-btn, .workspace-icon-action, .workspace-link-btn { height: 36px; border-radius: 7px; font: 600 12px Arial, sans-serif; cursor: pointer; }
+.workspace-primary-btn { padding: 0 18px; border: 1px solid #0f9d58; color: #fff; background: #0f9d58; }
+body.theme-excel .workspace-primary-btn { border-color: #107c41; background: #107c41; }
+.workspace-primary-btn:hover { filter: brightness(.94); }
+.workspace-secondary-btn { padding: 0 13px; border: 1px solid #cbd5e1; color: #334155; background: #fff; }
+.workspace-secondary-btn:hover { background: #f1f5f9; }
+.workspace-icon-action { width: 38px; border: 1px solid #fecaca; color: #b91c1c; background: #fff; }
+.workspace-icon-action:hover { background: #fff1f2; }
+.workspace-link-btn { padding: 0; border: 0; color: #64748b; background: transparent; }
+.workspace-link-btn:hover { color: #b91c1c; }
+.workspace-switch { display: flex; align-items: center; gap: 8px; height: 36px; white-space: nowrap; color: #334155; font-size: 11px; font-weight: 600; cursor: pointer; }
+.workspace-switch input { position: absolute; opacity: 0; pointer-events: none; }
+.workspace-switch span { position: relative; width: 34px; height: 19px; border-radius: 999px; background: #cbd5e1; transition: background .15s ease; }
+.workspace-switch span::after { content: ''; position: absolute; top: 3px; left: 3px; width: 13px; height: 13px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .24); transition: transform .15s ease; }
+.workspace-switch input:checked + span { background: #0f9d58; }
+body.theme-excel .workspace-switch input:checked + span { background: #107c41; }
+.workspace-switch input:checked + span::after { transform: translateX(15px); }
+.workspace-personalization-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-top: 1px solid #e5e7eb; background: #fff; }
+.workspace-personalization-footer > div { display: flex; gap: 9px; }
+body.workspace-gridlines-hidden #excel-table tbody td:not(.row-header) { border-color: transparent !important; }
+body.workspace-gridlines-hidden #excel-table tbody tr + tr td { border-top-color: transparent !important; }
+body[data-workspace-density="compact"] #excel-table tbody td { padding-top: 3px !important; padding-bottom: 3px !important; line-height: 1.35 !important; }
+body[data-workspace-density="comfortable"] #excel-table tbody td { padding-top: 6px !important; padding-bottom: 6px !important; }
+body[data-workspace-density="spacious"] #excel-table tbody td { padding-top: 10px !important; padding-bottom: 10px !important; line-height: 1.9 !important; }
+@media (max-width: 900px) {
+  .workspace-field-row { grid-template-columns: 1fr 1fr auto; }
+  .workspace-field-row .workspace-icon-action { grid-column: 3; }
+  .workspace-fields-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workspace-columns-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workspace-display-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .workspace-personalization-modal { padding: 8px; }
+  .workspace-personalization-dialog { max-height: 96vh; border-radius: 10px; }
+  .workspace-field-row, .workspace-fields-two, .workspace-columns-grid, .workspace-display-grid { grid-template-columns: 1fr; }
+  .workspace-field-row .workspace-icon-action { grid-column: auto; }
+}

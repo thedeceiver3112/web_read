@@ -130,6 +130,61 @@ const state = {
   sapTitle: localStorage.getItem('stealth_title_sap') || 'Display Purchase Order 4500192834',
 };
 
+const WORKSPACE_PERSONALIZATION_KEY = 'stealth_workspace_personalization_v1';
+const WORKSPACE_CUSTOM_PRESETS_KEY = 'stealth_workspace_custom_presets_v1';
+const SPREADSHEET_THEMES = new Set(['theme-googlesheets', 'theme-excel']);
+
+const WORKSPACE_PROFILE_LABELS = {
+  it: 'IT / System',
+  accounting: 'Kế toán',
+  hr: 'Nhân sự',
+  project: 'Quản lý dự án',
+  data: 'Phân tích dữ liệu',
+};
+
+const WORKSPACE_PROFILE_TEMPLATES = {
+  it: {
+    titles: {
+      'theme-googlesheets': 'Báo cáo vận hành hệ thống & KPI Q4',
+      'theme-excel': 'System_Operations_Audit_Q4.xlsx',
+    },
+    sheets: ['System_Log', 'KPI_Q4', 'Incident_Report'],
+    columns: ['Task_ID', 'Category / Module', 'Timestamp', 'Log Description & Execution Details', 'Status', 'Metrics', 'Assignee', 'Action / Remarks'],
+  },
+  accounting: {
+    titles: {
+      'theme-googlesheets': 'Đối soát doanh thu & chi phí tháng 10',
+      'theme-excel': 'Doi_Soat_Doanh_Thu_Thang_10.xlsx',
+    },
+    sheets: ['Doi_Soat', 'Doanh_Thu', 'Chi_Phi'],
+    columns: ['Mã CT', 'Hạng mục', 'Ngày ghi nhận', 'Diễn giải nghiệp vụ', 'Trạng thái', 'Giá trị', 'Phụ trách', 'Ghi chú'],
+  },
+  hr: {
+    titles: {
+      'theme-googlesheets': 'Theo dõi nhân sự & kế hoạch đào tạo',
+      'theme-excel': 'HR_Headcount_Training_Plan.xlsx',
+    },
+    sheets: ['Nhan_Su', 'Cham_Cong', 'Dao_Tao'],
+    columns: ['Mã NV', 'Phòng ban', 'Ngày cập nhật', 'Nội dung đánh giá / ghi chú', 'Trạng thái', 'KPI', 'Quản lý', 'Hành động'],
+  },
+  project: {
+    titles: {
+      'theme-googlesheets': 'Kế hoạch triển khai dự án & tiến độ Sprint',
+      'theme-excel': 'Project_Tracking_Sprint_Plan.xlsx',
+    },
+    sheets: ['Sprint_Backlog', 'Timeline', 'Risk_Log'],
+    columns: ['Task_ID', 'Workstream', 'Due date', 'Task description / Acceptance criteria', 'Status', 'Progress', 'Owner', 'Next action'],
+  },
+  data: {
+    titles: {
+      'theme-googlesheets': 'Báo cáo phân tích dữ liệu & KPI kinh doanh',
+      'theme-excel': 'Business_Data_Analysis_KPI.xlsx',
+    },
+    sheets: ['Raw_Data', 'Analysis', 'Dashboard'],
+    columns: ['Record_ID', 'Data source', 'Timestamp', 'Analysis result / Observation', 'Quality', 'Variance', 'Analyst', 'Recommendation'],
+  },
+};
+
 // Realistic mock categories & modules for corporate audit camouflage
 const MODULES = [
   'SYS_CORE_SEC', 'AUTH_GATEWAY', 'DB_TRANSACTION', 'DATA_PIPELINE',
@@ -2078,6 +2133,396 @@ function showReaderError(title, summary, error = null, stage = '', file = lastFa
   });
 }
 
+function getSpreadsheetWorkspaceTheme() {
+  const theme = state.theme || getThemeForCurrentPage();
+  return SPREADSHEET_THEMES.has(theme) ? theme : '';
+}
+
+function getWorkspacePersonalizationDefaults(theme) {
+  const isExcel = theme === 'theme-excel';
+  return {
+    profile: 'it',
+    title: isExcel ? 'Copy of Salary formula (Gửi IT).xlsx' : 'Báo cáo số liệu & Phân tích KPI Q3',
+    sheets: isExcel
+      ? ['Audit_Finding_Q3', 'Doanh_Thu_Q3', 'Can_Doi_Ke_Toan']
+      : ['Trang tính1', 'Doanh_Thu_Q3', 'Can_Doi_Ke_Toan'],
+    columns: ['Task_ID', 'Category / Module', 'Timestamp', 'Log Description & Execution Details', 'Status', 'Metrics', 'Assignee', 'Action / Remarks'],
+    fontFamily: isExcel ? 'Calibri' : 'Arial',
+    fontSize: isExcel ? 11 : 10,
+    zoom: 100,
+    wrapText: true,
+    gridlines: true,
+    density: 'comfortable',
+    avatar: isExcel ? 'NT' : 'P',
+  };
+}
+
+function readWorkspaceJson(key, fallback = {}) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key) || '');
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function normalizeWorkspacePersonalization(theme, value = {}) {
+  const defaults = getWorkspacePersonalizationDefaults(theme);
+  const cleanList = (candidate, fallback, count) => Array.from({ length: count }, (_, index) => {
+    const text = String(Array.isArray(candidate) ? candidate[index] ?? '' : '').trim();
+    return text || fallback[index];
+  });
+  const fontSize = Math.min(20, Math.max(8, Number(value.fontSize) || defaults.fontSize));
+  const zoom = Math.min(150, Math.max(75, Number(value.zoom) || defaults.zoom));
+  const density = ['compact', 'comfortable', 'spacious'].includes(value.density) ? value.density : defaults.density;
+  return {
+    profile: String(value.profile || defaults.profile),
+    title: String(value.title || defaults.title).trim().slice(0, 120) || defaults.title,
+    sheets: cleanList(value.sheets, defaults.sheets, 3),
+    columns: cleanList(value.columns, defaults.columns, 8),
+    fontFamily: ['Arial', 'Calibri', 'Roboto', 'Segoe UI', 'Times New Roman'].includes(value.fontFamily) ? value.fontFamily : defaults.fontFamily,
+    fontSize,
+    zoom,
+    wrapText: value.wrapText !== undefined ? Boolean(value.wrapText) : defaults.wrapText,
+    gridlines: value.gridlines !== undefined ? Boolean(value.gridlines) : defaults.gridlines,
+    density,
+    avatar: String(value.avatar || defaults.avatar).trim().slice(0, 3).toUpperCase() || defaults.avatar,
+  };
+}
+
+function getWorkspacePersonalization(theme) {
+  const all = readWorkspaceJson(WORKSPACE_PERSONALIZATION_KEY, {});
+  if (all[theme]) return normalizeWorkspacePersonalization(theme, all[theme]);
+  const isExcel = theme === 'theme-excel';
+  const defaults = getWorkspacePersonalizationDefaults(theme);
+  return normalizeWorkspacePersonalization(theme, {
+    ...defaults,
+    title: state[isExcel ? 'excelTitle' : 'gsheetTitle'] || defaults.title,
+    sheets: defaults.sheets.map((fallback, index) => localStorage.getItem(`stealth_sheet_${isExcel ? 'excel' : 'gsheet'}_${index}`) || fallback),
+    columns: defaults.columns.map((fallback, index) => index === 3
+      ? (localStorage.getItem(`stealth_header_title_${isExcel ? 'excel' : 'gsheet'}`) || fallback)
+      : fallback),
+    fontFamily: state.fontFamily || defaults.fontFamily,
+    fontSize: state.fontSize || defaults.fontSize,
+    wrapText: state.wrapText,
+  });
+}
+
+function setSpreadsheetColumnLabels(columns) {
+  const cells = Array.from(document.querySelectorAll('#excel-table .header-titles-row .data-col-title'));
+  columns.forEach((label, index) => {
+    const cell = cells[index];
+    if (!cell) return;
+    if (cell.id === 'story-header-title') {
+      let text = cell.querySelector('.story-header-title-text');
+      if (!text) {
+        text = document.createElement('span');
+        text.className = 'story-header-title-text';
+        cell.prepend(text);
+      }
+      text.textContent = label;
+      return;
+    }
+    cell.textContent = label;
+  });
+}
+
+function applyWorkspacePersonalization(theme, rawSettings, options = {}) {
+  if (!SPREADSHEET_THEMES.has(theme)) return;
+  const settings = normalizeWorkspacePersonalization(theme, rawSettings);
+  const isExcel = theme === 'theme-excel';
+  const title = document.getElementById(isExcel ? 'excel-doc-title' : 'gsheet-doc-title');
+  if (title) title.textContent = settings.title;
+  if (theme === state.theme) {
+    state[isExcel ? 'excelTitle' : 'gsheetTitle'] = settings.title;
+    setDocumentTitle(`${settings.title} - ${isExcel ? 'Excel' : 'Google Trang tính'}`);
+  }
+
+  const sheetIds = isExcel
+    ? ['tab-story-label', 'tab-excel-financial-label', 'tab-excel-balance-label']
+    : ['tab-story-label', 'tab-financial-label', 'tab-balance-label'];
+  sheetIds.forEach((id, index) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = settings.sheets[index];
+  });
+  setSpreadsheetColumnLabels(settings.columns);
+
+  const avatar = document.querySelector(isExcel ? '.excel-user-avatar' : '.gsheet-user-profile-circle span');
+  if (avatar) avatar.textContent = settings.avatar;
+
+  state.fontFamily = settings.fontFamily;
+  state.fontSize = settings.fontSize;
+  state.wrapText = settings.wrapText;
+  state.layoutMode = settings.wrapText ? 'wrap' : 'exact';
+  document.body.classList.toggle('workspace-gridlines-hidden', !settings.gridlines);
+  document.body.dataset.workspaceDensity = settings.density;
+  document.querySelectorAll('.excel-grid-table').forEach(table => {
+    table.style.zoom = String(settings.zoom / 100);
+  });
+  document.querySelectorAll('.gs-zoom-select').forEach(select => {
+    const matchingOption = Array.from(select.options || []).find(option => Number.parseInt(option.value || option.textContent, 10) === settings.zoom);
+    if (matchingOption) select.value = matchingOption.value;
+  });
+  applyStyles();
+  syncControls();
+
+  if (options.persist) {
+    const all = readWorkspaceJson(WORKSPACE_PERSONALIZATION_KEY, {});
+    all[theme] = settings;
+    localStorage.setItem(WORKSPACE_PERSONALIZATION_KEY, JSON.stringify(all));
+    localStorage.setItem(isExcel ? 'stealth_title_excel' : 'stealth_title_gsheet', settings.title);
+    settings.sheets.forEach((name, index) => localStorage.setItem(`stealth_sheet_${isExcel ? 'excel' : 'gsheet'}_${index}`, name));
+    localStorage.setItem(`stealth_header_title_${isExcel ? 'excel' : 'gsheet'}`, settings.columns[3]);
+    saveState();
+  }
+}
+
+function readWorkspacePersonalizationForm(theme) {
+  const form = document.getElementById('workspace-personalization-form');
+  if (!form) return getWorkspacePersonalization(theme);
+  return normalizeWorkspacePersonalization(theme, {
+    profile: form.elements.profile.value,
+    title: form.elements.title.value,
+    sheets: [0, 1, 2].map(index => form.elements[`sheet${index}`].value),
+    columns: Array.from({ length: 8 }, (_, index) => form.elements[`column${index}`].value),
+    fontFamily: form.elements.fontFamily.value,
+    fontSize: form.elements.fontSize.value,
+    zoom: form.elements.zoom.value,
+    wrapText: form.elements.wrapText.checked,
+    gridlines: form.elements.gridlines.checked,
+    density: form.elements.density.value,
+    avatar: form.elements.avatar.value,
+  });
+}
+
+function fillWorkspacePersonalizationForm(theme, rawSettings) {
+  const form = document.getElementById('workspace-personalization-form');
+  if (!form) return;
+  const settings = normalizeWorkspacePersonalization(theme, rawSettings);
+  form.elements.profile.value = settings.profile;
+  form.elements.title.value = settings.title;
+  settings.sheets.forEach((value, index) => { form.elements[`sheet${index}`].value = value; });
+  settings.columns.forEach((value, index) => { form.elements[`column${index}`].value = value; });
+  form.elements.fontFamily.value = settings.fontFamily;
+  form.elements.fontSize.value = settings.fontSize;
+  form.elements.zoom.value = settings.zoom;
+  form.elements.wrapText.checked = settings.wrapText;
+  form.elements.gridlines.checked = settings.gridlines;
+  form.elements.density.value = settings.density;
+  form.elements.avatar.value = settings.avatar;
+}
+
+function getWorkspaceCustomPresets(theme) {
+  const all = readWorkspaceJson(WORKSPACE_CUSTOM_PRESETS_KEY, {});
+  return all[theme] && typeof all[theme] === 'object' ? all[theme] : {};
+}
+
+function renderWorkspacePresetOptions(theme, selectedValue = '') {
+  const select = document.getElementById('workspace-profile-select');
+  if (!select) return;
+  select.innerHTML = '';
+  Object.entries(WORKSPACE_PROFILE_LABELS).forEach(([value, label]) => {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = label;
+    select.appendChild(option);
+  });
+  const custom = getWorkspaceCustomPresets(theme);
+  if (Object.keys(custom).length) {
+    const group = document.createElement('optgroup');
+    group.label = 'Preset của tôi';
+    Object.keys(custom).sort((a, b) => a.localeCompare(b, 'vi')).forEach(name => {
+      const option = document.createElement('option');
+      option.value = `custom:${name}`;
+      option.textContent = name;
+      group.appendChild(option);
+    });
+    select.appendChild(group);
+  }
+  select.value = selectedValue && select.querySelector(`option[value="${CSS.escape(selectedValue)}"]`) ? selectedValue : 'it';
+}
+
+function buildWorkspacePersonalizationModal() {
+  if (document.getElementById('workspace-personalization-modal')) return;
+  const modal = document.createElement('div');
+  modal.id = 'workspace-personalization-modal';
+  modal.className = 'workspace-personalization-modal';
+  modal.setAttribute('aria-hidden', 'true');
+  modal.innerHTML = `
+    <div class="workspace-personalization-backdrop" data-workspace-cancel></div>
+    <section class="workspace-personalization-dialog" role="dialog" aria-modal="true" aria-labelledby="workspace-personalization-title">
+      <header class="workspace-personalization-header">
+        <div><strong id="workspace-personalization-title">Cá nhân hóa workspace</strong><small>Google Sheets / Microsoft Excel</small></div>
+        <button type="button" data-workspace-cancel aria-label="Đóng">×</button>
+      </header>
+      <form id="workspace-personalization-form">
+        <div class="workspace-personalization-body">
+          <section class="workspace-settings-section workspace-profile-section">
+            <div class="workspace-section-title"><span>1</span><div><strong>Hồ sơ công việc</strong><small>Chọn mẫu rồi chỉnh lại theo công việc của bạn</small></div></div>
+            <div class="workspace-field-row">
+              <label class="workspace-field workspace-field-grow">Mẫu giao diện<select name="profile" id="workspace-profile-select"></select></label>
+              <label class="workspace-field workspace-field-grow">Tên preset mới<input name="presetName" maxlength="40" placeholder="Ví dụ: Báo cáo tuần của tôi"></label>
+              <button type="button" class="workspace-secondary-btn" id="workspace-save-preset">Lưu preset</button>
+              <button type="button" class="workspace-icon-action" id="workspace-delete-preset" title="Xóa preset đang chọn" aria-label="Xóa preset">🗑</button>
+            </div>
+          </section>
+          <section class="workspace-settings-section">
+            <div class="workspace-section-title"><span>2</span><div><strong>Nhận diện tài liệu</strong><small>Đổi tên file, avatar và các trang tính</small></div></div>
+            <div class="workspace-fields-grid workspace-fields-two">
+              <label class="workspace-field">Tên tài liệu<input name="title" maxlength="120"></label>
+              <label class="workspace-field">Chữ avatar<input name="avatar" maxlength="3"></label>
+              <label class="workspace-field">Sheet chính<input name="sheet0" maxlength="40"></label>
+              <label class="workspace-field">Sheet 2<input name="sheet1" maxlength="40"></label>
+              <label class="workspace-field">Sheet 3<input name="sheet2" maxlength="40"></label>
+            </div>
+          </section>
+          <section class="workspace-settings-section">
+            <div class="workspace-section-title"><span>3</span><div><strong>Tiêu đề bảng</strong><small>Tùy chỉnh các cột A–H cho đúng ngữ cảnh công việc</small></div></div>
+            <div class="workspace-columns-grid">
+              ${Array.from({ length: 8 }, (_, index) => `<label class="workspace-field"><b>${String.fromCharCode(65 + index)}</b><input name="column${index}" maxlength="70"></label>`).join('')}
+            </div>
+          </section>
+          <section class="workspace-settings-section">
+            <div class="workspace-section-title"><span>4</span><div><strong>Hiển thị</strong><small>Áp dụng ngay nhưng không làm mất vị trí đang đọc</small></div></div>
+            <div class="workspace-display-grid">
+              <label class="workspace-field">Font<select name="fontFamily"><option>Arial</option><option>Calibri</option><option>Roboto</option><option>Segoe UI</option><option>Times New Roman</option></select></label>
+              <label class="workspace-field">Cỡ chữ<select name="fontSize">${[8,9,10,11,12,13,14,16,18,20].map(size => `<option value="${size}">${size} pt</option>`).join('')}</select></label>
+              <label class="workspace-field">Zoom<select name="zoom">${[75,90,100,110,125,150].map(size => `<option value="${size}">${size}%</option>`).join('')}</select></label>
+              <label class="workspace-field">Mật độ<select name="density"><option value="compact">Gọn</option><option value="comfortable">Vừa</option><option value="spacious">Thoáng</option></select></label>
+              <label class="workspace-switch"><input type="checkbox" name="wrapText"><span></span>Wrap text</label>
+              <label class="workspace-switch"><input type="checkbox" name="gridlines"><span></span>Hiện đường lưới</label>
+            </div>
+          </section>
+        </div>
+        <footer class="workspace-personalization-footer">
+          <button type="button" class="workspace-link-btn" id="workspace-reset-defaults">Khôi phục mặc định</button>
+          <div><button type="button" class="workspace-secondary-btn" data-workspace-cancel>Hủy</button><button type="submit" class="workspace-primary-btn">Áp dụng</button></div>
+        </footer>
+      </form>
+    </section>`;
+  document.body.appendChild(modal);
+}
+
+let workspacePersonalizationOriginal = null;
+
+function openWorkspacePersonalization() {
+  const theme = getSpreadsheetWorkspaceTheme();
+  if (!theme) return;
+  buildWorkspacePersonalizationModal();
+  workspacePersonalizationOriginal = getWorkspacePersonalization(theme);
+  renderWorkspacePresetOptions(theme, workspacePersonalizationOriginal.profile);
+  fillWorkspacePersonalizationForm(theme, workspacePersonalizationOriginal);
+  const modal = document.getElementById('workspace-personalization-modal');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  document.getElementById('workspace-profile-select')?.focus();
+}
+
+function closeWorkspacePersonalization(restore = false) {
+  const theme = getSpreadsheetWorkspaceTheme();
+  if (restore && theme && workspacePersonalizationOriginal) {
+    applyWorkspacePersonalization(theme, workspacePersonalizationOriginal);
+  }
+  const modal = document.getElementById('workspace-personalization-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  workspacePersonalizationOriginal = null;
+}
+
+function initSpreadsheetPersonalization() {
+  const theme = getSpreadsheetWorkspaceTheme();
+  if (!theme) return;
+  buildWorkspacePersonalizationModal();
+  applyWorkspacePersonalization(theme, getWorkspacePersonalization(theme));
+
+  if (!document.getElementById('workspace-personalization-button')) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'workspace-personalization-button';
+    button.className = theme === 'theme-excel' ? 'workspace-personalization-button excel-workspace-button' : 'gsheet-icon-btn workspace-personalization-button';
+    button.title = 'Cá nhân hóa workspace';
+    button.setAttribute('aria-label', 'Cá nhân hóa workspace');
+    button.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.13.37.35.7.64.96.3.26.68.4 1.08.4H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z"></path></svg>';
+    const target = theme === 'theme-excel' ? document.querySelector('.right-window-controls') : document.querySelector('.docs-titlebar-badges');
+    if (target) {
+      if (theme === 'theme-excel') target.prepend(button); else target.appendChild(button);
+      button.addEventListener('click', openWorkspacePersonalization);
+    }
+  }
+
+  const modal = document.getElementById('workspace-personalization-modal');
+  if (modal.dataset.initialized === 'true') return;
+  modal.dataset.initialized = 'true';
+  const form = document.getElementById('workspace-personalization-form');
+  const preview = () => applyWorkspacePersonalization(theme, readWorkspacePersonalizationForm(theme));
+  form.querySelectorAll('input:not([name="presetName"]), select:not([name="profile"])').forEach(control => {
+    control.addEventListener(control.type === 'checkbox' || control.tagName === 'SELECT' ? 'change' : 'input', preview);
+  });
+  form.elements.profile.addEventListener('change', event => {
+    const value = event.target.value;
+    let settings;
+    if (value.startsWith('custom:')) {
+      settings = getWorkspaceCustomPresets(theme)[value.slice(7)];
+    } else {
+      const template = WORKSPACE_PROFILE_TEMPLATES[value] || WORKSPACE_PROFILE_TEMPLATES.it;
+      settings = {
+        ...readWorkspacePersonalizationForm(theme),
+        profile: value,
+        title: template.titles[theme],
+        sheets: template.sheets,
+        columns: template.columns,
+      };
+    }
+    if (!settings) return;
+    fillWorkspacePersonalizationForm(theme, { ...settings, profile: value });
+    applyWorkspacePersonalization(theme, readWorkspacePersonalizationForm(theme));
+  });
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    const settings = readWorkspacePersonalizationForm(theme);
+    applyWorkspacePersonalization(theme, settings, { persist: true });
+    closeWorkspacePersonalization(false);
+    showPageFlipToast('✅ Đã áp dụng workspace cá nhân hóa.');
+  });
+  modal.querySelectorAll('[data-workspace-cancel]').forEach(button => button.addEventListener('click', () => closeWorkspacePersonalization(true)));
+  document.getElementById('workspace-reset-defaults').addEventListener('click', () => {
+    const defaults = getWorkspacePersonalizationDefaults(theme);
+    fillWorkspacePersonalizationForm(theme, defaults);
+    applyWorkspacePersonalization(theme, defaults);
+  });
+  document.getElementById('workspace-save-preset').addEventListener('click', () => {
+    const name = form.elements.presetName.value.trim();
+    if (!name) {
+      form.elements.presetName.focus();
+      showPageFlipToast('Nhập tên preset trước khi lưu.');
+      return;
+    }
+    const all = readWorkspaceJson(WORKSPACE_CUSTOM_PRESETS_KEY, {});
+    all[theme] = all[theme] && typeof all[theme] === 'object' ? all[theme] : {};
+    all[theme][name] = { ...readWorkspacePersonalizationForm(theme), profile: `custom:${name}` };
+    localStorage.setItem(WORKSPACE_CUSTOM_PRESETS_KEY, JSON.stringify(all));
+    renderWorkspacePresetOptions(theme, `custom:${name}`);
+    form.elements.presetName.value = '';
+    showPageFlipToast(`✅ Đã lưu preset: <b>${escapeHtml(name)}</b>`);
+  });
+  document.getElementById('workspace-delete-preset').addEventListener('click', () => {
+    const selected = form.elements.profile.value;
+    if (!selected.startsWith('custom:')) {
+      showPageFlipToast('Chỉ có thể xóa preset do bạn tự tạo.');
+      return;
+    }
+    const name = selected.slice(7);
+    const all = readWorkspaceJson(WORKSPACE_CUSTOM_PRESETS_KEY, {});
+    if (all[theme]) delete all[theme][name];
+    localStorage.setItem(WORKSPACE_CUSTOM_PRESETS_KEY, JSON.stringify(all));
+    renderWorkspacePresetOptions(theme, 'it');
+    form.elements.profile.dispatchEvent(new Event('change'));
+    showPageFlipToast(`Đã xóa preset: <b>${escapeHtml(name)}</b>`);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   ensureSharedReaderComponents();
   loadSavedState();
@@ -2088,6 +2533,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   StealthImageManager.init();
   initTitleEditing();
   initStealthEditableElements();
+  initSpreadsheetPersonalization();
   initEventListeners();
   syncControls();
   syncUniversalNavbar();
@@ -3504,7 +3950,10 @@ const THEME_DOC_CONFIGS = {
       const storyLabel = document.getElementById('tab-story-label');
       const headerTitle = document.getElementById('story-header-title');
       if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_gsheet_0') || 'Trang tính1';
-      if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_gsheet') || 'Log Description & Execution Details';
+      if (headerTitle) {
+        const headerText = headerTitle.querySelector('.story-header-title-text');
+        if (headerText) headerText.textContent = localStorage.getItem('stealth_header_title_gsheet') || 'Log Description & Execution Details';
+      }
       initSpreadsheetColDResize();
       applySpreadsheetColDWidth(getSpreadsheetColDWidth(), false);
     }
@@ -3524,7 +3973,10 @@ const THEME_DOC_CONFIGS = {
       const storyLabel = document.getElementById('tab-story-label');
       const headerTitle = document.getElementById('story-header-title');
       if (storyLabel) storyLabel.textContent = localStorage.getItem('stealth_sheet_excel_0') || 'Audit_Finding_Q3';
-      if (headerTitle) headerTitle.textContent = localStorage.getItem('stealth_header_title_excel') || 'Audit Log Finding & Notes (Story Text)';
+      if (headerTitle) {
+        const headerText = headerTitle.querySelector('.story-header-title-text');
+        if (headerText) headerText.textContent = localStorage.getItem('stealth_header_title_excel') || 'Audit Log Finding & Notes (Story Text)';
+      }
       initSpreadsheetColDResize();
       applySpreadsheetColDWidth(getSpreadsheetColDWidth(), false);
     }
@@ -4148,7 +4600,9 @@ function initStealthEditableElements() {
     // Restore saved value from localStorage if available
     const saved = localStorage.getItem(key);
     if (saved && saved.trim()) {
-      el.textContent = saved;
+      const nestedText = el.querySelector('.story-header-title-text');
+      if (nestedText) nestedText.textContent = saved;
+      else el.textContent = saved;
     }
 
     if (el._stealthInitDone) return;
@@ -4166,7 +4620,8 @@ function initStealthEditableElements() {
 
     // Save on blur
     el.addEventListener('blur', () => {
-      const val = el.textContent.trim();
+      const nestedText = el.querySelector('.story-header-title-text');
+      const val = (nestedText ? nestedText.textContent : el.textContent).trim();
       if (val) {
         localStorage.setItem(key, val);
         showPageFlipToast(`✅ Đã lưu: <b>${escapeHtml(val.length > 32 ? val.substring(0, 30) + '...' : val)}</b>`);
@@ -6434,9 +6889,15 @@ function initEventListeners() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       const imgViewerModal = document.getElementById('stealth-image-viewer-modal');
+      const workspaceModal = document.getElementById('workspace-personalization-modal');
       if (imgViewerModal && imgViewerModal.classList.contains('show')) {
         e.preventDefault();
         closeStoryImageViewer();
+        return;
+      }
+      if (workspaceModal && workspaceModal.classList.contains('show')) {
+        e.preventDefault();
+        closeWorkspacePersonalization(true);
         return;
       }
       const themeModal = document.getElementById('theme-modal');
