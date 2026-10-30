@@ -1,24 +1,24 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('cá nhân hóa spreadsheet workspace', () => {
-  test('Alt+W mở cá nhân hóa nhưng không kích hoạt khi đang nhập liệu', async ({ page }) => {
+  test('G mở cá nhân hóa nhưng không kích hoạt khi đang nhập liệu', async ({ page }) => {
     await page.goto('/googlesheets.html');
     const modal = page.locator('#workspace-personalization-modal');
     const button = page.locator('#workspace-personalization-button');
 
-    await expect(button).toHaveAttribute('title', /Alt\+W/);
-    await page.keyboard.press('Alt+W');
+    await expect(button).toHaveAttribute('title', /phím G/);
+    await page.keyboard.press('g');
     await expect(modal).toHaveClass(/show/);
     await page.keyboard.press('Escape');
     await expect(modal).not.toHaveClass(/show/);
 
     await page.locator('#gsheet-doc-title').focus();
-    await page.keyboard.press('Alt+W');
+    await page.keyboard.press('g');
     await expect(modal).not.toHaveClass(/show/);
-    await expect.poll(() => page.evaluate(() => localStorage.getItem('stealth_workspace_shortcut_tip_v1'))).toBe('1');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('stealth_workspace_shortcut_tip_v2'))).toBe('1');
 
     await page.goto('/excel.html');
-    await page.keyboard.press('Alt+W');
+    await page.keyboard.press('g');
     await expect(page.locator('#workspace-personalization-modal')).toHaveClass(/show/);
   });
 
