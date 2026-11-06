@@ -14,12 +14,13 @@ test.describe('Public legal pages', () => {
     await page.screenshot({ path: testInfo.outputPath('privacy-desktop.png'), fullPage: true });
   });
 
-  test('terms page exposes copyright and third-party content rules', async ({ page }) => {
+  test('terms page exposes copyright rules without identifying content providers', async ({ page }) => {
     await page.goto('/terms.html');
 
     await expect(page).toHaveTitle('Điều khoản sử dụng | Stealth Reader');
     await expect(page.locator('h1')).toHaveText('Điều khoản sử dụng');
-    await expect(page.locator('#noi-dung-online')).toContainText('bên thứ ba');
+    await expect(page.locator('#noi-dung-truc-tuyen')).toContainText('chủ sở hữu hợp pháp');
+    await expect(page.locator('#noi-dung-truc-tuyen')).not.toContainText('nguồn');
     await expect(page.locator('#lien-he')).toContainText('yêu cầu bản quyền');
     await expect(page.locator('a[href="privacy.html"]').first()).toBeVisible();
   });
