@@ -1692,6 +1692,31 @@ function initFeedbackListeners() {
   }
 }
 
+const READER_TOOL_PANEL_META = Object.freeze({
+  toc: {
+    title: 'Mục lục tài liệu',
+    description: 'Di chuyển nhanh giữa các chương và vị trí chính.'
+  },
+  search: {
+    title: 'Tìm trong tài liệu',
+    description: 'Tìm từ khóa trong toàn bộ nội dung đang đọc.'
+  },
+  bookmarks: {
+    title: 'Dấu trang',
+    description: 'Lưu lại vị trí quan trọng và ghi chú ngắn.'
+  },
+  library: {
+    title: 'Thư viện trên thiết bị',
+    description: 'Mở lại hoặc quản lý các tài liệu đã lưu trong trình duyệt.'
+  },
+  layout: {
+    title: 'Hiển thị & bố cục',
+    description: 'Điều chỉnh xuống dòng, khoảng cách và cách trình bày văn bản.'
+  }
+});
+
+let readerToolsLastFocusedElement = null;
+
 function initReaderToolsUI() {
   if (document.getElementById('reader-tools-modal')) return;
   const modal = document.createElement('div');
@@ -1702,22 +1727,75 @@ function initReaderToolsUI() {
     <div class="reader-tools-backdrop" data-reader-tools-close></div>
     <section class="reader-tools-dialog" role="dialog" aria-modal="true" aria-labelledby="reader-tools-title">
       <header class="reader-tools-header">
-        <div><strong id="reader-tools-title">Công cụ đọc</strong><small id="reader-tools-document-name">Chưa nạp tài liệu</small></div>
-        <button class="reader-tools-icon-button" data-reader-tools-close title="Đóng" aria-label="Đóng">×</button>
+        <div class="reader-tools-heading">
+          <span class="reader-tools-heading-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </span>
+          <div><strong id="reader-tools-title">Công cụ đọc</strong><small id="reader-tools-document-name">Chưa nạp tài liệu</small></div>
+        </div>
+        <button type="button" class="reader-tools-icon-button" data-reader-tools-close title="Đóng" aria-label="Đóng">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+        </button>
       </header>
-      <nav class="reader-tools-tabs" aria-label="Công cụ tài liệu">
-        <button data-reader-tab="library">Thư viện</button>
-        <button data-reader-tab="bookmarks">Dấu trang</button>
-        <button data-reader-tab="toc">Mục lục</button>
-        <button data-reader-tab="search">Tìm kiếm</button>
-        <button data-reader-tab="layout">Bố cục dòng</button>
-      </nav>
-      <div class="reader-tools-content" id="reader-tools-content"></div>
+      <div class="reader-tools-workspace">
+        <nav class="reader-tools-tabs" role="tablist" aria-orientation="vertical" aria-label="Công cụ tài liệu">
+          <div class="reader-tools-tab-group" role="presentation">
+            <span class="reader-tools-tab-group-label">Điều hướng</span>
+            <button id="reader-tab-toc" type="button" role="tab" aria-selected="false" aria-controls="reader-tools-content" data-reader-tab="toc">
+              <span class="reader-tools-tab-icon" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg></span>
+              <span>Mục lục</span>
+            </button>
+            <button id="reader-tab-search" type="button" role="tab" aria-selected="false" aria-controls="reader-tools-content" data-reader-tab="search">
+              <span class="reader-tools-tab-icon" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg></span>
+              <span>Tìm kiếm</span><kbd>Ctrl F</kbd>
+            </button>
+            <button id="reader-tab-bookmarks" type="button" role="tab" aria-selected="false" aria-controls="reader-tools-content" data-reader-tab="bookmarks">
+              <span class="reader-tools-tab-icon" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></span>
+              <span>Dấu trang</span>
+            </button>
+          </div>
+          <div class="reader-tools-tab-group" role="presentation">
+            <span class="reader-tools-tab-group-label">Tài liệu</span>
+            <button id="reader-tab-library" type="button" role="tab" aria-selected="false" aria-controls="reader-tools-content" data-reader-tab="library">
+              <span class="reader-tools-tab-icon" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+              <span>Thư viện</span>
+            </button>
+          </div>
+          <div class="reader-tools-tab-group" role="presentation">
+            <span class="reader-tools-tab-group-label">Hiển thị</span>
+            <button id="reader-tab-layout" type="button" role="tab" aria-selected="false" aria-controls="reader-tools-content" data-reader-tab="layout">
+              <span class="reader-tools-tab-icon" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16M13 9h5M13 13h5"></path></svg></span>
+              <span>Bố cục dòng</span>
+            </button>
+          </div>
+        </nav>
+        <section class="reader-tools-panel">
+          <header class="reader-tools-panel-header">
+            <h2 id="reader-tools-panel-title">Tìm trong tài liệu</h2>
+            <p id="reader-tools-panel-description">Tìm từ khóa trong toàn bộ nội dung đang đọc.</p>
+          </header>
+          <div class="reader-tools-content" id="reader-tools-content" role="tabpanel" tabindex="0"></div>
+        </section>
+      </div>
     </section>`;
   document.body.appendChild(modal);
   modal.querySelectorAll('[data-reader-tools-close]').forEach(button => button.addEventListener('click', closeReaderTools));
   modal.querySelectorAll('[data-reader-tab]').forEach(button => {
     button.addEventListener('click', () => renderReaderToolsPanel(button.dataset.readerTab));
+  });
+  modal.querySelector('.reader-tools-tabs')?.addEventListener('keydown', event => {
+    const tabs = [...modal.querySelectorAll('[data-reader-tab]')];
+    const currentIndex = tabs.indexOf(event.target.closest('[data-reader-tab]'));
+    if (currentIndex < 0) return;
+    let nextIndex = currentIndex;
+    if (['ArrowDown', 'ArrowRight'].includes(event.key)) nextIndex = (currentIndex + 1) % tabs.length;
+    else if (['ArrowUp', 'ArrowLeft'].includes(event.key)) nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = tabs.length - 1;
+    else return;
+    event.preventDefault();
+    tabs[nextIndex].focus();
+    renderReaderToolsPanel(tabs[nextIndex].dataset.readerTab);
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && modal.classList.contains('open')) closeReaderTools();
@@ -1731,9 +1809,11 @@ function initReaderToolsUI() {
 function openReaderTools(tab = 'search') {
   initReaderToolsUI();
   const modal = document.getElementById('reader-tools-modal');
+  readerToolsLastFocusedElement = document.activeElement;
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
   renderReaderToolsPanel(tab);
+  requestAnimationFrame(() => modal.querySelector(`[data-reader-tab="${tab}"]`)?.focus());
 }
 
 function closeReaderTools() {
@@ -1741,13 +1821,26 @@ function closeReaderTools() {
   if (!modal) return;
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
+  if (readerToolsLastFocusedElement?.isConnected) readerToolsLastFocusedElement.focus();
 }
 
 async function renderReaderToolsPanel(tab = 'search') {
   const modal = document.getElementById('reader-tools-modal');
   const content = document.getElementById('reader-tools-content');
   if (!modal || !content) return;
-  modal.querySelectorAll('[data-reader-tab]').forEach(button => button.classList.toggle('active', button.dataset.readerTab === tab));
+  const panelMeta = READER_TOOL_PANEL_META[tab] || READER_TOOL_PANEL_META.search;
+  modal.querySelectorAll('[data-reader-tab]').forEach(button => {
+    const isActive = button.dataset.readerTab === tab;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-selected', String(isActive));
+    button.tabIndex = isActive ? 0 : -1;
+  });
+  const activeTab = modal.querySelector(`[data-reader-tab="${tab}"]`);
+  if (activeTab?.id) content.setAttribute('aria-labelledby', activeTab.id);
+  const panelTitle = document.getElementById('reader-tools-panel-title');
+  const panelDescription = document.getElementById('reader-tools-panel-description');
+  if (panelTitle) panelTitle.textContent = panelMeta.title;
+  if (panelDescription) panelDescription.textContent = panelMeta.description;
   const name = document.getElementById('reader-tools-document-name');
   if (name) name.textContent = state.pdfFileName || 'Chưa nạp tài liệu';
   content.innerHTML = '<div class="reader-tools-empty">Đang đọc dữ liệu...</div>';
@@ -6348,8 +6441,8 @@ function initUniversalNavbar() {
           <svg class="unav-bookmark-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
           <span class="unav-bookmark-text">Đánh dấu</span>
         </button>
-        <button class="unav-btn unav-btn-tools" id="univ-btn-tools" title="Mở thư viện, dấu trang, mục lục, bố cục dòng và tìm kiếm">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/><path d="M8 11h6M11 8v6"/></svg>
+        <button class="unav-btn unav-btn-tools" id="univ-btn-tools" title="Mở công cụ đọc và điều hướng tài liệu">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h2M10 12h10M4 18h6M14 18h6"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="12" cy="18" r="2"/></svg>
           <span>Công cụ</span>
         </button>
       </div>
