@@ -126,6 +126,7 @@ const state = {
   canvaTitle: localStorage.getItem('stealth_title_canva') || 'Báo Cáo Chiến Lược Thương Hiệu 2026',
   powerpointTitle: localStorage.getItem('stealth_title_powerpoint') || 'Q3_Business_Review_Strategic_Plan.pptx',
   tvplTitle: localStorage.getItem('stealth_title_tvpl') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ',
+  tvplCuTitle: localStorage.getItem('stealth_title_tvpl_cu') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ',
   capcutTitle: localStorage.getItem('stealth_title_capcut') || 'CapCut Pro - Draft_Project_0928_Vlog',
   sapTitle: localStorage.getItem('stealth_title_sap') || 'Display Purchase Order 4500192834',
 };
@@ -344,6 +345,7 @@ const THEME_PAGES = {
   'theme-canva': 'canva.html',
   'theme-powerpoint': 'powerpoint.html',
   'theme-thuvienphapluat': 'thuvienphapluat.html',
+  'theme-thuvienphapluat-cu': 'thuvienphapluat-cu.html',
   'theme-premiere': 'premiere.html',
   'theme-claude': 'claude.html',
   'theme-chatgpt': 'chatgpt.html',
@@ -373,7 +375,7 @@ function themeControlIds(suffix) {
 // Boss-key button ids use full theme names rather than the short prefixes above.
 const BOSS_KEY_BUTTON_IDS = [
   'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'indesign', 'blender', 'linkedin',
-  'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat',
+  'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat', 'thuvienphapluat-cu',
   'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'jira'
 ].map(name => `btn-boss-key-${name}`);
 
@@ -1099,6 +1101,7 @@ function getThemeForCurrentPage() {
   if (path.endsWith('outlook.html')) return 'theme-outlook';
   if (path.endsWith('jira.html')) return 'theme-jira';
   if (path.endsWith('slack.html')) return 'theme-slack';
+  if (path.endsWith('thuvienphapluat-cu.html') || path.endsWith('tvpl-cu.html')) return 'theme-thuvienphapluat-cu';
   if (path.endsWith('thuvienphapluat.html') || path.endsWith('tvpl.html')) return 'theme-thuvienphapluat';
   if (path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html')) {
     return localStorage.getItem('selected_theme') || 'theme-googlesheets';
@@ -1555,6 +1558,7 @@ const FAVICONS = {
   'theme-canva': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22canva-g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2300C4CC%22/%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%233A88E9%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%237D2AE8%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2222%22%20fill%3D%22url%28%23canva-g%29%22/%3E%20%3Cpath%20d%3D%22M30%2016.5c-3.2%200-6.8%201.8-9.2%204.8-2.6%203.2-3.8%207.5-3.8%2011.2%200%204.2%202.6%206.5%206.5%206.5%203.8%200%206.6-2.2%208.2-4.5l-2.6-2.2c-1.2%201.5-3.2%203.1-5.2%203.1-2.2%200-3.5-1.5-3.5-4.2%200-3.2%201.2-7%203.2-9.6%201.8-2.2%204.2-3.5%206.4-3.5%202.1%200%203.2%201%203.2%202.6%200%201.2-.6%202.2-1.8%202.8-1.5.8-3.2%201-5.2%201.2l-1.2.1c-.2%201.2-.3%202.5-.3%203.6%200%201.5.3%202.8.8%203.8l2.8-.4c-.4-.8-.6-1.8-.6-2.8%200-.8.1-1.6.2-2.4%201.8-.2%203.6-.5%205.1-1.5%202-1.2%203-2.8%203-4.8%200-2.8-2.2-4.4-5.6-4.4z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
   'theme-powerpoint': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22ppt-g1%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23D24726%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%239C2C12%22/%3E%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22ppt-g2%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FA8060%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23D24726%22/%3E%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20x%3D%2215%22%20y%3D%227%22%20width%3D%2227%22%20height%3D%2234%22%20rx%3D%224%22%20fill%3D%22url%28%23ppt-g1%29%22/%3E%20%3Ccircle%20cx%3D%2228.5%22%20cy%3D%2224%22%20r%3D%228.5%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.2%22/%3E%20%3Cpath%20d%3D%22M28.5%2015.5V24H37A8.5%208.5%200%200%200%2028.5%2015.5z%22%20fill%3D%22%23FFFFFF%22%20opacity%3D%220.9%22/%3E%20%3Crect%20x%3D%226%22%20y%3D%2211%22%20width%3D%2221%22%20height%3D%2226%22%20rx%3D%224%22%20fill%3D%22url%28%23ppt-g2%29%22%20filter%3D%22drop-shadow%280%203px%206px%20rgba%280%2C0%2C0%2C0.35%29%29%22/%3E%20%3Cpath%20d%3D%22M12%2017h6c2.8%200%204.8%201.8%204.8%204.5s-2%204.5-4.8%204.5h-2.8V31H12V17zm3.2%206.2h2.6c1.2%200%202-.7%202-1.7s-.8-1.7-2-1.7h-2.6v3.4z%22%20fill%3D%22%23FFFFFF%22/%3E%20%3C/svg%3E",
   'theme-thuvienphapluat': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22tvpl-g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23990000%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23660000%22/%3E%20%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22tvpl-gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FFDF73%22/%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23D4AF37%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23AA820A%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22url%28%23tvpl-g%29%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2220%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.8%22%20fill%3D%22none%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2211.5%22%20r%3D%222.2%22%20fill%3D%22url%28%23tvpl-gold%29%22/%3E%20%3Cpath%20d%3D%22M24%2011v26M18%2037h12M12%2017h24%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209M12%2017l5%209M7%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209M36%2017l5%209M31%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3C/svg%3E",
+  'theme-thuvienphapluat-cu': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22tvpl-g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23990000%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23660000%22/%3E%20%3C/linearGradient%3E%20%3ClinearGradient%20id%3D%22tvpl-gold%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23FFDF73%22/%3E%20%3Cstop%20offset%3D%2250%25%22%20stop-color%3D%22%23D4AF37%22/%3E%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23AA820A%22/%3E%20%3C/linearGradient%3E%20%3C/defs%3E%20%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22url%28%23tvpl-g%29%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%2220%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.8%22%20fill%3D%22none%22/%3E%20%3Ccircle%20cx%3D%2224%22%20cy%3D%2211.5%22%20r%3D%222.2%22%20fill%3D%22url%28%23tvpl-gold%29%22/%3E%20%3Cpath%20d%3D%22M24%2011v26M18%2037h12M12%2017h24%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%222.2%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M12%2017l-5%209M12%2017l5%209M7%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209h10l-5-9z%22%20fill%3D%22url%28%23tvpl-gold%29%22%20opacity%3D%220.35%22/%3E%20%3Cpath%20d%3D%22M36%2017l-5%209M36%2017l5%209M31%2026c0%202.5%2010%202.5%2010%200%22%20stroke%3D%22url%28%23tvpl-gold%29%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22/%3E%20%3C/svg%3E",
   'theme-teams': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%23464EB8%22/%3E%3Ccircle%20cx%3D%2233%22%20cy%3D%2217%22%20r%3D%225%22%20fill%3D%22%237B83EB%22/%3E%3Cpath%20d%3D%22M25%2031c0-4.4%203.6-8%208-8s8%203.6%208%208v2H25v-2z%22%20fill%3D%22%237B83EB%22/%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2215%22%20r%3D%227%22%20fill%3D%22%23FFFFFF%22/%3E%3Cpath%20d%3D%22M9%2034c0-6%205-11%2011-11s11%205%2011%2011v2H9v-2z%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
   'theme-revit': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%227%22%20fill%3D%22%23005A9C%22/%3E%3Cpath%20d%3D%22M12%209H26C31.5%209%2035.5%2012.8%2035.5%2018C35.5%2021.8%2032.8%2024.8%2028.5%2026.2L36%2039H28L21.5%2027.5H18V39H12V9ZM18%2022H25C27.5%2022%2029.5%2020.5%2029.5%2018C29.5%2015.5%2027.5%2014%2025%2014H18V22Z%22%20fill%3D%22white%22/%3E%3Cpath%20d%3D%22M22%2027.5L28.5%2039H35L27%2027.5H22Z%22%20fill%3D%22%2378C2F5%22/%3E%3C/svg%3E",
   'theme-misa': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20d%3D%22M24%203L38%2017L28%2024L24%2016L20%2024L10%2017L24%203Z%22%20fill%3D%22%23E51937%22/%3E%3Cpath%20d%3D%22M45%2024L31%2038L24%2028L32%2024L24%2020L31%2010L45%2024Z%22%20fill%3D%22%23FF9800%22/%3E%3Cpath%20d%3D%22M24%2045L10%2031L20%2024L24%2032L28%2024L38%2031L24%2045Z%22%20fill%3D%22%231976D2%22/%3E%3Cpath%20d%3D%22M3%2024L17%2010L24%2020L16%2024L24%2028L17%2038L3%2024Z%22%20fill%3D%22%234CAF50%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%225%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
@@ -3480,6 +3484,24 @@ function getThemePickerModalHTML() {
               <span class="theme-card-title">Thư Viện Pháp Luật</span>
               <div class="theme-card-check">✓</div>
             </div>
+            <!-- Theme: Thư Viện Pháp Luật (cũ) -->
+            <div class="theme-card" data-theme="theme-thuvienphapluat-cu">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48" fill="none">
+                  <rect width="48" height="48" rx="10" fill="#8B1E0F"/>
+                  <rect x="3" y="3" width="42" height="42" rx="8" stroke="#FFD700" stroke-width="1.8" fill="none"/>
+                  <path d="M24 10V36M18 36H30" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M12 16H36" stroke="#FFD700" stroke-width="2.5" stroke-linecap="round"/>
+                  <path d="M12 16L7 26H17L12 16Z" fill="#FFD700" opacity="0.3"/>
+                  <path d="M12 16L7 26M12 16L17 26M6 26C6 29 18 29 18 26" stroke="#FFD700" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M36 16L31 26H41L36 16Z" fill="#FFD700" opacity="0.3"/>
+                  <path d="M36 16L31 26M36 16L41 26M30 26C30 29 42 29 42 26" stroke="#FFD700" stroke-width="1.8" stroke-linecap="round"/>
+                  <circle cx="24" cy="11" r="2.5" fill="#FFD700"/>
+                </svg>
+              </div>
+              <span class="theme-card-title">Thư Viện Pháp Luật (cũ)</span>
+              <div class="theme-card-check">✓</div>
+            </div>
             <!-- Theme 14: Premiere Pro -->
             <div class="theme-card" data-theme="theme-premiere">
               <div class="theme-card-icon">
@@ -3874,6 +3896,7 @@ function initThemeSystem() {
     'btn-open-theme-modal-canva',
     'btn-open-theme-modal-powerpoint',
     'btn-open-theme-modal-thuvienphapluat',
+    'btn-open-theme-modal-thuvienphapluat-cu',
     'btn-open-theme-modal-capcut',
     'btn-open-theme-modal-sap'
   ];
@@ -4053,6 +4076,12 @@ const THEME_DOC_CONFIGS = {
     defaultTitle: 'Q3_Business_Review_Strategic_Plan.pptx',
     formatTabTitle: t => `${t} - PowerPoint`,
     titleId: 'ppt-doc-title'
+  },
+  'theme-thuvienphapluat-cu': {
+    prop: 'tvplCuTitle',
+    defaultTitle: 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ',
+    formatTabTitle: () => 'Nghị định 349/2026/NĐ-CP hướng dẫn chuyển đổi số và an toàn thông tin - THƯ VIỆN PHÁP LUẬT',
+    titleId: 'tvpl-doc-title'
   },
   'theme-thuvienphapluat': {
     prop: 'tvplTitle',
@@ -4431,6 +4460,8 @@ function initTitleEditing() {
       localStorage.setItem('stealth_title_tvpl', val);
       if (state.theme === 'theme-thuvienphapluat') {
         document.title = `Nghị định 349/2026/NĐ-CP sửa đổi các Nghị định hướng dẫn Luật Đấu thầu - THƯ VIỆN PHÁP LUẬT`;
+      } else if (state.theme === 'theme-thuvienphapluat-cu') {
+        document.title = `Nghị định 349/2026/NĐ-CP hướng dẫn chuyển đổi số và an toàn thông tin - THƯ VIỆN PHÁP LUẬT`;
       }
       showPageFlipToast(`✅ Đã đổi tiêu đề văn bản TVPL: <b>${escapeHtml(val)}</b>`);
     });
@@ -5650,7 +5681,7 @@ async function updatePortalUploadUI() {
           </button>
           <label for="portal-file-input" class="portal-file-add-btn" title="Nạp thêm truyện mới vào thư viện">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span>Nạp file máy</span>
+            <span>Nạp file từ máy</span>
           </label>
         </div>
       </div>
@@ -5988,6 +6019,7 @@ function initPortalTriggers() {
     'btn-open-portal-canva',
     'btn-open-portal-powerpoint',
     'btn-open-portal-thuvienphapluat',
+    'btn-open-portal-thuvienphapluat-cu',
     'btn-modal-to-portal'
   ].forEach(id => {
     const btn = document.getElementById(id);
@@ -9457,6 +9489,7 @@ const THEME_RENDERERS = {
   'theme-canva': { append: appendCanvaBatch, streams: ['canva-story-stream'] },
   'theme-powerpoint': { append: appendPowerPointBatch, streams: ['ppt-story-stream'] },
   'theme-thuvienphapluat': { append: appendTVPLBatch, streams: ['tvpl-story-stream'] },
+  'theme-thuvienphapluat-cu': { append: appendTVPLCuBatch, streams: ['tvpl-story-stream'] },
   'theme-premiere': { append: appendPremiereBatch, streams: ['premiere-story-stream'] },
   'theme-claude': { append: appendClaudeBatch, streams: ['claude-story-stream'] },
   'theme-chatgpt': { append: appendChatGPTBatch, streams: ['chatgpt-story-stream'] },
@@ -10119,6 +10152,19 @@ function appendPowerPointBatch(count) {
 }
 
 // 13. Thư Viện Pháp Luật (TVPL) Administrative Article & Clause Batch Renderer
+function appendTVPLCuBatch(count) {
+  appendSimpleThemeBatch(count, 'tvpl-story-stream', chunk => {
+    const item = document.createElement('div');
+    item.className = 'tvpl-clause-item';
+    item.id = `tvpl-clause-${chunk.globalIndex}`;
+    item.innerHTML = `
+      <div class="tvpl-clause-num">Điều ${chunk.globalIndex + 1}.</div>
+      <div class="tvpl-clause-text">${formatChunkText(chunk.text)}</div>
+    `;
+    return item;
+  });
+}
+
 function appendTVPLBatch(count) {
   appendSimpleThemeBatch(count, 'tvpl-story-stream', chunk => {
     const item = document.createElement('div');
@@ -10183,6 +10229,7 @@ const ACTIVE_ROW_SPECS = {
   'theme-canva': { id: 'canva-block-', cls: 'active-block' },
   'theme-powerpoint': { id: 'ppt-para-', cls: 'active-bullet' },
   'theme-thuvienphapluat': { id: 'tvpl-clause-', cls: 'active-clause' },
+  'theme-thuvienphapluat-cu': { id: 'tvpl-clause-', cls: 'active-clause' },
   'theme-premiere': { id: 'pr-caption-', cls: 'active-caption' },
   'theme-claude': { id: 'claude-para-', cls: 'active-para' },
   'theme-chatgpt': { id: 'gpt-para-', cls: 'active-para' },
@@ -10687,6 +10734,7 @@ function getActiveScrollContainer() {
     'theme-canva': 'canva-canvas-scroll-container',
     'theme-powerpoint': 'ppt-canvas-scroll-container',
     'theme-thuvienphapluat': 'tvpl-document-scroll-container',
+    'theme-thuvienphapluat-cu': 'tvpl-document-scroll-container',
     'theme-premiere': 'premiere-transcript-scroll-container',
     'theme-claude': 'claude-chat-scroll-container',
     'theme-chatgpt': 'chatgpt-chat-scroll-container',

@@ -13,7 +13,7 @@ const themeLabels = {
   googlesheets: 'Google Sheets', googledocs: 'Google Docs', excel: 'Microsoft Excel',
   vscode: 'VS Code', photoshop: 'Photoshop', blender: 'Blender 3D', linkedin: 'LinkedIn',
   autocad: 'AutoCAD', zalo: 'Zalo PC', figma: 'Figma', canva: 'Canva',
-  powerpoint: 'PowerPoint', thuvienphapluat: 'Thư Viện Pháp Luật', premiere: 'Premiere Pro',
+  powerpoint: 'PowerPoint', thuvienphapluat: 'Thư Viện Pháp Luật', 'thuvienphapluat-cu': 'Thư Viện Pháp Luật (cũ)', premiere: 'Premiere Pro',
   claude: 'Claude AI', chatgpt: 'ChatGPT', teams: 'Teams', revit: 'Revit BIM',
   misa: 'MISA SME', capcut: 'CapCut Pro', sap: 'SAP GUI', gmail: 'Gmail',
   outlook: 'Outlook', jira: 'Jira', slack: 'Slack'
