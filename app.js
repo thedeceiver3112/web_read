@@ -1874,11 +1874,6 @@ function renderLayoutToolsPanel(content) {
   const previewWhiteSpace = (isExact || !state.wrapText) ? (state.preserveIndents ? 'pre' : 'nowrap') : 'normal';
 
   content.innerHTML = `
-    <div class="reader-tools-toolbar" style="flex-direction:column; align-items:stretch; gap:6px; margin-bottom:12px;">
-      <strong style="font-size:13px; color:#0f172a;">Tùy chỉnh bố cục dòng & ngắt chữ</strong>
-      <small style="color:#64748b;">Chọn chế độ hiển thị phù hợp để chữ không bị xê dịch, nhảy dòng hoặc ngụy trang hoàn hảo.</small>
-    </div>
-
     <div class="unav-layout-dropdown-content" style="padding:0; max-height:none; background:transparent;">
       <!-- 1. Chế độ ngắt dòng -->
       <div class="unav-layout-section">

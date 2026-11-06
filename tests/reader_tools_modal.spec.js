@@ -29,6 +29,10 @@ test.describe('Reader tools workspace', () => {
     await modal.locator('[data-reader-tab="layout"]').click();
     await expect(modal.locator('#reader-tools-panel-title')).toHaveText('Hiển thị & bố cục');
     await expect(modal.locator('.reader-tools-preview-box')).toBeVisible();
+    const layoutColors = await modal.locator('.unav-layout-card-option').evaluateAll(cards => cards.map(card => getComputedStyle(card).backgroundColor));
+    expect(layoutColors).not.toContain('rgb(15, 23, 42)');
+    await expect(modal.locator('.unav-layout-card-option.active')).toHaveCSS('background-color', 'rgb(221, 244, 255)');
+    await expect(modal.locator('.unav-layout-select').first()).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 
     await modal.locator('.reader-tools-dialog').screenshot({ path: testInfo.outputPath('reader-tools-desktop.png') });
   });

@@ -14392,6 +14392,120 @@ body.boss-mode-active .online-chapter-next-button {
   overflow-y: auto;
 }
 
+/* Light layout controls inside the reader tools workspace.
+   The compact navbar dropdown keeps its own dark styling. */
+.reader-tools-content .unav-layout-dropdown-content {
+  gap: 4px;
+  color: #1f2328;
+}
+
+.reader-tools-content .unav-layout-section {
+  gap: 8px;
+}
+
+.reader-tools-content .unav-layout-section + .unav-layout-section {
+  padding-top: 14px;
+  border-top: 1px solid #eaeef2;
+}
+
+.reader-tools-content .unav-layout-section-label {
+  color: #57606a !important;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.reader-tools-content .unav-layout-card-option {
+  padding: 10px 11px;
+  border: 1px solid #d8dee4;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.reader-tools-content .unav-layout-card-option:hover {
+  border-color: #afb8c1;
+  background: #f6f8fa;
+}
+
+.reader-tools-content .unav-layout-card-option.active {
+  border-color: #54aeff;
+  background: #ddf4ff;
+  box-shadow: inset 3px 0 #0969da;
+}
+
+.reader-tools-content .unav-layout-card-title,
+.reader-tools-content .unav-layout-card-option.active .unav-layout-card-title {
+  color: #1f2328;
+}
+
+.reader-tools-content .unav-layout-card-option.active .unav-layout-card-title,
+.reader-tools-content .unav-layout-card-option.active .unav-dropdown-check {
+  color: #0969da;
+}
+
+.reader-tools-content .unav-layout-card-desc {
+  color: #656d76;
+}
+
+.reader-tools-content .unav-layout-pill-btn {
+  min-height: 28px;
+  padding: 4px 9px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  background: #f6f8fa;
+  color: #57606a;
+}
+
+.reader-tools-content .unav-layout-pill-btn:hover {
+  border-color: #8c959f;
+  background: #f3f4f6;
+  color: #1f2328;
+}
+
+.reader-tools-content .unav-layout-pill-btn.active {
+  border-color: #0969da;
+  background: #0969da;
+  color: #ffffff;
+}
+
+.reader-tools-content .unav-layout-select-label {
+  color: #656d76 !important;
+}
+
+.reader-tools-content .unav-layout-select {
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 1px solid #afb8c1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2328;
+  font-size: 12px;
+}
+
+.reader-tools-content .unav-layout-select:hover {
+  border-color: #8c959f;
+}
+
+.reader-tools-content .unav-layout-select:focus {
+  border-color: #0969da;
+  outline: 2px solid rgba(9, 105, 218, 0.18);
+}
+
+.reader-tools-content .unav-layout-checkbox-item {
+  color: #24292f !important;
+}
+
+.reader-tools-content .unav-layout-checkbox-item input {
+  accent-color: #0969da;
+}
+
+.reader-tools-content .reader-tools-preview-box {
+  margin-top: 4px;
+  border: 1px solid #d8dee4;
+  background: #f6f8fa;
+  color: #24292f;
+}
+
 /* Control groups */
 .unav-control-group {
   display: inline-flex;
