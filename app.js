@@ -2548,6 +2548,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSheetTabs();
   initContinuousScrollListeners();
   initLandingPortal();
+  initDonateWelcomePopup();
   initPortalTriggers();
   initOnlineStoryPicker();
   initControlsVisibilityToggle();
@@ -5726,6 +5727,37 @@ async function updatePortalUploadUI() {
 // ==========================================================
 // LANDING PORTAL, THEME SELECTOR & AUTHOR DONATE
 // ==========================================================
+let donateWelcomeDismissed = false;
+
+function openDonateWelcomePopup() {
+  const popup = document.getElementById('donate-welcome-popup');
+  const portal = document.getElementById('landing-portal');
+  if (!popup || !portal || portal.classList.contains('hidden') || donateWelcomeDismissed) return;
+  popup.classList.add('show');
+  popup.setAttribute('aria-hidden', 'false');
+}
+
+function closeDonateWelcomePopup() {
+  const popup = document.getElementById('donate-welcome-popup');
+  if (!popup) return;
+  donateWelcomeDismissed = true;
+  popup.classList.remove('show');
+  popup.setAttribute('aria-hidden', 'true');
+}
+
+function initDonateWelcomePopup() {
+  const popup = document.getElementById('donate-welcome-popup');
+  const portal = document.getElementById('landing-portal');
+  if (!popup || !portal) return;
+
+  const path = window.location.pathname.toLowerCase();
+  const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
+  if (!isIndexPage || portal.classList.contains('hidden')) return;
+
+  popup.querySelector('[data-donate-popup-close]')?.addEventListener('click', closeDonateWelcomePopup);
+  setTimeout(openDonateWelcomePopup, 250);
+}
+
 function openPortal(showCloseButton = true) {
   const portal = document.getElementById('landing-portal');
   if (!portal) return;
@@ -6898,6 +6930,12 @@ function initEventListeners() {
     if (e.key === 'Escape') {
       const imgViewerModal = document.getElementById('stealth-image-viewer-modal');
       const workspaceModal = document.getElementById('workspace-personalization-modal');
+      const donatePopup = document.getElementById('donate-welcome-popup');
+      if (donatePopup && donatePopup.classList.contains('show')) {
+        e.preventDefault();
+        closeDonateWelcomePopup();
+        return;
+      }
       if (imgViewerModal && imgViewerModal.classList.contains('show')) {
         e.preventDefault();
         closeStoryImageViewer();

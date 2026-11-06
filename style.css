@@ -1993,6 +1993,110 @@ body.theme-excel .section-break-badge {
   display: none !important;
 }
 
+.donate-welcome-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 100100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 220ms ease, visibility 220ms ease;
+}
+
+.donate-welcome-popup::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 8, 23, 0.64);
+  backdrop-filter: blur(4px);
+}
+
+.donate-welcome-popup.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.donate-welcome-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 94vw);
+  max-height: 92vh;
+  transform: translateY(16px) scale(0.97);
+  transition: transform 260ms cubic-bezier(0.2, 0.85, 0.3, 1);
+  filter: drop-shadow(0 24px 45px rgba(0, 0, 0, 0.42));
+}
+
+.donate-welcome-popup.show .donate-welcome-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.donate-welcome-artwork {
+  display: block;
+  width: 100%;
+  max-height: 92vh;
+  object-fit: contain;
+  user-select: none;
+}
+
+.donate-welcome-close {
+  position: absolute;
+  z-index: 2;
+  top: -10px;
+  right: -10px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: rgba(8, 20, 48, 0.86);
+  color: #ffffff;
+  font: 400 30px/1 Arial, sans-serif;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.donate-welcome-close:hover,
+.donate-welcome-close:focus-visible {
+  background: #dc2626;
+  transform: scale(1.08);
+  outline: 3px solid rgba(255, 255, 255, 0.72);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .donate-welcome-popup {
+    padding: 8px;
+  }
+
+  .donate-welcome-dialog {
+    width: calc(100vw - 16px);
+  }
+
+  .donate-welcome-close {
+    top: 0;
+    right: 0;
+    width: 38px;
+    height: 38px;
+    font-size: 27px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donate-welcome-popup,
+  .donate-welcome-dialog,
+  .donate-welcome-close {
+    transition: none;
+  }
+}
+
 .portal-container {
   max-width: 1540px;
   width: 100%;
