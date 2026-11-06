@@ -2585,15 +2585,15 @@ body.theme-excel .section-break-badge {
 
 .duo-upload-quest.has-doc {
   background: #ffffff;
-  border: 1px solid #bae6fd;
-  border-left: 4px solid var(--portal-primary);
-  box-shadow: 0 4px 16px -2px rgba(14, 165, 233, 0.08), 0 2px 4px -1px rgba(14, 165, 233, 0.04);
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(31, 35, 40, 0.04);
 }
 
 .duo-upload-quest.has-doc:hover {
-  border-color: #7dd3fc;
-  border-left-color: var(--portal-primary-hover);
-  box-shadow: 0 6px 20px -2px rgba(14, 165, 233, 0.12);
+  border-color: #afb8c1;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(31, 35, 40, 0.08);
 }
 
 .duo-upload-badge-tag {
@@ -2613,9 +2613,17 @@ body.theme-excel .section-break-badge {
 }
 
 .duo-upload-quest.has-doc .duo-upload-badge-tag {
-  background: #e0f2fe;
-  color: #0369a1;
-  border-color: #bae6fd;
+  background: transparent;
+  color: #1f2328;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.duo-upload-quest.has-doc .duo-upload-badge-tag .badge-icon {
+  color: #1a7f37;
 }
 
 .duo-upload-main {
@@ -3715,7 +3723,7 @@ body.theme-excel .section-break-badge {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   gap: 10px;
 }
 
@@ -3727,24 +3735,25 @@ body.theme-excel .section-break-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #ffffff;
-  color: #0f172a;
-  border: 1px solid #cbd5e1;
+  min-height: 30px;
+  background: #f6f8fa;
+  color: #24292f;
+  border: 1px solid #d0d7de;
   font-size: 12px;
   font-weight: 600;
-  padding: 5px 12px;
+  padding: 4px 10px;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+  transition: background-color 80ms ease, border-color 80ms ease, color 80ms ease;
   white-space: nowrap;
 }
 
 .portal-file-add-btn:hover {
-  background: #f0f9ff;
-  border-color: var(--portal-primary);
-  color: var(--portal-primary);
-  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.12);
-  transform: translateY(-1px);
+  background: #f3f4f6;
+  border-color: #8c959f;
+  color: #1f2328;
+  box-shadow: 0 1px 0 rgba(31, 35, 40, 0.08);
 }
 
 /* Portal In-Card Upload Progress */
@@ -3870,11 +3879,14 @@ body.theme-excel .section-break-badge {
 .portal-books-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
   max-height: 220px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 4px;
+  padding: 0;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
 }
 
 .portal-books-list::-webkit-scrollbar {
@@ -3882,32 +3894,41 @@ body.theme-excel .section-break-badge {
 }
 
 .portal-books-list::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #afb8c1;
   border-radius: 4px;
 }
 
 .portal-book-item {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 10px;
+  gap: 10px;
+  min-height: 50px;
+  padding: 7px 10px;
+  background: #ffffff;
+  border: 0;
+  border-bottom: 1px solid #d8dee4;
+  border-radius: 0;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 80ms ease;
   user-select: none;
 }
 
+.portal-book-item:last-child {
+  border-bottom: 0;
+}
+
 .portal-book-item:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
+  background: #f6f8fa;
 }
 
 .portal-book-item.selected {
-  background: #ffffff;
-  border-color: var(--portal-primary);
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15);
+  background: #ddf4ff;
+  box-shadow: inset 3px 0 #0969da;
+}
+
+.portal-book-item.selected:hover {
+  background: #b6e3ff;
 }
 
 .portal-book-select-indicator {
@@ -3917,51 +3938,51 @@ body.theme-excel .section-break-badge {
 }
 
 .portal-book-radio {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  border: 1.5px solid #94a3b8;
+  border: 1px solid #8c959f;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease;
+  transition: background-color 80ms ease, border-color 80ms ease;
   color: #ffffff;
 }
 
 .portal-book-item.selected .portal-book-radio {
-  border-color: var(--portal-primary);
-  background: var(--portal-primary);
+  border-color: #0969da;
+  background: #0969da;
 }
 
 .portal-book-icon-box {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: #f6f8fa;
+  border: 1px solid #d8dee4;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: #57606a;
   flex-shrink: 0;
 }
 
 .portal-book-item.selected .portal-book-icon-box {
-  background: #f0f9ff;
-  color: var(--portal-primary);
-  border-color: #bae6fd;
+  background: #ffffff;
+  color: #0969da;
+  border-color: #80ccff;
 }
 
 .portal-book-icon-box.is-online {
-  background: #f0f9ff;
-  color: #0284c7;
-  border-color: #bae6fd;
+  background: #f6f8fa;
+  color: #0969da;
+  border-color: #d8dee4;
 }
 
 .portal-book-item.selected .portal-book-icon-box.is-online {
-  background: #e0f2fe;
-  color: #0369a1;
-  border-color: #7dd3fc;
+  background: #ffffff;
+  color: #0969da;
+  border-color: #80ccff;
 }
 
 .portal-book-details {
@@ -3979,33 +4000,45 @@ body.theme-excel .section-break-badge {
 }
 
 .portal-book-title {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
-  color: #0f172a;
+  color: #1f2328;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .portal-book-item.selected .portal-book-title {
-  color: #0369a1;
-  font-weight: 700;
+  color: #0550ae;
+  font-weight: 600;
 }
 
 .portal-book-pill {
-  font-size: 10.5px;
-  font-weight: 600;
-  padding: 1px 7px;
-  border-radius: 12px;
-  background: #e2e8f0;
-  color: #475569;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #656d76;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .portal-book-pill.active {
-  background: #e0f2fe;
-  color: #0284c7;
+  background: transparent;
+  color: #0969da;
+  font-weight: 600;
+}
+
+.portal-book-pill.active::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #1a7f37;
+  vertical-align: 1px;
 }
 
 .portal-book-meta {
@@ -4020,18 +4053,36 @@ body.theme-excel .section-break-badge {
   border-radius: 6px;
   border: none;
   background: transparent;
-  color: #94a3b8;
+  color: #656d76;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.15s ease;
+  opacity: 0;
+  transition: opacity 80ms ease, background-color 80ms ease, color 80ms ease;
+}
+
+.portal-book-item:hover .portal-book-delete-btn,
+.portal-book-item:focus-within .portal-book-delete-btn,
+.portal-book-delete-btn:focus-visible {
+  opacity: 1;
 }
 
 .portal-book-delete-btn:hover {
-  background: #fee2e2;
-  color: #dc2626;
+  background: #ffebe9;
+  color: #cf222e;
+}
+
+@media (hover: none), (max-width: 640px) {
+  .portal-book-delete-btn {
+    opacity: 1;
+  }
+
+  .duo-upload-header-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 .duo-upload-alert {

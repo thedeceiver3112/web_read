@@ -1,6 +1,42 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('Portal Multi-Book Library & Selector', () => {
+  test('renders the loaded-story library as a compact action list', async ({ page }, testInfo) => {
+    await page.goto('/index.html?portal=1');
+    await page.locator('[data-donate-popup-close]').click({ timeout: 5000 }).catch(() => {});
+
+    await page.evaluate(() => {
+      const input = document.getElementById('portal-file-input');
+      const dt = new DataTransfer();
+      [
+        ['Bao_Cao_Du_An.txt', 'Nội dung báo cáo dự án.'],
+        ['Mao_Son_Quy_Thuat.txt', 'Chương một của truyện.'],
+        ['Kiem_Hiep_Ky_Duyen.txt', 'Đoạn mở đầu kiếm hiệp.']
+      ].forEach(([name, content]) => dt.items.add(new File([content], name, { type: 'text/plain' })));
+      input.files = dt.files;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    const list = page.locator('.portal-books-list');
+    const rows = list.locator('.portal-book-item');
+    const selectedRow = rows.filter({ has: page.locator('.portal-book-pill.active') });
+    const idleRow = list.locator('.portal-book-item:not(.selected)').first();
+    await expect(rows).toHaveCount(3);
+    await expect(list).toHaveCSS('border-top-style', 'solid');
+    await expect(rows.first()).toHaveCSS('border-radius', '0px');
+    await expect(idleRow).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(selectedRow).toHaveCount(1);
+    await expect(selectedRow).toHaveCSS('background-color', 'rgb(221, 244, 255)');
+
+    const deleteButton = idleRow.locator('.portal-book-delete-btn');
+    await expect(deleteButton).toHaveCSS('opacity', '0');
+    await idleRow.hover();
+    await expect(deleteButton).toHaveCSS('opacity', '1');
+
+    await page.mouse.move(700, 850);
+    await page.locator('#portal-upload-card').screenshot({ path: testInfo.outputPath('portal_action_list.png') });
+  });
+
   test('warns and shakes the upload card when reading starts without a document', async ({ page }) => {
     await page.goto('/index.html?portal=1');
 
