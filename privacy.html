@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Chính sách bảo mật của Stealth Reader, mô tả cách dữ liệu đăng nhập, tài liệu, tiến độ đọc và thống kê sử dụng được xử lý." />
+    <meta name="robots" content="index,follow" />
+    <title>Chính sách bảo mật | Stealth Reader</title>
+    <link rel="canonical" href="https://thedeceiver.site/privacy.html" />
+    <link rel="stylesheet" href="css/legal.css?v=20261106-4" />
+  </head>
+  <body>
+    <header class="legal-topbar">
+      <div class="legal-topbar-inner">
+        <a class="legal-brand" href="/" aria-label="Về trang chủ Stealth Reader">
+          <span class="legal-brand-icon" aria-hidden="true">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+          </span>
+          <span>Stealth Reader</span>
+        </a>
+        <nav class="legal-nav" aria-label="Điều hướng pháp lý">
+          <a href="/">Trang chủ</a>
+          <a href="privacy.html" aria-current="page">Bảo mật</a>
+          <a href="terms.html">Điều khoản</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="legal-layout">
+      <article class="legal-document">
+        <p class="legal-eyebrow">Quyền riêng tư &amp; dữ liệu</p>
+        <h1>Chính sách bảo mật</h1>
+        <p class="legal-updated">Ngày có hiệu lực: 06/11/2026 · Cập nhật gần nhất: 06/11/2026</p>
+
+        <div class="legal-summary">
+          <p><strong>Tóm tắt:</strong> Nội dung file PDF, TXT hoặc EPUB bạn chọn được xử lý và lưu trong trình duyệt. Khi đăng nhập Google, Stealth Reader chỉ đồng bộ hồ sơ cơ bản, metadata tài liệu, tiến độ, dấu trang và cài đặt; không tải file gốc hoặc toàn bộ nội dung sách lên máy chủ.</p>
+        </div>
+
+        <section id="pham-vi">
+          <h2>1. Phạm vi áp dụng</h2>
+          <p>Chính sách này áp dụng cho website Stealth Reader tại <a href="https://thedeceiver.site/">thedeceiver.site</a>, bao gồm chức năng đọc file tại máy, đăng nhập Google, đồng bộ tiến độ, tìm truyện online và thống kê sử dụng.</p>
+        </section>
+
+        <section id="du-lieu-thu-thap">
+          <h2>2. Dữ liệu chúng tôi xử lý</h2>
+
+          <h3>2.1. Khi bạn sử dụng mà không đăng nhập</h3>
+          <ul>
+            <li>Mã khách truy cập và mã phiên ngẫu nhiên được tạo trong <code>localStorage</code> và <code>sessionStorage</code>.</li>
+            <li>Sự kiện truy cập, giao diện đã chọn, đường dẫn trang và thời điểm sử dụng.</li>
+            <li>Trên máy chủ, mã khách truy cập và mã phiên được băm trước khi lưu; ứng dụng không lưu mã định danh trình duyệt thô trong bảng analytics.</li>
+          </ul>
+
+          <h3>2.2. Khi bạn đăng nhập bằng Google</h3>
+          <p>Ứng dụng yêu cầu phạm vi <code>openid</code>, <code>email</code> và <code>profile</code>. Dữ liệu nhận từ Google có thể gồm:</p>
+          <ul>
+            <li>Mã định danh tài khoản Google.</li>
+            <li>Địa chỉ email, tên hiển thị và URL ảnh đại diện.</li>
+            <li>Thời điểm đăng nhập gần nhất và phiên đăng nhập của Stealth Reader.</li>
+          </ul>
+          <p>Stealth Reader không yêu cầu quyền truy cập Gmail, Google Drive, danh bạ hoặc mật khẩu Google của bạn.</p>
+
+          <h3>2.3. File và dữ liệu đọc</h3>
+          <ul>
+            <li>File PDF, TXT và EPUB cùng nội dung được trích xuất được xử lý trong trình duyệt và có thể được lưu trong IndexedDB hoặc bộ nhớ phiên trên thiết bị.</li>
+            <li>Nếu bật đồng bộ sau khi đăng nhập, máy chủ có thể lưu khóa tài liệu, tên file/tài liệu, loại và kích thước file, số trang hoặc số chương.</li>
+            <li>Máy chủ có thể lưu vị trí đọc, phần trăm tiến độ, dấu trang, nhãn, ghi chú, đoạn trích ngắn gắn với dấu trang và cài đặt giao diện đọc.</li>
+            <li>File gốc và toàn bộ nội dung tài liệu không thuộc payload đồng bộ hiện tại.</li>
+          </ul>
+
+          <h3>2.4. Truyện từ nguồn online</h3>
+          <p>Khi bạn tìm hoặc mở truyện online, từ khóa tìm kiếm, mã truyện và mã chương cần thiết được gửi qua máy chủ của Stealth Reader tới nhà cung cấp nội dung bên thứ ba. Việc xử lý tại nguồn bên thứ ba còn chịu chính sách của dịch vụ đó.</p>
+
+          <h3>2.5. Nhật ký hạ tầng</h3>
+          <p>Nhà cung cấp hosting hoặc máy chủ web có thể tự động ghi nhận dữ liệu kỹ thuật tiêu chuẩn như địa chỉ IP, user-agent, thời điểm và URL được yêu cầu để vận hành, bảo mật và xử lý sự cố. Các nhật ký này nằm ngoài bảng analytics của ứng dụng.</p>
+        </section>
+
+        <section id="muc-dich">
+          <h2>3. Mục đích sử dụng dữ liệu</h2>
+          <ul>
+            <li>Xác thực tài khoản và duy trì phiên đăng nhập.</li>
+            <li>Đồng bộ tiến độ đọc, dấu trang và cài đặt giữa các thiết bị.</li>
+            <li>Hiển thị nội dung, giao diện và tính năng mà bạn yêu cầu.</li>
+            <li>Đo lượng truy cập, khung giờ sử dụng và mức độ phổ biến của từng theme.</li>
+            <li>Phát hiện lỗi, chống lạm dụng và cải thiện hiệu năng, độ ổn định của website.</li>
+          </ul>
+          <p class="legal-note"><strong>Stealth Reader không bán dữ liệu cá nhân của bạn.</strong></p>
+        </section>
+
+        <section id="luu-tru">
+          <h2>4. Lưu trữ và thời hạn</h2>
+          <ul>
+            <li>Dữ liệu local tồn tại trên thiết bị cho đến khi bạn xóa truyện, xóa dữ liệu website hoặc trình duyệt tự dọn bộ nhớ.</li>
+            <li>Phiên đăng nhập phía máy chủ có thời hạn tối đa 30 ngày và có thể kết thúc sớm khi bạn đăng xuất.</li>
+            <li>Hồ sơ tài khoản, dữ liệu đồng bộ và analytics được lưu trong thời gian cần thiết để cung cấp dịch vụ, vận hành hệ thống hoặc cho đến khi có yêu cầu xóa hợp lệ.</li>
+          </ul>
+        </section>
+
+        <section id="chia-se">
+          <h2>5. Chia sẻ và bên xử lý dữ liệu</h2>
+          <p>Dữ liệu chỉ được truyền cho các bên cần thiết để vận hành dịch vụ:</p>
+          <ul>
+            <li><strong>Google:</strong> cung cấp quy trình OAuth và xác minh danh tính.</li>
+            <li><strong>Nhà cung cấp hosting:</strong> lưu trữ website, API và cơ sở dữ liệu.</li>
+            <li><strong>Nguồn nội dung online:</strong> xử lý yêu cầu tìm truyện hoặc tải chương khi bạn chủ động sử dụng tính năng đó.</li>
+            <li><strong>Cơ quan có thẩm quyền:</strong> khi pháp luật yêu cầu hợp lệ.</li>
+          </ul>
+        </section>
+
+        <section id="bao-mat">
+          <h2>6. Bảo mật</h2>
+          <p>Ứng dụng sử dụng HTTPS, cookie phiên bảo mật, token phiên được băm trong cơ sở dữ liệu, CSRF token và truy vấn có tham số. Tuy nhiên, không hệ thống truyền tải hoặc lưu trữ nào có thể đảm bảo an toàn tuyệt đối.</p>
+        </section>
+
+        <section id="quyen-lua-chon">
+          <h2>7. Quyền và lựa chọn của bạn</h2>
+          <ul>
+            <li>Dùng công cụ mà không đăng nhập nếu không cần đồng bộ.</li>
+            <li>Đăng xuất để kết thúc phiên hiện tại.</li>
+            <li>Xóa dữ liệu local trong cài đặt trình duyệt hoặc xóa từng truyện khỏi thư viện.</li>
+            <li>Thu hồi quyền Google tại trang quản lý ứng dụng của tài khoản Google.</li>
+            <li>Yêu cầu xem, chỉnh sửa hoặc xóa dữ liệu phía máy chủ bằng email liên hệ bên dưới.</li>
+          </ul>
+          <p>Việc thu hồi quyền Google không tự động xóa dữ liệu đã đồng bộ trên Stealth Reader; hãy gửi yêu cầu nếu bạn muốn xóa dữ liệu máy chủ.</p>
+        </section>
+
+        <section id="thay-doi">
+          <h2>8. Thay đổi chính sách</h2>
+          <p>Chính sách có thể được cập nhật khi tính năng hoặc cách xử lý dữ liệu thay đổi. Ngày cập nhật sẽ được ghi ở đầu trang. Với thay đổi quan trọng, website có thể hiển thị thông báo bổ sung.</p>
+        </section>
+
+        <section id="lien-he">
+          <h2>9. Liên hệ</h2>
+          <div class="legal-contact">
+            <strong>Stealth Reader — Nguyễn Trần Hải Phong</strong><br />
+            Email: <a href="mailto:nguyentranhaiphong2@gmail.com">nguyentranhaiphong2@gmail.com</a><br />
+            Website: <a href="https://thedeceiver.site/">https://thedeceiver.site/</a>
+          </div>
+        </section>
+      </article>
+
+      <aside class="legal-toc" aria-label="Mục lục">
+        <strong>Nội dung</strong>
+        <a href="#pham-vi">1. Phạm vi áp dụng</a>
+        <a href="#du-lieu-thu-thap">2. Dữ liệu được xử lý</a>
+        <a href="#muc-dich">3. Mục đích sử dụng</a>
+        <a href="#luu-tru">4. Lưu trữ</a>
+        <a href="#chia-se">5. Chia sẻ dữ liệu</a>
+        <a href="#bao-mat">6. Bảo mật</a>
+        <a href="#quyen-lua-chon">7. Quyền của bạn</a>
+        <a href="#thay-doi">8. Thay đổi</a>
+        <a href="#lien-he">9. Liên hệ</a>
+      </aside>
+    </main>
+
+    <footer class="legal-footer">
+      <div class="legal-footer-inner">
+        <span>© 2026 Stealth Reader</span>
+        <span class="legal-footer-links"><a href="privacy.html">Chính sách bảo mật</a><a href="terms.html">Điều khoản sử dụng</a></span>
+      </div>
+    </footer>
+  </body>
+</html>
