@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 test.describe('popup donate trang chủ', () => {
-  test('hiện ảnh QR trong suốt và cho phép đóng bằng nút hoặc Escape', async ({ page }) => {
+  test('hiện ảnh QR, đóng được và chỉ hiện lại sau cooldown 5 phút', async ({ page }) => {
     await page.goto('/index.html?portal=1');
 
     const popup = page.locator('#donate-welcome-popup');
@@ -16,6 +16,12 @@ test.describe('popup donate trang chủ', () => {
     await expect(popup).not.toHaveClass(/show/);
     await expect(popup).toHaveAttribute('aria-hidden', 'true');
 
+    await page.reload();
+    await expect(popup).not.toHaveClass(/show/);
+
+    await page.evaluate(() => {
+      sessionStorage.setItem('stealth_donate_popup_last_shown', String(Date.now() - (5 * 60 * 1000) - 1));
+    });
     await page.reload();
     await expect(popup).toHaveClass(/show/);
     await page.keyboard.press('Escape');

@@ -5727,12 +5727,32 @@ async function updatePortalUploadUI() {
 // ==========================================================
 // LANDING PORTAL, THEME SELECTOR & AUTHOR DONATE
 // ==========================================================
+const DONATE_WELCOME_SESSION_KEY = 'stealth_donate_popup_last_shown';
+const DONATE_WELCOME_COOLDOWN_MS = 5 * 60 * 1000;
 let donateWelcomeDismissed = false;
+
+function canShowDonateWelcomePopup() {
+  try {
+    const lastShownAt = Number(sessionStorage.getItem(DONATE_WELCOME_SESSION_KEY) || 0);
+    return !lastShownAt || Date.now() - lastShownAt >= DONATE_WELCOME_COOLDOWN_MS;
+  } catch (error) {
+    return true;
+  }
+}
+
+function markDonateWelcomePopupShown() {
+  try {
+    sessionStorage.setItem(DONATE_WELCOME_SESSION_KEY, String(Date.now()));
+  } catch (error) {
+    // Popup vẫn hoạt động nếu trình duyệt chặn sessionStorage.
+  }
+}
 
 function openDonateWelcomePopup() {
   const popup = document.getElementById('donate-welcome-popup');
   const portal = document.getElementById('landing-portal');
-  if (!popup || !portal || portal.classList.contains('hidden') || donateWelcomeDismissed) return;
+  if (!popup || !portal || portal.classList.contains('hidden') || donateWelcomeDismissed || !canShowDonateWelcomePopup()) return;
+  markDonateWelcomePopupShown();
   popup.classList.add('show');
   popup.setAttribute('aria-hidden', 'false');
 }
