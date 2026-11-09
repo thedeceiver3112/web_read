@@ -534,7 +534,7 @@ function csvCell(value) {
 
 function exportCsv() {
   if (!state.data) return;
-  const rows = [['Báo cáo Stealth Reader'], ['Khoảng ngày', state.data.rangeDays], ['Tạo lúc', state.data.generatedAt], []];
+  const rows = [['Báo cáo The Deceiver'], ['Khoảng ngày', state.data.rangeDays], ['Tạo lúc', state.data.generatedAt], []];
   rows.push(['Chỉ số', 'Giá trị']);
   rows.push(['Lượt truy cập', state.data.summary.visits]);
   rows.push(['Người dùng duy nhất', state.data.summary.uniqueVisitors]);
@@ -585,7 +585,7 @@ function exportCsv() {
   const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
   const link = document.createElement('a');
   link.href = url;
-  link.download = `stealth-reader-analytics-${state.data.rangeDays}d.csv`;
+  link.download = `the-deceiver-analytics-${state.data.rangeDays}d.csv`;
   document.body.append(link);
   link.click();
   link.remove();

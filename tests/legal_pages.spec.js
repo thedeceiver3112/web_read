@@ -4,7 +4,7 @@ test.describe('Public legal pages', () => {
   test('privacy policy is public, responsive, and describes actual data flows', async ({ page }, testInfo) => {
     await page.goto('/privacy.html');
 
-    await expect(page).toHaveTitle('Chính sách bảo mật | Stealth Reader');
+    await expect(page).toHaveTitle('Chính sách bảo mật | The Deceiver');
     await expect(page.locator('h1')).toHaveText('Chính sách bảo mật');
     await expect(page.locator('body')).toContainText('openid');
     await expect(page.locator('body')).toContainText('File gốc và toàn bộ nội dung tài liệu không thuộc payload đồng bộ hiện tại');
@@ -17,7 +17,7 @@ test.describe('Public legal pages', () => {
   test('terms page exposes copyright rules without identifying content providers', async ({ page }) => {
     await page.goto('/terms.html');
 
-    await expect(page).toHaveTitle('Điều khoản sử dụng | Stealth Reader');
+    await expect(page).toHaveTitle('Điều khoản sử dụng | The Deceiver');
     await expect(page.locator('h1')).toHaveText('Điều khoản sử dụng');
     await expect(page.locator('#noi-dung-truc-tuyen')).toContainText('chủ sở hữu hợp pháp');
     await expect(page.locator('#noi-dung-truc-tuyen')).not.toContainText('nguồn');

@@ -132,7 +132,7 @@ def _request_upstream_json(url: str, params: dict[str, str]) -> dict[str, Any]:
     response = requests.get(
         url,
         params=params,
-        headers={"Accept": "application/json", "User-Agent": "StealthReader/1.0"},
+        headers={"Accept": "application/json", "User-Agent": "TheDeceiver/1.0"},
         timeout=(4, 15),
         allow_redirects=False,
         stream=True,

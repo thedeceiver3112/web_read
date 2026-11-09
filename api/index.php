@@ -145,7 +145,7 @@ function online_story_request_json(array $config, string $url, array $params): a
         CURLOPT_CONNECTTIMEOUT => 4,
         CURLOPT_TIMEOUT => 15,
         CURLOPT_FOLLOWLOCATION => false,
-        CURLOPT_HTTPHEADER => ['Accept: application/json', 'User-Agent: StealthReader/1.0'],
+        CURLOPT_HTTPHEADER => ['Accept: application/json', 'User-Agent: TheDeceiver/1.0'],
         CURLOPT_WRITEFUNCTION => static function ($handle, string $chunk) use (&$body): int {
             if (strlen($body) + strlen($chunk) > MAX_STORY_RESPONSE_BODY) {
                 return 0;

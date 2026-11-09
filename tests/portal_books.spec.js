@@ -226,11 +226,12 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     });
     await page.goto('/index.html?portal=1');
     await page.waitForLoadState('domcontentloaded');
+    await expect(page).toHaveTitle('The Deceiver');
 
     // 1. Verify modern header elements
     const header = page.locator('#portal-top-navbar');
     await expect(header).toBeVisible();
-    await expect(header.locator('.duo-brand-titles h1')).toHaveText('Stealth Reader');
+    await expect(header.locator('.duo-brand-titles h1')).toHaveText('The Deceiver');
     await expect(header.locator('.portal-version-pill')).toHaveCount(0);
 
     // Verify Google sign-in button with colorful SVG
@@ -254,7 +255,7 @@ test.describe('Portal Multi-Book Library & Selector', () => {
     // 2. Verify modern simple footer
     const footer = page.locator('#portal-footer');
     await expect(footer).toBeVisible();
-    await expect(footer.locator('.portal-footer-title')).toHaveText('Stealth Reader');
+    await expect(footer.locator('.portal-footer-title')).toHaveText('The Deceiver');
     await expect(footer.locator('.portal-footer-copy')).toBeVisible();
   });
 });

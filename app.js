@@ -1,5 +1,5 @@
 /**
- * Multi-Theme Stealth Reader - Core Logic
+ * Multi-Theme The Deceiver - Core Logic
  * Supports: Google Sheets (Online), Microsoft Excel 365, and Real VS Code IDE
  * Fast PDF, TXT, and EPUB parsing with local-first processing,
  * Boss Key (ESC), Auto-advance, and local persistence.
@@ -4018,7 +4018,7 @@ function setDocumentTitle(title) {
   const isPortalVisible = portal ? !portal.classList.contains('hidden') : isIndexPage;
 
   if (isIndexPage && isPortalVisible) {
-    document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+    document.title = 'The Deceiver';
   } else {
     document.title = title;
   }
@@ -4056,7 +4056,7 @@ function applyTheme(themeName) {
   const headerTitle = document.getElementById('story-header-title');
 
   if (isIndexPage && isPortalVisible) {
-    document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+    document.title = 'The Deceiver';
   }
 
 const THEME_DOC_CONFIGS = {
@@ -5907,7 +5907,7 @@ function openPortal(showCloseButton = true) {
   const path = window.location.pathname.toLowerCase();
   const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
   if (isIndexPage) {
-    document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+    document.title = 'The Deceiver';
     const favicon = document.getElementById('app-favicon');
     if (favicon && FAVICONS['portal']) {
       favicon.href = FAVICONS['portal'];
@@ -5951,7 +5951,7 @@ function initLandingPortal() {
   } else {
     openPortal(false);
     if (isIndexPage) {
-      document.title = 'web ngụy trang đọc truyện trong giờ làm việc';
+      document.title = 'The Deceiver';
     }
   }
 
@@ -6375,9 +6375,9 @@ function initUniversalNavbar() {
     nav.className = 'universal-reader-navbar stealth-reading-ctrls';
     nav.innerHTML = `
       <div class="unav-section unav-left">
-        <div class="unav-brand" title="Stealth Reader - Web đọc truyện ngụy trang">
+        <div class="unav-brand" title="The Deceiver - Web đọc truyện ngụy trang">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h7"/></svg>
-          <span class="unav-brand-text">Stealth Reader</span>
+          <span class="unav-brand-text">The Deceiver</span>
         </div>
         <label for="file-pdf-input" class="unav-btn unav-btn-upload" title="Nạp file PDF, TXT hoặc EPUB (hoặc kéo thả vào trang)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>

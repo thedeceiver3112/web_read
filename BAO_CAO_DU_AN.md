@@ -1,6 +1,6 @@
 # BÁO CÁO TÌM HIỂU DỰ ÁN `web_read`
 
-> **Stealth Reader** — web đọc truyện/tài liệu ngụy trang thành ứng dụng văn phòng.
+> **The Deceiver** — web đọc truyện/tài liệu ngụy trang thành ứng dụng văn phòng.
 >
 > Ngày lập báo cáo: 22/10/2026
 >
@@ -24,7 +24,7 @@
 
 ## 1. Tổng quan dự án
 
-**Stealth Reader** là một web app cho phép đọc PDF / EPUB / TXT trong giờ làm việc bằng cách ngụy trang nội dung thành giao diện của các phần mềm văn phòng quen thuộc.
+**The Deceiver** là một web app cho phép đọc PDF / EPUB / TXT trong giờ làm việc bằng cách ngụy trang nội dung thành giao diện của các phần mềm văn phòng quen thuộc.
 
 ### Tính năng chính
 
