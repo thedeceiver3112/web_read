@@ -6,6 +6,48 @@ import unicodedata
 import pypdf
 
 STEALTH_IMG_TOKEN_RE = re.compile(r"^\[\[STEALTH_IMG:[^\]]+\]\]$")
+PDF_STANDALONE_URL_RE = re.compile(r"^(?:https?://|www\.)\S+$", re.IGNORECASE)
+
+
+def is_pdf_footer_url_text(text, text_matrix, font_size, page_width, page_height):
+    value = str(text or "").strip()
+    if not PDF_STANDALONE_URL_RE.match(value):
+        return False
+    if not text_matrix or len(text_matrix) < 6 or page_height <= 0:
+        return False
+
+    try:
+        x = float(text_matrix[4])
+        y = float(text_matrix[5])
+        size = abs(float(font_size or 0))
+    except (TypeError, ValueError):
+        return False
+
+    footer_band_height = max(24.0, float(page_height) * 0.08)
+    is_inside_footer_band = 0 <= y <= footer_band_height
+    looks_like_footer_style = size <= 14 or (page_width > 0 and x >= float(page_width) * 0.5)
+    return is_inside_footer_band and looks_like_footer_style
+
+
+def extract_pdf_page_text(page):
+    try:
+        page_width = float(page.mediabox.width)
+        page_height = float(page.mediabox.height)
+    except (AttributeError, TypeError, ValueError):
+        page_width = 0.0
+        page_height = 0.0
+
+    fragments = []
+
+    def collect_text(text, _current_matrix, text_matrix, _font_dictionary, font_size):
+        if not is_pdf_footer_url_text(text, text_matrix, font_size, page_width, page_height):
+            fragments.append(text or "")
+
+    try:
+        page.extract_text(visitor_text=collect_text)
+        return "".join(fragments)
+    except TypeError:
+        return page.extract_text() or ""
 
 
 def get_image_mime_type(filename="", data=b""):
@@ -150,7 +192,7 @@ def extract_pdf_payload(pdf_data, filename="document.pdf"):
     for index, page in enumerate(reader.pages):
         page_num = index + 1
         try:
-            raw_text = page.extract_text() or ""
+            raw_text = extract_pdf_page_text(page)
         except Exception:
             raw_text = ""
 

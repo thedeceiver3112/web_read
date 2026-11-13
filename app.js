@@ -1342,6 +1342,31 @@ function remapSavedBookmarkIndices(documentId, indexMap, chunkCount) {
   }
 }
 
+function sanitizeRepeatedPdfFooterUrlChunks(chunks, totalPages, fileType) {
+  if (!Array.isArray(chunks) || chunks.length === 0) return { chunks: [], removed: 0 };
+  if (String(fileType || '').toLowerCase() !== 'pdf') return { chunks, removed: 0 };
+
+  const urlPages = new Map();
+  chunks.forEach(chunk => {
+    const text = String(chunk?.text || '').trim();
+    if (!/^(?:https?:\/\/|www\.)\S+$/i.test(text)) return;
+    if (!urlPages.has(text)) urlPages.set(text, new Set());
+    urlPages.get(text).add(Math.max(1, Number(chunk?.page) || 1));
+  });
+
+  const pageCount = Math.max(1, Number(totalPages) || 1);
+  const repeatedThreshold = Math.max(3, Math.ceil(pageCount * 0.5));
+  const repeatedUrls = new Set(
+    [...urlPages.entries()]
+      .filter(([, pages]) => pages.size >= repeatedThreshold)
+      .map(([url]) => url)
+  );
+  if (repeatedUrls.size === 0) return { chunks, removed: 0 };
+
+  const filteredChunks = chunks.filter(chunk => !repeatedUrls.has(String(chunk?.text || '').trim()));
+  return { chunks: filteredChunks, removed: chunks.length - filteredChunks.length };
+}
+
 function applyCachedDocument(cache) {
   if (!isValidCachedDocument(cache)) return false;
 
@@ -1352,7 +1377,9 @@ function applyCachedDocument(cache) {
       ...chunk,
       text: cleanAndRepairVietnameseText(chunk.text || '')
     }));
-  const normalizedCache = normalizeDocumentChunks(cachedChunks);
+  const cacheFileType = cache.fileType || getDocumentExtension({ name: cache.documentName || '' });
+  const sanitizedPdfCache = sanitizeRepeatedPdfFooterUrlChunks(cachedChunks, cache.totalPages, cacheFileType);
+  const normalizedCache = normalizeDocumentChunks(sanitizedPdfCache.chunks);
   if (normalizedCache.chunks.length === 0) return false;
   state.allChunks = normalizedCache.chunks;
   state.documentToc = Array.isArray(cache.documentToc) ? cache.documentToc : [];
@@ -1371,7 +1398,7 @@ function applyCachedDocument(cache) {
   state.pdfFileName = cache.documentName || state.pdfFileName || '';
   state.documentId = cache.documentId || '';
   state.documentFileSize = Number(cache.fileSize) || 0;
-  state.documentFileType = cache.fileType || getDocumentExtension({ name: state.pdfFileName });
+  state.documentFileType = cacheFileType;
   state.pageStartIndices = rebuildPageStartIndices(state.allChunks, state.totalPages);
   remapSavedBookmarkIndices(state.documentId, normalizedCache.indexMap, state.allChunks.length);
   const canUseLegacyPosition = previousDocumentName === state.pdfFileName;
@@ -1384,7 +1411,9 @@ function applyCachedDocument(cache) {
   );
   state.currentPage = state.allChunks[state.currentGlobalIndex]?.page || 1;
   state.documentCreatedAt = cache.createdAt || cache.savedAt || Date.now();
-  state.rawText = cache.rawText || state.allChunks.map(c => c.text).join('\n');
+  state.rawText = sanitizedPdfCache.removed > 0
+    ? state.allChunks.map(c => c.text).join('\n')
+    : (cache.rawText || state.allChunks.map(c => c.text).join('\n'));
   restoreSavedReadingPosition(false);
 
   // If upgrading from an older cache version where Page 1 cover image was auto-skipped to Page 2, reset to Page 1
@@ -1404,6 +1433,9 @@ function applyCachedDocument(cache) {
   const portalNameLabel = document.getElementById('portal-pdf-filename');
   if (portalNameLabel && state.pdfFileName) portalNameLabel.textContent = state.pdfFileName;
   if (typeof updatePortalUploadUI === 'function') updatePortalUploadUI();
+  if (sanitizedPdfCache.removed > 0) {
+    setTimeout(() => persistDocumentCache().catch(() => {}), 0);
+  }
   return true;
 }
 
@@ -1417,7 +1449,7 @@ function persistDocumentCache() {
 
   const payload = {
     id: `document:${getCurrentDocumentId()}`,
-    cacheVersion: 3,
+    cacheVersion: 4,
     processingComplete: !state.isPdfProcessing,
     documentName: state.pdfFileName,
     documentId: getCurrentDocumentId(),
@@ -8956,6 +8988,28 @@ async function renderPdfPageToDataUrl(page, scale = 1.4) {
   }
 }
 
+function isPdfFooterUrlItem(item, viewport) {
+  const text = String(item?.str || '').trim();
+  if (!/^(?:https?:\/\/|www\.)\S+$/i.test(text)) return false;
+
+  const transform = item?.transform;
+  if (!transform || typeof transform.length !== 'number' || transform.length < 6) return false;
+
+  const x = Number(transform[4]);
+  const y = Number(transform[5]);
+  const pageWidth = Number(viewport?.width) || 0;
+  const pageHeight = Number(viewport?.height) || 0;
+  if (!Number.isFinite(y) || pageHeight <= 0) return false;
+
+  const itemHeight = Number(item?.height) || Math.abs(Number(transform[0])) || 0;
+  const footerBandHeight = Math.max(24, pageHeight * 0.08);
+  const isInsideFooterBand = y >= 0 && y <= footerBandHeight;
+  const looksLikeFooterStyle = itemHeight <= 14
+    || (Number.isFinite(x) && pageWidth > 0 && x >= pageWidth * 0.5);
+
+  return isInsideFooterBand && looksLikeFooterStyle;
+}
+
 async function extractPdfPage(pdfDoc, pageNum) {
   let page = null;
 
@@ -8965,6 +9019,7 @@ async function extractPdfPage(pdfDoc, pageNum) {
       normalizeWhitespace: true,
       disableCombineTextItems: false
     });
+    const viewport = page.getViewport({ scale: 1 });
 
     let fullText = '';
     let lastX = null;
@@ -8976,6 +9031,7 @@ async function extractPdfPage(pdfDoc, pageNum) {
       const item = textContent.items[i];
       const str = item.str || '';
       if (!str && !item.hasEOL) continue;
+      if (isPdfFooterUrlItem(item, viewport)) continue;
 
       const currentX = item.transform ? item.transform[4] : null;
       const currentY = item.transform ? item.transform[5] : null;

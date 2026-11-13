@@ -38,6 +38,32 @@ function makePdfFile() {
   return { name: 'kiem-thu.pdf', mimeType: 'application/pdf', buffer: Buffer.from(pdf, 'binary') };
 }
 
+function makePdfWithFooterUrlFile() {
+  const stream = [
+    'BT /F1 18 Tf 72 720 Td (Noi dung truyen trong trang PDF) Tj ET',
+    'BT /F1 12 Tf 72 650 Td (https://example.com/noi-dung-can-giu) Tj ET',
+    'BT /F1 10 Tf 500 17 Td (https://thuviensach.vn) Tj ET'
+  ].join('\n');
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    `<< /Length ${Buffer.byteLength(stream)} >>\nstream\n${stream}\nendstream`
+  ];
+  let pdf = '%PDF-1.4\n';
+  const offsets = [0];
+  objects.forEach((object, index) => {
+    offsets.push(Buffer.byteLength(pdf));
+    pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
+  });
+  const xrefOffset = Buffer.byteLength(pdf);
+  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+  offsets.slice(1).forEach(offset => { pdf += `${String(offset).padStart(10, '0')} 00000 n \n`; });
+  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  return { name: 'pdf-co-footer-url.pdf', mimeType: 'application/pdf', buffer: Buffer.from(pdf, 'binary') };
+}
+
 async function openReader(page) {
   await page.goto('/googlesheets.html');
   await expect(page.locator('#universal-reader-navbar')).toBeVisible();
@@ -87,6 +113,45 @@ test('PDF thay thế dữ liệu mẫu bằng nội dung vừa nạp', async ({ 
   await expect(page.locator('#univ-file-name')).toContainText('kiem-thu.pdf');
   await expect(page.locator('#story-tbody')).toContainText('PDF regression story text');
   await expect(page.locator('#story-tbody')).not.toContainText('BÁO CÁO PHÂN TÍCH TỔNG QUAN CHIẾN DỊCH Q3');
+});
+
+test('PDF loại bỏ URL ở footer nhưng giữ URL trong nội dung', async ({ page }) => {
+  await openReader(page);
+  await page.locator('#file-pdf-input').setInputFiles(makePdfWithFooterUrlFile());
+  await expect(page.locator('#loading-spinner')).toBeHidden({ timeout: 20000 });
+  await expect(page.locator('#story-tbody')).toContainText('Noi dung truyen trong trang PDF');
+  await expect(page.locator('#story-tbody')).toContainText('https://example.com/noi-dung-can-giu');
+  await expect(page.locator('#story-tbody')).not.toContainText('https://thuviensach.vn');
+});
+
+test('cache PDF cũ tự loại URL footer lặp lại nhưng giữ URL nội dung', async ({ page }) => {
+  await openReader(page);
+  const { result, clientFilter } = await page.evaluate(() => ({
+    result: sanitizeRepeatedPdfFooterUrlChunks([
+      { text: 'Nội dung trang một', page: 1, globalIndex: 0 },
+      { text: 'https://thuviensach.vn', page: 1, globalIndex: 1 },
+      { text: 'Nội dung trang hai', page: 2, globalIndex: 2 },
+      { text: 'https://thuviensach.vn', page: 2, globalIndex: 3 },
+      { text: 'https://example.com/noi-dung-can-giu', page: 2, globalIndex: 4 },
+      { text: 'Nội dung trang ba', page: 3, globalIndex: 5 },
+      { text: 'https://thuviensach.vn', page: 3, globalIndex: 6 }
+    ], 3, 'pdf'),
+    clientFilter: {
+      footer: isPdfFooterUrlItem(
+        { str: 'https://thuviensach.vn', transform: [10, 0, 0, 10, 500, 17], height: 10 },
+        { width: 612, height: 792 }
+      ),
+      body: isPdfFooterUrlItem(
+        { str: 'https://example.com/noi-dung-can-giu', transform: [12, 0, 0, 12, 72, 650], height: 12 },
+        { width: 612, height: 792 }
+      )
+    }
+  }));
+
+  expect(result.removed).toBe(3);
+  expect(result.chunks.map(chunk => chunk.text)).toContain('https://example.com/noi-dung-can-giu');
+  expect(result.chunks.map(chunk => chunk.text)).not.toContain('https://thuviensach.vn');
+  expect(clientFilter).toEqual({ footer: true, body: false });
 });
 
 test('đổi giao diện vẫn giữ tài liệu và vị trí đọc', async ({ page }) => {
