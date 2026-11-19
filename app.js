@@ -1,7 +1,7 @@
 /**
  * Multi-Theme The Deceiver - Core Logic
  * Supports: Google Sheets (Online), Microsoft Excel 365, and Real VS Code IDE
- * Fast PDF, TXT, and EPUB parsing with local-first processing,
+ * Fast PDF, TXT, EPUB, and HTML parsing with local-first processing,
  * Boss Key (ESC), Auto-advance, and local persistence.
  */
 
@@ -3851,11 +3851,11 @@ function getStealthSettingsModalHTML() {
       <div class="modal-body">
         <div class="settings-group">
           <h4>1. Nạp tài liệu đọc</h4>
-          <p class="guide-text">Chọn file PDF, TXT hoặc EPUB. Nội dung được xử lý trực tiếp trên thiết bị của bạn.</p>
+          <p class="guide-text">Chọn file PDF, TXT, EPUB hoặc HTML. Nội dung được xử lý trực tiếp trên thiết bị của bạn.</p>
           <div class="file-drop-area" id="modal-drop-area">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="#0F9D58"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
-            <p>Kéo & thả file PDF, TXT, EPUB vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
-            <input type="file" id="modal-file-pdf" accept=".pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip">
+            <p>Kéo & thả file PDF, TXT, EPUB, HTML vào đây hoặc <span class="browse-link">Chọn tệp</span></p>
+            <input type="file" id="modal-file-pdf" accept=".pdf,.txt,.epub,.html,.htm,application/pdf,text/plain,application/epub+zip,text/html">
           </div>
         </div>
 
@@ -3952,7 +3952,7 @@ function ensureSharedReaderComponents() {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.id = 'file-pdf-input';
-    fileInput.accept = '.pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip';
+    fileInput.accept = '.pdf,.txt,.epub,.html,.htm,application/pdf,text/plain,application/epub+zip,text/html';
     fileInput.style.display = 'none';
     document.body.appendChild(fileInput);
   }
@@ -5725,7 +5725,7 @@ async function updatePortalUploadUI() {
       enterBtn.classList.add('disabled-need-file');
       enterBtn.classList.remove('ready');
       enterBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <span>Cần nạp file truyện để bắt đầu đọc</span>`;
-      enterBtn.title = 'Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc';
+      enterBtn.title = 'Vui lòng nạp file truyện (PDF, TXT, EPUB, HTML) trước khi bắt đầu đọc';
     }
   }
 
@@ -6013,7 +6013,7 @@ function initLandingPortal() {
     enterBtn.addEventListener('click', () => {
       if (!hasLoadedDocument()) {
         shakePortalUpload();
-        showPageFlipToast('⚠️ Vui lòng nạp file truyện (PDF, TXT, EPUB) trước khi bắt đầu đọc!');
+        showPageFlipToast('⚠️ Vui lòng nạp file truyện (PDF, TXT, EPUB, HTML) trước khi bắt đầu đọc!');
         const uploadAlert = document.getElementById('portal-upload-alert');
         if (uploadAlert) {
           uploadAlert.style.display = 'flex';
@@ -6411,7 +6411,7 @@ function initUniversalNavbar() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h7"/></svg>
           <span class="unav-brand-text">The Deceiver</span>
         </div>
-        <label for="file-pdf-input" class="unav-btn unav-btn-upload" title="Nạp file PDF, TXT hoặc EPUB (hoặc kéo thả vào trang)">
+        <label for="file-pdf-input" class="unav-btn unav-btn-upload" title="Nạp file PDF, TXT, EPUB hoặc HTML (hoặc kéo thả vào trang)">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <span>Nạp file</span>
         </label>
@@ -6509,7 +6509,7 @@ function initUniversalNavbar() {
     fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.id = 'file-pdf-input';
-    fileInput.accept = '.pdf,.txt,.epub,application/pdf,text/plain,application/epub+zip';
+    fileInput.accept = '.pdf,.txt,.epub,.html,.htm,application/pdf,text/plain,application/epub+zip,text/html';
     fileInput.style.display = 'none';
     document.body.appendChild(fileInput);
     fileInput.addEventListener('change', handleFileSelect);
@@ -7260,7 +7260,7 @@ function initEventListeners() {
         processDocumentFile(files[0]);
         closeModal();
       } else if (files.length) {
-        alert('Chỉ hỗ trợ file PDF, TXT hoặc EPUB.');
+        alert('Chỉ hỗ trợ file PDF, TXT, EPUB hoặc HTML.');
       }
     });
   }
@@ -8188,6 +8188,7 @@ const MAX_DOCUMENT_SIZE = 200 * 1024 * 1024;
 const MAX_EPUB_ENTRIES = 5000;
 const MAX_EPUB_TEXT_LENGTH = 60 * 1024 * 1024;
 const MAX_EPUB_UNCOMPRESSED_SIZE = 300 * 1024 * 1024;
+const MAX_HTML_TEXT_LENGTH = 60 * 1024 * 1024;
 const LARGE_FILE_WARNING_SIZE = 100 * 1024 * 1024;
 let pdfBackendAvailable = null;
 let lastUploadedPdfFile = null;
@@ -8199,7 +8200,7 @@ function getDocumentExtension(file) {
 }
 
 function isSupportedDocument(file) {
-  return ['pdf', 'txt', 'epub'].includes(getDocumentExtension(file));
+  return ['pdf', 'txt', 'epub', 'html', 'htm'].includes(getDocumentExtension(file));
 }
 
 function prepareDocumentLoad(file, documentId = '') {
@@ -8277,7 +8278,7 @@ function prepareDocumentLoad(file, documentId = '') {
 
 function validateDocumentFile(file) {
   if (!isSupportedDocument(file)) {
-    throw new Error('Chỉ hỗ trợ file PDF, TXT hoặc EPUB.');
+    throw new Error('Chỉ hỗ trợ file PDF, TXT, EPUB hoặc HTML.');
   }
   if (file.size > MAX_DOCUMENT_SIZE) {
     throw new Error('File lớn hơn 200 MB. Hãy chọn file nhỏ hơn để tránh trình duyệt bị treo.');
@@ -8299,6 +8300,7 @@ async function processDocumentFile(file) {
   const extension = getDocumentExtension(file);
   if (extension === 'pdf') return processPdfFile(file, documentId);
   if (extension === 'txt') return processTextFile(file, documentId);
+  if (extension === 'html' || extension === 'htm') return processHtmlFile(file, documentId);
   return processEpubFile(file, documentId);
 }
 
@@ -8440,6 +8442,79 @@ async function processTextFile(file, documentId = '') {
     state.isPdfProcessing = false;
     console.error('TXT parsing error:', error);
     showReaderError('Không thể đọc file TXT', 'Tệp không thể giải mã hoặc xử lý thành nội dung đọc.', error, 'Đọc và chia văn bản', file);
+  } finally {
+    if (loadToken === state.pdfLoadToken) hideLoading();
+  }
+}
+
+function extractTextFromLocalHtml(htmlText) {
+  const documentNode = new DOMParser().parseFromString(String(htmlText || ''), 'text/html');
+  documentNode.querySelectorAll(
+    'script, style, noscript, template, iframe, object, embed, form, nav, header, footer, button, input, select, textarea'
+  ).forEach(node => node.remove());
+  documentNode.querySelectorAll('[hidden], [aria-hidden="true"]').forEach(node => node.remove());
+
+  return extractTextFromEpubHtml(documentNode.documentElement.outerHTML);
+}
+
+async function processHtmlFile(file, documentId = '') {
+  const loadToken = prepareDocumentLoad(file, documentId);
+
+  try {
+    showLoading('Đang đọc cấu trúc file HTML...');
+    const htmlText = await file.text();
+    if (loadToken !== state.pdfLoadToken) return;
+    if (htmlText.length > MAX_HTML_TEXT_LENGTH) {
+      throw new Error('Nội dung HTML vượt quá giới hạn xử lý 60 MB.');
+    }
+
+    updateLoadingProgress(30, 'Đang loại mã script, giao diện và thành phần không phải nội dung...');
+    const extracted = extractTextFromLocalHtml(htmlText);
+    if (!extracted.text.trim()) throw new Error('HTML không có nội dung văn bản có thể đọc.');
+
+    state.rawText = extracted.text;
+    updateLoadingProgress(55, `Đang chia nội dung và nhận diện ${extracted.headings.length} đề mục...`);
+    const chunks = await runTextChunkWorker(extracted.text, state.chunkMode, {
+      preserveIndents: state.preserveIndents,
+      compactBlankLines: state.compactBlankLines,
+      maxCharsPerLine: state.layoutMode === 'custom' ? state.maxCharsPerLine : 0
+    });
+    if (loadToken !== state.pdfLoadToken) return;
+    if (chunks.length === 0) throw new Error('HTML không có nội dung văn bản có thể đọc.');
+
+    updateLoadingProgress(85, 'Đang tạo mục lục và dựng nội dung đọc...');
+    finishTextDocument(chunks, 'HTML');
+
+    const toc = [];
+    let searchFrom = 0;
+    extracted.headings.forEach(title => {
+      const cleanTitle = cleanAndRepairVietnameseText(title).replace(/\s+/g, ' ').trim();
+      if (!cleanTitle) return;
+      const normalizedTitle = cleanTitle.toLocaleLowerCase('vi');
+      let chunkIndex = chunks.findIndex((chunk, index) => (
+        index >= searchFrom && chunk.toLocaleLowerCase('vi').includes(normalizedTitle)
+      ));
+      if (chunkIndex < 0) chunkIndex = searchFrom;
+      chunkIndex = Math.min(Math.max(0, chunkIndex), chunks.length - 1);
+      searchFrom = Math.min(chunks.length - 1, chunkIndex + 1);
+      const page = 1 + Math.floor(chunkIndex / TEXT_CHUNKS_PER_PAGE);
+      toc.push({ title: cleanTitle, page, globalIndex: state.pageStartIndices[page] || chunkIndex });
+    });
+
+    state.documentToc = toc;
+    persistDocumentCache().catch(() => {});
+    showBanner(`Đã nạp thành công HTML: <b>${state.totalPages}</b> phần đọc, <b>${toc.length}</b> mục lục.`);
+  } catch (error) {
+    if (loadToken !== state.pdfLoadToken) return;
+    state.isPdfProcessing = false;
+    console.error('HTML parsing error:', error);
+    showReaderError(
+      'Không thể đọc file HTML',
+      'HTML có thể không chứa nội dung truyện, sai bảng mã hoặc vượt quá giới hạn xử lý.',
+      error,
+      'Tách nội dung HTML',
+      file
+    );
   } finally {
     if (loadToken === state.pdfLoadToken) hideLoading();
   }

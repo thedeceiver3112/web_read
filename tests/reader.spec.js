@@ -16,6 +16,21 @@ async function makeEpubFile() {
   return { name: 'kiem-thu.epub', mimeType: 'application/epub+zip', buffer: await zip.generateAsync({ type: 'nodebuffer' }) };
 }
 
+function makeHtmlFile() {
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Truyện kiểm thử</title>
+    <style>body { color: red; }</style><script>window.__uploadedHtmlScriptRan = true;</script></head><body>
+    <nav><p>Quảng cáo và menu không được đưa vào truyện</p></nav>
+    <a href="#chapter-1">Chương 1</a><a href="#chapter-2">Chương 2</a>
+    <h2 id="chapter-1">Chương 1: Khởi đầu</h2>
+    <p>Nội dung HTML của chương đầu tiên.</p>
+    <p>Đoạn văn thứ hai vẫn được giữ nguyên.</p>
+    <h2 id="chapter-2">Chương 2: Hành trình</h2>
+    <p>Nội dung HTML chương thứ hai có từ khóa đặc biệt.</p>
+    <footer><p>Footer nguồn không được đưa vào truyện</p></footer>
+    </body></html>`;
+  return { name: 'truyen-kiem-thu.html', mimeType: 'text/html', buffer: Buffer.from(html, 'utf8') };
+}
+
 function makePdfFile() {
   const stream = 'BT /F1 18 Tf 72 720 Td (PDF regression story text) Tj ET';
   const objects = [
@@ -106,6 +121,22 @@ test('EPUB vẫn mở khi server thiếu text-worker.js', async ({ page }) => {
   await expect(page.locator('#reader-error-modal.open')).toHaveCount(0);
 });
 
+test('HTML tách nội dung, tạo mục lục và không chạy script nhúng', async ({ page }) => {
+  await openReader(page);
+  await page.locator('#file-pdf-input').setInputFiles(makeHtmlFile());
+  await expect(page.locator('#loading-spinner')).toBeHidden({ timeout: 20000 });
+  await expect(page.locator('#univ-file-name')).toContainText('truyen-kiem-thu.html');
+  await expect(page.locator('#story-tbody')).toContainText('Nội dung HTML của chương đầu tiên');
+  await expect(page.locator('#story-tbody')).not.toContainText('Quảng cáo và menu');
+  await expect(page.locator('#story-tbody')).not.toContainText('Footer nguồn');
+  expect(await page.evaluate(() => window.__uploadedHtmlScriptRan)).toBeUndefined();
+
+  await page.locator('#univ-btn-tools').click();
+  await page.locator('[data-reader-tab="toc"]').click();
+  await expect(page.locator('[data-toc-index]')).toHaveCount(2);
+  await expect(page.locator('[data-toc-index]').nth(1)).toContainText('Chương 2: Hành trình');
+});
+
 test('PDF thay thế dữ liệu mẫu bằng nội dung vừa nạp', async ({ page }) => {
   await openReader(page);
   await page.locator('#file-pdf-input').setInputFiles(makePdfFile());
@@ -184,7 +215,7 @@ test('lỗi định dạng hiển thị hộp thoại có nguyên nhân', async 
     buffer: Buffer.from('not-a-document')
   });
   await expect(page.locator('#reader-error-modal')).toHaveClass(/open/);
-  await expect(page.locator('#reader-error-modal')).toContainText('Chỉ hỗ trợ file PDF, TXT hoặc EPUB');
+  await expect(page.locator('#reader-error-modal')).toContainText('Chỉ hỗ trợ file PDF, TXT, EPUB hoặc HTML');
   await expect(page.locator('#reader-error-modal')).toContainText('Kiểm tra tệp');
 });
 
