@@ -943,9 +943,6 @@ window.addEventListener('resize', closeHybridAccountDropdown);
 async function initializeHybridSync() {
   renderHybridAuthButton();
   try {
-    document.querySelectorAll('.hybrid-auth-button, #hybrid-auth-button').forEach(authButton => {
-      authButton.addEventListener('click', handleHybridAuthClick, { once: false });
-    });
     const response = await fetch('/api/auth/status', { credentials: 'same-origin', cache: 'no-store' });
     if (!response.ok) return;
     const data = await response.json();

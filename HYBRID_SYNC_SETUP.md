@@ -52,6 +52,13 @@ https://thedeceiver.site/api/auth/google/callback
 Only `openid email profile` scopes are requested. Google Drive access is not
 used.
 
+The desktop application reuses this web OAuth client through a browser-pairing
+flow. It does not embed the Google client secret in the executable and does not
+need a separate Desktop OAuth client. The pairing verifier is generated on the
+device; only its SHA-256 hash is carried through the signed OAuth state. After
+Google login, the server creates a normal row in the existing `auth_sessions`
+table. No additional database migration is required.
+
 ## 3. Configure cPanel environment variables
 
 Add the variables shown in `.env.example` to the Python application's
@@ -84,3 +91,5 @@ hidden automatically while configuration is incomplete.
   source of truth until sync becomes available again.
 - A SHA-256 fingerprint of file size/type plus the first and last 1 MiB is used
   to identify the same local file without uploading its contents.
+- The desktop session token is stored in Windows Credential Manager. PDF,
+  EPUB, TXT and HTML contents remain on the device.

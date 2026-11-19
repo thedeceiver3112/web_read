@@ -11,6 +11,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import time
 from dataclasses import dataclass
@@ -85,12 +86,15 @@ def _b64decode(value: str) -> bytes:
     return base64.urlsafe_b64decode(value + "=" * (-len(value) % 4))
 
 
-def _signed_oauth_state(return_path: str, secret: str) -> str:
-    payload = _b64encode(json.dumps({
+def _signed_oauth_state(return_path: str, secret: str, extra: dict[str, Any] | None = None) -> str:
+    state_data = {
         "nonce": secrets.token_urlsafe(20),
         "return": return_path,
         "expires": int(time.time()) + 600,
-    }, separators=(",", ":")).encode("utf-8"))
+    }
+    if extra:
+        state_data.update(extra)
+    payload = _b64encode(json.dumps(state_data, separators=(",", ":")).encode("utf-8"))
     signature = hmac.new(secret.encode("utf-8"), payload.encode("ascii"), hashlib.sha256).digest()
     return f"{payload}.{_b64encode(signature)}"
 
@@ -144,8 +148,15 @@ def _db_connection(config: dict[str, Any]):
     )
 
 
+def _session_token(headers: dict[str, str]) -> str:
+    authorization = headers.get("authorization", "")
+    if authorization.lower().startswith("bearer "):
+        return authorization[7:].strip()
+    return _cookie_map(headers.get("cookie", "")).get(SESSION_COOKIE, "")
+
+
 def _session_user(config: dict[str, Any], headers: dict[str, str]):
-    token = _cookie_map(headers.get("cookie", "")).get(SESSION_COOKIE, "")
+    token = _session_token(headers)
     if not token:
         return None
     token_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
@@ -208,10 +219,20 @@ def _exchange_google_code(config: dict[str, Any], code: str) -> dict[str, Any]:
     return claims
 
 
-def _create_login_session(config: dict[str, Any], claims: dict[str, Any]) -> str:
-    token = secrets.token_urlsafe(48)
+def _google_authorization_url(config: dict[str, Any], state: str) -> str:
+    return "https://accounts.google.com/o/oauth2/v2/auth?" + urlencode({
+        "client_id": config["client_id"],
+        "redirect_uri": config["redirect_uri"],
+        "response_type": "code",
+        "scope": "openid email profile",
+        "state": state,
+        "prompt": "select_account",
+        "access_type": "online",
+    })
+
+
+def _create_login_session_with_hash(config: dict[str, Any], claims: dict[str, Any], token_hash: str) -> None:
     csrf_token = secrets.token_urlsafe(32)
-    token_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
     expires_at = datetime.now(timezone.utc) + timedelta(days=SESSION_DAYS)
     connection = _db_connection(config)
     try:
@@ -230,7 +251,6 @@ def _create_login_session(config: dict[str, Any], claims: dict[str, Any]) -> str
             )
             cursor.execute("DELETE FROM auth_sessions WHERE expires_at <= UTC_TIMESTAMP()")
         connection.commit()
-        return token
     except Exception:
         connection.rollback()
         raise
@@ -238,8 +258,15 @@ def _create_login_session(config: dict[str, Any], claims: dict[str, Any]) -> str
         connection.close()
 
 
+def _create_login_session(config: dict[str, Any], claims: dict[str, Any]) -> str:
+    token = secrets.token_urlsafe(48)
+    token_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
+    _create_login_session_with_hash(config, claims, token_hash)
+    return token
+
+
 def _logout(config: dict[str, Any], headers: dict[str, str]):
-    token = _cookie_map(headers.get("cookie", "")).get(SESSION_COOKIE, "")
+    token = _session_token(headers)
     if not token:
         return
     connection = _db_connection(config)
@@ -415,12 +442,20 @@ def handle_api_request(method: str, raw_path: str, headers: dict[str, str], body
             query = parse_qs(parsed.query)
             return_path = _safe_return_path((query.get("return") or ["/"])[0])
             state = _signed_oauth_state(return_path, config["app_secret"])
-            location = "https://accounts.google.com/o/oauth2/v2/auth?" + urlencode({
-                "client_id": config["client_id"], "redirect_uri": config["redirect_uri"],
-                "response_type": "code", "scope": "openid email profile", "state": state,
-                "prompt": "select_account", "access_type": "online",
-            })
+            location = _google_authorization_url(config, state)
             return ApiResponse(302, None, [("Location", location), ("Set-Cookie", _cookie(OAUTH_STATE_COOKIE, state, 600, secure_cookie))])
+
+        if path == "/api/auth/desktop/start" and method == "GET":
+            query = parse_qs(parsed.query)
+            challenge = (query.get("challenge") or [""])[0].lower()
+            if not re.fullmatch(r"[0-9a-f]{64}", challenge):
+                return _json_response(400, {"error": "Mã ghép nối desktop không hợp lệ"})
+            state = _signed_oauth_state("/", config["app_secret"], {"desktopChallenge": challenge})
+            location = _google_authorization_url(config, state)
+            return ApiResponse(302, None, [
+                ("Location", location),
+                ("Set-Cookie", _cookie(OAUTH_STATE_COOKIE, state, 600, secure_cookie)),
+            ])
 
         if path == "/api/auth/google/callback" and method == "GET":
             query = parse_qs(parsed.query)
@@ -431,6 +466,15 @@ def handle_api_request(method: str, raw_path: str, headers: dict[str, str], body
             if not state_data or not hmac.compare_digest(state, cookie_state) or not code:
                 return _json_response(400, {"error": "Phiên đăng nhập Google không hợp lệ hoặc đã hết hạn"})
             claims = _exchange_google_code(config, code)
+            desktop_challenge = str(state_data.get("desktopChallenge") or "").lower()
+            if desktop_challenge:
+                if not re.fullmatch(r"[0-9a-f]{64}", desktop_challenge):
+                    return _json_response(400, {"error": "Mã ghép nối desktop không hợp lệ"})
+                _create_login_session_with_hash(config, claims, desktop_challenge)
+                return ApiResponse(302, None, [
+                    ("Location", "/desktop-auth-complete.html"),
+                    ("Set-Cookie", _cookie(OAUTH_STATE_COOKIE, "", 0, secure_cookie)),
+                ])
             session_token = _create_login_session(config, claims)
             return ApiResponse(302, None, [
                 ("Location", _safe_return_path(state_data.get("return", "/"))),
