@@ -5756,7 +5756,7 @@ async function updatePortalUploadUI() {
               <span class="duo-upload-name" id="portal-pdf-filename">Chưa chọn file truyện</span>
               <span class="duo-upload-status-pill" id="portal-upload-status-pill">Chưa có truyện</span>
             </div>
-            <span class="duo-upload-hint" id="portal-upload-hint">Bấm nút bên cạnh để tải file .PDF, .TXT hoặc .EPUB từ máy (hỗ trợ chọn nhiều file)</span>
+            <span class="duo-upload-hint" id="portal-upload-hint">Bấm nút bên cạnh để tải file .PDF, .TXT, .EPUB hoặc .HTML từ máy (hỗ trợ chọn nhiều file)</span>
           </div>
         </div>
         <label for="portal-file-input" class="portal-file-change-btn" id="portal-upload-btn-label">

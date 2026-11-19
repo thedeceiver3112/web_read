@@ -84,6 +84,13 @@ async function openReader(page) {
   await expect(page.locator('#universal-reader-navbar')).toBeVisible();
 }
 
+test('trang chủ ghi rõ hỗ trợ HTML trong hướng dẫn và khu vực nạp file', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.guide-step-text').first()).toContainText('.html');
+  await expect(page.locator('#portal-upload-hint')).toContainText('.HTML');
+  await expect(page.locator('#portal-file-input')).toHaveAttribute('accept', /\.html/);
+});
+
 test('nạp TXT, tìm kiếm và lưu nhiều dấu trang', async ({ page }) => {
   await openReader(page);
   await page.locator('#file-pdf-input').setInputFiles(makeTextFile());
