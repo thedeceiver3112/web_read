@@ -21872,3 +21872,346 @@ body[data-workspace-density="spacious"] #excel-table tbody td { padding-top: 10p
   .workspace-field-row, .workspace-fields-two, .workspace-columns-grid, .workspace-display-grid { grid-template-columns: 1fr; }
   .workspace-field-row .workspace-icon-action { grid-column: auto; }
 }
+
+/* ==========================================================================
+   ZALO WEB VISUAL ALIGNMENT (2026)
+   Layout follows the public web client proportions while keeping all local
+   story content, names and avatars synthetic.
+   ========================================================================== */
+body.theme-zalo {
+  --zalo-blue: #0068ff;
+  --zalo-ink: #081c36;
+  --zalo-muted: #7589a3;
+  --zalo-line: #e5e7eb;
+  --zalo-chat-bg: #e5efff;
+  box-sizing: border-box;
+  font-family: SegoeuiPc, "Segoe UI", "San Francisco", "Helvetica Neue", Helvetica, "Lucida Grande", Roboto, Ubuntu, Tahoma, "Microsoft Sans Serif", Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: .2px;
+}
+body.theme-zalo *,
+body.theme-zalo *::before,
+body.theme-zalo *::after {
+  box-sizing: border-box;
+}
+body.theme-zalo #app-page {
+  height: 100%;
+  min-height: 0;
+}
+body.theme-zalo .system-banner__container {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  background: #eaf5ff;
+  border-bottom-color: #d5e9fb;
+}
+body.theme-zalo .system-banner__item__wrapper {
+  width: 100%;
+  padding: 8px 16px;
+}
+body.theme-zalo .z-banner {
+  max-width: 920px;
+  margin: 0 auto;
+}
+body.theme-zalo .z-banner__info {
+  justify-content: center;
+}
+body.theme-zalo .z-banner__info__content,
+body.theme-zalo .z-banner__action.--link {
+  font-size: 13px;
+  line-height: 20px;
+}
+body.theme-zalo #sidebarNav {
+  width: 64px;
+  background: var(--zalo-blue);
+}
+body.theme-zalo .nav__tabs {
+  padding: 12px 0 10px;
+}
+body.theme-zalo .nav__tabs__zalo {
+  margin-bottom: 12px;
+}
+body.theme-zalo .zavatar-m {
+  width: 42px;
+  height: 42px;
+  box-shadow: none;
+}
+body.theme-zalo .nav__tabs__top,
+body.theme-zalo .nav__tabs__bottom {
+  gap: 2px;
+}
+body.theme-zalo .leftbar-tab {
+  width: 64px;
+  height: 52px;
+  padding: 0;
+  border-radius: 0;
+  opacity: 1;
+}
+body.theme-zalo .leftbar-tab:hover {
+  background: rgba(0, 41, 120, .18);
+}
+body.theme-zalo .leftbar-tab.selected {
+  background: #0054d1;
+}
+body.theme-zalo .zalo-chat-list-pane {
+  width: 344px;
+  border-right: 1px solid #dfe4ea;
+}
+body.theme-zalo .zalo-search-bar-row {
+  min-height: 56px;
+  padding: 8px 12px;
+  gap: 4px;
+}
+body.theme-zalo .zalo-search-input-box {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 5px;
+  background: #f0f2f5;
+  color: #72808e;
+}
+body.theme-zalo .zalo-search-input-box:focus-within {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px var(--zalo-blue);
+}
+body.theme-zalo .zalo-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: #344563;
+}
+body.theme-zalo .msg-filters-bar {
+  height: 40px;
+  border-bottom-color: #e8edf2;
+}
+body.theme-zalo .tab-main {
+  height: 40px;
+  gap: 20px;
+}
+body.theme-zalo .tab-item {
+  color: #5b6b79;
+  font-size: 14px;
+}
+body.theme-zalo .filter-preview-v2 {
+  color: #5b6b79;
+  font-size: 13px;
+}
+body.theme-zalo .sync-v2-banner {
+  min-height: 48px;
+  margin: 8px;
+  border: 1px solid #d8eaff;
+  border-radius: 6px;
+  background: #f2f8ff;
+}
+body.theme-zalo .zalo-conversations-scroll {
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: #c8d0da transparent;
+}
+body.theme-zalo .zalo-conv-item {
+  min-height: 78px;
+  height: 78px;
+  padding: 10px 12px 10px 8px;
+  gap: 8px;
+  border-bottom: 0;
+}
+body.theme-zalo .zalo-conv-item.active {
+  order: -10;
+  background: #e5efff;
+}
+body.theme-zalo .zalo-conv-item.pinned:not(.active) {
+  background: #fff;
+}
+body.theme-zalo .zalo-conv-item:hover,
+body.theme-zalo .zalo-conv-item.pinned:hover {
+  background: #f3f6f9;
+}
+body.theme-zalo .zalo-conv-item.active:hover {
+  background: #dbeaff;
+}
+body.theme-zalo .zalo-conv-avatar-box {
+  width: 52px;
+  height: 52px;
+}
+body.theme-zalo .zalo-conv-name-row {
+  margin-bottom: 3px;
+}
+body.theme-zalo .zalo-conv-name {
+  font-size: 15px;
+  line-height: 21px;
+  font-weight: 500;
+  color: var(--zalo-ink);
+}
+body.theme-zalo .zalo-conv-time {
+  margin-left: 8px;
+  font-size: 12px;
+  line-height: 18px;
+  color: #8492a6;
+}
+body.theme-zalo .zalo-conv-preview {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: #7589a3;
+}
+body.theme-zalo .zalo-chat-main-pane {
+  background: var(--zalo-chat-bg);
+}
+body.theme-zalo .zalo-chat-header {
+  height: 68px;
+  padding: 0 16px;
+  border-bottom: 1px solid #e8edf2;
+}
+body.theme-zalo .zalo-header-avatar {
+  width: 48px;
+  height: 48px;
+}
+body.theme-zalo .zalo-header-title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+}
+body.theme-zalo .zalo-header-sub {
+  margin-top: 1px;
+  font-size: 13px;
+  line-height: 18px;
+}
+body.theme-zalo .zalo-header-tag,
+body.theme-zalo .zalo-top-action-btn[title="Cuộc gọi thoại"],
+body.theme-zalo .zalo-top-action-btn[title="Cuộc gọi video"],
+body.theme-zalo .zalo-win-ctrls {
+  display: none !important;
+}
+body.theme-zalo .zalo-top-action-icons {
+  gap: 4px;
+}
+body.theme-zalo .zalo-top-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  color: #344563;
+}
+body.theme-zalo .zalo-pinned-banner {
+  min-height: 52px;
+  padding: 6px 16px;
+  border-bottom-color: #e8edf2;
+}
+body.theme-zalo .zalo-pinned-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: #4c5b6b;
+  font-size: 12px;
+}
+body.theme-zalo .zalo-messages-scroll {
+  padding: 18px 24px 26px;
+  gap: 8px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,.62) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 82% 32%, rgba(255,255,255,.52) 0 1px, transparent 1.5px),
+    linear-gradient(180deg, #e7f0fb 0%, #e1ebf7 100%);
+  background-size: 34px 34px, 42px 42px, auto;
+}
+body.theme-zalo .zalo-date-divider {
+  margin: 6px 0 10px;
+}
+body.theme-zalo .zalo-date-divider span {
+  padding: 4px 12px;
+  border-radius: 14px;
+  background: rgba(64, 78, 96, .52);
+  font-size: 12px;
+  line-height: 16px;
+}
+body.theme-zalo .zalo-msg-row-incoming,
+body.theme-zalo .zalo-msg-item {
+  max-width: min(680px, 82%);
+  gap: 8px;
+}
+body.theme-zalo .zalo-msg-row-outgoing {
+  max-width: min(680px, 82%);
+}
+body.theme-zalo .zalo-msg-bubble-wrap,
+body.theme-zalo .zalo-msg-content-box {
+  max-width: calc(100% - 44px);
+}
+body.theme-zalo .zalo-msg-sender,
+body.theme-zalo .zalo-msg-sender-name {
+  margin: 0 0 2px 2px;
+  color: #63768d;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+}
+body.theme-zalo .zalo-msg-bubble-in,
+body.theme-zalo .zalo-msg-bubble {
+  padding: 9px 12px 7px;
+  border: 0;
+  border-radius: 4px 12px 12px 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(8, 28, 54, .12);
+}
+body.theme-zalo .zalo-msg-bubble-out {
+  padding: 9px 12px 7px;
+  border: 0;
+  border-radius: 12px 4px 12px 12px;
+  background: #d9fdd3;
+  box-shadow: 0 1px 2px rgba(8, 28, 54, .12);
+}
+body.theme-zalo .zalo-msg-content-text,
+body.theme-zalo .zalo-msg-text {
+  color: var(--zalo-ink);
+  font-size: var(--story-font-size, 14px);
+  line-height: var(--story-line-height, 1.5);
+  letter-spacing: .2px;
+}
+body.theme-zalo .zalo-msg-time-row,
+body.theme-zalo .zalo-msg-time,
+body.theme-zalo .zalo-msg-meta-out {
+  color: #8492a6;
+  font-size: 11px;
+  line-height: 15px;
+}
+body.theme-zalo .zalo-chat-input-area {
+  min-height: 92px;
+  padding: 6px 16px 10px;
+  border-top: 1px solid #e2e8ef;
+}
+body.theme-zalo .zalo-input-toolbar {
+  height: 38px;
+  gap: 4px;
+  padding: 0;
+}
+body.theme-zalo .zalo-tool-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  color: #344563;
+}
+body.theme-zalo .zalo-textarea-row {
+  min-height: 36px;
+}
+body.theme-zalo .zalo-chat-input {
+  height: 36px;
+  font-size: 14px;
+  color: #344563;
+}
+body.theme-zalo .zalo-info-sidebar {
+  width: 344px;
+  border-left-color: #dfe4ea;
+}
+
+@media (max-width: 850px) {
+  body.theme-zalo #container.zalo-convs-open .zalo-chat-list-pane {
+    left: 64px;
+    width: 344px;
+  }
+  body.theme-zalo .zalo-msg-row-incoming,
+  body.theme-zalo .zalo-msg-row-outgoing,
+  body.theme-zalo .zalo-msg-item {
+    max-width: 92%;
+  }
+}
