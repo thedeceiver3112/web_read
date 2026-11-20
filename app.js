@@ -1600,6 +1600,27 @@ const FAVICONS = {
   'portal': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E",
 };
 
+const STANDARD_THEME_ICONS = {
+  'theme-excel': 'static/theme-icons/excel.png',
+  'theme-vscode': 'static/theme-icons/vscode.png',
+  'theme-zalo': 'static/theme-icons/zalo.png',
+  'theme-misa': 'static/theme-icons/misa.webp',
+  'theme-gmail': 'static/theme-icons/gmail.png',
+};
+
+Object.assign(FAVICONS, STANDARD_THEME_ICONS);
+
+function applyStandardThemeIcons(root = document) {
+  Object.entries(STANDARD_THEME_ICONS).forEach(([themeName, iconPath]) => {
+    root.querySelectorAll(`[data-theme="${themeName}"]`).forEach(themeItem => {
+      const iconBox = themeItem.querySelector('.duo-mission-icon-box, .theme-card-icon');
+      if (!iconBox || iconBox.dataset.standardThemeIcon === iconPath) return;
+      iconBox.dataset.standardThemeIcon = iconPath;
+      iconBox.innerHTML = `<img src="${iconPath}" alt="" width="34" height="34" loading="eager" decoding="async" style="display:block;width:34px;height:34px;object-fit:contain;">`;
+    });
+  });
+}
+
 function syncDesktopThemeIcon(themeName) {
   const iconDataUrl = FAVICONS[themeName];
   if (!iconDataUrl || typeof window.__THE_DECEIVER_SET_THEME_ICON__ !== 'function') return;
@@ -3777,12 +3798,16 @@ function getThemePickerModalHTML() {
 
 function ensureThemeModalComponent() {
   let modal = document.getElementById('theme-modal');
-  if (modal) return modal;
+  if (modal) {
+    applyStandardThemeIcons(modal);
+    return modal;
+  }
 
   const temp = document.createElement('div');
   temp.innerHTML = getThemePickerModalHTML().trim();
   modal = temp.firstElementChild;
   document.body.appendChild(modal);
+  applyStandardThemeIcons(modal);
 
   attachThemeModalEvents(modal);
   return modal;
@@ -6178,6 +6203,7 @@ function initPortalTriggers() {
 }
 
 function updatePortalThemeUI(themeName) {
+  applyStandardThemeIcons(document);
   document.querySelectorAll('.duo-mission-item, .portal-theme-item').forEach(item => {
     const match = item.getAttribute('data-theme') === themeName;
     item.classList.toggle('selected', match);
