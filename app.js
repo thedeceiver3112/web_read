@@ -1600,6 +1600,14 @@ const FAVICONS = {
   'portal': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E",
 };
 
+function syncDesktopThemeIcon(themeName) {
+  const iconDataUrl = FAVICONS[themeName];
+  if (!iconDataUrl || typeof window.__THE_DECEIVER_SET_THEME_ICON__ !== 'function') return;
+  window.__THE_DECEIVER_SET_THEME_ICON__(themeName, iconDataUrl).catch(error => {
+    console.warn('Không thể đồng bộ icon theme với ứng dụng desktop:', error);
+  });
+}
+
 // ==========================================================
 // INITIALIZATION
 // ==========================================================
@@ -4073,13 +4081,16 @@ function applyTheme(themeName) {
   const isPortalVisible = portal ? !portal.classList.contains('hidden') : isIndexPage;
 
   const favicon = document.getElementById('app-favicon');
+  let activeIconTheme = themeName;
   if (favicon) {
     if (isIndexPage && isPortalVisible && FAVICONS['portal']) {
       favicon.href = FAVICONS['portal'];
+      activeIconTheme = 'portal';
     } else if (FAVICONS[themeName]) {
       favicon.href = FAVICONS[themeName];
     }
   }
+  syncDesktopThemeIcon(activeIconTheme);
 
   const storyLabel = document.getElementById('tab-story-label');
   const headerTitle = document.getElementById('story-header-title');
@@ -6171,6 +6182,7 @@ function updatePortalThemeUI(themeName) {
     const match = item.getAttribute('data-theme') === themeName;
     item.classList.toggle('selected', match);
   });
+  syncDesktopThemeIcon(themeName);
 }
 
 function copyAccountNumber() {
