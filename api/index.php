@@ -635,13 +635,17 @@ function safe_return_path(string $value): string
     return $value;
 }
 
-function signed_state(string $returnPath, string $secret): string
+function signed_state(string $returnPath, string $secret, array $extra = []): string
 {
-    $payload = base64url_encode(json_encode([
+    $state = [
         'nonce' => base64url_encode(random_bytes(20)),
         'return' => safe_return_path($returnPath),
         'expires' => time() + 600,
-    ], JSON_UNESCAPED_SLASHES));
+    ];
+    foreach ($extra as $key => $value) {
+        $state[(string)$key] = $value;
+    }
+    $payload = base64url_encode(json_encode($state, JSON_UNESCAPED_SLASHES));
     return $payload . '.' . base64url_encode(hash_hmac('sha256', $payload, $secret, true));
 }
 
@@ -669,9 +673,18 @@ function db(array $config): PDO
     ]);
 }
 
+function request_session_token(): string
+{
+    $authorization = trim((string)($_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? ''));
+    if (preg_match('/^Bearer\s+(\S+)$/i', $authorization, $matches)) {
+        return (string)$matches[1];
+    }
+    return (string)($_COOKIE[SESSION_COOKIE] ?? '');
+}
+
 function current_session(array $config): ?array
 {
-    $token = (string)($_COOKIE[SESSION_COOKIE] ?? '');
+    $token = request_session_token();
     if ($token === '') {
         return null;
     }
@@ -725,7 +738,7 @@ function google_claims(array $config, string $code): array
     return $claims;
 }
 
-function create_session(array $config, array $claims): string
+function create_session_with_hash(array $config, array $claims, string $tokenHash): void
 {
     $pdo = db($config);
     $pdo->beginTransaction();
@@ -733,17 +746,22 @@ function create_session(array $config, array $claims): string
         $stmt = $pdo->prepare('INSERT INTO users (google_sub,email,display_name,avatar_url,last_login_at) VALUES (?,?,?,?,UTC_TIMESTAMP()) ON DUPLICATE KEY UPDATE email=VALUES(email),display_name=VALUES(display_name),avatar_url=VALUES(avatar_url),last_login_at=UTC_TIMESTAMP(),id=LAST_INSERT_ID(id)');
         $stmt->execute([(string)$claims['sub'], (string)($claims['email'] ?? ''), (string)($claims['name'] ?? ''), (string)($claims['picture'] ?? '')]);
         $userId = (int)$pdo->lastInsertId();
-        $token = base64url_encode(random_bytes(48));
         $csrf = base64url_encode(random_bytes(32));
         $stmt = $pdo->prepare('INSERT INTO auth_sessions (user_id,token_hash,csrf_token,expires_at) VALUES (?,?,?,DATE_ADD(UTC_TIMESTAMP(),INTERVAL 30 DAY))');
-        $stmt->execute([$userId, hash('sha256', $token), $csrf]);
+        $stmt->execute([$userId, $tokenHash, $csrf]);
         $pdo->exec('DELETE FROM auth_sessions WHERE expires_at<=UTC_TIMESTAMP()');
         $pdo->commit();
-        return $token;
     } catch (Throwable $error) {
         $pdo->rollBack();
         throw $error;
     }
+}
+
+function create_session(array $config, array $claims): string
+{
+    $token = base64url_encode(random_bytes(48));
+    create_session_with_hash($config, $claims, hash('sha256', $token));
+    return $token;
 }
 
 function json_body(): array
@@ -1201,12 +1219,31 @@ try {
         set_secure_cookie(OAUTH_STATE_COOKIE, $state, 600);
         redirect_response('https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query(['client_id' => $config['google_client_id'], 'redirect_uri' => $config['google_redirect_uri'], 'response_type' => 'code', 'scope' => 'openid email profile', 'state' => $state, 'prompt' => 'select_account', 'access_type' => 'online']));
     }
+    if ($path === '/api/auth/desktop/start' && $method === 'GET') {
+        $challenge = strtolower((string)($_GET['challenge'] ?? ''));
+        if (!preg_match('/^[0-9a-f]{64}$/D', $challenge)) {
+            json_response(400, ['error' => 'Mã ghép nối desktop không hợp lệ']);
+        }
+        $state = signed_state('/', (string)$config['app_session_secret'], ['desktopChallenge' => $challenge]);
+        set_secure_cookie(OAUTH_STATE_COOKIE, $state, 600);
+        redirect_response('https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query(['client_id' => $config['google_client_id'], 'redirect_uri' => $config['google_redirect_uri'], 'response_type' => 'code', 'scope' => 'openid email profile', 'state' => $state, 'prompt' => 'select_account', 'access_type' => 'online']));
+    }
     if ($path === '/api/auth/google/callback' && $method === 'GET') {
         $state = (string)($_GET['state'] ?? '');
         $code = (string)($_GET['code'] ?? '');
         $stateData = verify_state($state, (string)$config['app_session_secret']);
         if (!$stateData || !hash_equals($state, (string)($_COOKIE[OAUTH_STATE_COOKIE] ?? '')) || $code === '') json_response(400, ['error' => 'Phiên đăng nhập Google không hợp lệ hoặc đã hết hạn']);
-        $token = create_session($config, google_claims($config, $code));
+        $claims = google_claims($config, $code);
+        $desktopChallenge = strtolower((string)($stateData['desktopChallenge'] ?? ''));
+        if ($desktopChallenge !== '') {
+            if (!preg_match('/^[0-9a-f]{64}$/D', $desktopChallenge)) {
+                json_response(400, ['error' => 'Mã ghép nối desktop không hợp lệ']);
+            }
+            create_session_with_hash($config, $claims, $desktopChallenge);
+            set_secure_cookie(OAUTH_STATE_COOKIE, '', 0);
+            redirect_response('/desktop-auth-complete.html');
+        }
+        $token = create_session($config, $claims);
         set_secure_cookie(SESSION_COOKIE, $token, SESSION_DAYS * 86400);
         set_secure_cookie(OAUTH_STATE_COOKIE, '', 0);
         redirect_response(safe_return_path((string)($stateData['return'] ?? '/')));
@@ -1225,7 +1262,7 @@ try {
         require_csrf($session);
         $pdo = db($config);
         $stmt = $pdo->prepare('DELETE FROM auth_sessions WHERE token_hash=?');
-        $stmt->execute([hash('sha256', (string)($_COOKIE[SESSION_COOKIE] ?? ''))]);
+        $stmt->execute([hash('sha256', request_session_token())]);
         set_secure_cookie(SESSION_COOKIE, '', 0);
         json_response(200, ['ok' => true]);
     }
