@@ -11,7 +11,9 @@
     .icon { width: 64px; height: 64px; display: grid; place-items: center; margin: 0 auto 18px; border-radius: 50%; background: #e9f8ef; color: #168447; font-size: 34px; font-weight: 700; }
     h1 { margin: 0 0 10px; font-size: 24px; }
     p { margin: 0; color: #5e6b7d; line-height: 1.6; }
+    #close-help { min-height: 24px; margin-top: 14px; font-size: 14px; color: #3f4d62; }
     button { margin-top: 24px; padding: 10px 20px; border: 0; border-radius: 9px; background: #1769e0; color: #fff; font: inherit; font-weight: 650; cursor: pointer; }
+    button:disabled { cursor: default; opacity: .75; }
   </style>
 </head>
 <body>
@@ -19,7 +21,22 @@
     <div class="icon" aria-hidden="true">✓</div>
     <h1>Đã kết nối Google</h1>
     <p>The Deceiver Desktop đang hoàn tất đăng nhập. Bạn có thể đóng cửa sổ này và quay lại ứng dụng.</p>
-    <button type="button" onclick="window.close()">Đóng cửa sổ</button>
+    <button id="close-button" type="button">Đóng cửa sổ</button>
+    <p id="close-help" role="status" aria-live="polite"></p>
   </main>
+  <script>
+    document.getElementById('close-button').addEventListener('click', function () {
+      const button = this;
+      const help = document.getElementById('close-help');
+      button.disabled = true;
+      button.textContent = 'Đang đóng...';
+      window.close();
+      window.setTimeout(function () {
+        button.disabled = false;
+        button.textContent = 'Thử đóng lại';
+        help.innerHTML = 'Chrome không cho website tự đóng tab này. Nhấn <strong>Ctrl+W</strong> để đóng và quay lại ứng dụng.';
+      }, 250);
+    });
+  </script>
 </body>
 </html>

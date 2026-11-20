@@ -71,4 +71,22 @@ test('local document gets a stable SHA-256 fingerprint without uploading content
   expect(syncUploadRequests).toBe(0);
 });
 
+test('header feedback and progress buttons open their configured links', async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__testOpenedUrls = [];
+    window.open = url => {
+      window.__testOpenedUrls.push(String(url));
+      return null;
+    };
+  });
+  await page.goto('/index.html?portal=1');
+  await page.locator('#btn-open-feedback-nav').click();
+  await page.locator('#btn-open-progress-nav').click();
+  const openedUrls = await page.evaluate(() => window.__testOpenedUrls);
+  expect(openedUrls).toEqual([
+    'https://forms.gle/YxPd6zRZEeyQ3z3e8',
+    'https://docs.google.com/spreadsheets/d/126sjvPWcDbwGrtrObHFdcCZ1KzQ7cfeaTozgfyESHOA/edit?gid=1898748271#gid=1898748271'
+  ]);
+});
+
 
