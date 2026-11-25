@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đọc sách — The Deceiver</title>
+  <link rel="stylesheet" href="style.css?v=20261119-2">
+  <link rel="stylesheet" href="css/reader.css?v=20261123-1">
+</head>
+<body class="theme-reader">
+  <header class="reading-header">
+    <a class="reading-brand" href="index.html" aria-label="Về thư viện">The Deceiver<span>Một khoảng lặng để đọc</span></a>
+    <nav aria-label="Công cụ đọc">
+      <button id="reading-library">Thư viện</button>
+      <button id="reading-upload" onclick="document.getElementById('file-pdf-input').click()">Nạp file</button>
+      <button id="reading-toc">Mục lục</button>
+      <button id="reading-bookmarks">Dấu trang</button>
+      <button id="reading-settings" aria-expanded="false" aria-controls="reading-settings-panel">Aa <span>Hiển thị</span></button>
+    </nav>
+  </header>
+  <section id="reading-settings-panel" class="reading-settings" aria-label="Tùy chỉnh trang đọc" hidden>
+    <div><span>Cỡ chữ</span><button id="reading-btn-font-dec" aria-label="Giảm cỡ chữ">A−</button><output id="reading-font-size">16pt</output><button id="reading-btn-font-inc" aria-label="Tăng cỡ chữ">A+</button></div>
+    <div><span>Nền trang</span><button data-reading-palette="paper" aria-label="Nền giấy ấm">Ấm</button><button data-reading-palette="light" aria-label="Nền sáng">Sáng</button><button data-reading-palette="night" aria-label="Nền tối">Tối</button></div>
+    <label>Độ rộng <input id="reading-width" type="range" min="540" max="1000" step="20" value="720"></label>
+    <button id="reading-layout">Phông chữ & giãn dòng</button>
+  </section>
+  <main id="reading-scroll-container" tabindex="0" aria-label="Nội dung sách">
+    <article class="reading-paper">
+      <div class="reading-intro"><span class="reading-eyebrow">TRANG SÁCH ĐANG MỞ</span><h1 id="reading-book-title">Một khoảng lặng cho câu chuyện của bạn</h1><p>Thả lỏng một chút. Đọc chậm một chút.</p><div class="reading-divider" aria-hidden="true">❧</div></div>
+      <div id="reading-story-stream"></div>
+      <div class="reading-end" aria-hidden="true">· · ·</div>
+    </article>
+  </main>
+  <footer class="reading-footer">
+    <button id="reading-btn-prev" aria-label="Trang trước">← <span>Trang trước</span></button>
+    <span id="reading-page-indicator" aria-live="polite">1 / 1</span>
+    <button id="reading-save">Đánh dấu vị trí</button>
+    <button id="reading-btn-next" aria-label="Trang tiếp"><span>Trang tiếp</span> →</button>
+  </footer>
+  <input type="file" id="file-pdf-input" accept=".pdf,.txt,.epub,.html,.htm" hidden>
+  <div id="page-flip-toast" class="page-flip-toast"></div>
+  <script src="app.js?v=20261123-reader-1" defer></script>
+</body>
+</html>

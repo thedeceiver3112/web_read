@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <script src="version-check.js?v=20261119-2" data-app-version="20261119-2"></script>
+  <title>*|Thao tác thiết lập lệnh sản xuất(MOC.M02)|(MOCAL (1)|</title>
+  <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%235C2D91%22/%3E%3Cpath%20d%3D%22M12%2014L24%208L36%2014L24%2020L12%2014Z%22%20fill%3D%22%23B180E8%22/%3E%3Cpath%20d%3D%22M12%2014V34L24%2040V20L12%2014Z%22%20fill%3D%22%237E3FB8%22/%3E%3Cpath%20d%3D%22M36%2014V34L24%2040V20L36%2014Z%22%20fill%3D%22%239B59D0%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%2229%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2214%22%20text-anchor%3D%22middle%22%3EW%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css?v=20261119-2">
+  <link rel="stylesheet" href="css/workflow.css?v=20261123-4">
+</head>
+<body class="theme-workflow controls-hidden">
+  <div class="workflow-app">
+
+    <!-- 1. WINDOW TITLE BAR -->
+    <header class="workflow-titlebar">
+      <div class="workflow-title-left">
+        <div class="workflow-logo-icon" title="Workflow ERP">
+          <svg width="15" height="15" viewBox="0 0 16 16">
+            <rect width="16" height="16" rx="2.5" fill="#5C2D91"/>
+            <path d="M4 5L8 3L12 5L8 7L4 5Z" fill="#C084FC"/>
+            <path d="M4 5V11L8 13V7L4 5Z" fill="#7E22CE"/>
+            <path d="M12 5V11L8 13V7L12 5Z" fill="#9333EA"/>
+            <text x="8" y="10" fill="#FFFFFF" font-family="Arial, sans-serif" font-weight="900" font-size="5" text-anchor="middle">W</text>
+          </svg>
+        </div>
+        <span class="workflow-win-title stealth-editable" id="workflow-doc-title" contenteditable="true" spellcheck="false" title="Nhấp đúp để sửa tiêu đề" data-stealth-key="stealth_title_workflow">*|Thao tác thiết lập lệnh sản xuất(MOC.M02)|(MOCAL (1)|</span>
+      </div>
+
+      <div class="workflow-win-controls">
+        <button type="button" class="workflow-win-btn" title="Thu nhỏ">&#8213;</button>
+        <button type="button" class="workflow-win-btn" title="Phóng to">&#9634;</button>
+        <button type="button" class="workflow-win-btn close" title="Đóng">&#10005;</button>
+      </div>
+    </header>
+
+    <!-- 2. MENUBAR -->
+    <nav class="workflow-menubar">
+      <span class="workflow-menu-item"><u>X</u>ử lý (D)</span>
+      <span class="workflow-menu-item"><u>T</u>ạo dựng(F)</span>
+      <span class="workflow-menu-item" id="btn-boss-key-workflow" title="Chế độ khẩn cấp Boss Key (Phím tắt: Esc hoặc B)">T<u>h</u>oát (X)</span>
+    </nav>
+
+    <!-- 3. TOOLBAR - EXACT REPLICA OF WORKFLOW ERP ICONS -->
+    <div class="workflow-toolbar">
+      <!-- 1. New Document -->
+      <button type="button" class="workflow-tool-btn" title="Thêm mới (Ctrl+N)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#444"><path d="M3 1h7l4 4v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm6 1v4h4L9 2z"/></svg>
+      </button>
+      <!-- 2. Edit -->
+      <button type="button" class="workflow-tool-btn" title="Sửa đổi">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#d97706"><path d="M12.1 1.9a1.5 1.5 0 0 1 2.1 2.1l-9 9-3.2 1 1-3.2 9.1-8.9zm1.4.7l-1.4-1.4 1.4 1.4z"/></svg>
+      </button>
+      <!-- 3. Search / Query -->
+      <button type="button" class="workflow-tool-btn" id="workflow-btn-search" title="Tìm trong truyện">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#2563eb" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4.5 4.5" stroke-linecap="round"/></svg>
+      </button>
+      <!-- 4. Delete / Trash -->
+      <button type="button" class="workflow-tool-btn" title="Xóa">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#dc2626"><path d="M4 3h8l-1 11H5L4 3zm-2-1h12v2H2V2zm4-1h4v1H6V1z"/></svg>
+      </button>
+      <!-- 5. Save with dropdown -->
+      <button type="button" class="workflow-tool-btn" id="workflow-btn-save" title="Lưu thiết lập (Ctrl+S)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#15803d"><path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4.5L11.5 1H2zm1 1h7.5L13 4.5V14H3V2zm2 1v3h6V3H5zm1 1h4v1H6V4zm-2 5h8v4H4V9z"/></svg>
+        <span style="font-size:7px; margin-left:2px;">▾</span>
+      </button>
+
+      <span class="workflow-tool-sep"></span>
+
+      <!-- 6-9. Navigation Cluster (Blue Triangles matching image) -->
+      <button type="button" class="workflow-tool-btn workflow-nav-btn" id="workflow-btn-first" title="Bản ghi đầu (|<<)">|◀◀</button>
+      <button type="button" class="workflow-tool-btn workflow-nav-btn" id="workflow-btn-prev" title="Bản ghi trước (< / J / Mũi tên trái)">◀</button>
+      <button type="button" class="workflow-tool-btn workflow-nav-btn" id="workflow-btn-next" title="Bản ghi sau (> / K / Mũi tên phải / Space)">▶</button>
+      <button type="button" class="workflow-tool-btn workflow-nav-btn" id="workflow-btn-last" title="Bản ghi cuối (>>|)">▶▶|</button>
+
+      <span class="workflow-tool-sep"></span>
+
+      <!-- 10. Operations dropdown -->
+      <button type="button" class="workflow-tool-btn" title="Thao tác nghiệp vụ">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#880088"><rect x="2" y="2" width="12" height="12" rx="2" fill="none" stroke="#880088" stroke-width="1.8"/><circle cx="8" cy="8" r="3" fill="#880088"/></svg>
+        <span style="font-size:7px; margin-left:1px;">▾</span>
+      </button>
+      <!-- 11. Checkmark -->
+      <button type="button" class="workflow-tool-btn" title="Kiểm tra hợp lệ">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#333333"><path d="M13.5 3.5l-8 8-3.5-3.5 1.4-1.4 2.1 2.1 6.6-6.6z"/></svg>
+      </button>
+      <!-- 12. Cancel (Red X) -->
+      <button type="button" class="workflow-tool-btn" title="Hủy bỏ">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#cc0000"><path d="M3.5 2.1l4.5 4.5 4.5-4.5 1.4 1.4-4.5 4.5 4.5 4.5-1.4 1.4-4.5-4.5-4.5 4.5-1.4-1.4 4.5-4.5-4.5-4.5z"/></svg>
+      </button>
+      <!-- 13. Print with dropdown -->
+      <button type="button" class="workflow-tool-btn" title="In lệnh (Ctrl+P)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#334155"><path d="M4 1h8v3H4V1zm8 8h1a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1v4h8V9zm-7 1h6v3H5v-3z"/></svg>
+        <span style="font-size:7px; margin-left:1px;">▾</span>
+      </button>
+      <!-- 14. Excel Export with dropdown -->
+      <button type="button" class="workflow-tool-btn" title="Xuất ra Excel">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#107c41"><rect x="1" y="2" width="14" height="12" rx="1.5" fill="#107c41"/><text x="8" y="11" fill="#fff" font-family="Arial" font-weight="900" font-size="9" text-anchor="middle">X</text></svg>
+        <span style="font-size:7px; margin-left:1px;">▾</span>
+      </button>
+      <!-- 15. Users with dropdown -->
+      <button type="button" class="workflow-tool-btn" title="Phân quyền">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#0284c7"><circle cx="6" cy="5" r="2.5"/><path d="M1.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4v1h-9v-1z"/><circle cx="11.5" cy="6" r="2"/><path d="M9.5 11.5c.5-.8 1.4-1.5 2.5-1.5 1.8 0 3 1.2 3 3v1h-4"/></svg>
+        <span style="font-size:7px; margin-left:1px;">▾</span>
+      </button>
+      <!-- 16. Refresh -->
+      <button type="button" class="workflow-tool-btn" title="Làm mới (F5)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#0284c7" stroke-width="1.8"><path d="M2.5 8a5.5 5.5 0 0 1 9.3-3.9L14 6m-1.5 2a5.5 5.5 0 0 1-9.3 3.9L1 10"/></svg>
+      </button>
+      <!-- 17. Calculator -->
+      <button type="button" class="workflow-tool-btn" title="Tính toán nhu cầu">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#d97706"><rect x="3" y="1" width="10" height="14" rx="1" fill="#d97706"/><rect x="5" y="3" width="6" height="3" fill="#ffffff"/></svg>
+      </button>
+      <!-- 18. Chart with dropdown -->
+      <button type="button" class="workflow-tool-btn" title="Biểu đồ tiến độ">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#c026d3"><path d="M2 14h12v1H1V2h1v12zm3-3h2v2H5v-2zm3-4h2v6H8V7zm3-4h2v10h-2V3z"/></svg>
+        <span style="font-size:7px; margin-left:1px;">▾</span>
+      </button>
+      <!-- 19. Folder -->
+      <button type="button" class="workflow-tool-btn" title="Mở thư mục lưu trữ">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#eab308"><path d="M1 3a1 1 0 0 1 1-1h4l2 2h6a1 1 0 0 1 1 1v2H1V3zm0 4h14v6a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V7z"/></svg>
+      </button>
+      <!-- 20. Book Library (Stealth button to portal) -->
+      <button type="button" class="workflow-tool-btn" id="btn-open-portal-workflow" title="Thư mục hồ sơ / Kho sách">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#005A9C"><path d="M2 2h3a2 2 0 0 1 2 2v9a2 2 0 0 0-2-2H2V2zm12 0h-3a2 2 0 0 0-2 2v9a2 2 0 0 1 2-2h3V2z"/></svg>
+      </button>
+      <!-- 21. Exit / Door (Stealth boss trigger) -->
+      <button type="button" class="workflow-tool-btn" title="Thoát hệ thống" onclick="if(typeof toggleBossKey==='function')toggleBossKey();">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#b91c1c"><path d="M2 2h8v12H2V2zm1 1v10h6V3H3zm8 4h3v2h-3v2l-3-3 3-3v2z"/></svg>
+      </button>
+      <!-- 22. Columns -->
+      <button type="button" class="workflow-tool-btn" title="Tùy chỉnh cột">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#475569"><path d="M1 2h14v2H1V2zm0 4h6v8H1V6zm8 0h6v8H9V6z"/></svg>
+      </button>
+      <!-- 23. Logistics Truck -->
+      <button type="button" class="workflow-tool-btn" title="Điều phối kho vận">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#f59e0b"><path d="M1 3h9v7H1V3zm9 2h3l2 3v2h-5V5zm-7 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>
+      </button>
+      <!-- 24. Zoom -->
+      <button type="button" class="workflow-tool-btn" id="workflow-btn-tools" title="Công cụ đọc: bố cục, phông chữ và giãn dòng">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#16a34a" stroke-width="1.8"><circle cx="6" cy="6" r="4"/><path d="M9.5 9.5l4 4"/></svg>
+      </button>
+      <!-- 25. Theme Picker (Stealth button to theme modal) -->
+      <button type="button" class="workflow-tool-btn" id="btn-open-theme-modal-workflow" title="Tùy chọn hiển thị">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#7c3aed"><circle cx="8" cy="8" r="6" fill="none" stroke="#7c3aed" stroke-width="1.5"/><circle cx="6" cy="6" r="1" fill="#7c3aed"/><circle cx="10" cy="6" r="1" fill="#7c3aed"/><circle cx="8" cy="11" r="1" fill="#7c3aed"/></svg>
+      </button>
+      <!-- 26. Help -->
+      <button type="button" class="workflow-tool-btn" title="Trợ giúp (F1)">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="#2563eb"><circle cx="8" cy="8" r="7" stroke="#2563eb" stroke-width="1.5" fill="none"/><text x="8" y="11.5" fill="#2563eb" font-family="Arial" font-weight="bold" font-size="10" text-anchor="middle">?</text></svg>
+      </button>
+    </div>
+
+    <!-- 4. UPPER TABS (CHI TIẾT / XEM SƠ QUA DL) -->
+    <div class="workflow-top-tabs">
+      <button type="button" class="workflow-tool-btn" id="workflow-btn-font-dec" title="Giảm cỡ chữ ([)">A−</button>
+      <button type="button" class="workflow-tool-btn" id="workflow-btn-font-inc" title="Tăng cỡ chữ (])">A+</button>
+      <div class="workflow-tab-btn active">Chi tiết</div>
+      <div class="workflow-tab-btn">Xem sơ qua DL</div>
+    </div>
+
+    <!-- 5. FORM HEADER SECTION (MOC.M02 MASTER FIELDS) -->
+    <section class="workflow-form-section">
+      <!-- Authentic Red Outline CONFIRM Stamp -->
+      <div class="workflow-confirm-stamp">CONFIRM</div>
+
+      <div class="workflow-form-grid">
+        <!-- Row 1 -->
+        <div class="workflow-field" style="grid-column: span 6;">
+          <span class="workflow-label">Lệnh SX:</span>
+          <input type="text" class="workflow-input workflow-input-cyan" value="5112" style="width: 48px;" readonly>
+          <label style="display:inline-flex; align-items:center; gap:2px; font-size:11px; margin-left:3px;">
+            <input type="checkbox"> 委托加工-台湾母厂
+          </label>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 6;">
+          <span class="workflow-label">Mã trạng thái:</span>
+          <select class="workflow-select" style="width: 95px;">
+            <option>1: Chưa SX</option>
+            <option>2: Đang SX</option>
+            <option>3: Hoàn thành</option>
+          </select>
+          <label style="display:inline-flex; align-items:center; gap:2px; font-size:11px; margin-left:6px;">
+            <input type="checkbox" checked style="accent-color:#0033cc;"> Hàng gấp
+          </label>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 4;">
+          <span class="workflow-label">In:</span>
+          <input type="text" class="workflow-input" value="0" style="width: 28px; text-align:center;" readonly>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 8;">
+          <label style="display:inline-flex; align-items:center; gap:2px; font-size:11px;">
+            <input type="checkbox"> Tích hợp SMES
+          </label>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="workflow-field" style="grid-column: span 6;">
+          <span class="workflow-label">Mã lệnh SX:</span>
+          <input type="text" class="workflow-input workflow-input-cyan" value="20261113024" style="width: 105px;" readonly>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 8;">
+          <span class="workflow-label">Mã SP:</span>
+          <input type="text" class="workflow-input workflow-input-yellow" value="LA-5H5F-MAA-609" style="width: 130px;">
+          <button type="button" class="workflow-btn-mini">...</button>
+          <span class="workflow-label" style="margin-left:4px;">Số lần chuyển:</span>
+          <input type="text" class="workflow-input" value="0" style="width: 25px; text-align:center;" readonly>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 10;">
+          <label style="display:inline-flex; align-items:center; gap:2px; font-size:11px;">
+            <input type="checkbox" checked style="accent-color:#0033cc;"> SMES转厂 (SMES chuyển tới xưởng)
+          </label>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="workflow-field" style="grid-column: span 6;">
+          <span class="workflow-label">Ngày lập đơn:</span>
+          <input type="text" class="workflow-input workflow-input-yellow" value="2026/11/13" style="width: 82px;" readonly>
+          <button type="button" class="workflow-btn-mini">📅</button>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 18;">
+          <span class="workflow-label">Tên SP:</span>
+          <input type="text" class="workflow-input" value="42L-864139上盖直径5 1/2&quot; 下盖直径10&quot;*7 1/8&quot;高 螺卡" style="flex:1;">
+        </div>
+
+        <!-- Row 4 -->
+        <div class="workflow-field" style="grid-column: span 6;">
+          <span class="workflow-label">Tính chất:</span>
+          <select class="workflow-select" style="width: 140px;">
+            <option>1:Lệnh SX trong xưởng</option>
+            <option>2:Gia công ngoài</option>
+          </select>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 18;">
+          <span class="workflow-label">Quy cách:</span>
+          <input type="text" class="workflow-input" value="上下盖90MM直管原色漆 (MC-0200) （扣网）节全带斜口" style="flex:1;">
+        </div>
+
+        <!-- Row 5 -->
+        <div class="workflow-field" style="grid-column: span 6;">
+          <span class="workflow-label">Loại hình:</span>
+          <select class="workflow-select" style="width: 135px;">
+            <option>2:Mã SP chính thức</option>
+            <option>1:Mã SP tạm thời</option>
+          </select>
+        </div>
+
+        <div class="workflow-field" style="grid-column: span 18;">
+          <span class="workflow-label">Đơn vị:</span>
+          <input type="text" class="workflow-input" value="PCS" style="width: 45px;" readonly>
+          <span class="workflow-label" style="margin-left:8px;">Lần thay đổi BOM:</span>
+          <input type="text" class="workflow-input" value="0000" style="width: 45px;" readonly>
+          <span class="workflow-label" style="margin-left:8px;">Phân bản:</span>
+          <input type="text" class="workflow-input" value="0000" style="width: 45px;" readonly>
+          <span class="workflow-label" style="margin-left:8px;">T.thái chuyển EBO:</span>
+          <select class="workflow-select" style="width: 130px;">
+            <option>Không cần chuyển</option>
+            <option>Cần chuyển</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. MIDDLE SUB-TABS -->
+    <div class="workflow-mid-tabs">
+      <div class="workflow-mid-tab">Kế hoạch và sản lượng</div>
+      <div class="workflow-mid-tab">Trong xưởng/GC</div>
+      <div class="workflow-mid-tab">DL nâng cao</div>
+      <div class="workflow-mid-tab">DL đóng gói</div>
+      <div class="workflow-mid-tab active">Xem sơ qua DL</div>
+    </div>
+
+    <!-- 7. MASTER UPPER TABLE AREA -->
+    <div class="workflow-master-wrap">
+      <table class="workflow-master-table">
+        <thead>
+          <tr>
+            <th style="width:16px;"></th>
+            <th class="cyan-header">Lệnh SX</th>
+            <th>Tên Lệnh SX</th>
+            <th class="cyan-header">Mã Lệnh SX</th>
+            <th>Hàng gấp</th>
+            <th>Mã SP</th>
+            <th>Tên SP</th>
+            <th>Quy cách</th>
+            <th>Ghi chú</th>
+            <th>Mã DDH của KH</th>
+            <th>Mã SP KH</th>
+            <th>SL dự tính</th>
+            <th>Ngày lập đơn</th>
+            <th>In</th>
+            <th>Ngày thể</th>
+            <th>Tính chất</th>
+            <th>Mã trạng thái</th>
+            <th>Loại hình</th>
+            <th>Đơn vị</th>
+            <th>Lần thay đổi BOM</th>
+            <th>SL đã lĩnh</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:center; font-size:8px;">▶</td>
+            <td>5112</td>
+            <td>委托加工-台湾母厂</td>
+            <td>20261113024</td>
+            <td style="text-align:center; color:#0033cc;">✓</td>
+            <td>LA-5H5F-MAA-609</td>
+            <td>42L-864139上盖直径5 1/2" 下盖直径10"*7 1/8"高 螺卡</td>
+            <td>上下盖90MM直管原色漆 (MC-0200) （扣网）节全带斜口</td>
+            <td>CUR LOLOI-42L-864139SH</td>
+            <td>JLCYVM102926</td>
+            <td></td>
+            <td style="text-align:right;">2</td>
+            <td style="text-align:center;">2026/11/13</td>
+            <td style="text-align:center;">0</td>
+            <td></td>
+            <td>1:Lệnh SX trong xưởng</td>
+            <td>1: Chưa SX</td>
+            <td>2:Mã SP chính thức</td>
+            <td>PCS</td>
+            <td>0000</td>
+            <td style="text-align:right;">0</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="workflow-master-empty-grid"></div>
+    </div>
+
+    <!-- 8. SPLITTER BAR WITH ARROWS ON RIGHT -->
+    <div class="workflow-splitter">
+      <div class="workflow-splitter-arrows">
+        <span>▲</span>
+        <span>▼</span>
+      </div>
+    </div>
+
+    <!-- 9. LOWER GRID: READING STREAM (VẬT LIỆU NVL) -->
+    <div class="workflow-grid-scroll-pane" id="workflow-grid-scroll-container">
+      
+      <!-- Normal Reading View (Novel Chunks as BOM rows) -->
+      <div id="workflow-story-view">
+        <table class="workflow-detail-table">
+          <thead>
+            <tr>
+              <th style="width:16px;"></th>
+              <th class="cyan-header">Mã NVL</th>
+              <th style="min-width:320px;">Tên SP</th>
+              <th>Dự tính lĩnh NVL</th>
+              <th>Quy cách</th>
+              <th>SL dùng cần lãnh</th>
+              <th>Lượng đã lĩnh dùng</th>
+              <th>Lượng chưa lĩnh dùng</th>
+              <th>Đơn vị</th>
+              <th>SL đóng gói cần lĩnh dùng</th>
+              <th>SL đóng gói đã lĩnh</th>
+              <th>SL đóng gói chưa lĩnh NVL</th>
+              <th>Đơn vị đóng gói</th>
+              <th>Kho</th>
+              <th class="cyan-header">Mã CĐ</th>
+              <th>Tên CĐ</th>
+              <th>Nguyên vật liệu...</th>
+            </tr>
+          </thead>
+          <tbody id="workflow-story-stream">
+            <!-- Populated via appendWorkflowBatch -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Boss Key Camouflage View (Exact 11 static rows from original photo) -->
+      <div id="workflow-boss-view" class="workflow-boss-view">
+        <table class="workflow-detail-table">
+          <thead>
+            <tr>
+              <th style="width:16px;"></th>
+              <th class="cyan-header">Mã NVL</th>
+              <th style="min-width:320px;">Tên SP</th>
+              <th>Dự tính lĩnh NVL</th>
+              <th>Quy cách</th>
+              <th>SL dùng cần lãnh</th>
+              <th>Lượng đã lĩnh dùng</th>
+              <th>Lượng chưa lĩnh dùng</th>
+              <th>Đơn vị</th>
+              <th>SL đóng gói cần lĩnh dùng</th>
+              <th>SL đóng gói đã lĩnh</th>
+              <th>SL đóng gói chưa lĩnh NVL</th>
+              <th>Đơn vị đóng gói</th>
+              <th>Kho</th>
+              <th class="cyan-header">Mã CĐ</th>
+              <th>Tên CĐ</th>
+              <th>Nguyên vật liệu...</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="workflow-item-row active-workflow-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-DA500AWS-AR5-003</td>
+              <td class="workflow-col-desc">CUR 英文文版新型警语棒(白底红字)</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td>3"*2.5" tem nền trắng chữ đỏ 76.2*63</td>
+              <td class="workflow-col-num">5</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">5</td>
+              <td class="workflow-col-center">PCS</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">VLA-32</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-FAMA060-005AIV</td>
+              <td class="workflow-col-desc">60"ZX-0125 PB+1米白厚布</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td></td>
+              <td class="workflow-col-num">2</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">2</td>
+              <td class="workflow-col-center">Y</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">TLA-32T</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-FATC019-004AIV</td>
+              <td class="workflow-col-desc">60"MC-0210半白T/C布贴附0.9MM 上白+贴</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td></td>
+              <td class="workflow-col-num">12</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">12</td>
+              <td class="workflow-col-center">Y</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">TLA-32T</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-FD1-10207000</td>
+              <td class="workflow-col-desc">8"*3.5MM平垫圈</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td></td>
+              <td class="workflow-col-num">5</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">5</td>
+              <td class="workflow-col-center">PCS</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">VLA-32</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-FB3-20512000RB</td>
+              <td class="workflow-col-desc">CUR 8" H21MM*3.5 三叉上盖圈 铝ORB</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td>(厚42MM8厘平铁卡共用)</td>
+              <td class="workflow-col-num">5</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">5</td>
+              <td class="workflow-col-center">PCS</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">VLA-32</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-FC038-32001AWS</td>
+              <td class="workflow-col-desc">58"0.32PVC胶</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td></td>
+              <td class="workflow-col-num">1.345</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">1.345</td>
+              <td class="workflow-col-center">KG</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">VLA-32</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-FD342-003000</td>
+              <td class="workflow-col-desc">外径62MM 内径42MM T=1.2MM 平垫片</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td>铝材</td>
+              <td class="workflow-col-num">11</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">11</td>
+              <td class="workflow-col-center">PCS</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">VLA-32</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-GB-004</td>
+              <td class="workflow-col-desc">GH-280AF铜万向盖板（青野7119）</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td></td>
+              <td class="workflow-col-num">0.01</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0.01</td>
+              <td class="workflow-col-center">KG</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">TLA-32T</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-GB-004-5</td>
+              <td class="workflow-col-desc">铬附中铁块（适型402）</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td></td>
+              <td class="workflow-col-num">0.01</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0.01</td>
+              <td class="workflow-col-center">KG</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">VLA-32</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-GB-016</td>
+              <td class="workflow-col-desc">白胶 DA-102H</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td>黑胶</td>
+              <td class="workflow-col-num">0.015</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0.015</td>
+              <td class="workflow-col-center">KG</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">VLA-32</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+            <tr class="workflow-item-row">
+              <td class="workflow-sel-cell"></td>
+              <td class="workflow-col-code">SH-HB-002-2</td>
+              <td class="workflow-col-desc">OPP胶10CM</td>
+              <td class="workflow-col-center">2026/11/13</td>
+              <td>45KG/包</td>
+              <td class="workflow-col-num">0.05</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0.05</td>
+              <td class="workflow-col-center">KG</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td class="workflow-col-num">0</td>
+              <td></td>
+              <td class="workflow-col-center">TLA-32T</td>
+              <td class="workflow-col-center">****</td>
+              <td></td>
+              <td>原物料领料-NV</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- 10. STATUS BAR (4 INSET BEVEL PANELS MATCHING EXACT IMAGE) -->
+    <footer class="workflow-statusbar">
+      <div class="workflow-status-panel workflow-status-browse">Browse</div>
+      <div class="workflow-status-panel workflow-status-rows" id="workflow-status-count">Số dòng dữ liệu nội dung: 11</div>
+      <div class="workflow-status-panel workflow-status-detail" id="workflow-status-row-info">SH-DA500AWS-AR5-003 CUR 英文文版新型警语棒(白底红字)</div>
+      <div class="workflow-status-panel workflow-status-ip">127.0.0.1 : 211</div>
+    </footer>
+
+  </div>
+
+  <!-- Hidden file input for novel uploads -->
+  <input type="file" id="file-pdf-input" accept=".txt,.pdf,.epub,.html,.htm" style="display:none;">
+
+  <!-- Floating Quick Controls Visibility Toggle -->
+  <button id="btn-toggle-ctrls-floating" class="floating-stealth-toggle" title="Ẩn/Hiện nút điều khiển đọc (Phím tắt: H)">
+    <span class="stealth-toggle-icon">👁</span>
+    <span class="stealth-toggle-text">Điều khiển (H)</span>
+  </button>
+
+  <div id="page-flip-toast" class="page-flip-toast"></div>
+
+  <script src="app.js?v=20261123-4" defer></script>
+</body>
+</html>

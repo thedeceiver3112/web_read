@@ -129,6 +129,7 @@ const state = {
   tvplCuTitle: localStorage.getItem('stealth_title_tvpl_cu') || 'QUY ĐỊNH CHI TIẾT VỀ PHÁT TRIỂN CHUYỂN ĐỔI SỐ QUỐC GIA VÀ BẢO ĐẢM AN TOÀN DỮ LIỆU ĐIỆN TỬ',
   capcutTitle: localStorage.getItem('stealth_title_capcut') || 'CapCut Pro - Draft_Project_0928_Vlog',
   sapTitle: localStorage.getItem('stealth_title_sap') || 'Display Purchase Order 4500192834',
+  workflowTitle: localStorage.getItem('stealth_title_workflow') || '*| Thao tác thiết lập lệnh sản xuất(MOC.M02)|(MOCAL (1)|',
 };
 
 const WORKSPACE_PERSONALIZATION_KEY = 'stealth_workspace_personalization_v1';
@@ -331,6 +332,7 @@ const SAMPLE_STORY_CHUNKS = [
 
 // Multi-File Workspace Mapping & Navigation
 const THEME_PAGES = {
+  'theme-reader': 'reader.html',
   'theme-googlesheets': 'googlesheets.html',
   'theme-googledocs': 'docs.html',
   'theme-excel': 'excel.html',
@@ -354,6 +356,7 @@ const THEME_PAGES = {
   'theme-misa': 'misa.html',
   'theme-capcut': 'capcut.html',
   'theme-sap': 'sap.html',
+  'theme-workflow': 'workflow.html',
   'theme-gmail': 'gmail.html',
   'theme-outlook': 'outlook.html',
   'theme-jira': 'jira.html',
@@ -364,8 +367,9 @@ const THEME_PAGES = {
 // Control ids follow the pattern `${prefix}-${suffix}` (e.g. 'vsc-btn-next').
 // To add a theme, add its prefix here instead of editing every id list.
 const THEME_CONTROL_PREFIXES = [
+  'reading',
   'gs', 'gdocs', 'excel', 'vsc', 'ps', 'id', 'blender', 'linkedin',
-  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack'
+  'autocad', 'zalo', 'figma', 'canva', 'ppt', 'tvpl', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack', 'workflow'
 ];
 
 function themeControlIds(suffix) {
@@ -376,7 +380,7 @@ function themeControlIds(suffix) {
 const BOSS_KEY_BUTTON_IDS = [
   'gsheet', 'gdocs', 'excel', 'vscode', 'photoshop', 'indesign', 'blender', 'linkedin',
   'autocad', 'zalo', 'figma', 'canva', 'powerpoint', 'thuvienphapluat', 'thuvienphapluat-cu',
-  'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'jira'
+  'premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'jira', 'workflow'
 ].map(name => `btn-boss-key-${name}`);
 
 const DOCUMENT_CACHE_DB_NAME = 'stealth_reader_cache';
@@ -1072,6 +1076,7 @@ async function pullHybridDocument() {
 }
 
 function getThemeForCurrentPage() {
+  if (window.location.pathname.toLowerCase().endsWith('reader.html')) return 'theme-reader';
   const path = window.location.pathname.toLowerCase();
   if (path.endsWith('googlesheets.html') || path.endsWith('sheets.html')) return 'theme-googlesheets';
   if (path.endsWith('docs.html') || path.endsWith('googledocs.html')) return 'theme-googledocs';
@@ -1094,6 +1099,7 @@ function getThemeForCurrentPage() {
   if (path.endsWith('misa.html')) return 'theme-misa';
   if (path.endsWith('capcut.html')) return 'theme-capcut';
   if (path.endsWith('sap.html')) return 'theme-sap';
+  if (path.endsWith('workflow.html') || path.endsWith('workflow-erp.html')) return 'theme-workflow';
   if (path.endsWith('gmail.html')) return 'theme-gmail';
   if (path.endsWith('outlook.html')) return 'theme-outlook';
   if (path.endsWith('jira.html')) return 'theme-jira';
@@ -1593,6 +1599,7 @@ const FAVICONS = {
   'theme-misa': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20d%3D%22M24%203L38%2017L28%2024L24%2016L20%2024L10%2017L24%203Z%22%20fill%3D%22%23E51937%22/%3E%3Cpath%20d%3D%22M45%2024L31%2038L24%2028L32%2024L24%2020L31%2010L45%2024Z%22%20fill%3D%22%23FF9800%22/%3E%3Cpath%20d%3D%22M24%2045L10%2031L20%2024L24%2032L28%2024L38%2031L24%2045Z%22%20fill%3D%22%231976D2%22/%3E%3Cpath%20d%3D%22M3%2024L17%2010L24%2020L16%2024L24%2028L17%2038L3%2024Z%22%20fill%3D%22%234CAF50%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2224%22%20r%3D%225%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
   'theme-capcut': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22%23000000%22/%3E%3Cpath%20d%3D%22M10%2014L22%2022V26L10%2034V14Z%22%20fill%3D%22%2300F2FE%22/%3E%3Cpath%20d%3D%22M38%2014L26%2022V26L38%2034V14Z%22%20fill%3D%22%23FFFFFF%22/%3E%3C/svg%3E",
   'theme-sap': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%2300386B%22/%3E%3Cpath%20d%3D%22M10%2012h28l-8%2024H2l8-24z%22%20fill%3D%22%23007DB8%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%2231%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2216%22%20text-anchor%3D%22middle%22%20letter-spacing%3D%221%22%3ESAP%3C/text%3E%3C/svg%3E",
+  'theme-workflow': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%228%22%20fill%3D%22%235C2D91%22/%3E%3Cpath%20d%3D%22M12%2014L24%208L36%2014L24%2020L12%2014Z%22%20fill%3D%22%23B180E8%22/%3E%3Cpath%20d%3D%22M12%2014V34L24%2040V20L12%2014Z%22%20fill%3D%22%237E3FB8%22/%3E%3Cpath%20d%3D%22M36%2014V34L24%2040V20L36%2014Z%22%20fill%3D%22%239B59D0%22/%3E%3Ctext%20x%3D%2224%22%20y%3D%2229%22%20fill%3D%22%23FFFFFF%22%20font-family%3D%22Arial%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2214%22%20text-anchor%3D%22middle%22%3EW%3C/text%3E%3C/svg%3E",
   'theme-gmail': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2038.5V13.8L24%2027.5l19.5-13.7v24.7c0%202.2-1.8%204-4%204H8.5c-2.2%200-4-1.8-4-4z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M43.5%2013.8v24.7c0%202.2-1.8%204-4%204h-5V20.5l9-6.7z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2013.8v24.7c0%202.2%201.8%204%204%204h5V20.5l-9-6.7z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M13.5%205.5L24%2014.5l10.5-9h-21z%22/%3E%3Cpath%20fill%3D%22%23FBBC05%22%20d%3D%22M4.5%209.5C4.5%207.3%206.3%205.5%208.5%205.5h5l-9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23C5221F%22%20d%3D%22M43.5%209.5c0-2.2-1.8-4-4-4h-5l9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M4.5%2013.8L24%2027.5%2043.5%2013.8%2024%2029%204.5%2013.8z%22/%3E%3C/svg%3E",
   'theme-outlook': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2214%22%20y%3D%228%22%20width%3D%2228%22%20height%3D%2232%22%20rx%3D%224%22%20fill%3D%22%230078D4%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10v22a4%204%200%200%201-4%204H18a4%204%200%200%201-4-4V14z%22%20fill%3D%22%2328A8EA%22%20opacity%3D%220.6%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Crect%20x%3D%226%22%20y%3D%2212%22%20width%3D%2222%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23005A9E%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2224%22%20r%3D%226.5%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223.2%22/%3E%3C/svg%3E",
   'theme-jira': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20d%3D%22M490.6%207.4H243.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V28.1c.1-11.7-9.2-20.7-21.3-20.7%22%20fill%3D%22%232684ff%22/%3E%3Cpath%20d%3D%22M368.7%20126.5H121.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.9c0%2059.6%2049.9%20108%20111.2%20108V147.3c.2-11.1-9.1-20.8-21.2-20.8%22%20fill%3D%22%230052cc%22/%3E%3Cpath%20d%3D%22M246.7%20246.3H0c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V267.1c.1-11.8-9.9-20.8-21.3-20.8%22%20fill%3D%22%230052cc%22/%3E%3C/svg%3E",
@@ -2727,7 +2734,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       state.pdfFileName = '';
       state.documentId = '';
       const portal = document.getElementById('landing-portal');
-      initStoryFromChunks(SAMPLE_STORY_CHUNKS, { render: !portal || portal.classList.contains('hidden') });
+      initStoryFromChunks(state.theme === 'theme-reader'
+        ? ['Chào bạn, hãy chọn một cuốn sách trong Thư viện hoặc nạp file từ máy để bắt đầu đọc.', 'Bạn có thể điều chỉnh cỡ chữ, nền trang và độ rộng ở nút Aa. Mục lục và dấu trang luôn ở ngay phía trên khi cần.']
+        : SAMPLE_STORY_CHUNKS, { render: !portal || portal.classList.contains('hidden') });
     } else {
       renderContinuousView(true);
       if (getCurrentBookmark()) {
@@ -3730,6 +3739,14 @@ function getThemePickerModalHTML() {
               <span class="theme-card-title">SAP GUI</span>
               <div class="theme-card-check">✓</div>
             </div>
+            <!-- Theme: Workflow ERP -->
+            <div class="theme-card" data-theme="theme-workflow">
+              <div class="theme-card-icon">
+                <svg width="34" height="34" viewBox="0 0 48 48"><rect width="48" height="48" rx="8" fill="#5C2D91"/><path d="M12 14L24 8L36 14L24 20L12 14Z" fill="#B180E8"/><path d="M12 14V34L24 40V20L12 14Z" fill="#7E3FB8"/><path d="M36 14V34L24 40V20L36 14Z" fill="#9B59D0"/><text x="24" y="29" fill="#FFFFFF" font-family="Arial, sans-serif" font-weight="900" font-size="14" text-anchor="middle">W</text></svg>
+              </div>
+              <span class="theme-card-title">Workflow ERP</span>
+              <div class="theme-card-check">✓</div>
+            </div>
             <!-- Theme 22: Gmail -->
             <div class="theme-card" data-theme="theme-gmail">
               <div class="theme-card-icon">
@@ -4030,6 +4047,14 @@ function ensureSharedReaderComponents() {
 }
 
 function initThemeSystem() {
+  const themeGrid = document.querySelector('.theme-selection-grid');
+  if (themeGrid && !themeGrid.querySelector('[data-theme="theme-reader"]')) {
+    const card = document.createElement('div');
+    card.className = 'theme-card';
+    card.dataset.theme = 'theme-reader';
+    card.innerHTML = '<div class="theme-card-icon">☷</div><span>Đọc sách</span>';
+    themeGrid.prepend(card);
+  }
   applyTheme(state.theme);
   ensureThemeModalComponent();
 
@@ -4048,7 +4073,8 @@ function initThemeSystem() {
     'btn-open-theme-modal-thuvienphapluat',
     'btn-open-theme-modal-thuvienphapluat-cu',
     'btn-open-theme-modal-capcut',
-    'btn-open-theme-modal-sap'
+    'btn-open-theme-modal-sap',
+    'btn-open-theme-modal-workflow'
   ];
   openButtons.forEach(id => {
     const btn = document.getElementById(id);
@@ -4294,6 +4320,13 @@ const THEME_DOC_CONFIGS = {
     formatTabTitle: t => `SAP GUI for Windows 8.0 - [ME23N - ${t}]`,
     titleId: 'sap-doc-title'
   },
+  'theme-workflow': {
+    prop: 'workflowTitle',
+    defaultTitle: '*| Thao tác thiết lập lệnh sản xuất(MOC.M02)|(MOCAL (1)|',
+    formatTabTitle: t => t || '*| Thao tác thiết lập lệnh sản xuất(MOC.M02)|(MOCAL (1)|',
+    titleId: 'workflow-doc-title'
+  },
+
   'theme-gmail': {
     prop: 'gmailTitle',
     defaultTitle: '[Kế hoạch Sprint Q3] Báo cáo tiến độ phân tích & đặc tả yêu cầu hệ thống',
@@ -6173,6 +6206,7 @@ function initPortalTriggers() {
     'btn-open-portal-powerpoint',
     'btn-open-portal-thuvienphapluat',
     'btn-open-portal-thuvienphapluat-cu',
+    'btn-open-portal-workflow',
     'btn-modal-to-portal'
   ].forEach(id => {
     const btn = document.getElementById(id);
@@ -6429,6 +6463,7 @@ function launchConfetti(originX, originY, count = 60) {
 // UNIVERSAL PINNED READING NAVBAR COMPONENT
 // ==========================================================
 function initUniversalNavbar() {
+  if (document.body.classList.contains('theme-reader')) return;
   const path = window.location.pathname.toLowerCase();
   const isIndexPage = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
   if (isIndexPage) return;
@@ -7127,7 +7162,122 @@ function syncBookmarkButton() {
 // ==========================================================
 // EVENT LISTENERS & HOTKEYS
 // ==========================================================
+function initReadingTheme() {
+  if (!document.body.classList.contains('theme-reader')) return;
+  state.fontSize = Math.max(8, Math.min(28, Number(localStorage.getItem('reading_font_size')) || 16));
+  state.fontFamily = localStorage.getItem('reading_font_family') || '"Times New Roman", Georgia, serif';
+  state.lineHeight = localStorage.getItem('reading_line_height') || '1.9';
+  document.getElementById('reading-font-size').textContent = `${state.fontSize}pt`;
+  const setPalette = value => {
+    document.body.dataset.readingPalette = value;
+    document.querySelectorAll('button[data-reading-palette]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.readingPalette === value)));
+  };
+  setPalette(localStorage.getItem('reading_palette') || 'paper');
+  document.querySelectorAll('button[data-reading-palette]').forEach(button => button.addEventListener('click', () => {
+    setPalette(button.dataset.readingPalette);
+    localStorage.setItem('reading_palette', button.dataset.readingPalette);
+  }));
+  const width = document.getElementById('reading-width');
+  width.value = String(Math.max(540, Math.min(1000, Number(localStorage.getItem('reading_width')) || 720)));
+  const setWidth = () => document.body.style.setProperty('--reading-width', `${width.value}px`);
+  setWidth();
+  width.addEventListener('input', setWidth);
+  width.addEventListener('change', () => localStorage.setItem('reading_width', width.value));
+  document.getElementById('reading-settings').addEventListener('click', event => {
+    const panel = document.getElementById('reading-settings-panel');
+    panel.hidden = !panel.hidden;
+    event.currentTarget.setAttribute('aria-expanded', String(!panel.hidden));
+  });
+  const actions = {
+    'reading-library': () => openReaderTools('library'),
+    'reading-toc': () => openReaderTools('toc'),
+    'reading-bookmarks': () => openReaderTools('bookmarks'),
+    'reading-save': () => addManualBookmark(),
+    'reading-layout': () => openReaderTools('layout')
+  };
+  Object.entries(actions).forEach(([id, action]) => document.getElementById(id).addEventListener('click', action));
+  applyStyles();
+}
+
+function appendReadingBatch(count) {
+  appendSimpleThemeBatch(count, 'reading-story-stream', chunk => {
+    const paragraph = document.createElement('div');
+    paragraph.className = 'reading-paragraph';
+    paragraph.id = `reading-para-${chunk.globalIndex}`;
+    paragraph.innerHTML = formatChunkText(chunk.text);
+    return paragraph;
+  });
+}
+
+function initWorkflowColumnResize() {
+  const header = document.querySelector('#workflow-story-view th:nth-child(3)');
+  if (!header || header.querySelector('.workflow-column-resize')) return;
+  const root = document.documentElement;
+  const key = 'workflow_story_column_width';
+  const clampWidth = value => Math.max(240, Math.min(2400, Math.round(value)));
+  const saved = Number(localStorage.getItem(key));
+  if (saved >= 240 && saved <= 2400) root.style.setProperty('--workflow-story-width', `${saved}px`);
+  const handle = document.createElement('span');
+  handle.className = 'workflow-column-resize';
+  handle.tabIndex = 0;
+  handle.setAttribute('role', 'separator');
+  handle.setAttribute('aria-orientation', 'vertical');
+  handle.setAttribute('aria-label', 'Điều chỉnh chiều rộng cột nội dung truyện');
+  handle.setAttribute('aria-valuemin', '240');
+  handle.setAttribute('aria-valuemax', '2400');
+  handle.title = 'Kéo để đổi chiều rộng; nhấp đúp để mặc định; dùng phím trái/phải để chỉnh';
+  header.appendChild(handle);
+  const setWidth = (width, persist = false) => {
+    const value = clampWidth(width);
+    root.style.setProperty('--workflow-story-width', `${value}px`);
+    handle.setAttribute('aria-valuenow', String(value));
+    if (persist) localStorage.setItem(key, String(value));
+  };
+  handle.setAttribute('aria-valuenow', String(Math.round(header.getBoundingClientRect().width)));
+  handle.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const startX = event.clientX;
+    const startWidth = header.getBoundingClientRect().width;
+    handle.setPointerCapture(event.pointerId);
+    document.body.classList.add('workflow-column-resizing');
+    const move = next => setWidth(startWidth + next.clientX - startX);
+    const finish = () => {
+      document.body.classList.remove('workflow-column-resizing');
+      setWidth(header.getBoundingClientRect().width, true);
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('lostpointercapture', finish);
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('lostpointercapture', finish);
+  });
+  handle.addEventListener('dblclick', () => {
+    root.style.removeProperty('--workflow-story-width');
+    localStorage.removeItem(key);
+    handle.setAttribute('aria-valuenow', String(Math.round(header.getBoundingClientRect().width)));
+  });
+  handle.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setWidth(header.getBoundingClientRect().width + (event.key === 'ArrowRight' ? 20 : -20), true);
+  });
+}
+
 function initEventListeners() {
+  initReadingTheme();
+  initWorkflowColumnResize();
+  const workflowActions = {
+    'workflow-btn-first': () => goToPage(1),
+    'workflow-btn-last': () => goToPage(state.totalPages),
+    'workflow-btn-save': () => addManualBookmark(),
+    'workflow-btn-tools': () => openReaderTools('layout'),
+    'workflow-btn-search': () => openReaderTools('search')
+  };
+  Object.entries(workflowActions).forEach(([id, action]) => {
+    document.getElementById(id)?.addEventListener('click', action);
+  });
   BOSS_KEY_BUTTON_IDS.forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener('click', toggleBossKey);
@@ -7541,6 +7691,11 @@ function setFontSize(size) {
   const num = parseInt(size, 10);
   if (isNaN(num) || num < 6 || num > 36) return;
   state.fontSize = num;
+  if (state.theme === 'theme-reader') {
+    localStorage.setItem('reading_font_size', String(num));
+    const sizeLabel = document.getElementById('reading-font-size');
+    if (sizeLabel) sizeLabel.textContent = `${num}pt`;
+  }
   applyStyles();
   syncControls();
   saveState();
@@ -7939,6 +8094,10 @@ function showBanner(html) {
 }
 
 function applyStyles() {
+  if (state.theme === 'theme-reader') {
+    localStorage.setItem('reading_font_family', state.fontFamily);
+    localStorage.setItem('reading_line_height', String(state.lineHeight || '1.9'));
+  }
   const root = document.documentElement;
   root.style.setProperty('--story-font-family', state.fontFamily);
   root.style.setProperty('--story-font-size', `${state.fontSize}pt`);
@@ -7967,10 +8126,10 @@ function applyStyles() {
   const whiteSpaceVal = isNowrap ? (state.preserveIndents ? 'pre' : 'nowrap') : 'normal';
   const wordBreakVal = isNowrap ? 'normal' : 'break-word';
 
-  restyle('.story-cell', cell => {
+  restyle('.story-cell, #workflow-story-stream .workflow-col-desc', cell => {
     cell.style.fontWeight = state.isBold ? 'bold' : 'normal';
     cell.style.fontStyle = state.isItalic ? 'italic' : 'normal';
-    if (state.theme === 'theme-excel') {
+    if (state.theme === 'theme-excel' || state.theme === 'theme-workflow') {
       cell.style.whiteSpace = state.preserveIndents ? 'pre-wrap' : 'normal';
       cell.style.wordBreak = 'break-word';
       cell.style.overflowWrap = 'anywhere';
@@ -8002,7 +8161,7 @@ function applyStyles() {
   // 3. Document, Email, Chat & Prose reading themes (Gmail, Outlook, Google Docs, InDesign, Zalo, LinkedIn, Figma, Canva, PPT, Captions, Notes)
   // Text in these themes MUST ALWAYS wrap naturally within their containers and NEVER produce horizontal scrollbars.
   const proseWhiteSpace = isNowrap ? (state.preserveIndents ? 'pre-wrap' : 'normal') : 'normal';
-  restyle('.id-story-paragraph, .gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .jira-log-body, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .cad-note-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text', el => {
+  restyle('.reading-paragraph, .id-story-paragraph, .gdocs-story-paragraph, .gmail-story-para, .outlook-story-para, .jira-log-body, .zalo-msg-text, .ln-post-paragraph, .ps-chunk-body, .b-story-text, .cad-note-text, .figma-text-layer, .canva-text-box, .ppt-bullet-text, .cc-caption-text', el => {
     el.style.whiteSpace = proseWhiteSpace;
     el.style.wordBreak = 'break-word';
     el.style.overflowX = 'hidden';
@@ -8161,7 +8320,7 @@ const BOSS_VIEW_CONFIGS = [
   { story: 'canva-story-view', boss: 'canva-boss-view', storyDisplay: 'flex', bossDisplay: 'block' },
   { story: 'ppt-story-view', boss: 'ppt-boss-view', storyDisplay: 'flex', bossDisplay: 'flex' },
   { story: 'tvpl-story-view', boss: 'tvpl-boss-view', storyDisplay: '', bossDisplay: 'block' },
-  ...['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack'].map(p => ({
+  ...['premiere', 'claude', 'chatgpt', 'teams', 'revit', 'misa', 'capcut', 'sap', 'gmail', 'outlook', 'jira', 'slack', 'workflow'].map(p => ({
     story: `${p}-story-view`,
     boss: `${p}-boss-view`,
     storyDisplay: '',
@@ -9725,6 +9884,7 @@ function initStoryFromChunks(chunks, options = {}) {
 // ==========================================================
 // Per-theme renderer: batch appender + the containers cleared on a full re-render.
 const THEME_RENDERERS = {
+  'theme-reader': { append: appendReadingBatch, streams: ['reading-story-stream'] },
   'theme-vscode': { append: appendVSCodeBatch, streams: ['vsc-line-numbers', 'vsc-code-lines'] },
   'theme-googledocs': { append: appendGoogleDocsBatch, streams: ['gdocs-story-stream'] },
     'theme-indesign': {
@@ -9752,6 +9912,7 @@ const THEME_RENDERERS = {
   'theme-misa': { append: appendMisaBatch, streams: ['misa-story-stream'] },
   'theme-capcut': { append: appendCapCutBatch, streams: ['capcut-story-stream'] },
   'theme-sap': { append: appendSAPBatch, streams: ['sap-story-stream'] },
+  'theme-workflow': { append: appendWorkflowBatch, streams: ['workflow-story-stream'] },
   'theme-gmail': { append: appendGmailBatch, streams: ['gmail-story-stream'] },
   'theme-outlook': { append: appendOutlookBatch, streams: ['outlook-story-stream'] },
   'theme-jira': { append: appendJiraBatch, streams: ['jira-story-stream'] },
@@ -10492,6 +10653,8 @@ const ACTIVE_ROW_SPECS = {
   'theme-misa': { id: 'misa-order-', cls: 'selected-order-row' },
   'theme-capcut': { id: 'capcut-cap-', cls: 'active-caption' },
   'theme-sap': { id: 'sap-item-', cls: 'selected-sap-row' },
+  'theme-workflow': { id: 'workflow-row-', cls: 'active-workflow-row' },
+  'theme-reader': { id: 'reading-para-', cls: 'active-reading-paragraph' },
   'theme-gmail': { id: 'gmail-para-', cls: 'active-email-para' },
   'theme-outlook': { id: 'outlook-para-', cls: 'active-outlook-para' },
   'theme-jira': { id: 'jira-log-item-', cls: 'active-jira-item' },
@@ -10566,6 +10729,20 @@ function setActiveRow(index, scrollIntoView = true) {
     }
   }
 
+  if (state.theme === 'theme-workflow') {
+    const statusCount = document.getElementById('workflow-status-count');
+    if (statusCount) {
+      statusCount.textContent = `Số dòng dữ liệu nội dung: ${index + 1}`;
+    }
+    const statusInfo = document.getElementById('workflow-status-row-info');
+    if (statusInfo && state.allChunks && state.allChunks[index]) {
+      const curChunk = state.allChunks[index];
+      const curCode = WORKFLOW_MAT_CODES[index % WORKFLOW_MAT_CODES.length];
+      const textSample = (curChunk.text || '').replace(/\s+/g, ' ').slice(0, 45);
+      statusInfo.textContent = `${curCode} ${textSample}`;
+    }
+  }
+
   updateReadingProgressStatus(index);
   scheduleSaveState();
 }
@@ -10579,6 +10756,10 @@ function updateReadingProgressStatus(index) {
 }
 
 function updatePaginationUI() {
+  if (state.theme === 'theme-reader') {
+    const title = document.getElementById('reading-book-title');
+    if (title) title.textContent = state.pdfFileName || 'Một khoảng lặng cho câu chuyện của bạn';
+  }
   const text = `${state.currentPage} / ${state.totalPages}`;
   const maxNavigablePage = state.isPdfProcessing ? state.loadedPages : state.totalPages;
   
@@ -10997,6 +11178,8 @@ function getActiveScrollContainer() {
     'theme-misa': 'misa-orders-scroll-container',
     'theme-capcut': 'capcut-scroll-container',
     'theme-sap': 'sap-scroll-container',
+    'theme-workflow': 'workflow-grid-scroll-container',
+    'theme-reader': 'reading-scroll-container',
     'theme-gmail': 'gmail-scroll-container',
     'theme-outlook': 'outlook-scroll-container',
     'theme-jira': 'jira-issue-scroll-container',
@@ -11959,6 +12142,69 @@ function appendJiraBatch(count) {
       <div class="jira-log-body">${formatChunkText(chunk.text)}</div>`;
     return el;
   });
+}
+
+const WORKFLOW_MAT_CODES = [
+  'SH-DA500AWS-AR5-003', 'SH-FAMA060-005AIV', 'SH-FATC019-004AIV', 'SH-FD1-10207000',
+  'SH-FB3-20512000RB', 'SH-FC038-32001AWS', 'SH-FD342-003000', 'SH-GB-004',
+  'SH-GB-004-5', 'SH-GB-016', 'SH-HB-002-2', 'SH-JC102-008000', 'SH-MC0200-090AWS'
+];
+
+const WORKFLOW_SPECS = [
+  '3"*2.5" tem nền trắng chữ đỏ 76.2*63', '60"ZX-0125 PB+1米白厚布',
+  '60"MC-0210半白T/C布贴附0.9MM 上白+贴', '8"*3.5MM平垫圈',
+  '(厚42MM8厘平铁卡共用)', '58"0.32PVC胶', '外径62MM 内径42MM T=1.2MM 平垫片',
+  'GH-280AF铜万向盖板（青野7119）', '铝材', '45KG/包', '白胶 DA-102H', 'OPP胶10CM'
+];
+
+const WORKFLOW_UNITS = ['PCS', 'Y', 'Y', 'PCS', 'PCS', 'KG', 'PCS', 'KG', 'KG', 'KG', 'KG'];
+const WORKFLOW_WH = ['VLA-32', 'TLA-32T', 'TLA-32T', 'VLA-32', 'VLA-32', 'VLA-32', 'VLA-32', 'VLA-32', 'VLA-32', 'VLA-32', 'TLA-32T'];
+
+function appendWorkflowBatch(count) {
+  appendSimpleThemeBatch(count, 'workflow-story-stream', chunk => {
+    const tr = document.createElement('tr');
+    tr.className = 'workflow-item-row';
+    tr.id = `workflow-row-${chunk.globalIndex}`;
+    const matCode = WORKFLOW_MAT_CODES[chunk.globalIndex % WORKFLOW_MAT_CODES.length];
+    const spec = (chunk.globalIndex % 3 === 0) ? WORKFLOW_SPECS[chunk.globalIndex % WORKFLOW_SPECS.length] : '';
+    const qty = ((chunk.globalIndex % 12) + 1) * 2.5;
+    const formattedQty = (qty % 1 === 0) ? String(qty) : qty.toFixed(3).replace(/\.?0+$/, '');
+    const unit = WORKFLOW_UNITS[chunk.globalIndex % WORKFLOW_UNITS.length];
+    const wh = WORKFLOW_WH[chunk.globalIndex % WORKFLOW_WH.length];
+
+    tr.innerHTML = `
+      <td class="workflow-sel-cell"></td>
+      <td class="workflow-col-code">${matCode}</td>
+      <td class="workflow-col-desc">${formatChunkText(chunk.text)}</td>
+      <td class="workflow-col-center">2026/11/13</td>
+      <td>${spec}</td>
+      <td class="workflow-col-num">${formattedQty}</td>
+      <td class="workflow-col-num">0</td>
+      <td class="workflow-col-num">${formattedQty}</td>
+      <td class="workflow-col-center">${unit}</td>
+      <td class="workflow-col-num">0</td>
+      <td class="workflow-col-num">0</td>
+      <td class="workflow-col-num">0</td>
+      <td></td>
+      <td class="workflow-col-center">${wh}</td>
+      <td class="workflow-col-center">****</td>
+      <td></td>
+      <td>原物料领料-NV</td>
+    `;
+    return tr;
+  });
+
+  const statusCount = document.getElementById('workflow-status-count');
+  if (statusCount) {
+    statusCount.textContent = `Số dòng dữ liệu nội dung: ${state.currentGlobalIndex + 1}`;
+  }
+  const statusInfo = document.getElementById('workflow-status-row-info');
+  if (statusInfo && state.allChunks && state.allChunks[state.currentGlobalIndex]) {
+    const curChunk = state.allChunks[state.currentGlobalIndex];
+    const curCode = WORKFLOW_MAT_CODES[state.currentGlobalIndex % WORKFLOW_MAT_CODES.length];
+    const textSample = (curChunk.text || '').replace(/\s+/g, ' ').slice(0, 45);
+    statusInfo.textContent = `${curCode} ${textSample}`;
+  }
 }
 
 function appendSAPBatch(count) {

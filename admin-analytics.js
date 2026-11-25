@@ -15,7 +15,7 @@ const themeLabels = {
   autocad: 'AutoCAD', zalo: 'Zalo PC', figma: 'Figma', canva: 'Canva',
   powerpoint: 'PowerPoint', thuvienphapluat: 'Thư Viện Pháp Luật', 'thuvienphapluat-cu': 'Thư Viện Pháp Luật (cũ)', premiere: 'Premiere Pro',
   claude: 'Claude AI', chatgpt: 'ChatGPT', teams: 'Teams', revit: 'Revit BIM',
-  misa: 'MISA SME', capcut: 'CapCut Pro', sap: 'SAP GUI', gmail: 'Gmail',
+  misa: 'MISA SME', capcut: 'CapCut Pro', sap: 'SAP GUI', workflow: 'Workflow ERP', gmail: 'Gmail',
   outlook: 'Outlook', jira: 'Jira', slack: 'Slack'
 };
 
