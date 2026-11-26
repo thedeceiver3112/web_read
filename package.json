@@ -3,6 +3,8 @@
   "version": "20261010.15.0",
   "private": true,
   "scripts": {
+    "sync-version": "python scripts/sync_asset_version.py",
+    "check-version": "python scripts/sync_asset_version.py --check",
     "test": "playwright test",
     "test:headed": "playwright test --headed"
   },

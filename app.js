@@ -5945,16 +5945,25 @@ async function updatePortalUploadUI() {
 // LANDING PORTAL, THEME SELECTOR & AUTHOR DONATE
 // ==========================================================
 const DONATE_WELCOME_SESSION_KEY = 'stealth_donate_popup_last_shown';
+const DONATE_WELCOME_HIDE_DAY_KEY = 'stealth_donate_popup_hidden_day';
 const DONATE_WELCOME_COOLDOWN_MS = 5 * 60 * 1000;
 let donateWelcomeDismissed = false;
 
 function canShowDonateWelcomePopup() {
+  try {
+    if (localStorage.getItem(DONATE_WELCOME_HIDE_DAY_KEY) === getDonateWelcomeDay()) return false;
+  } catch (_) { /* Keep the session cooldown if localStorage is unavailable. */ }
   try {
     const lastShownAt = Number(sessionStorage.getItem(DONATE_WELCOME_SESSION_KEY) || 0);
     return !lastShownAt || Date.now() - lastShownAt >= DONATE_WELCOME_COOLDOWN_MS;
   } catch (error) {
     return true;
   }
+}
+
+function getDonateWelcomeDay() {
+  const now = new Date();
+  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
 }
 
 function markDonateWelcomePopupShown() {
@@ -5992,6 +6001,15 @@ function initDonateWelcomePopup() {
   if (!isIndexPage || portal.classList.contains('hidden')) return;
 
   popup.querySelector('[data-donate-popup-close]')?.addEventListener('click', closeDonateWelcomePopup);
+  document.getElementById('donate-welcome-hide-today')?.addEventListener('change', event => {
+    try {
+      if (event.currentTarget.checked) {
+        localStorage.setItem(DONATE_WELCOME_HIDE_DAY_KEY, getDonateWelcomeDay());
+      } else {
+        localStorage.removeItem(DONATE_WELCOME_HIDE_DAY_KEY);
+      }
+    } catch (_) { /* Reading remains available when browser storage is blocked. */ }
+  });
   setTimeout(openDonateWelcomePopup, 250);
 }
 

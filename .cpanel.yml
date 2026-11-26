@@ -12,3 +12,4 @@ deployment:
     - /bin/cp api/index.php api/.htaccess $DEPLOYPATH/api/
     - /bin/cp -R static/. $DEPLOYPATH/static/
     - /bin/cp -R css/. $DEPLOYPATH/css/
+    - /usr/bin/env python3 scripts/sync_asset_version.py --target $DEPLOYPATH

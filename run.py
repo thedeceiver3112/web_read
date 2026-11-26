@@ -287,6 +287,9 @@ def find_free_port(start_port=8080, max_tries=20):
 
 def main():
     os.chdir(DIRECTORY)
+    from scripts.sync_asset_version import sync_versions
+    version, updated_pages = sync_versions(DIRECTORY)
+    print(f"[*] Asset version {version}: updated {len(updated_pages)} HTML page(s).")
     port = find_free_port(PORT)
     url = f"http://localhost:{port}"
 
