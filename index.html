@@ -9,7 +9,7 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <script src="version-check.js?v=20261126-donate-day-1" data-app-version="20261126-donate-day-1"></script>
+    <script src="version-check.js?v=20261126-portal-ui-1" data-app-version="20261126-portal-ui-1"></script>
     <script>
       (function() {
         try {
@@ -68,7 +68,7 @@
     <meta property="og:site_name" content="The Deceiver" />
     <meta name="twitter:card" content="summary" />
     <link rel="icon" type="image/svg+xml" id="app-favicon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E" />
-    <link rel="stylesheet" href="style.css?v=20261126-donate-day-1" />
+    <link rel="stylesheet" href="style.css?v=20261126-portal-ui-1" />
   </head>
   <body class="theme-googlesheets">
     <div class="theme-header-container gsheet-only">
@@ -874,17 +874,33 @@
             </svg>
             <span>Đăng nhập Google</span>
           </button>
-          <button
-            class="duo-btn-feedback-nav"
-            id="btn-open-feedback-nav"
-            title="Đóng góp ý kiến &amp; Báo lỗi qua Google Form"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg>
-            <span>Góp ý &amp; Báo lỗi</span>
-          </button>
+          <div class="duo-btn-group duo-report-group" role="group" aria-label="Báo lỗi &amp; góp ý">
+            <button
+              class="duo-btn-feedback-nav"
+              id="btn-open-feedback-nav"
+              title="Đóng góp ý kiến &amp; Báo lỗi qua Google Form"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              <span>Góp ý &amp; Báo lỗi</span>
+            </button>
+            <a
+              class="duo-btn-zalo-nav"
+              href="https://zalo.me/g/sumbsq947"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Tham gia nhóm Zalo báo lỗi &amp; góp ý"
+            >
+              <span class="duo-zalo-badge">Zalo</span>
+              <span>Nhóm Zalo báo lỗi</span>
+              <svg class="duo-ext-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7 17 17 7"></path>
+                <path d="M8 7h9v9"></path>
+              </svg>
+            </a>
+          </div>
           <button
             class="duo-btn-sheet-nav"
             id="btn-open-progress-nav"
@@ -1629,99 +1645,71 @@
               </div>
               <span class="duo-card-title">Tác giả & Ủng hộ</span>
             </div>
-          <!-- Author Info Card -->
-          <div class="duo-author-box">
-            <div class="duo-author-avatar">NP</div>
-            <div class="duo-author-text">
-              <div class="name">NGUYEN TRAN HAI PHONG</div>
-              <div class="badge">Tác giả &amp; Nhà phát triển</div>
-            </div>
-          </div>
 
-          <!-- Author Social Contacts -->
-          <div class="duo-author-socials">
-            <!-- <a href="https://www.facebook.com/phongdev01/" target="_blank" rel="noopener noreferrer" class="duo-social-row duo-social-fb" title="Mở trang Facebook cá nhân">
-              <span class="social-icon-box fb">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-              </span>
-              <div class="social-row-info">
-                <span class="social-label">Facebook</span>
-                <span class="social-value">phongdev01</span>
-              </div>
-              <span class="social-arrow">↗</span>
-            </a> -->
-
-            <a href="https://zalo.me/g/sumbsq947" target="_blank" rel="noopener noreferrer" class="duo-social-row duo-social-zalo" title="Nhóm Zalo báo lỗi">
-              <span class="social-icon-box zalo">Zalo</span>
-              <div class="social-row-info">
-                <span class="social-label">Zalo</span>
-                <span class="social-value">Nhóm Zalo báo lỗi</span>
-              </div>
-              <span class="social-arrow">↗</span>
-            </a>
-
-            <a href="mailto:Nguyentranhaiphong2@gmail.com" class="duo-social-row duo-social-gmail" title="Gửi thư qua Gmail">
-              <span class="social-icon-box gmail">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-              </span>
-              <div class="social-row-info">
-                <span class="social-label">Gmail</span>
-                <span class="social-value">Nguyentranhaiphong2@gmail.com</span>
-              </div>
-              <span class="social-arrow">✉</span>
-            </a>
-          </div>
-            
-
-            <div class="duo-speech-donate">
-              <div class="speech-donate-icon">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                  <line x1="6" y1="1" x2="6" y2="4"></line>
-                  <line x1="10" y1="1" x2="10" y2="4"></line>
-                  <line x1="14" y1="1" x2="14" y2="4"></line>
-                </svg>
-              </div>
-              <span>Ủng hộ tác giả một ly cà phê nếu thấy ứng dụng hữu ích nhé!</span>
-            </div>
-
-            <!-- QR Code Frame -->
-            <div class="duo-qr-frame">
-              <img
-                src="static/donate_qr_card.png?v=20261010-15"
-                alt="Mã QR Vietcombank NGUYEN TRAN HAI PHONG"
-                class="duo-qr-img"
-                id="portal-qr-img"
-              />
-
-              <div class="duo-bank-info">
-                <div class="duo-bank-row">
-                  <span class="duo-bank-label">Ngân hàng:</span>
-                  <span class="duo-bank-val">Vietcombank (VCB)</span>
-                </div>
-                <div class="duo-bank-row">
-                  <span class="duo-bank-label">Chủ tài khoản:</span>
-                  <span class="duo-bank-val">NGUYEN TRAN HAI PHONG</span>
-                </div>
-                <div class="duo-bank-row stk-row">
-                  <span class="duo-bank-label">Số tài khoản:</span>
-                  <span class="duo-bank-val stk-highlight" id="portal-stk-val"
-                    >1015471873</span
-                  >
+            <!-- Author & Support Contact Card -->
+            <div class="duo-author-card">
+              <div class="duo-author-head">
+                <div class="duo-author-meta">
+                  <div class="duo-author-name">NGUYEN TRAN HAI PHONG</div>
+                  <div class="duo-author-role">Tác giả &amp; Nhà phát triển</div>
                 </div>
               </div>
             </div>
 
-            <!-- Copy Button -->
-            <button class="duo-btn-orange duo-btn-copy-stk" id="btn-copy-stk">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              <span>Sao chép số tài khoản</span>
-            </button>
+            <!-- Donate Section -->
+            <section class="duo-support-card" aria-label="Ủng hộ tác giả">
+              <div class="duo-donate-note">
+                <span class="duo-donate-note-icon">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                    <line x1="6" y1="1" x2="6" y2="4"></line>
+                    <line x1="10" y1="1" x2="10" y2="4"></line>
+                    <line x1="14" y1="1" x2="14" y2="4"></line>
+                  </svg>
+                </span>
+                <span>Ủng hộ tác giả ly cà phê nếu thấy hữu ích</span>
+              </div>
 
+              <div class="duo-qr-frame">
+                <div class="duo-qr-tile">
+                  <div class="duo-qr-bank">Vietcombank</div>
+                  <img
+                    src="static/donate_qr_only.png?v=20261126-1"
+                    alt="Mã QR Vietcombank NGUYEN TRAN HAI PHONG"
+                    class="duo-qr-img"
+                    id="portal-qr-img"
+                    width="222"
+                    height="222"
+                  />
+                  <div class="duo-qr-caption">Quét bằng app ngân hàng · VietQR</div>
+                </div>
+
+                <div class="duo-bank-info">
+                  <div class="duo-bank-row">
+                    <span class="duo-bank-label">Ngân hàng</span>
+                    <span class="duo-bank-val">Vietcombank (VCB)</span>
+                  </div>
+                  <div class="duo-bank-row">
+                    <span class="duo-bank-label">Chủ tài khoản</span>
+                    <span class="duo-bank-val">NGUYEN TRAN HAI PHONG</span>
+                  </div>
+                  <div class="duo-bank-row stk-row">
+                    <span class="duo-bank-label">Số tài khoản</span>
+                    <span class="duo-bank-val stk-highlight" id="portal-stk-val">1015471873</span>
+                  </div>
+
+                  <!-- Copy Button -->
+                  <button class="duo-btn-orange duo-btn-copy-stk" id="btn-copy-stk" type="button">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Sao chép số tài khoản</span>
+                  </button>
+                </div>
+              </div>
+            </section>
             <!-- <div class="duo-feedback-box">
               <div class="duo-feedback-actions">
                 <button class="duo-btn-feedback" id="btn-open-feedback-portal">
@@ -1805,7 +1793,7 @@
     <!-- Toast Notification for Seamless Page Navigation -->
     <div id="page-flip-toast" class="page-flip-toast"></div>
 
-    <script src="app.js?v=20261126-donate-day-1" defer></script>
+    <script src="app.js?v=20261126-portal-ui-1" defer></script>
   </body>
 </html>
 
