@@ -1,0 +1,4 @@
+[      45ms] [ERROR] Error: <path> attribute d: Expected number, "….9-5.8 12.9-12.9V97h12.9zm0-6.5c…". @ http://127.0.0.1:8080/app.js?v=20261123-4:3819
+[     135ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:8080/api/analytics/event:1
+[     135ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:8080/api/analytics/event:1
+[    9667ms] [ERROR] Error: <path> attribute d: Expected number, "….9-5.8 12.9-12.9V97h12.9zm0-6.5c…". @ http://127.0.0.1:8080/app.js?v=20261123-4:3819

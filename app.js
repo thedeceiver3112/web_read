@@ -7163,11 +7163,14 @@ function syncBookmarkButton() {
 // EVENT LISTENERS & HOTKEYS
 // ==========================================================
 function initReadingTheme() {
-  if (!document.body.classList.contains('theme-reader')) return;
+  // The portal also applies the selected theme to body. Only reader.html has
+  // the reading workspace; do not abort shared event setup on the portal.
+  if (!document.body.classList.contains('theme-reader') || !document.getElementById('reading-story-stream')) return;
   state.fontSize = Math.max(8, Math.min(28, Number(localStorage.getItem('reading_font_size')) || 16));
   state.fontFamily = localStorage.getItem('reading_font_family') || '"Times New Roman", Georgia, serif';
   state.lineHeight = localStorage.getItem('reading_line_height') || '1.9';
-  document.getElementById('reading-font-size').textContent = `${state.fontSize}pt`;
+  const fontSizeLabel = document.getElementById('reading-font-size');
+  if (fontSizeLabel) fontSizeLabel.textContent = `${state.fontSize}pt`;
   const setPalette = value => {
     document.body.dataset.readingPalette = value;
     document.querySelectorAll('button[data-reading-palette]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.readingPalette === value)));
@@ -7178,13 +7181,16 @@ function initReadingTheme() {
     localStorage.setItem('reading_palette', button.dataset.readingPalette);
   }));
   const width = document.getElementById('reading-width');
-  width.value = String(Math.max(540, Math.min(1000, Number(localStorage.getItem('reading_width')) || 720)));
-  const setWidth = () => document.body.style.setProperty('--reading-width', `${width.value}px`);
-  setWidth();
-  width.addEventListener('input', setWidth);
-  width.addEventListener('change', () => localStorage.setItem('reading_width', width.value));
-  document.getElementById('reading-settings').addEventListener('click', event => {
+  if (width) {
+    width.value = String(Math.max(540, Math.min(1000, Number(localStorage.getItem('reading_width')) || 720)));
+    const setWidth = () => document.body.style.setProperty('--reading-width', `${width.value}px`);
+    setWidth();
+    width.addEventListener('input', setWidth);
+    width.addEventListener('change', () => localStorage.setItem('reading_width', width.value));
+  }
+  document.getElementById('reading-settings')?.addEventListener('click', event => {
     const panel = document.getElementById('reading-settings-panel');
+    if (!panel) return;
     panel.hidden = !panel.hidden;
     event.currentTarget.setAttribute('aria-expanded', String(!panel.hidden));
   });
@@ -7195,7 +7201,7 @@ function initReadingTheme() {
     'reading-save': () => addManualBookmark(),
     'reading-layout': () => openReaderTools('layout')
   };
-  Object.entries(actions).forEach(([id, action]) => document.getElementById(id).addEventListener('click', action));
+  Object.entries(actions).forEach(([id, action]) => document.getElementById(id)?.addEventListener('click', action));
   applyStyles();
 }
 

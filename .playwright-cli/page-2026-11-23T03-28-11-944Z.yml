@@ -1,0 +1,29 @@
+- generic [active] [ref=f1e1]:
+  - banner [ref=f1e2]:
+    - link "Về thư viện" [ref=f1e3] [cursor=pointer]:
+      - /url: index.html
+      - text: The Deceiver
+      - generic [ref=f1e4]: Một khoảng lặng để đọc
+    - navigation "Công cụ đọc" [ref=f1e5]:
+      - button "Thư viện" [ref=f1e6] [cursor=pointer]
+      - button "Nạp file" [ref=f1e7] [cursor=pointer]
+      - button "Mục lục" [ref=f1e8] [cursor=pointer]
+      - button "Dấu trang" [ref=f1e9] [cursor=pointer]
+      - button "Aa Hiển thị" [ref=f1e10] [cursor=pointer]
+  - main "Nội dung sách" [ref=f1e11]:
+    - article [ref=f1e12]:
+      - generic [ref=f1e13]:
+        - text: TRANG SÁCH ĐANG MỞ
+        - heading "Một khoảng lặng cho câu chuyện của bạn" [level=1] [ref=f1e14]
+        - paragraph [ref=f1e15]: Thả lỏng một chút. Đọc chậm một chút.
+        - generic [aria-hidden] [ref=f1e16]: ❧
+      - generic [ref=f1e17]:
+        - generic [ref=f1e18]: Chào bạn, hãy chọn một cuốn sách trong Thư viện hoặc nạp file từ máy để bắt đầu đọc.
+        - generic [ref=f1e19]: Bạn có thể điều chỉnh cỡ chữ, nền trang và độ rộng ở nút Aa. Mục lục và dấu trang luôn ở ngay phía trên khi cần.
+      - generic [aria-hidden] [ref=f1e20]: · · ·
+  - contentinfo [ref=f1e21]:
+    - button "Trang trước" [disabled] [ref=f1e22]: ← Trang trước
+    - generic [ref=f1e23]: 1 / 1
+    - button "Đánh dấu vị trí" [ref=f1e24] [cursor=pointer]
+    - button "Trang tiếp" [disabled] [ref=f1e25]: Trang tiếp →
+  - button "Tải lại phiên bản mới" [ref=f1e26] [cursor=pointer]: ↻

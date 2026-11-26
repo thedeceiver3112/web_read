@@ -1,0 +1,11 @@
+[     148ms] [ERROR] Error: <path> attribute d: Expected number, "….9-5.8 12.9-12.9V97h12.9zm0-6.5c…". @ http://127.0.0.1:8080/app.js?v=20261123-reader-1:3824
+[     161ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:8080/api/analytics/event:1
+[     161ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:8080/api/analytics/event:1
+[     185ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://127.0.0.1:8080/favicon.ico:1
+[   30290ms] [ERROR] Error: <path> attribute d: Expected number, "….9-5.8 12.9-12.9V97h12.9zm0-6.5c…". @ http://127.0.0.1:8080/app.js?v=20261123-reader-1:3824
+[   31554ms] [ERROR] Error: <path> attribute d: Expected number, "….9-5.8 12.9-12.9V97h12.9zm0-6.5c…". @ http://127.0.0.1:8080/app.js?v=20261119-2:3824
+[   31627ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:8080/api/analytics/event:1
+[   33010ms] [ERROR] Error: <path> attribute d: Expected number, "….9-5.8 12.9-12.9V97h12.9zm0-6.5c…". @ http://127.0.0.1:8080/app.js?v=20261119-2:3824
+[   33050ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:8080/api/analytics/event:1
+[   34581ms] [ERROR] Error: <path> attribute d: Expected number, "….9-5.8 12.9-12.9V97h12.9zm0-6.5c…". @ http://127.0.0.1:8080/app.js?v=20261123-4:3824
+[   34621ms] [ERROR] Failed to load resource: the server responded with a status of 503 (Service Unavailable) @ http://127.0.0.1:8080/api/analytics/event:1

@@ -1,0 +1,1215 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - heading [level=1] [ref=e6]:
+          - link "Truyện Full - Đọc truyện online" [ref=e7] [cursor=pointer]:
+            - /url: https://truyenfull.live/
+        - generic [ref=e8]:
+          - list [ref=e9]:
+            - listitem [ref=e10]:
+              - button " Danh sách" [ref=e11] [cursor=pointer]:
+                - generic [ref=e12]: 
+                - text: Danh sách
+            - listitem [ref=e14]:
+              - button " Phân loại theo Chương" [ref=e15] [cursor=pointer]:
+                - generic [ref=e16]: 
+                - text: Phân loại theo Chương
+            - listitem [ref=e18]:
+              - button "Đăng nhập" [ref=e19] [cursor=pointer]
+          - search [ref=e23]:
+            - generic [ref=e24]:
+              - searchbox "Từ khóa tìm kiếm" [ref=e25]
+              - button "Tìm kiếm" [ref=e27] [cursor=pointer]:
+                - generic [ref=e28]: 
+      - generic [ref=e29]: Đọc truyện online, đọc truyện chữ, truyện full, truyện hay. Tổng hợp đầy đủ và cập nhật liên tục.
+    - main [ref=e31]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - heading [level=2] [ref=e34]:
+            - link "Truyện hot" [ref=e35] [cursor=pointer]:
+              - /url: https://truyenfull.live/danh-sach/truyen-hot/
+          - link "" [ref=e36] [cursor=pointer]:
+            - /url: https://truyenfull.live/danh-sach/truyen-hot/
+          - combobox "Chọn thể loại" [ref=e38]:
+            - option "Tất cả" [selected]
+            - option "Truyện sáng tác"
+            - option "Tiên Hiệp"
+            - option "Kiếm Hiệp"
+            - option "Ngôn Tình"
+            - option "Đam Mỹ"
+            - option "Quan Trường"
+            - option "Chủ công"
+            - option "Võng Du"
+            - option "Khoa Huyễn"
+            - option "Hệ Thống"
+            - option "Huyền Huyễn"
+            - option "Dị Giới"
+            - option "Dị Năng"
+            - option "Quân Sự"
+            - option "Sắc"
+            - option "Lịch Sử"
+            - option "Xuyên Không"
+            - option "Xuyên Sách"
+            - option "Xuyên Nhanh"
+            - option "Cận Đại"
+            - option "Trọng Sinh"
+            - option "Trinh Thám"
+            - option "Thám Hiểm"
+            - option "Linh Dị"
+            - option "Ngược"
+            - option "Sủng"
+            - option "Cung Đấu"
+            - option "Nữ Cường"
+            - option "Gia Đấu"
+            - option "Đông Phương"
+            - option "Đô Thị"
+            - option "Bách Hợp"
+            - option "Hài Hước"
+            - option "Điền Văn"
+            - option "Cổ Đại"
+            - option "Mạt Thế"
+            - option "Truyện Teen"
+            - option "Phương Tây"
+            - option "Nữ Phụ"
+            - option "Light Novel"
+            - option "Việt Nam"
+            - option "Tương Lai"
+            - option "Giải Trí"
+            - option "Đoản Văn"
+            - option "Review sách"
+            - option "Truyện Ngắn"
+            - option "Khác"
+        - generic:
+          - link [ref=e40] [cursor=pointer]:
+            - /url: /ga-kim-thoa-tieu-giai-nhan/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Gả Kim Thoa - Tiếu Giai Nhân" [level=3] [ref=e43]
+          - link [ref=e45] [cursor=pointer]:
+            - /url: /freud-cua-anh-ay-mong-tieu-nhi/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Freud Của Anh Ấy – Mộng Tiêu Nhị" [level=3] [ref=e48]
+          - link [ref=e50] [cursor=pointer]:
+            - /url: /tram-me-trong-dem-dai-son-hoa-doi-tuu/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Trầm Mê Trong Đêm Dài - Sơn Hoa Đối Tửu" [level=3] [ref=e53]
+          - link [ref=e55] [cursor=pointer]:
+            - /url: /vac-bung-bau-theo-quan-co-khien-ca-dai-vien-phai-tram-tro/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Vác Bụng Bầu Theo Quân, Cô Khiến Cả Đại Viện Phải Trầm Trồ" [level=3] [ref=e58]
+          - link [ref=e60] [cursor=pointer]:
+            - /url: /bi-ep-ga-cho-quyen-than-doan-menh/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Bị Ép Gả Cho Quyền Thần Đoản Mệnh" [level=3] [ref=e63]
+          - link [ref=e65] [cursor=pointer]:
+            - /url: /huy-hon-do-nam-kinh/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Huỷ Hôn - Đồ Nam Kình" [level=3] [ref=e68]
+          - link [ref=e70] [cursor=pointer]:
+            - /url: /ngao-the-dan-than/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Ngạo Thế Đan Thần" [level=3] [ref=e73]
+          - link [ref=e75] [cursor=pointer]:
+            - /url: /than-an/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Thần Ẩn" [level=3] [ref=e78]
+          - link [ref=e80] [cursor=pointer]:
+            - /url: /tinh-cu-diep-kien-tinh/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Tình Cũ - Diệp Kiến Tinh" [level=3] [ref=e83]
+          - link [ref=e85] [cursor=pointer]:
+            - /url: /ranh-gioi-nhap-nhem-thoi-tinh-thao/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Ranh Giới Nhập Nhèm - Thời Tinh Thảo" [level=3] [ref=e88]
+          - link [ref=e90] [cursor=pointer]:
+            - /url: /dai-chu-tien-lai/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Đại Chu Tiên Lại" [level=3] [ref=e93]
+          - link [ref=e95] [cursor=pointer]:
+            - /url: /thap-nien-70-lam-chi-dau-cua-nam-chinh/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - 'heading "Thập Niên 70: Làm Chị Dâu Của Nam Chính" [level=3] [ref=e98]'
+          - link [ref=e100] [cursor=pointer]:
+            - /url: /tay-sung-ban-tia-lac-ve-thoi-tam-quoc/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Tay Súng Bắn Tỉa Lạc Về Thời Tam Quốc" [level=3] [ref=e103]
+          - link [ref=e105] [cursor=pointer]:
+            - /url: /nam-phu-cuc-pham-cua-van-ngot-sung-song-lai/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Nam Phụ Cực Phẩm Của Văn Ngọt Sủng Sống Lại" [level=3] [ref=e108]
+          - link [ref=e110] [cursor=pointer]:
+            - /url: /dai-duong-song-long-truyen/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Đại Đường Song Long Truyện" [level=3] [ref=e113]
+          - link [ref=e115] [cursor=pointer]:
+            - /url: /that-thien-kim-la-lao-to-tong-thoi-phong-kien/?utm_source=truyenfulllive&utm_campaign=truyenfulllive_boxhothome
+            - heading "Thật Thiên Kim Là Lão Tổ Tông Thời Phong Kiến" [level=3] [ref=e118]
+      - generic [ref=e119]:
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - heading [level=2] [ref=e122]:
+              - link "Truyện mới cập nhật" [ref=e123] [cursor=pointer]:
+                - /url: https://truyenfull.live/danh-sach/truyen-moi/
+            - link "" [ref=e124] [cursor=pointer]:
+              - /url: https://truyenfull.live/danh-sach/truyen-moi/
+            - combobox "Chọn thể loại" [ref=e126]:
+              - option "Tất cả" [selected]
+              - option "Truyện sáng tác"
+              - option "Tiên Hiệp"
+              - option "Kiếm Hiệp"
+              - option "Ngôn Tình"
+              - option "Đam Mỹ"
+              - option "Quan Trường"
+              - option "Chủ công"
+              - option "Võng Du"
+              - option "Khoa Huyễn"
+              - option "Hệ Thống"
+              - option "Huyền Huyễn"
+              - option "Dị Giới"
+              - option "Dị Năng"
+              - option "Quân Sự"
+              - option "Sắc"
+              - option "Lịch Sử"
+              - option "Xuyên Không"
+              - option "Xuyên Sách"
+              - option "Xuyên Nhanh"
+              - option "Cận Đại"
+              - option "Trọng Sinh"
+              - option "Trinh Thám"
+              - option "Thám Hiểm"
+              - option "Linh Dị"
+              - option "Ngược"
+              - option "Sủng"
+              - option "Cung Đấu"
+              - option "Nữ Cường"
+              - option "Gia Đấu"
+              - option "Đông Phương"
+              - option "Đô Thị"
+              - option "Bách Hợp"
+              - option "Hài Hước"
+              - option "Điền Văn"
+              - option "Cổ Đại"
+              - option "Mạt Thế"
+              - option "Truyện Teen"
+              - option "Phương Tây"
+              - option "Nữ Phụ"
+              - option "Light Novel"
+              - option "Việt Nam"
+              - option "Tương Lai"
+              - option "Giải Trí"
+              - option "Đoản Văn"
+              - option "Review sách"
+              - option "Truyện Ngắn"
+              - option "Khác"
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - generic [ref=e129]: 
+              - heading [level=3] [ref=e130]:
+                - link "Kẻ Thù Không Đội Trời Chung Mất Trí Nhớ Gọi Tôi Là Vợ" [ref=e131] [cursor=pointer]:
+                  - /url: https://truyenfull.live/ke-thu-khong-doi-troi-chung-mat-tri-nho-goi-toi-la-vo-free/
+              - generic [ref=e132]: New
+              - generic [ref=e133]: Full
+            - generic [ref=e134]:
+              - link "Sủng" [ref=e135] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e136] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 12" [ref=e138] [cursor=pointer]:
+              - /url: https://truyenfull.live/ke-thu-khong-doi-troi-chung-mat-tri-nho-goi-toi-la-vo-free/chuong-12/
+              - generic [ref=e139]: Chương
+              - text: "12"
+            - generic [ref=e140]: 2 ngày trước
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - generic [ref=e143]: 
+              - heading [level=3] [ref=e144]:
+                - link "Mở Quan Tài Gặp Chồng" [ref=e145] [cursor=pointer]:
+                  - /url: https://truyenfull.live/mo-quan-tai-gap-chong-free/
+              - generic [ref=e146]: New
+              - generic [ref=e147]: Full
+            - generic [ref=e148]:
+              - link "Cổ Đại" [ref=e149] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/co-dai/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e150] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 12" [ref=e152] [cursor=pointer]:
+              - /url: https://truyenfull.live/mo-quan-tai-gap-chong-free/chuong-12/
+              - generic [ref=e153]: Chương
+              - text: "12"
+            - generic [ref=e154]: 2 ngày trước
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - generic [ref=e157]: 
+              - heading [level=3] [ref=e158]:
+                - 'link "Thập Niên 70: Sinh Liền Chín Đứa, Thiên Kim Thật Phá Mười Đời Đơn Truyền Nhà Chồng" [ref=e159] [cursor=pointer]':
+                  - /url: https://truyenfull.live/thap-nien-70-sinh-lien-chin-dua-thien-kim-that-pha-muoi-doi-don-truyen-nha-chong/
+              - generic [ref=e160]: New
+              - generic [ref=e161]: Full
+              - generic [ref=e162]: Hot
+            - generic [ref=e163]:
+              - link "Khác" [ref=e164] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Sủng" [ref=e165] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 456" [ref=e167] [cursor=pointer]:
+              - /url: https://truyenfull.live/thap-nien-70-sinh-lien-chin-dua-thien-kim-that-pha-muoi-doi-don-truyen-nha-chong/chuong-456/
+              - generic [ref=e168]: Chương
+              - text: "456"
+            - generic [ref=e169]: 2 ngày trước
+          - generic [ref=e170]:
+            - generic [ref=e171]:
+              - generic [ref=e172]: 
+              - heading [level=3] [ref=e173]:
+                - link "Năm Đầu Sau Khi Từ Hôn, Nàng Gả Cho Người Khác" [ref=e174] [cursor=pointer]:
+                  - /url: https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/
+              - generic [ref=e175]: New
+              - generic [ref=e176]: Full
+              - generic [ref=e177]: Hot
+            - generic [ref=e178]:
+              - link "Cổ Đại" [ref=e179] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/co-dai/
+              - text: ","
+              - link "Sủng" [ref=e180] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 77" [ref=e182] [cursor=pointer]:
+              - /url: https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-77/
+              - generic [ref=e183]: Chương
+              - text: "77"
+            - generic [ref=e184]: 2 ngày trước
+          - generic [ref=e185]:
+            - generic [ref=e186]:
+              - generic [ref=e187]: 
+              - heading [level=3] [ref=e188]:
+                - link "Nương Nương Quyết Chí Leo Lên Vị Trí Cao" [ref=e189] [cursor=pointer]:
+                  - /url: https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/
+              - generic [ref=e190]: Full
+              - generic [ref=e191]: Hot
+            - generic [ref=e192]:
+              - link "Cổ Đại" [ref=e193] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/co-dai/
+              - text: ","
+              - link "Sủng" [ref=e194] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 329" [ref=e196] [cursor=pointer]:
+              - /url: https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-329/
+              - generic [ref=e197]: Chương
+              - text: "329"
+            - generic [ref=e198]: 2 ngày trước
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - generic [ref=e201]: 
+              - heading [level=3] [ref=e202]:
+                - link "Vứt Bỏ Tra Nam Tiện Muội, Tôi Ôm Không Gian Gả Cho Đại Lão Quân Hôn" [ref=e203] [cursor=pointer]:
+                  - /url: https://truyenfull.live/vut-bo-tra-nam-tien-muoi-toi-om-khong-gian-ga-cho-dai-lao-quan-hon/
+              - generic [ref=e204]: Full
+              - generic [ref=e205]: Hot
+            - generic [ref=e206]:
+              - link "Hệ Thống" [ref=e207] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/he-thong/
+              - text: ","
+              - link "Cận Đại" [ref=e208] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/can-dai/
+            - link "Chương 207" [ref=e210] [cursor=pointer]:
+              - /url: https://truyenfull.live/vut-bo-tra-nam-tien-muoi-toi-om-khong-gian-ga-cho-dai-lao-quan-hon/chuong-207/
+              - generic [ref=e211]: Chương
+              - text: "207"
+            - generic [ref=e212]: 2 ngày trước
+          - generic [ref=e213]:
+            - generic [ref=e214]:
+              - generic [ref=e215]: 
+              - heading [level=3] [ref=e216]:
+                - 'link "Hôn Nhân Bí Mật: Nhật Ký Nuôi Con" [ref=e217] [cursor=pointer]':
+                  - /url: https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/
+              - generic [ref=e218]: Full
+              - generic [ref=e219]: Hot
+            - generic [ref=e220]:
+              - link "Điền Văn" [ref=e221] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/dien-van/
+              - text: ","
+              - link "Sủng" [ref=e222] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 85" [ref=e224] [cursor=pointer]:
+              - /url: https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-85/
+              - generic [ref=e225]: Chương
+              - text: "85"
+            - generic [ref=e226]: 2 ngày trước
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - generic [ref=e229]: 
+              - heading [level=3] [ref=e230]:
+                - link "Thâm Tình Dẫn Dụ - Điểu Tùng Mễ" [ref=e231] [cursor=pointer]:
+                  - /url: https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/
+              - generic [ref=e232]: Full
+              - generic [ref=e233]: Hot
+            - generic [ref=e234]:
+              - link "Ngược" [ref=e235] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/nguoc/
+              - text: ","
+              - link "Sủng" [ref=e236] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 236" [ref=e238] [cursor=pointer]:
+              - /url: https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-236/
+              - generic [ref=e239]: Chương
+              - text: "236"
+            - generic [ref=e240]: 2 ngày trước
+          - generic [ref=e241]:
+            - generic [ref=e242]:
+              - generic [ref=e243]: 
+              - heading [level=3] [ref=e244]:
+                - 'link "Thập Niên 60: Đại Tiểu Thư Xã Hội Đen Thức Tỉnh, Xuống Nông Thôn Đánh Khắp Quân Khu" [ref=e245] [cursor=pointer]':
+                  - /url: https://truyenfull.live/thap-nien-60-dai-tieu-thu-xa-hoi-den-thuc-tinh-xuong-nong-thon-danh-khap-quan-khu/
+              - generic [ref=e246]: Full
+              - generic [ref=e247]: Hot
+            - generic [ref=e248]:
+              - link "Xuyên Sách" [ref=e249] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/xuyen-sach/
+              - text: ","
+              - link "Cận Đại" [ref=e250] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/can-dai/
+            - link "Chương 491" [ref=e252] [cursor=pointer]:
+              - /url: https://truyenfull.live/thap-nien-60-dai-tieu-thu-xa-hoi-den-thuc-tinh-xuong-nong-thon-danh-khap-quan-khu/chuong-491/
+              - generic [ref=e253]: Chương
+              - text: "491"
+            - generic [ref=e254]: 2 ngày trước
+          - generic [ref=e255]:
+            - generic [ref=e256]:
+              - generic [ref=e257]: 
+              - heading [level=3] [ref=e258]:
+                - link "Mang Không Gian Xuyên Về 70, Blogger Làm Đẹp Bóc Bạch Liên Hoa, Vạch Mặt Trà Xanh" [ref=e259] [cursor=pointer]:
+                  - /url: https://truyenfull.live/mang-khong-gian-xuyen-ve-70-blogger-lam-dep-boc-bach-lien-hoa-vach-mat-tra-xanh/
+              - generic [ref=e260]: Full
+              - generic [ref=e261]: Hot
+            - generic [ref=e262]:
+              - link "Ngược" [ref=e263] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/nguoc/
+              - text: ","
+              - link "Khác" [ref=e264] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+            - link "Chương 836" [ref=e266] [cursor=pointer]:
+              - /url: https://truyenfull.live/mang-khong-gian-xuyen-ve-70-blogger-lam-dep-boc-bach-lien-hoa-vach-mat-tra-xanh/chuong-836/
+              - generic [ref=e267]: Chương
+              - text: "836"
+            - generic [ref=e268]: 2 ngày trước
+          - generic [ref=e269]:
+            - generic [ref=e270]:
+              - generic [ref=e271]: 
+              - heading [level=3] [ref=e272]:
+                - link "Đại Sư Huyền Môn Livestream, Cả Nhà Hào Môn Hối Hận" [ref=e273] [cursor=pointer]:
+                  - /url: https://truyenfull.live/dai-su-huyen-mon-livestream-ca-nha-hao-mon-hoi-han/
+              - generic [ref=e274]: Full
+              - generic [ref=e275]: Hot
+            - generic [ref=e276]:
+              - link "Nữ Cường" [ref=e277] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/nu-cuong/
+              - text: ","
+              - link "Khác" [ref=e278] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+            - link "Chương 1185" [ref=e280] [cursor=pointer]:
+              - /url: https://truyenfull.live/dai-su-huyen-mon-livestream-ca-nha-hao-mon-hoi-han/chuong-1185/
+              - generic [ref=e281]: Chương
+              - text: "1185"
+            - generic [ref=e282]: 2 ngày trước
+          - generic [ref=e283]:
+            - generic [ref=e284]:
+              - generic [ref=e285]: 
+              - heading [level=3] [ref=e286]:
+                - link "Nhật Ký Nuôi Nhóc Tì Của Quý Phi Cá Mặn" [ref=e287] [cursor=pointer]:
+                  - /url: https://truyenfull.live/nhat-ky-nuoi-nhoc-ti-cua-quy-phi-ca-man/
+              - generic [ref=e288]: Full
+              - generic [ref=e289]: Hot
+            - generic [ref=e290]:
+              - link "Cổ Đại" [ref=e291] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/co-dai/
+              - text: ","
+              - link "Khác" [ref=e292] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+            - link "Chương 237" [ref=e294] [cursor=pointer]:
+              - /url: https://truyenfull.live/nhat-ky-nuoi-nhoc-ti-cua-quy-phi-ca-man/chuong-237/
+              - generic [ref=e295]: Chương
+              - text: "237"
+            - generic [ref=e296]: 2 ngày trước
+          - generic [ref=e297]:
+            - generic [ref=e298]:
+              - generic [ref=e299]: 
+              - heading [level=3] [ref=e300]:
+                - link "Bà Chủ Tiệm Bánh Ngọt Xuyên Về Thập Niên 70 Làm Mẹ Kế Nuôi Con" [ref=e301] [cursor=pointer]:
+                  - /url: https://truyenfull.live/ba-chu-tiem-banh-ngot-xuyen-ve-thap-nien-70-lam-me-ke-nuoi-con/
+              - generic [ref=e302]: Full
+              - generic [ref=e303]: Hot
+            - generic [ref=e304]:
+              - link "Khác" [ref=e305] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Sủng" [ref=e306] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 280" [ref=e308] [cursor=pointer]:
+              - /url: https://truyenfull.live/ba-chu-tiem-banh-ngot-xuyen-ve-thap-nien-70-lam-me-ke-nuoi-con/chuong-280/
+              - generic [ref=e309]: Chương
+              - text: "280"
+            - generic [ref=e310]: 2 ngày trước
+          - generic [ref=e311]:
+            - generic [ref=e312]:
+              - generic [ref=e313]: 
+              - heading [level=3] [ref=e314]:
+                - link "Gả Cho Thư Sinh Bệnh Tật" [ref=e315] [cursor=pointer]:
+                  - /url: https://truyenfull.live/ga-cho-thu-sinh-benh-tat/
+              - generic [ref=e316]: Full
+              - generic [ref=e317]: Hot
+            - generic [ref=e318]:
+              - link "Khác" [ref=e319] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Sủng" [ref=e320] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 1110" [ref=e322] [cursor=pointer]:
+              - /url: https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-1110/
+              - generic [ref=e323]: Chương
+              - text: "1110"
+            - generic [ref=e324]: 2 ngày trước
+          - generic [ref=e325]:
+            - generic [ref=e326]:
+              - generic [ref=e327]: 
+              - heading [level=3] [ref=e328]:
+                - link "Kinh Sắc Dục Trụy (Sắc Kinh Sụp Đổ)" [ref=e329] [cursor=pointer]:
+                  - /url: https://truyenfull.live/kinh-sac-duc-truy-sac-kinh-sup-do/
+              - generic [ref=e330]: Full
+              - generic [ref=e331]: Hot
+            - generic [ref=e332]:
+              - link "Khác" [ref=e333] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Sủng" [ref=e334] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 257" [ref=e336] [cursor=pointer]:
+              - /url: https://truyenfull.live/kinh-sac-duc-truy-sac-kinh-sup-do/chuong-257/
+              - generic [ref=e337]: Chương
+              - text: "257"
+            - generic [ref=e338]: 2 ngày trước
+          - generic [ref=e339]:
+            - generic [ref=e340]:
+              - generic [ref=e341]: 
+              - heading [level=3] [ref=e342]:
+                - 'link "Hải Đảo Thập Niên 80: Chị Dâu Quân Nhân Cưỡi Sóng Đạp Gió" [ref=e343] [cursor=pointer]':
+                  - /url: https://truyenfull.live/hai-dao-thap-nien-80-chi-dau-quan-nhan-cuoi-song-dap-gio/
+              - generic [ref=e344]: Full
+              - generic [ref=e345]: Hot
+            - generic [ref=e346]:
+              - link "Khác" [ref=e347] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Sủng" [ref=e348] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+            - link "Chương 708" [ref=e350] [cursor=pointer]:
+              - /url: https://truyenfull.live/hai-dao-thap-nien-80-chi-dau-quan-nhan-cuoi-song-dap-gio/chuong-708/
+              - generic [ref=e351]: Chương
+              - text: "708"
+            - generic [ref=e352]: 2 ngày trước
+          - generic [ref=e353]:
+            - generic [ref=e354]:
+              - generic [ref=e355]: 
+              - heading [level=3] [ref=e356]:
+                - 'link "TN 70: Cô Cướp Chồng Tôi, Tôi Nuôi Anh Quân Nhân Nhà Cô" [ref=e357] [cursor=pointer]':
+                  - /url: https://truyenfull.live/tn-70-co-cuop-chong-toi-toi-nuoi-anh-quan-nhan-nha-co/
+              - generic [ref=e358]: New
+              - generic [ref=e359]: Full
+              - generic [ref=e360]: Hot
+            - generic [ref=e361]:
+              - link "Nữ Phụ" [ref=e362] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/nu-phu/
+              - text: ","
+              - link "Xuyên Sách" [ref=e363] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/xuyen-sach/
+            - link "Chương 627" [ref=e365] [cursor=pointer]:
+              - /url: https://truyenfull.live/tn-70-co-cuop-chong-toi-toi-nuoi-anh-quan-nhan-nha-co/chuong-627/
+              - generic [ref=e366]: Chương
+              - text: "627"
+            - generic [ref=e367]: 2 ngày trước
+          - generic [ref=e368]:
+            - generic [ref=e369]:
+              - generic [ref=e370]: 
+              - heading [level=3] [ref=e371]:
+                - link "Trùng Sinh Né Chậu Hoa" [ref=e372] [cursor=pointer]:
+                  - /url: https://truyenfull.live/trung-sinh-ne-chau-hoa/
+              - generic [ref=e373]: New
+              - generic [ref=e374]: Full
+            - generic [ref=e375]:
+              - link "Khác" [ref=e376] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e377] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 27" [ref=e379] [cursor=pointer]:
+              - /url: https://truyenfull.live/trung-sinh-ne-chau-hoa/chuong-27/
+              - generic [ref=e380]: Chương
+              - text: "27"
+            - generic [ref=e381]: 2 ngày trước
+          - generic [ref=e382]:
+            - generic [ref=e383]:
+              - generic [ref=e384]: 
+              - heading [level=3] [ref=e385]:
+                - link "Đứng Nhất Sau Khi Rời Đi" [ref=e386] [cursor=pointer]:
+                  - /url: https://truyenfull.live/dung-nhat-sau-khi-roi-di-free/
+              - generic [ref=e387]: New
+              - generic [ref=e388]: Full
+            - generic [ref=e389]:
+              - link "Khác" [ref=e390] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e391] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 10" [ref=e393] [cursor=pointer]:
+              - /url: https://truyenfull.live/dung-nhat-sau-khi-roi-di-free/chuong-10/
+              - generic [ref=e394]: Chương
+              - text: "10"
+            - generic [ref=e395]: 2 ngày trước
+          - generic [ref=e396]:
+            - generic [ref=e397]:
+              - generic [ref=e398]: 
+              - heading [level=3] [ref=e399]:
+                - link "Bài Học Cho Kẻ Gian" [ref=e400] [cursor=pointer]:
+                  - /url: https://truyenfull.live/bai-hoc-cho-ke-gian-free/
+              - generic [ref=e401]: New
+              - generic [ref=e402]: Full
+            - generic [ref=e403]:
+              - link "Khác" [ref=e404] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e405] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 8" [ref=e407] [cursor=pointer]:
+              - /url: https://truyenfull.live/bai-hoc-cho-ke-gian-free/chuong-8/
+              - generic [ref=e408]: Chương
+              - text: "8"
+            - generic [ref=e409]: 2 ngày trước
+          - generic [ref=e410]:
+            - generic [ref=e411]:
+              - generic [ref=e412]: 
+              - heading [level=3] [ref=e413]:
+                - 'link "Thập Niên 70: Thiên Kim Thật Phát Điên Khiến Cả Nhà Quỳ Xin Tha Thứ" [ref=e414] [cursor=pointer]':
+                  - /url: https://truyenfull.live/thap-nien-70-thien-kim-that-phat-dien-khien-ca-nha-quy-xin-tha-thu/
+              - generic [ref=e415]: Full
+              - generic [ref=e416]: Hot
+            - generic [ref=e417]:
+              - link "Sủng" [ref=e418] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+              - text: ","
+              - link "Cận Đại" [ref=e419] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/can-dai/
+            - link "Chương 387" [ref=e421] [cursor=pointer]:
+              - /url: https://truyenfull.live/thap-nien-70-thien-kim-that-phat-dien-khien-ca-nha-quy-xin-tha-thu/chuong-387/
+              - generic [ref=e422]: Chương
+              - text: "387"
+            - generic [ref=e423]: 2 ngày trước
+          - generic [ref=e424]:
+            - generic [ref=e425]:
+              - generic [ref=e426]: 
+              - heading [level=3] [ref=e427]:
+                - 'link "Thập Niên 70: Tiểu Thư Tư Bản Trọng Sinh Mang Song Thai Đến Quân Đội" [ref=e428] [cursor=pointer]':
+                  - /url: https://truyenfull.live/thap-nien-70-tieu-thu-tu-ban-trong-sinh-mang-song-thai-den-quan-doi/
+              - generic [ref=e429]: New
+              - generic [ref=e430]: Full
+              - generic [ref=e431]: Hot
+            - generic [ref=e432]:
+              - link "Sủng" [ref=e433] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+              - text: ","
+              - link "Cận Đại" [ref=e434] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/can-dai/
+            - link "Chương 996" [ref=e436] [cursor=pointer]:
+              - /url: https://truyenfull.live/thap-nien-70-tieu-thu-tu-ban-trong-sinh-mang-song-thai-den-quan-doi/chuong-996/
+              - generic [ref=e437]: Chương
+              - text: "996"
+            - generic [ref=e438]: 5 ngày trước
+          - generic [ref=e439]:
+            - generic [ref=e440]:
+              - generic [ref=e441]: 
+              - heading [level=3] [ref=e442]:
+                - 'link "Thập Niên 70: Quân Nhân Lạnh Lùng Bị Vợ Nhỏ Xinh Đẹp, Giỏi Y Thuật Thu Phục" [ref=e443] [cursor=pointer]':
+                  - /url: https://truyenfull.live/thap-nien-70-quan-nhan-lanh-lung-bi-vo-nho-xinh-dep-gioi-y-thuat-thu-phuc/
+              - generic [ref=e444]: Full
+              - generic [ref=e445]: Hot
+            - generic [ref=e446]:
+              - link "Sủng" [ref=e447] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+              - text: ","
+              - link "Cận Đại" [ref=e448] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/can-dai/
+            - link "Chương 548" [ref=e450] [cursor=pointer]:
+              - /url: https://truyenfull.live/thap-nien-70-quan-nhan-lanh-lung-bi-vo-nho-xinh-dep-gioi-y-thuat-thu-phuc/chuong-548/
+              - generic [ref=e451]: Chương
+              - text: "548"
+            - generic [ref=e452]: 5 ngày trước
+          - generic [ref=e453]:
+            - generic [ref=e454]:
+              - generic [ref=e455]: 
+              - heading [level=3] [ref=e456]:
+                - link "Sắc Xuân Tươi Đẹp - Vị Kiến Thanh Sơn Viễn" [ref=e457] [cursor=pointer]:
+                  - /url: https://truyenfull.live/sac-xuan-tuoi-dep-vi-kien-thanh-son-vien-free/
+              - generic [ref=e458]: New
+              - generic [ref=e459]: Full
+            - generic [ref=e460]:
+              - link "Sủng" [ref=e461] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e462] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 12" [ref=e464] [cursor=pointer]:
+              - /url: https://truyenfull.live/sac-xuan-tuoi-dep-vi-kien-thanh-son-vien-free/chuong-12/
+              - generic [ref=e465]: Chương
+              - text: "12"
+            - generic [ref=e466]: 5 ngày trước
+          - generic [ref=e467]:
+            - generic [ref=e468]:
+              - generic [ref=e469]: 
+              - heading [level=3] [ref=e470]:
+                - link "Thiên Kim Thật Biết Xem Tướng" [ref=e471] [cursor=pointer]:
+                  - /url: https://truyenfull.live/thien-kim-that-biet-xem-tuong-free/
+              - generic [ref=e472]: New
+              - generic [ref=e473]: Full
+            - generic [ref=e474]:
+              - link "Sủng" [ref=e475] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/sung/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e476] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 11" [ref=e478] [cursor=pointer]:
+              - /url: https://truyenfull.live/thien-kim-that-biet-xem-tuong-free/chuong-11/
+              - generic [ref=e479]: Chương
+              - text: "11"
+            - generic [ref=e480]: 5 ngày trước
+          - generic [ref=e481]:
+            - generic [ref=e482]:
+              - generic [ref=e483]: 
+              - heading [level=3] [ref=e484]:
+                - link "Vị Ngọt Sau Giông Bão" [ref=e485] [cursor=pointer]:
+                  - /url: https://truyenfull.live/vi-ngot-sau-giong-bao-free/
+              - generic [ref=e486]: New
+              - generic [ref=e487]: Full
+            - generic [ref=e488]:
+              - link "Khác" [ref=e489] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e490] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 14" [ref=e492] [cursor=pointer]:
+              - /url: https://truyenfull.live/vi-ngot-sau-giong-bao-free/chuong-14/
+              - generic [ref=e493]: Chương
+              - text: "14"
+            - generic [ref=e494]: 5 ngày trước
+          - generic [ref=e495]:
+            - generic [ref=e496]:
+              - generic [ref=e497]: 
+              - heading [level=3] [ref=e498]:
+                - link "Bát Yến Sào Đoạt Mạng" [ref=e499] [cursor=pointer]:
+                  - /url: https://truyenfull.live/bat-yen-sao-doat-mang-free/
+              - generic [ref=e500]: New
+              - generic [ref=e501]: Full
+            - generic [ref=e502]:
+              - link "Khác" [ref=e503] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/khac/
+              - text: ","
+              - link "Truyện Ngắn" [ref=e504] [cursor=pointer]:
+                - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Chương 9" [ref=e506] [cursor=pointer]:
+              - /url: https://truyenfull.live/bat-yen-sao-doat-mang-free/chuong-9/
+              - generic [ref=e507]: Chương
+              - text: "9"
+            - generic [ref=e508]: 5 ngày trước
+        - generic [ref=e510]:
+          - heading "Thể loại truyện" [level=2] [ref=e512]
+          - generic [ref=e513]:
+            - link "Truyện sáng tác" [ref=e515] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/truyen-sang-tac/
+            - link "Tiên Hiệp" [ref=e517] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/tien-hiep/
+            - link "Kiếm Hiệp" [ref=e519] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/kiem-hiep/
+            - link "Ngôn Tình" [ref=e521] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/ngon-tinh/
+            - link "Đam Mỹ" [ref=e523] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/dam-my/
+            - link "Quan Trường" [ref=e525] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/quan-truong/
+            - link "Chủ công" [ref=e527] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/chu-cong/
+            - link "Võng Du" [ref=e529] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/vong-du/
+            - link "Khoa Huyễn" [ref=e531] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/khoa-huyen/
+            - link "Hệ Thống" [ref=e533] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/he-thong/
+            - link "Huyền Huyễn" [ref=e535] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/huyen-huyen/
+            - link "Dị Giới" [ref=e537] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/di-gioi/
+            - link "Dị Năng" [ref=e539] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/di-nang/
+            - link "Quân Sự" [ref=e541] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/quan-su/
+            - link "Lịch Sử" [ref=e543] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/lich-su/
+            - link "Xuyên Không" [ref=e545] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/xuyen-khong/
+            - link "Xuyên Sách" [ref=e547] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/xuyen-sach/
+            - link "Xuyên Nhanh" [ref=e549] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/xuyen-nhanh/
+            - link "Cận Đại" [ref=e551] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/can-dai/
+            - link "Trọng Sinh" [ref=e553] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/trong-sinh/
+            - link "Trinh Thám" [ref=e555] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/trinh-tham/
+            - link "Thám Hiểm" [ref=e557] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/tham-hiem/
+            - link "Linh Dị" [ref=e559] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/linh-di/
+            - link "Ngược" [ref=e561] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/nguoc/
+            - link "Sủng" [ref=e563] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/sung/
+            - link "Cung Đấu" [ref=e565] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/cung-dau/
+            - link "Nữ Cường" [ref=e567] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/nu-cuong/
+            - link "Gia Đấu" [ref=e569] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/gia-dau/
+            - link "Đông Phương" [ref=e571] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/dong-phuong/
+            - link "Đô Thị" [ref=e573] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/do-thi/
+            - link "Bách Hợp" [ref=e575] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/bach-hop/
+            - link "Hài Hước" [ref=e577] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/hai-huoc/
+            - link "Điền Văn" [ref=e579] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/dien-van/
+            - link "Cổ Đại" [ref=e581] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/co-dai/
+            - link "Mạt Thế" [ref=e583] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/mat-the/
+            - link "Truyện Teen" [ref=e585] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/truyen-teen/
+            - link "Phương Tây" [ref=e587] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/phuong-tay/
+            - link "Nữ Phụ" [ref=e589] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/nu-phu/
+            - link "Light Novel" [ref=e591] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/light-novel/
+            - link "Việt Nam" [ref=e593] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/viet-nam/
+            - link "Tương Lai" [ref=e595] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/tuong-lai/
+            - link "Giải Trí" [ref=e597] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/giai-tri/
+            - link "Đoản Văn" [ref=e599] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/doan-van/
+            - link "Review sách" [ref=e601] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/review-sach/
+            - link "Truyện Ngắn" [ref=e603] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/truyen-ngan/
+            - link "Khác" [ref=e605] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/khac/
+      - generic [ref=e608]:
+        - generic [ref=e609]:
+          - heading [level=2] [ref=e610]:
+            - link "Truyện đã hoàn thành" [ref=e611] [cursor=pointer]:
+              - /url: https://truyenfull.live/danh-sach/truyen-full/
+          - link "" [ref=e612] [cursor=pointer]:
+            - /url: https://truyenfull.live/danh-sach/truyen-full/
+        - generic [ref=e614]:
+          - link [ref=e616] [cursor=pointer]:
+            - /url: https://truyenfull.live/nang-khong-muon-lam-hoang-hau/
+            - generic [ref=e618]:
+              - heading "Nàng Không Muốn Làm Hoàng Hậu" [level=3] [ref=e619]
+              - text: Full - 80 chương
+          - link [ref=e621] [cursor=pointer]:
+            - /url: https://truyenfull.live/vu-than/
+            - generic [ref=e623]:
+              - heading "Vũ Thần" [level=3] [ref=e624]
+              - text: Full - 1308 chương
+          - link [ref=e626] [cursor=pointer]:
+            - /url: https://truyenfull.live/thien-giang-lan-nhi-chi-thien-y-vo-phung/
+            - generic [ref=e628]:
+              - heading "Thiên Giáng Lân Nhi Chi Thiên Y Vô Phùng" [level=3] [ref=e629]
+              - text: Full - 3 chương
+          - link [ref=e631] [cursor=pointer]:
+            - /url: https://truyenfull.live/ta-la-minh-tue/
+            - generic [ref=e633]:
+              - heading "Ta là Minh Tuệ" [level=3] [ref=e634]
+              - text: Full - 47 chương
+          - link [ref=e636] [cursor=pointer]:
+            - /url: https://truyenfull.live/cuoc-hon-nhan-ep-buoc/
+            - generic [ref=e638]:
+              - heading "[Fairy Tail][Nalu] Cuộc Hôn Nhân Ép Buộc" [level=3] [ref=e639]
+              - text: Full - 50 chương
+          - link [ref=e641] [cursor=pointer]:
+            - /url: https://truyenfull.live/ngai-meo-liem-ban-chan-mot-cach-lanh-lung/
+            - generic [ref=e643]:
+              - heading "Ngài Mèo Liếm Bàn Chân Một Cách Lạnh Lùng" [level=3] [ref=e644]
+              - text: Full - 9 chương
+          - link [ref=e646] [cursor=pointer]:
+            - /url: https://truyenfull.live/tu-tu-suy-ly/
+            - generic [ref=e648]:
+              - heading "Từ Từ Suy Lý" [level=3] [ref=e649]
+              - text: Full - 66 chương
+          - link [ref=e651] [cursor=pointer]:
+            - /url: https://truyenfull.live/giai-giap-bat-dieu-khan-tuyet/
+            - generic [ref=e653]:
+              - heading "Giải Giáp - Bát Điều Khán Tuyết" [level=3] [ref=e654]
+              - text: Full - 178 chương
+          - link [ref=e656] [cursor=pointer]:
+            - /url: https://truyenfull.live/nhat-ky-lam-bo/
+            - generic [ref=e658]:
+              - heading "Nhật Ký Làm Bố" [level=3] [ref=e659]
+              - text: Full - 13 chương
+          - link [ref=e661] [cursor=pointer]:
+            - /url: https://truyenfull.live/xac-chet-loan-giang-ho/
+            - generic [ref=e663]:
+              - heading "Xác Chết Loạn Giang Hồ" [level=3] [ref=e664]
+              - text: Full - 177 chương
+          - link [ref=e666] [cursor=pointer]:
+            - /url: https://truyenfull.live/am-tran-tuyet/
+            - generic [ref=e668]:
+              - heading "Âm Trần Tuyệt" [level=3] [ref=e669]
+              - text: Full - 34 chương
+          - link [ref=e671] [cursor=pointer]:
+            - /url: https://truyenfull.live/hoa-linh-lan/
+            - generic [ref=e673]:
+              - heading "Hoa Linh Lan" [level=3] [ref=e674]
+              - text: Full - 15 chương
+          - link [ref=e676] [cursor=pointer]:
+            - /url: https://truyenfull.live/mat-na-tra-xanh/
+            - generic [ref=e678]:
+              - heading "\"Mặt Nạ\" Trà Xanh" [level=3] [ref=e679]
+              - text: Full - 3 chương
+          - link [ref=e681] [cursor=pointer]:
+            - /url: https://truyenfull.live/dac-quyen-cua-thu-truong/
+            - generic [ref=e683]:
+              - heading "Đặc Quyền Của Thủ Trưởng" [level=3] [ref=e684]
+              - text: Full - 20 chương
+          - link [ref=e686] [cursor=pointer]:
+            - /url: https://truyenfull.live/coc-ghe-thit-thien-nga/
+            - generic [ref=e688]:
+              - heading "Cóc Ghẻ Thịt Thiên Nga" [level=3] [ref=e689]
+              - text: Full - 36 chương
+          - link [ref=e691] [cursor=pointer]:
+            - /url: https://truyenfull.live/yeu-nghiet-buong-tha-ta/
+            - generic [ref=e693]:
+              - heading "Yêu Nghiệt, Buông Tha Ta" [level=3] [ref=e694]
+              - text: Full - 43 chương
+          - link [ref=e696] [cursor=pointer]:
+            - /url: https://truyenfull.live/tro-ve-nhung-nam-60-nu-thanh-nien-tri-thuc-mang-theo-khong-gian-nghich-thien/
+            - generic [ref=e698]:
+              - 'heading "Trở Về Những Năm 60: Nữ Thanh Niên Tri Thức Mang Theo Không Gian Nghịch Thiên" [level=3] [ref=e699]'
+              - text: Full - 596 chương
+          - link [ref=e701] [cursor=pointer]:
+            - /url: https://truyenfull.live/gia-yeu-thanh-that/
+            - generic [ref=e703]:
+              - heading "Giả Yêu Thành Thật" [level=3] [ref=e704]
+              - text: Full - 220 chương
+      - generic [ref=e706]:
+        - generic [ref=e707]:
+          - heading [level=2] [ref=e708]:
+            - link "Truyện sáng tác" [ref=e709] [cursor=pointer]:
+              - /url: https://truyenfull.live/the-loai/truyen-sang-tac/
+          - link "" [ref=e710] [cursor=pointer]:
+            - /url: https://truyenfull.live/the-loai/truyen-sang-tac/
+        - generic [ref=e712]:
+          - link [ref=e714] [cursor=pointer]:
+            - /url: https://truyenfull.live/thu-ly-hon-gui-lai-mua-xuan-truyenfull/
+            - generic [ref=e716]:
+              - heading "Thư Ly Hôn Gửi Lại Mùa Xuân" [level=3] [ref=e717]
+              - text: Full - 24 chương
+          - link [ref=e719] [cursor=pointer]:
+            - /url: https://truyenfull.live/chiec-ghe-thua-trong-hon-thu-truyenfull/
+            - generic [ref=e721]:
+              - heading "Chiếc Ghế Thừa Trong Hôn Thư" [level=3] [ref=e722]
+              - text: Full - 22 chương
+          - link [ref=e724] [cursor=pointer]:
+            - /url: https://truyenfull.live/ta-chep-lai-ket-cuc-cua-ke-qua-duong-truyenfull/
+            - generic [ref=e726]:
+              - heading "Ta Chép Lại Kết Cục Của Kẻ Qua Đường" [level=3] [ref=e727]
+              - text: Full - 20 chương
+          - link [ref=e729] [cursor=pointer]:
+            - /url: https://truyenfull.live/tuyen-hoa-xa-qua-hem-nui-truyenfull/
+            - generic [ref=e731]:
+              - heading "Tuyến Hỏa Xa Qua Hẻm Núi" [level=3] [ref=e732]
+              - text: Full - 25 chương
+          - link [ref=e734] [cursor=pointer]:
+            - /url: https://truyenfull.live/mua-trang-co-ba-duong-kiem-truyenfull/
+            - generic [ref=e736]:
+              - heading "Mùa Trăng Có Ba Đường Kiếm" [level=3] [ref=e737]
+              - text: Full - 23 chương
+          - link [ref=e739] [cursor=pointer]:
+            - /url: https://truyenfull.live/gia-pha-ben-kia-buc-binh-phong-truyenfull/
+            - generic [ref=e741]:
+              - heading "Gia Phả Bên Kia Bức Bình Phong" [level=3] [ref=e742]
+              - text: Full - 25 chương
+          - link [ref=e744] [cursor=pointer]:
+            - /url: https://truyenfull.live/nguoi-chon-duong-cho-chinh-minh-truyenfull/
+            - generic [ref=e746]:
+              - heading "Người Chọn Đường Cho Chính Mình" [level=3] [ref=e747]
+              - text: Full - 25 chương
+          - link [ref=e749] [cursor=pointer]:
+            - /url: https://truyenfull.live/tieng-go-sau-tuong-gach-truyenfull/
+            - generic [ref=e751]:
+              - heading "Tiếng Gõ Sau Tường Gạch" [level=3] [ref=e752]
+              - text: Full - 24 chương
+          - link [ref=e754] [cursor=pointer]:
+            - /url: https://truyenfull.live/tau-chuong-cua-huyen-lenh-tan-nham-truyenfull/
+            - generic [ref=e756]:
+              - heading "Tấu Chương Của Huyện Lệnh Tân Nhậm" [level=3] [ref=e757]
+              - text: Full - 22 chương
+          - link [ref=e759] [cursor=pointer]:
+            - /url: https://truyenfull.live/duong-ke-tren-toa-nha-sap-do-truyenfull/
+            - generic [ref=e761]:
+              - heading "Đường Kẻ Trên Tòa Nhà Sắp Đổ" [level=3] [ref=e762]
+              - text: Full - 21 chương
+          - link [ref=e764] [cursor=pointer]:
+            - /url: https://truyenfull.live/hao-quang-vi-tao-thap-lai-vom-may-truyenfull-ai-free/
+            - generic [ref=e766]:
+              - heading "Ly Hôn Sau Cơn Mưa" [level=3] [ref=e767]
+              - text: Full - 32 chương
+  - generic [ref=e770]:
+    - heading "Truyenfull – Đọc Truyện Online, Truyện Chữ Hay, Truyện Full Miễn Phí" [level=2] [ref=e771]
+    - paragraph [ref=e772]:
+      - strong [ref=e773]: Truyenfull
+      - text: là điểm đến dành cho những người yêu thích đọc truyện online, nơi bạn có thể khám phá
+      - link "thế giới truyện chữ" [ref=e774] [cursor=pointer]:
+        - /url: https://truyenfull.live/
+      - text: phong phú với nhiều thể loại hấp dẫn như
+      - link "ngôn tình" [ref=e775] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/ngon-tinh/
+      - text: ","
+      - link "tiên hiệp" [ref=e776] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/tien-hiep/
+      - text: ","
+      - link "kiếm hiệp" [ref=e777] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/kiem-hiep/
+      - text: ","
+      - link "huyền huyễn" [ref=e778] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/huyen-huyen/
+      - text: ","
+      - link "đô thị" [ref=e779] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/do-thi/
+      - text: ","
+      - link "xuyên không" [ref=e780] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/xuyen-khong/
+      - text: ","
+      - link "trọng sinh" [ref=e781] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/trong-sinh/
+      - text: ", lịch sử, quân sự và nhiều dòng truyện đặc sắc khác. Tại"
+      - strong [ref=e782]:
+        - link "Truyenfull.live" [ref=e783] [cursor=pointer]:
+          - /url: https://truyenfull.live/
+      - text: ", độc giả có thể tìm kiếm những bộ truyện yêu thích, theo dõi các chương mới và tận hưởng những câu chuyện thú vị ngay trên điện thoại, máy tính bảng hoặc máy tính."
+    - paragraph [ref=e784]: Dù bạn yêu thích những câu chuyện tình yêu ngọt ngào, những màn đấu trí đầy kịch tính, hành trình tu luyện vượt qua nghịch cảnh hay những cuộc phiêu lưu kỳ ảo, Truyenfull mang đến nhiều lựa chọn phù hợp với sở thích đọc truyện của bạn.
+    - heading "Truyenfull – Khám Phá Thế Giới Truyện Chữ Đa Dạng" [level=2] [ref=e785]
+    - paragraph [ref=e786]: Đọc truyện không chỉ là một hình thức giải trí mà còn là cách để mỗi người bước vào những thế giới mới, trải nghiệm cuộc sống qua góc nhìn của các nhân vật và khám phá những câu chuyện giàu cảm xúc.
+    - paragraph [ref=e787]: Với những người yêu thích truyện chữ, việc tìm được một bộ truyện hay, có nội dung cuốn hút và phù hợp với sở thích luôn là điều quan trọng. Truyenfull hướng đến việc giúp độc giả khám phá nhiều tác phẩm thuộc các thể loại khác nhau, từ những bộ truyện nhẹ nhàng, hài hước đến những câu chuyện có tình tiết phức tạp, nhiều nút thắt bất ngờ.
+    - paragraph [ref=e788]:
+      - text: Tại Truyenfull, bạn có thể lựa chọn đọc những bộ
+      - link "truyện đã hoàn thành" [ref=e789] [cursor=pointer]:
+        - /url: https://truyenfull.live/danh-sach/truyen-full/
+      - text: để thưởng thức trọn vẹn nội dung hoặc theo dõi những tác phẩm đang được cập nhật để cùng chờ đợi diễn biến tiếp theo.
+    - heading "Đọc Truyện Full – Thưởng Thức Trọn Vẹn Những Câu Chuyện Hay" [level=3] [ref=e790]
+    - paragraph [ref=e791]:
+      - strong [ref=e792]:
+        - link "Truyện full" [ref=e793] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-full/
+      - text: là lựa chọn yêu thích của nhiều độc giả bởi toàn bộ nội dung chính của tác phẩm đã được hoàn thành. Người đọc có thể theo dõi câu chuyện từ chương đầu tiên đến chương cuối cùng mà không phải chờ đợi tác giả hoặc người dịch cập nhật chương mới.
+    - paragraph [ref=e794]: Những bộ truyện hoàn thành đặc biệt phù hợp với độc giả thích đọc liên tục, muốn nắm bắt toàn bộ diễn biến cốt truyện và khám phá kết thúc của các nhân vật.
+    - paragraph [ref=e795]:
+      - text: Từ
+      - link "truyện ngôn tình" [ref=e796] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/ngon-tinh/
+      - text: hiện đại, cổ đại đến
+      - link "tiên hiệp" [ref=e797] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/tien-hiep/
+      - text: ","
+      - link "huyền huyễn" [ref=e798] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/huyen-huyen/
+      - text: ","
+      - link "kiếm hiệp" [ref=e799] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/kiem-hiep/
+      - text: hay
+      - link "đô thị" [ref=e800] [cursor=pointer]:
+        - /url: https://truyenfull.live/the-loai/do-thi/
+      - text: ", mỗi thể loại đều có những tác phẩm hoàn thành đáng để khám phá."
+    - heading "Đọc Truyện Online – Theo Dõi Những Chương Truyện Mới" [level=3] [ref=e801]
+    - paragraph [ref=e802]: Bên cạnh truyện đã hoàn thành, các bộ truyện đang ra cũng mang đến sức hấp dẫn riêng. Việc chờ đợi chương mới, dự đoán tình tiết và theo dõi sự phát triển của nhân vật tạo nên trải nghiệm thú vị đối với những người yêu thích đọc truyện dài kỳ.
+    - paragraph [ref=e803]: Truyenfull giúp độc giả tìm kiếm và theo dõi những câu chuyện đang được cập nhật, từ đó dễ dàng lựa chọn tác phẩm phù hợp với thời gian và thói quen đọc của mình.
+    - heading "Các Thể Loại Truyện Được Yêu Thích Tại Truyenfull" [level=2] [ref=e804]
+    - paragraph [ref=e805]: Thế giới truyện chữ vô cùng rộng lớn, với nhiều thể loại đáp ứng sở thích đa dạng của độc giả. Dưới đây là những dòng truyện phổ biến mà bạn có thể khám phá.
+    - heading "Truyện Ngôn Tình – Những Câu Chuyện Tình Yêu Đầy Cảm Xúc" [level=3] [ref=e806]
+    - paragraph [ref=e807]:
+      - strong [ref=e808]:
+        - link "Truyện ngôn tình" [ref=e809] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/ngon-tinh/
+      - text: luôn có sức hút đặc biệt nhờ những câu chuyện tình yêu lãng mạn, sâu sắc và giàu cảm xúc. Các tác phẩm ngôn tình thường xoay quanh hành trình gặp gỡ, yêu thương, chia xa và trưởng thành của các nhân vật.
+    - paragraph [ref=e810]: Độc giả có thể lựa chọn nhiều dòng truyện như ngôn tình hiện đại, ngôn tình cổ đại, thanh xuân vườn trường, tổng tài, cưới trước yêu sau, hào môn thế gia, tình yêu chữa lành hoặc những câu chuyện tình cảm có yếu tố quyền mưu.
+    - paragraph [ref=e811]: Mỗi tác phẩm mang đến một sắc thái riêng, từ nhẹ nhàng, ngọt ngào đến day dứt, kịch tính.
+    - heading "Truyện Tiên Hiệp – Hành Trình Tu Luyện Và Khám Phá Tiên Giới" [level=3] [ref=e812]
+    - paragraph [ref=e813]:
+      - strong [ref=e814]:
+        - link "Truyện tiên hiệp" [ref=e815] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/tien-hiep/
+      - text: đưa người đọc bước vào thế giới tu chân rộng lớn, nơi các nhân vật trải qua hành trình tu luyện, vượt qua thiên kiếp, khám phá bí cảnh và theo đuổi con đường trường sinh.
+    - paragraph [ref=e816]: Điểm hấp dẫn của thể loại này nằm ở hệ thống cảnh giới, công pháp, pháp bảo, linh thú cùng những cuộc đối đầu giữa các thế lực.
+    - paragraph [ref=e817]: Những bộ truyện tiên hiệp thường có thế giới quan đồ sộ, hành trình phát triển nhân vật kéo dài và nhiều tình tiết bất ngờ.
+    - heading "Truyện Kiếm Hiệp – Giang Hồ, Võ Công Và Nghĩa Khí" [level=3] [ref=e818]
+    - paragraph [ref=e819]:
+      - strong [ref=e820]:
+        - link "Truyện kiếm hiệp" [ref=e821] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/kiem-hiep/
+      - text: mang đến thế giới giang hồ đầy ân oán, nơi những cao thủ võ lâm tranh đấu, các môn phái đối đầu và những nhân vật anh hùng theo đuổi lý tưởng riêng.
+    - paragraph [ref=e822]: Sức hấp dẫn của truyện kiếm hiệp không chỉ đến từ những trận chiến võ công mà còn nằm ở tình bằng hữu, nghĩa khí, tình yêu và những lựa chọn giữa danh lợi với đạo nghĩa.
+    - paragraph [ref=e823]: Đây là thể loại phù hợp với độc giả yêu thích những cuộc phiêu lưu, hành trình trưởng thành và tinh thần hiệp nghĩa.
+    - heading "Truyện Huyền Huyễn – Thế Giới Kỳ Ảo Không Giới Hạn" [level=3] [ref=e824]
+    - paragraph [ref=e825]:
+      - strong [ref=e826]:
+        - link "Truyện huyền huyễn" [ref=e827] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/huyen-huyen/
+      - text: nổi bật với những thế giới tưởng tượng rộng lớn, hệ thống sức mạnh độc đáo và các chủng tộc, sinh vật kỳ bí.
+    - paragraph [ref=e828]: Trong truyện huyền huyễn, nhân vật có thể bước vào những đại lục xa lạ, khám phá di tích cổ xưa, chiến đấu với ma thú hoặc đối đầu những thế lực sở hữu sức mạnh phi thường.
+    - paragraph [ref=e829]: Sự sáng tạo trong xây dựng thế giới là một trong những yếu tố khiến thể loại này được nhiều độc giả yêu thích.
+    - heading "Truyện Đô Thị – Những Câu Chuyện Giữa Cuộc Sống Hiện Đại" [level=3] [ref=e830]
+    - paragraph [ref=e831]:
+      - strong [ref=e832]:
+        - link "Truyện đô thị" [ref=e833] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/do-thi/
+      - text: lấy bối cảnh xã hội hiện đại, kết hợp nhiều yếu tố như tình cảm, kinh doanh, gia đình, sự nghiệp, cạnh tranh quyền lực và những biến cố trong cuộc sống.
+    - paragraph [ref=e834]: Nhân vật chính có thể là một người bình thường từng bước thay đổi số phận, một doanh nhân đối mặt với thương trường hoặc một người sở hữu năng lực đặc biệt giữa thế giới hiện đại.
+    - paragraph [ref=e835]: Thể loại này hấp dẫn nhờ bối cảnh gần gũi, tiết tấu nhanh và những tình huống giàu kịch tính.
+    - heading "Truyện Xuyên Không Và Trọng Sinh – Cơ Hội Thay Đổi Số Phận" [level=3] [ref=e836]
+    - paragraph [ref=e837]:
+      - strong [ref=e838]:
+        - link "Truyện xuyên không" [ref=e839] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/xuyen-khong/
+      - text: kể về những nhân vật bất ngờ bước sang một thời đại hoặc thế giới khác. Từ cuộc sống hiện đại trở về cổ đại, xuyên vào tiểu thuyết hay xuất hiện trong một thế giới giả tưởng, mỗi hành trình đều mở ra những thử thách mới.
+    - paragraph [ref=e840]:
+      - text: Trong khi đó,
+      - strong [ref=e841]: truyện trọng sinh
+      - text: thường xoay quanh nhân vật có cơ hội sống lại, quay về quá khứ hoặc bắt đầu một cuộc đời mới với ký ức và kinh nghiệm từ kiếp trước.
+    - paragraph [ref=e842]: Hai thể loại này đặc biệt hấp dẫn bởi những tình huống đảo ngược số phận, đấu trí, trả thù, xây dựng sự nghiệp và tìm kiếm hạnh phúc.
+    - heading "Truyện Lịch Sử, Quân Sự Và Quyền Mưu" [level=3] [ref=e843]
+    - paragraph [ref=e844]: Nếu yêu thích những cuộc đấu trí căng thẳng, âm mưu chính trị và tranh đoạt quyền lực, độc giả có thể khám phá các bộ truyện lịch sử, quân sự hoặc quyền mưu.
+    - paragraph [ref=e845]: Những tác phẩm thuộc nhóm này thường khai thác cuộc chiến giữa các thế lực, sự biến động của triều đình, chiến lược quân sự và những lựa chọn có thể thay đổi vận mệnh của cả một quốc gia.
+    - paragraph [ref=e846]: Sức hấp dẫn đến từ cách xây dựng nhân vật, diễn biến chính trị phức tạp và những tình tiết đòi hỏi người đọc phải suy luận.
+    - heading "Cách Tìm Truyện Hay Phù Hợp Với Sở Thích" [level=2] [ref=e847]
+    - paragraph [ref=e848]: Giữa số lượng lớn tác phẩm, việc lựa chọn một bộ truyện phù hợp đôi khi không hề đơn giản. Để có trải nghiệm đọc truyện tốt hơn, bạn có thể bắt đầu bằng việc xác định thể loại yêu thích.
+    - paragraph [ref=e849]: Nếu muốn tìm một câu chuyện tình cảm nhẹ nhàng, ngôn tình hoặc truyện thanh xuân có thể là lựa chọn phù hợp. Nếu yêu thích những hành trình dài với thế giới rộng lớn, tiên hiệp và huyền huyễn là những thể loại đáng cân nhắc.
+    - paragraph [ref=e850]: Với độc giả yêu thích những màn đấu trí, truyện quyền mưu, lịch sử hoặc trinh thám có thể mang đến nhiều trải nghiệm thú vị. Trong khi đó, truyện đô thị, trọng sinh và xuyên không thường phù hợp với những người thích tình tiết nhanh, nhiều biến cố và hành trình thay đổi số phận.
+    - paragraph [ref=e851]: Ngoài thể loại, bạn cũng nên tham khảo phần giới thiệu nội dung, tình trạng hoàn thành và danh sách chương để lựa chọn tác phẩm phù hợp với thời gian đọc của mình.
+    - heading "Trải Nghiệm Đọc Truyện Chữ Trên Điện Thoại Và Máy Tính" [level=2] [ref=e852]
+    - paragraph [ref=e853]: Một trong những ưu điểm của đọc truyện online là sự linh hoạt. Chỉ với một thiết bị có kết nối Internet, độc giả có thể tìm kiếm và thưởng thức các tác phẩm yêu thích ở nhiều thời điểm khác nhau.
+    - paragraph [ref=e854]: Đọc truyện trên điện thoại phù hợp với những khoảng thời gian nghỉ ngơi ngắn, trong khi máy tính hoặc máy tính bảng mang đến không gian hiển thị rộng rãi hơn cho những buổi đọc dài.
+    - paragraph [ref=e855]: Để việc đọc truyện thoải mái hơn, bạn nên lựa chọn môi trường đủ ánh sáng, duy trì khoảng cách phù hợp với màn hình và nghỉ ngơi định kỳ khi đọc trong thời gian dài.
+    - heading "Vì Sao Nên Khám Phá Truyện Tại Truyenfull?" [level=2] [ref=e856]
+    - paragraph [ref=e857]: Truyenfull hướng đến việc tạo ra không gian khám phá truyện chữ dành cho những độc giả có sở thích khác nhau.
+    - paragraph [ref=e858]: Từ những câu chuyện tình yêu lãng mạn đến các cuộc phiêu lưu kỳ ảo, từ hành trình tu luyện đến những màn tranh đoạt quyền lực, mỗi thể loại đều mang đến một thế giới riêng.
+    - paragraph [ref=e859]: Độc giả có thể tìm kiếm những bộ truyện đã hoàn thành để đọc liền mạch hoặc theo dõi các tác phẩm đang ra để khám phá những diễn biến mới.
+    - paragraph [ref=e860]: Không chỉ là nơi tìm kiếm những câu chuyện giải trí, Truyenfull còn là điểm khởi đầu cho hành trình khám phá các nhân vật, bối cảnh và thế giới tưởng tượng được xây dựng qua từng trang truyện.
+    - heading "Câu Hỏi Thường Gặp Khi Đọc Truyện Trên Truyenfull" [level=2] [ref=e861]
+    - heading "Truyenfull là gì?" [level=3] [ref=e862]
+    - paragraph [ref=e863]: Truyenfull là website đọc truyện chữ online, nơi độc giả có thể tìm kiếm và khám phá nhiều tác phẩm thuộc các thể loại như ngôn tình, tiên hiệp, kiếm hiệp, huyền huyễn, đô thị, xuyên không và trọng sinh.
+    - heading "Truyện full và truyện đang ra khác nhau như thế nào?" [level=3] [ref=e864]
+    - paragraph [ref=e865]: Truyện full là tác phẩm đã hoàn thành nội dung chính, cho phép độc giả theo dõi toàn bộ câu chuyện. Truyện đang ra là tác phẩm vẫn tiếp tục được cập nhật thêm chương mới.
+    - heading "Nên bắt đầu đọc truyện từ thể loại nào?" [level=3] [ref=e866]
+    - paragraph [ref=e867]: Điều này phụ thuộc vào sở thích của từng người. Nếu yêu thích tình cảm, bạn có thể bắt đầu với ngôn tình. Nếu thích phiêu lưu và thế giới kỳ ảo, hãy thử tiên hiệp hoặc huyền huyễn. Nếu thích đấu trí, truyện quyền mưu và trinh thám là những lựa chọn đáng khám phá.
+    - heading "Có thể đọc Truyenfull trên điện thoại không?" [level=3] [ref=e868]
+    - paragraph [ref=e869]: Bạn có thể truy cập website Truyenfull.live bằng trình duyệt trên điện thoại, máy tính bảng hoặc máy tính để tìm kiếm và đọc các tác phẩm yêu thích.
+    - heading "Làm thế nào để tìm truyện đã hoàn thành?" [level=3] [ref=e870]
+    - paragraph [ref=e871]:
+      - text: Bạn có thể tìm kiếm những tác phẩm có trạng thái hoàn thành hoặc truy cập các danh sách
+      - link "truyện full" [ref=e872] [cursor=pointer]:
+        - /url: https://truyenfull.live/danh-sach/truyen-full/
+      - text: được website cung cấp để lựa chọn bộ truyện phù hợp.
+    - heading "Truyenfull – Cùng Khám Phá Những Câu Chuyện Hấp Dẫn" [level=2] [ref=e873]
+    - paragraph [ref=e874]: Mỗi câu chuyện đều mở ra một hành trình riêng, nơi người đọc có thể gặp gỡ những nhân vật đáng nhớ, trải nghiệm những cung bậc cảm xúc và khám phá các thế giới mới qua từng chương truyện.
+    - paragraph [ref=e875]:
+      - text: Dù bạn đang tìm kiếm
+      - strong [ref=e876]:
+        - link "truyện full hay" [ref=e877] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-full/
+      - text: ", muốn"
+      - strong [ref=e878]:
+        - link "đọc truyện ngôn tình" [ref=e879] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/ngon-tinh/
+      - text: ", khám phá những bộ"
+      - strong [ref=e880]:
+        - link "truyện tiên hiệp hấp dẫn" [ref=e881] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/tien-hiep/
+      - text: hay theo dõi các
+      - link "chương truyện mới" [ref=e882] [cursor=pointer]:
+        - /url: https://truyenfull.live/danh-sach/truyen-moi/
+      - text: ", Truyenfull mang đến nhiều lựa chọn để bạn bắt đầu hành trình đọc của mình."
+    - paragraph [ref=e883]:
+      - text: Hãy truy cập
+      - strong [ref=e884]: Truyenfull.live
+      - text: để khám phá thế giới truyện chữ online và tìm cho mình những câu chuyện yêu thích.
+  - generic [ref=e886]:
+    - generic [ref=e887]:
+      - text: "Liên hệ:"
+      - link "contact@truyenfull.live" [ref=e888] [cursor=pointer]:
+        - /url: mailto:contact@truyenfull.live
+    - generic [ref=e889]:
+      - heading "Truyenfull – Đọc Truyện Full, Truyện Chữ Online" [level=2] [ref=e890]
+      - paragraph [ref=e891]: Truyenfull.live là website đọc truyện chữ online, nơi độc giả có thể khám phá nhiều tác phẩm thuộc các thể loại như ngôn tình, tiên hiệp, kiếm hiệp, huyền huyễn, đô thị, xuyên không, trọng sinh, đam mỹ và truyện cổ đại. Từ những bộ truyện đã hoàn thành đến các tác phẩm đang cập nhật chương mới, Truyenfull mang đến nhiều lựa chọn giải trí dành cho người yêu thích truyện chữ.
+      - paragraph [ref=e892]:
+        - strong [ref=e893]: "Khám phá truyện:"
+        - link "Truyện mới cập nhật" [ref=e894] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-moi/
+        - text: "|"
+        - link "Truyện Full" [ref=e895] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-full/
+        - text: "|"
+        - link "Truyện Hot" [ref=e896] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-hot/
+        - text: "|"
+        - link "Truyện sáng tác" [ref=e897] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/truyen-sang-tac/
+      - paragraph [ref=e898]:
+        - strong [ref=e899]: "Thể loại nổi bật:"
+        - link "Ngôn Tình" [ref=e900] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/ngon-tinh/
+        - text: "|"
+        - link "Tiên Hiệp" [ref=e901] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/tien-hiep/
+        - text: "|"
+        - link "Kiếm Hiệp" [ref=e902] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/kiem-hiep/
+        - text: "|"
+        - link "Huyền Huyễn" [ref=e903] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/huyen-huyen/
+        - text: "|"
+        - link "Đô Thị" [ref=e904] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/do-thi/
+        - text: "|"
+        - link "Xuyên Không" [ref=e905] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/xuyen-khong/
+        - text: "|"
+        - link "Trọng Sinh" [ref=e906] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/trong-sinh/
+        - text: "|"
+        - link "Đam Mỹ" [ref=e907] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/dam-my/
+        - text: "|"
+        - link "Cung Đấu" [ref=e908] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/cung-dau/
+        - text: "|"
+        - link "Trinh Thám" [ref=e909] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/trinh-tham/
+      - paragraph [ref=e910]:
+        - strong [ref=e911]: "Thông tin website:"
+        - link "Giới thiệu" [ref=e912] [cursor=pointer]:
+          - /url: https://truyenfull.live/gioi-thieu/
+        - text: "|"
+        - link "Liên hệ" [ref=e913] [cursor=pointer]:
+          - /url: https://truyenfull.live/contact/
+        - text: "|"
+        - link "Chính sách bảo mật" [ref=e914] [cursor=pointer]:
+          - /url: https://truyenfull.live/confidental.html
+        - text: "|"
+        - link "Điều khoản sử dụng" [ref=e915] [cursor=pointer]:
+          - /url: https://truyenfull.live/terms.html
+        - text: "|"
+        - link "Báo lỗi nội dung" [ref=e916] [cursor=pointer]:
+          - /url: https://truyenfull.live/contact/
+      - paragraph [ref=e917]: © 2026 Truyenfull.live. Khám phá thế giới truyện chữ online.
+      - link [ref=e918] [cursor=pointer]:
+        - /url: http://creativecommons.org/licenses/by/4.0/
+        - img "Creative Commons License" [ref=e919]
+      - paragraph [ref=e920]:
+        - text: Website hoạt động dưới Giấy phép truy cập mở
+        - link "Creative Commons Attribution 4.0 International License" [ref=e921] [cursor=pointer]:
+          - /url: http://creativecommons.org/licenses/by/4.0/

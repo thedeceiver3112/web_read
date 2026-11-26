@@ -1,0 +1,163 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e4]:
+        - link "Truyện Full - Đọc truyện online" [ref=e6] [cursor=pointer]:
+          - /url: https://truyenfull.live/
+        - generic [ref=e7]:
+          - list [ref=e8]:
+            - listitem [ref=e9]:
+              - button " Danh sách" [ref=e10] [cursor=pointer]:
+                - generic [ref=e11]: 
+                - text: Danh sách
+            - listitem [ref=e13]:
+              - button " Phân loại theo Chương" [ref=e14] [cursor=pointer]:
+                - generic [ref=e15]: 
+                - text: Phân loại theo Chương
+            - listitem [ref=e17]:
+              - button " Tùy chỉnh" [ref=e18] [cursor=pointer]:
+                - generic [ref=e19]: 
+                - text: Tùy chỉnh
+            - listitem [ref=e21]:
+              - button "Đăng nhập" [ref=e22] [cursor=pointer]
+          - search [ref=e26]:
+            - generic [ref=e27]:
+              - searchbox "Từ khóa tìm kiếm" [ref=e28]
+              - button "Tìm kiếm" [ref=e30] [cursor=pointer]:
+                - generic [ref=e31]: 
+      - list [ref=e34]:
+        - listitem [ref=e35]:
+          - link "Trang chủ" [ref=e36] [cursor=pointer]:
+            - /url: https://truyenfull.live
+            - generic [ref=e37]: 
+          - link "Truyện" [ref=e38] [cursor=pointer]:
+            - /url: https://truyenfull.live
+        - listitem [ref=e39]:
+          - text: /
+          - heading [level=1] [ref=e40]:
+            - link "Có Một Lá Thư Gửi Từ Hồng Kông" [ref=e41] [cursor=pointer]:
+              - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/
+        - listitem [ref=e42]:
+          - text: /
+          - link "Chương 25" [ref=e43] [cursor=pointer]:
+            - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/chuong-25/
+    - main [ref=e44]:
+      - generic [ref=e47]:
+        - link "Có Một Lá Thư Gửi Từ Hồng Kông" [ref=e48] [cursor=pointer]:
+          - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/
+        - heading [level=2] [ref=e49]:
+          - 'link "Chương 25: Tôi dẫn em đi ký hợp đồng" [ref=e50] [cursor=pointer]':
+            - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/chuong-25/
+            - generic [ref=e51]: Chương
+            - text: "25: Tôi dẫn em đi ký hợp đồng"
+        - separator [ref=e52]
+        - generic [ref=e54]:
+          - link " Chương trước" [ref=e55] [cursor=pointer]:
+            - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/chuong-24/
+            - generic [ref=e56]: 
+            - text: Chương trước
+          - button "Chọn chương" [ref=e57] [cursor=pointer]:
+            - generic [ref=e58]: 
+          - link "Chương tiếp " [ref=e59] [cursor=pointer]:
+            - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/chuong-26/
+            - text: Chương tiếp
+            - generic [ref=e60]: 
+        - separator [ref=e61]
+        - generic [ref=e62]: "Nhịp thở từ gấp gáp dần dần chậm lại, Thương Thiệu bình tĩnh lại rồi thả tay từ lưng Ứng Ẩn Chiếc Maybach dừng lại vững vàng trước cửa chính. Chú Khang bước xuống xe, lịch sự mở cửa cho cô trước và hơi cúi đầu nói: \"Chào mừng cô Ứng.\"Ứng Ẩn tâm trạng phức tạp, lại bị choáng ngợp đến mức không biết nói gì, trước ngôi nhà như thế này, lời khen ngợi và sự ngạc nhiên của cô đều trở nên dư thừa.Thương Thiệu bước đi, thấy cô chưa theo kịp, lạnh lùng nói: \"Đừng đứng ngây ra đó, tôi sẽ dẫn em đi tham quan.\"Tiếng giày cao gót của Ứng Ẩn vang lên hai lần, đã có người giúp việc ra đón, trên tay bưng một đôi giày nữ mới tinh bằng da mềm: \"Cô Ứng, không biết cô có muốn đổi sang đôi giày thoải mái hơn để đi lại không?\"Ứng Ẩn liếc nhìn Thương Thiệu, anh nhẹ gật đầu: \"Đợi em.\"Cô theo người giúp việc vào tiền sảnh, ngồi xuống một chiếc ghế mềm. Người giúp việc nửa ngồi xuống: \"Tôi giúp cô thay giày.\"Người giúp việc nhẹ nhàng nâng chân và mắt cá chân của Ứng Ẩn lên, tháo đôi giày cao gót tám phân ra khỏi chân cô, trước khi thay giày mới, Ứng Ẩn hỏi: \"Cô có tất dùng một lần không?\"\"Cô yên tâm, đôi giày này là mới tinh và chỉ dành riêng cho cô.\" Người giúp việc mang giày vào chân cô: \"Đôi giày này thích hợp để đi chân trần ở nhà, rất thoải mái và thoáng khí, như thể nó biết thở vậy.\"Ứng Ẩn không nhịn được cười: \"Cô nên làm nhân viên bán hàng ở quầy hàng xa xỉ.\"Người giúp việc cũng cười với cô: \"Cảm ơn lời khen, cô đứng lên thử xem có vừa chân không?\"Ứng Ẩn đứng lên đi vài bước, cảm thấy không thể tin được: \"Thật đấy, chân tôi size 37.5, rất khó để tìm được đôi giày vừa.\"Người giúp việc không nói nhiều, hai tay khẽ chắp lại trước ngực, hơi cúi đầu: \"Cô thấy thoải mái là tốt, cậu chủ đang đợi cô ngoài cửa.\"Ứng Ẩn đổi giày, khí thế ban đầu không còn sắc bén nữa, toàn thân trở nên thư thái và thoải mái hơn, có thể cảm nhận được cô đang chìm đắm trong sự thoải mái.Thương Thiệu mỉm cười dịu dàng: \"Thoải mái rồi chứ?\"\"Ừ.\" Cô đáp lại mạnh mẽ.\"Đi lối này.\" Thương Thiệu nghiêng người nhường đường, để Ứng Ẩn đi bên cạnh anh.Anh không dẫn cô vào trong nhà, trước tiên đi dạo bên ngoài, giới thiệu với cô: \"Nơi này ban đầu là một công viên hải dương nhưng phần lớn các khu vực đã bị tháo dỡ, hiện chỉ còn lại trung tâm bảo vệ động vật và trung tâm nuôi dưỡng mà em vừa thấy. Hàng ngày sẽ có người đến làm việc nhưng em không cần lo lắng, họ thường không đến đây.\"\"Toàn bộ khu vực này là một mặt cắt của vách đá, có một con đường mòn dẫn xuống núi, có thể ngắm biển có một bãi cát nhỏ nhưng không thể bơi được. Nếu em thích bơi, ở tầng hai có hồ bơi vô cực, ngoài ra ở vườn sau cũng có một hồ bơi nữa, lát nữa em sẽ thấy.\"Đi qua khu vườn trước mất một lúc. Đến phía bên hông, Thương Thiệu chỉ vào một công trình trắng hình vuông cắt chéo: \"Đây là khu nhà cá mập voi nguyên gốc của công viên hải dương, tôi đã giữ lại, từ trong nhà cũng có thể đi qua, phía dưới là nhà hàng hải cảnh và phòng ngắm biển.\"Ứng Ẩn: \"...Ồ?\"\"Sao vậy?\" Thương Thiệu hỏi thản nhiên.\"Không có gì...\" Ứng Ẩn nuốt lấy sự kinh ngạc, hỏi: \"Tại sao anh giữ lại khu nhà cá mập voi?\"\"Vẫn đang sử dụng.\"\"Nuôi cá sao?\"\"Nuôi cá.\"\"Anh Thương ngay cả bể cá cũng lớn hơn người khác.\" Ứng Ẩn nói đùa, cô theo bước chân của Thương Thiệu đi vào khu nhà.Thương Thiệu cười, trông có vẻ tâm trạng tốt, \"Ừm\" một tiếng, \"Em nói đúng.\"Vào trong khu nhà, nhiệt độ đột ngột giảm xuống, ánh sáng đẹp buổi chiều bị chắn ngoài tòa nhà, thay vào đó là một màu xanh thẫm yên tĩnh và dịu dàng. Ánh sáng được phân bổ rõ ràng một cách chuyên nghiệp, toàn bộ không gian có cảm giác như những gợn nước lăn tăn, phản chiếu trên bức tường trắng tinh, có góc bo tròn.\"Tôi dẫn em gặp một người bạn.\"\"Ở đây?\" Ứng Ẩn ngạc nhiên một chút rồi sau đó hiểu ra, chắc là con cá anh nuôi hoặc là đàn cá nhiệt đới, có lẽ là một con ếch cây sặc sỡ.Thương Thiệu gật đầu, nói \"đợi chút\", rồi cởi áo vest, khoác lên vai Ứng Ẩn: \"Ở đây lạnh, mặc thêm vào.\"Ứng Ẩn nắm chặt cổ áo vest, lại thấy anh từ túi quần tây lấy ra hộp thuốc lá bằng sứ trắng, hỏi theo lệ thường: \"Em có phiền không?\"Ứng Ẩn lắc đầu. Thực ra cô khá thích mùi thuốc trên tay anh, khác với người khác, mùi hương ấm áp.Lại nhớ đến nụ hôn trong xe.Trong khoảnh khắc ấy, hương thơm của thuốc lá trên môi anh cũng rất nhạt nhưng mạnh mẽ lan tỏa khắp hơi thở của cô.Thương Thiệu ngậm điếu thuốc, nghiêng đầu bật lửa, ngọn lửa trong lòng bàn tay chiếu sáng khuôn mặt anh.Hút một hơi, anh nhớ ra và hỏi: \"Em có sợ những thứ lớn không? Bạn của tôi... có chút lớn.\"Ứng Ẩn vừa mới nghĩ về nụ hôn của anh, lúc này lại nghĩ đến \"bạn\" và \"lớn\", suy nghĩ không cẩn thận trượt dốc, những ý nghĩ không trong sáng đổ xuống.Cứu với! Một cô gái trong sáng lại nghĩ gì thế này!Trong ánh sáng xanh thẫm, ánh mắt của Thương Thiệu đầy tìm hiểu và sâu sắc: \"Câu hỏi này cần em phải thể hiện sự phiền muộn mạnh mẽ vậy sao?\"Ứng Ẩn cúi đầu tránh ánh mắt anh, giọng điệu có phần không tự nhiên: \"Tôi không sợ những thứ lớn... lớn một chút cũng không sao.\"Thương Thiệu: \"...\"Sao lại nghe kỳ lạ vậy? Ứng Ẩn ngẩng đầu, nhanh chóng bổ sung nhưng lời nói càng che đậy càng lộ liễu: \"Ý tôi là bạn anh có lớn cũng không sao!\"Thương Thiệu bất đắc dĩ thở ra một hơi khói, cười một tiếng: \"Em đừng nói nữa, nói thêm tôi sẽ nghĩ sai.\"Ứng Ẩn: \"...\"Cô xấu hổ cắn môi giận dữ, như bị sỉ nhục.Thương Thiệu bị cô nhìn chằm chằm không biết làm sao, đành phải giơ tay nửa chừng, mỉm cười với vẻ xin lỗi: \"OK, lỗi của tôi.\"Anh như chịu thua cô nhưng tư thế cầm điếu thuốc của anh lại mang phong thái ngạo mạn, nụ cười vẫn còn trên mặt, rõ ràng vẫn đang cười nhạo cô.Ứng Ẩn hừ lạnh một tiếng, biểu cảm trên mặt rất sống động: \"Anh Thương cũng không khác gì đàn ông khác.\"\"Em mắng tôi à?\" Thương Thiệu giọng trầm thấp, mỉm cười: \"Hôm nay gan to vậy? Vừa đóng cửa xe vừa mắng tôi, không sợ tôi trả thù à?\"Ứng Ẩn nhất thời không đáp được, đứng yên tại chỗ nhìn anh chằm chằm một lúc, đột ngột bước lên một bước ôm eo anh.Thương Thiệu cả biểu cảm lẫn cơ thể đều cứng lại, anh nâng tay, không biết nên đặt lên người cô hay không. Cúi đầu xuống, thấy cô ôm chặt không rời, không khỏi hỏi khẽ: \"Đây là làm gì?\"\"Trả thù anh, lãng phí tiền của anh.\" Ứng Ẩn trả lời trang trọng: \"Một triệu trong ba mươi phút, một giây năm nghìn năm trăm năm mươi lăm, bây giờ đã mười giây rồi.\"Sự trả thù của cô là ngẫu hứng mang theo sự giận dữ không quan tâm. Nhưng cô lại làm rất nghiêm túc, hai cánh tay mảnh khảnh ôm chặt quanh eo anh, như sợ anh thoát ra nên dùng rất nhiều sức.Lúc này Thương Thiệu chỉ mặc một chiếc áo sơ mi được cài cẩn thận trong quần tây, Ứng Ẩn ôm eo anh, chỉ cảm thấy xúc cảm của cơ bắp và xương săn chắc, tràn đầy sức mạnh.Cô đỏ mặt.Trên cổ tay trái chiếc đồng hồ nam rộng lớn, kim giây di chuyển nhanh mà chậm.\"Hai mươi giây.\" Cô ấy nhắm mắt đếm thầm.\"40 giây,\" cô ấy đầy tự hào.\"1 phút,\" cô ấy với tư thế của người chiến thắng.Thương Thiệu: \"...\"\"Hôm nay tạm dừng ở đây,\" Ứng Ẩn ngẩng đầu lên, \"Anh Thương là người giữ lời. Sau này anh hung dữ với tôi, tôi sẽ lãng phí tiền của anh.\"Cô ấy như thế này khiến Thương Thiệu cảm thấy vào lúc này không hôn cô ấy thật không phải là đàn ông.Anh siết chặt eo cô, ánh mắt vô cảm nhưng giọng nói lại vô cùng trầm: \"Sao em lại thông minh thế?\"Ứng Ẩn tin chắc anh không thật lòng khen cô, nhưng cô đối diện với ánh mắt anh, nhẹ nhàng nuốt nước bọt.Điếu thuốc vừa châm vẫn còn cháy, khói trắng lan tỏa trong không khí lạnh, che phủ gương mặt khó đoán của anh.Sau vài giây, Thương Thiệu nheo mắt, tay kẹp điếu thuốc nâng lên nhẹ nhàng vuốt má Ứng Ẩn, giọng nói trầm thấp nhưng lơ đễnh: \"Tôi có nhiều tiền lắm, để tôi dạy em cách lãng phí nhanh hơn.\"Tim Ứng Ẩn thắt lại, mi mắt nâng lên nhìn vào mắt anh, chỉ trong vài giây cô đã không chịu nổi nữa, cúi đầu nhìn vào môi anh đang gần sát bên.Mũi cô bị mùi thuốc của anh chiếm đầy.Cô nhẹ nhàng quay mặt đi, chân tay yếu đuối, biết chuyện gì sắp xảy ra.Khi cô nhắm mắt lại, Thương Thiệu đã hôn cô.Chiếc áo vest từ vai cô trượt xuống đất, Ứng Ẩn kêu một tiếng, trọng tâm đột nhiên bay lên—Thương Thiệu bế cô lên, đè mạnh cô lên tường.Bức tường lạnh lẽo, cái lạnh thấm qua áo sơ mi lụa thấm vào tận xương cô khiến cô run rẩy không ngừng. Cô gần như không đứng vững, mông bị cánh tay anh giữ chặt, dưới chiếc váy bút chì, đôi chân dài của cô chỉ có thể căng đầu ngón chân, yếu ớt và gắng sức nâng lên, eo cô rơi vào cánh tay anh, sức mạnh khiến cô gần như gãy đôi.Nhưng sự hung bạo không nơi nào sánh bằng cách anh hôn cô.Nụ hôn của anh mạnh mẽ, không cho cô bất kỳ cơ hội nào để đáp lại, m*t, cắn, l**m, cuốn lấy, kéo giật, không giống như đêm qua do cảm xúc khống chế, không giống buổi chiều thong thả, mà là một sự chiếm hữu mãnh liệt đầy hormone.Ứng Ẩn bị anh hút đến đau lưỡi, hai cánh tay mềm mại ôm lấy cổ anh, v**t v* mái tóc đen của anh, không biết là đẩy anh về phía mình hay là tựa vào anh.Cơ thể anh dưới áo sơ mi nóng bức.Trái tim cô đập thình thịch trong mềm mại, cho đến khi cô nghĩ mình sẽ chết vì tim đập mạnh, một tiếng \"tách\" nhỏ vang lên, chiếc móc áo sơ mi của cô bị anh tháo ra bằng một tay dễ dàng.Hơi thở của cô được giải thoát, sự mềm mại của cô cũng được thả ra.Nhưng nụ hôn này dừng lại ngay lúc này, Thương Thiệu tỉnh lại, Ứng Ẩn cũng tỉnh lại, một người mắt sâu, một người mắt đỏ, một người nuốt nước bọt khó nhịn, một người th* d*c.Nhịp thở từ gấp gáp dần dần chậm lại, Thương Thiệu bình tĩnh lại rồi thả tay từ lưng Ứng Ẩn xuống, để cô nhẹ nhàng đặt chân xuống đất.Ứng Ẩn bị anh làm cho mềm nhũn, chân không còn sức, vừa chạm đất đã mềm nhũn, được anh nhanh tay đỡ lấy.Anh lại đẩy cô vào tường.Thương Thiệu thở dài, đôi mắt mệt mỏi nhìn cô, sau một lúc lâu, cúi đầu hôn nhẹ lên khóe môi cô.\"Xin lỗi.\"Ứng Ẩn cúi đầu, vùi mặt vào ngực anh, hai cánh tay dài vòng ra sau, im lặng cài lại móc áo.Cài mãi không được.Cô sắp khóc.Người gì thế này!Thương Thiệu im lặng một lúc: \"...Em có cần tôi giúp không?\"\"Không cần!\" Cô nói giọng đầy mũi, cắn môi, cố nhịn nước mắt, bận rộn một lúc, cuối cùng cũng khó khăn cài lại được móc áo.Lại vùi mặt vào ngực anh một lúc, khi ngẩng lên, Ứng Ẩn nước mắt lưng tròng.Thương Thiệu dừng lại một chút, anh vuốt mặt cô, ngón tay cái chạm nhẹ vào đôi mắt mềm mại ướt át của cô: \"Sao lại khóc?\"Ứng Ẩn cố nhịn sự khó chịu không thể nói ra, đôi môi bị anh hôn đến sưng lên, bướng bỉnh như muốn khóc.Thấy cô im lặng, một luồng nhiệt nóng bức lại dâng lên từ sâu trong cơ thể, Thương Thiệu với tay, tháo hoàn toàn cà vạt.\"Tất cả là lỗi của tôi, tôi thất hứa,...thấy sắc sinh lòng, làm điều xằng bậy,... quấy rối em.\"\"Thấy sắc sinh lòng\" không phải là một từ tốt, \"quấy rối\" chưa bao giờ xuất hiện trong cuộc đời anh, đủ thấy anh tự kiểm điểm đến mức nào.Ứng Ẩn cúi đầu, khóe môi hơi nhếch lên.\"Anh giàu như vậy, một triệu với anh chẳng là gì, lần sau anh vẫn dám làm.\"Cô nói có lý.Một triệu một nụ hôn không hề có sự ràng buộc. Anh muốn hôn thì hôn, trên thế giới này bất kỳ thứ gì có giá anh đều có thể dễ dàng có được.Thương Thiệu nghĩ một lúc, giọng trầm nhưng trang trọng: \"Thực sự sẽ không có lần sau, nụ hôn của em không nên có giá, tôi cũng không nên cưỡng ép.\"Anh vuốt tóc Ứng Ẩn: \"Đi nào, tôi dẫn em đi ký hợp đồng.\"\"Không gặp bạn anh à?\"\"Hôm nay có lẽ không phải là lúc thích hợp.\"Anh cúi xuống nhặt chiếc áo vest rơi trên đất, sau một tiếng thở dài dài thay đổi ý định: \"Cô Ứng, hay là em đi trước, tôi nghĩ tôi cần ở một mình với bạn mình một lúc.\"Ứng Ẩn gật đầu, hai người chia tay mỗi người đi một hướng.Trong cửa sổ ngắm cảnh biển rộng 20 mét, con cá mập voi khổng lồ một mình bơi tự do, trước cửa sổ chỉ có một chiếc ghế xếp cổ, màu bạc của kim loại bị màu xanh đậm ở đây chiếm lấy, trông lạnh lẽo và cô đơn.Thấy có người đến, cá mập voi ngừng bơi, chỉ vẫy đuôi rồi dừng lại trước ghế xếp.Người đàn ông trước mắt nó chưa bao giờ xuất hiện lộn xộn như vậy, áo vest cầm trong tay, gần như kéo lê, áo sơ mi thường ngày phẳng phiu bị anh làm nhàu nhĩ không ra hình.Điều quan trọng nhất là, cà vạt của anh cũng lỏng lẻo, yết hầu nhấp nhô theo từng lần nuốt nhẹ.Khi tiến đến gần, anh ta vắt áo vest lên lưng ghế một cách tùy tiện rồi lấy hộp thuốc lá từ túi quần ra.Chỉ còn lại một điếu cuối cùng nhưng Thương Thiệu không do dự, châm lửa hít một hơi, lồng ngực phập phồng lên xuống.Cá mập voi nhìn anh ngồi xuống ghế, một tay vắt lên lưng ghế, tay kia kẹp điếu thuốc, khuôn mặt im lặng không vui.Anh không phải là người thiếu tự chủ, ít nhất trong mối quan hệ với bạn gái cũ Du Hạ Hạ, anh luôn giữ đủ sự lịch thiệp và kiềm chế. Anh và Du Hạ Hạ là một cặp thật sự, không có lý do gì khi bên Ứng Ẩn, người chỉ vừa mới quen vài ngày và là bạn gái hợp đồng, anh lại không thể kiềm chế được.Sau khi hút hết điếu thuốc, Thương Thiệu đứng dậy đi thẳng từ một lối khác trở lại trung tâm ngôi nhà.Áp điện thoại vào tai, anh ra lệnh cho chú Khang: \"Đưa cô Ứng đến thư phòng, hợp đồng đã chuẩn bị xong chưa? Giúp tôi bổ sung vài điều khoản.\"Khi đến thư phòng trên tầng hai, Ứng Ẩn đã ở đó. Trước khi rời khỏi phòng cá mập voi, cô đã vào nhà vệ sinh cẩn thận xem xét lại mình.Khuôn mặt trong gương có chút rối loạn, sự rối loạn này toát ra từ ánh mắt, đôi tai và đầu mũi hơi đỏ, đôi môi nhòe đi, người ngoài nhìn vào là biết ngay đã có chuyện gì xảy ra.Ứng Ẩn rửa mặt bằng nước lạnh, làm sạch hết sắc đỏ trên mặt.Khi Thương Thiệu và chú Khang gặp cô, cô đã trang điểm lại chỉnh chu trở lại.\"Cô Ứng, đây là hợp đồng.\" Chú Khang đưa cô một tờ giấy mỏng: \"Có hai bản, chúng tôi sẽ công chứng, sau khi công chứng sẽ có hiệu lực pháp lý.\"Ứng Ẩn không ngờ rằng chuyện này lại nghiêm túc đến vậy.Cô đọc nhanh các điều khoản, tai nghe chú Khang giới thiệu: \"Sau khi ký hợp đồng, hôm nay sẽ thanh toán trước ba mươi phần trăm, tức là ba ttrăm riệu, thời hạn hợp đồng là một năm, khi hợp đồng được thực hiện đến nửa năm, sẽ thanh toán tiếp ba mươi phần trăm nữa, tức là tổng cộng sáu mươi phần trăm, phần còn lại sẽ được thanh toán sau khi kết thúc hợp đồng.\"Ứng Ẩn gật đầu, không ngẩng lên nhìn Thương Thiệu.\"Xét đến việc em là ngôi sao,\" Thương Thiệu chậm rãi mở miệng: \"Hẹn hò với tôi sẽ có rủi ro bị lộ, những tổn thất từ mối quan hệ sẽ được bù đắp bằng các nguồn lực như đại diện, đầu tư, giải thưởng, bất kỳ thứ gì em cần.\"\"Em không cần.\" Ứng Ẩn trả lời nhanh chóng.Thương Thiệu mỉm cười, giọng không thể coi là không dịu dàng: \"Đó là điều em xứng đáng nhận được, chuyện làm ăn là làm ăn, không cần khách sáo với anh.\"Quả là... chuyện làm ăn.Rõ ràng vừa rồi còn không thể kiềm chế nổi mà hôn cô say đắm, bây giờ đã là \"không cần khách sáo.\"\"Trong thời gian hợp đồng, cô không cần thực hiện bất kỳ nghĩa vụ thân thể nào với anh Thương, anh Thương cũng không thể dùng hợp đồng để ép buộc cô tiếp xúc thân thể, nếu vi phạm, cô có quyền chấm dứt hợp đồng ngay lập tức và chúng tôi sẽ thanh toán toàn bộ thù lao.\" Chú Khang tiếp tục nói.Có lẽ vì giọng ông quá lịch sự nên càng làm cho mọi thứ trở nên vô tình. Nhưng cách ông nói, thực ra cũng khá dịu dàng.Ứng Ẩn nghĩ đó là lỗi của cô, sao có thể trách ông được?Cô gật đầu đáp \"Ừm.\"\"Việc cô cần làm chỉ là trong những dịp cần thiết, đi cùng anh Thương với tư cách bạn gái, ngoài ra chúng tôi không quy định số lần.\"Lúc này, Ứng Ẩn ngẩng đầu, cười với chú Khang: \"Tự do thật.\"Anh thậm chí không yêu cầu gặp mấy lần mỗi tuần.Cô không biết, đây là điều Thương Thiệu vừa mới bảo chú Khang bổ sung.Thương Thiệu không hiểu tại sao cô không nhìn anh, như thể người ký hợp đồng với cô là chú Khang, người mà cô phải thực hiện hợp đồng cũng là chú Khang.Anh nhìn Ứng Ẩn đầy ẩn ý, gọi tên cô: \"Ứng Ẩn.\"Ứng Ẩn quay đầu lại, Thương Thiệu cảm thấy thoải mái hơn nhưng vẫn nghiêm túc hỏi: \"Em còn gì cần bổ sung không?\"\"Không có.\" Ứng Ẩn không nhìn lại hợp đồng, giọng nhẹ nhàng: \"Ký đi.\"Chú Khang mở bút máy đưa cho cô, rồi mở hộp mực đỏ bên cạnh.Ứng Ẩn điền số chứng minh thư, tên, ký tên và ngày tháng rồi lăn dấu vân tay.Hai bản hợp đồng, cả hai bên cùng ký, mọi thứ diễn ra nhanh chóng và trật tự trong im lặng.Sau khi ký xong, Ứng Ẩn nhìn Thương Thiệu, nụ cười rạng rỡ trên môi: \"Cảm ơn anh Thương đã cho em một vụ làm ăn béo bở như vậy.\"Nghe cô nói, Thương Thiệu cau mày nhẹ, trước khi điền nốt số chứng minh của mình, anh dừng bút ngước nhìn cô: \"Ứng Ẩn, nếu em cảm thấy có gì không thoải mái, hãy nói với tôi.\"\"Không, em thấy rất tốt, những gì cần cân nhắc anh Thương đều đã cân nhắc giúp em rồi, rất chu đáo, em rất yên tâm.\"Cô vô thức, cứng nhắc chơi với cây bút Montblanc, vặn mở và đóng lại ống mực nhiều lần.Thương Thiệu tiếp tục ký phần còn lại.Ứng Ẩn nghe tiếng ngòi bút trên giấy, ngẩng đầu, mắt sáng, môi cười, giọng nhẹ nhàng, ngây thơ và thảnh thơi hỏi: \"Vậy... nghĩa là, em chỉ cần đợi khi nào anh Thương cần thì tìm em, đúng không?\"Câu hỏi vừa dứt, một lúc không có câu trả lời nhưng tiếng bút dừng lại.Thương Thiệu đóng nắp bút, đưa hợp đồng ra.Ngay khi Ứng Ẩn sắp nhận, anh nhìn vào mắt cô, ánh mắt đầy ẩn ý nhưng không chớp mắt mà vò tờ giấy trong tay.Chú Khang không biểu lộ chút ngạc nhiên, chỉ nhìn ra khung cửa sổ xanh mướt, vẻ thản nhiên như không liên quan.Khu rừng này được xây dựng với chi phí lớn, vào buổi tối con đường quanh co yên tĩnh bắt đầu phủ sương, lan tỏa giữa những cây thẳng đứng ánh hoàng hôn vẫn dịu dàng bao phủ.\"Anh Thương... có ý gì?\" Ứng Ẩn ngập ngừng hỏi, nụ cười trên môi gần như không giữ được.Anh hối hận rồi sao?\"Tôi hối hận rồi.\" Thương Thiệu bình tĩnh nói.Ứng Ẩn thở phào, mím môi: \"Vậy à?\"\"Nếu đã bỏ ra nhiều tiền như vậy, tôi nên gặp em bất cứ khi nào tôi muốn.\"Giọng Thương Thiệu trầm thấp và chậm rãi: \"Nhưng xét đến việc rôi rất bận, vậy một tuần ba lần, mỗi lần không dưới một giờ—\"Anh ngước mắt nhìn cô, lơ đãng: \"Em có ý kiến gì không?\""
+        - separator [ref=e63]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - link " Chương trước" [ref=e66] [cursor=pointer]:
+              - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/chuong-24/
+              - generic [ref=e67]: 
+              - text: Chương trước
+            - button "Chọn chương" [ref=e68] [cursor=pointer]:
+              - generic [ref=e69]: 
+            - link "Chương tiếp " [ref=e70] [cursor=pointer]:
+              - /url: https://truyenfull.live/co-mot-la-thu-gui-tu-hong-kong/chuong-26/
+              - text: Chương tiếp
+              - generic [ref=e71]: 
+          - generic [ref=e73]:
+            - button " Báo lỗi chương" [ref=e74] [cursor=pointer]:
+              - generic [ref=e75]: 
+              - text: Báo lỗi chương
+            - button " Bình luận" [ref=e76] [cursor=pointer]:
+              - generic [ref=e77]: 
+              - text: Bình luận
+          - generic [ref=e78]: Bạn có thể dùng phím mũi tên hoặc WASD để lùi/sang chương.
+  - generic [ref=e84]:
+    - generic [ref=e85]:
+      - text: "Liên hệ:"
+      - link "contact@truyenfull.live" [ref=e86] [cursor=pointer]:
+        - /url: mailto:contact@truyenfull.live
+    - generic [ref=e87]:
+      - heading "Truyenfull – Đọc Truyện Full, Truyện Chữ Online" [level=2] [ref=e88]
+      - paragraph [ref=e89]: Truyenfull.live là website đọc truyện chữ online, nơi độc giả có thể khám phá nhiều tác phẩm thuộc các thể loại như ngôn tình, tiên hiệp, kiếm hiệp, huyền huyễn, đô thị, xuyên không, trọng sinh, đam mỹ và truyện cổ đại. Từ những bộ truyện đã hoàn thành đến các tác phẩm đang cập nhật chương mới, Truyenfull mang đến nhiều lựa chọn giải trí dành cho người yêu thích truyện chữ.
+      - paragraph [ref=e90]:
+        - strong [ref=e91]: "Khám phá truyện:"
+        - link "Truyện mới cập nhật" [ref=e92] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-moi/
+        - text: "|"
+        - link "Truyện Full" [ref=e93] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-full/
+        - text: "|"
+        - link "Truyện Hot" [ref=e94] [cursor=pointer]:
+          - /url: https://truyenfull.live/danh-sach/truyen-hot/
+        - text: "|"
+        - link "Truyện sáng tác" [ref=e95] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/truyen-sang-tac/
+      - paragraph [ref=e96]:
+        - strong [ref=e97]: "Thể loại nổi bật:"
+        - link "Ngôn Tình" [ref=e98] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/ngon-tinh/
+        - text: "|"
+        - link "Tiên Hiệp" [ref=e99] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/tien-hiep/
+        - text: "|"
+        - link "Kiếm Hiệp" [ref=e100] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/kiem-hiep/
+        - text: "|"
+        - link "Huyền Huyễn" [ref=e101] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/huyen-huyen/
+        - text: "|"
+        - link "Đô Thị" [ref=e102] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/do-thi/
+        - text: "|"
+        - link "Xuyên Không" [ref=e103] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/xuyen-khong/
+        - text: "|"
+        - link "Trọng Sinh" [ref=e104] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/trong-sinh/
+        - text: "|"
+        - link "Đam Mỹ" [ref=e105] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/dam-my/
+        - text: "|"
+        - link "Cung Đấu" [ref=e106] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/cung-dau/
+        - text: "|"
+        - link "Trinh Thám" [ref=e107] [cursor=pointer]:
+          - /url: https://truyenfull.live/the-loai/trinh-tham/
+      - paragraph [ref=e108]:
+        - strong [ref=e109]: "Thông tin website:"
+        - link "Giới thiệu" [ref=e110] [cursor=pointer]:
+          - /url: https://truyenfull.live/gioi-thieu/
+        - text: "|"
+        - link "Liên hệ" [ref=e111] [cursor=pointer]:
+          - /url: https://truyenfull.live/contact/
+        - text: "|"
+        - link "Chính sách bảo mật" [ref=e112] [cursor=pointer]:
+          - /url: https://truyenfull.live/confidental.html
+        - text: "|"
+        - link "Điều khoản sử dụng" [ref=e113] [cursor=pointer]:
+          - /url: https://truyenfull.live/terms.html
+        - text: "|"
+        - link "Báo lỗi nội dung" [ref=e114] [cursor=pointer]:
+          - /url: https://truyenfull.live/contact/
+      - paragraph [ref=e115]: © 2026 Truyenfull.live. Khám phá thế giới truyện chữ online.
+      - link [ref=e116] [cursor=pointer]:
+        - /url: http://creativecommons.org/licenses/by/4.0/
+        - img "Creative Commons License" [ref=e117]
+      - paragraph [ref=e118]:
+        - text: Website hoạt động dưới Giấy phép truy cập mở
+        - link "Creative Commons Attribution 4.0 International License" [ref=e119] [cursor=pointer]:
+          - /url: http://creativecommons.org/licenses/by/4.0/

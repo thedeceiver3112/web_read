@@ -1,0 +1,149 @@
+[     247ms] [LOG] Service Worker registered @ https://truyenfull.live/:2
+[     372ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify.js?v=20261110_18:231
+[     372ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify.js?v=20261110_18:231
+[     372ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify.js?v=20261110_18:250
+[     385ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/:1
+[     385ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/:1
+[     385ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/:1
+[     385ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/:1
+[     385ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/:1
+[   22367ms] [LOG] Service Worker registered @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-1/:2
+[   22419ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   22419ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   22419ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   22422ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-1/:1
+[   22422ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-1/:1
+[   22422ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-1/:1
+[   22422ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-1/:1
+[   22422ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-1/:1
+[   22884ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   22884ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   22884ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   22887ms] [LOG] Service Worker registered @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-26/:2
+[   22890ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-26/:1
+[   22890ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-26/:1
+[   22890ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-26/:1
+[   22890ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-26/:1
+[   22890ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-26/:1
+[   23399ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   23399ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   23399ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   23400ms] [LOG] Service Worker registered @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-50/:2
+[   23402ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-50/:1
+[   23402ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-50/:1
+[   23402ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-50/:1
+[   23402ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-50/:1
+[   23402ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nam-dau-sau-khi-tu-hon-nang-ga-cho-nguoi-khac/chuong-50/:1
+[   24590ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   24590ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   24590ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   24591ms] [LOG] Service Worker registered @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-1/:2
+[   24593ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-1/:1
+[   24593ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-1/:1
+[   24593ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-1/:1
+[   24593ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-1/:1
+[   24593ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-1/:1
+[   25114ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   25114ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   25114ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   25114ms] [LOG] Service Worker registered @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-26/:2
+[   25117ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-26/:1
+[   25117ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-26/:1
+[   25117ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-26/:1
+[   25117ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-26/:1
+[   25117ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-26/:1
+[   25182ms] [LOG] adfill disable 6822bf1ad43ef8ca6704019e @ https://iads.staticscdn.net/adf/c/6/9e/6822bf1ad43ef8ca6704019e.js?v=20261028_1:1
+[   25647ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   25647ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   25647ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   25647ms] [LOG] Service Worker registered @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-50/:2
+[   25649ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-50/:1
+[   25650ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-50/:1
+[   25650ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-50/:1
+[   25650ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-50/:1
+[   25650ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/nuong-nuong-quyet-chi-leo-len-vi-tri-cao/chuong-50/:1
+[   25667ms] [LOG] adfill disable 6822bf1ad43ef8ca6704019e @ https://iads.staticscdn.net/adf/c/6/9e/6822bf1ad43ef8ca6704019e.js?v=20261028_1:1
+[   26756ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   26756ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   26756ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   26756ms] [LOG] Service Worker registered @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-1/:2
+[   26758ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-1/:1
+[   26758ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-1/:1
+[   26758ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-1/:1
+[   26758ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-1/:1
+[   26758ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-1/:1
+[   27249ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   27249ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   27249ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   27250ms] [LOG] Service Worker registered @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-26/:2
+[   27252ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-26/:1
+[   27252ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-26/:1
+[   27252ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-26/:1
+[   27252ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-26/:1
+[   27252ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-26/:1
+[   27761ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   27761ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   27762ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   27762ms] [LOG] Service Worker registered @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-50/:2
+[   27764ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-50/:1
+[   27764ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-50/:1
+[   27764ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-50/:1
+[   27764ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-50/:1
+[   27764ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/hon-nhan-bi-mat-nhat-ky-nuoi-con/chuong-50/:1
+[   28897ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   28897ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   28897ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   28898ms] [LOG] Service Worker registered @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-1/:2
+[   28900ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-1/:1
+[   28900ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-1/:1
+[   28900ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-1/:1
+[   28900ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-1/:1
+[   28900ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-1/:1
+[   29369ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   29369ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   29369ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   29370ms] [LOG] Service Worker registered @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-26/:2
+[   29372ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-26/:1
+[   29372ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-26/:1
+[   29372ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-26/:1
+[   29372ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-26/:1
+[   29372ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-26/:1
+[   29880ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   29880ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   29880ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   29882ms] [LOG] Service Worker registered @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-50/:2
+[   29884ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-50/:1
+[   29884ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-50/:1
+[   29884ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-50/:1
+[   29884ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-50/:1
+[   29884ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/tham-tinh-dan-du-dieu-tung-me/chuong-50/:1
+[   31032ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   31033ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   31033ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   31033ms] [LOG] Service Worker registered @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-1/:2
+[   31035ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-1/:1
+[   31035ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-1/:1
+[   31035ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-1/:1
+[   31035ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-1/:1
+[   31035ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-1/:1
+[   31050ms] [LOG] adfill disable 6822bf1ad43ef8ca6704019e @ https://iads.staticscdn.net/adf/c/6/9e/6822bf1ad43ef8ca6704019e.js?v=20261028_1:1
+[   31530ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   31530ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   31530ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   31530ms] [LOG] Service Worker registered @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-26/:2
+[   31532ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-26/:1
+[   31532ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-26/:1
+[   31532ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-26/:1
+[   31532ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-26/:1
+[   31532ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-26/:1
+[   31548ms] [LOG] adfill disable 6822bf1ad43ef8ca6704019e @ https://iads.staticscdn.net/adf/c/6/9e/6822bf1ad43ef8ca6704019e.js?v=20261028_1:1
+[   32045ms] [LOG] social js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   32045ms] [LOG] 🚀 ~ isMobile: 0 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:183
+[   32045ms] [LOG] custom js 20261110_1 @ https://static.truyenfull.live/js/minify-chapter.js?v=20261110_18:202
+[   32045ms] [LOG] Service Worker registered @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-50/:2
+[   32047ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-50/:1
+[   32047ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-50/:1
+[   32047ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-50/:1
+[   32047ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-50/:1
+[   32047ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "new-password"): (More info: https://goo.gl/9p2vKq) %o @ https://truyenfull.live/ga-cho-thu-sinh-benh-tat/chuong-50/:1
+[   32064ms] [LOG] adfill disable 6822bf1ad43ef8ca6704019e @ https://iads.staticscdn.net/adf/c/6/9e/6822bf1ad43ef8ca6704019e.js?v=20261028_1:1
