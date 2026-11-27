@@ -38,7 +38,7 @@ test.describe('popup donate trang chủ', () => {
     await expect(popup).toHaveClass(/show/);
     await expect(popup).toHaveAttribute('aria-hidden', 'false');
     await expect(artwork).toBeVisible();
-    await expect(artwork).toHaveAttribute('src', /donate_kaito_popup\.png/);
+    await expect(artwork).toHaveAttribute('src', /donate_kaito_popup\.webp/);
     await expect(popup).toHaveCSS('pointer-events', 'none');
 
     await popup.locator('.donate-welcome-close').click();

@@ -5951,6 +5951,7 @@ const DONATE_WELCOME_SESSION_KEY = 'stealth_donate_popup_last_shown';
 const DONATE_WELCOME_HIDE_DAY_KEY = 'stealth_donate_popup_hidden_day';
 const DONATE_WELCOME_COOLDOWN_MS = 5 * 60 * 1000;
 let donateWelcomeDismissed = false;
+let donateWelcomeOpening = false;
 
 function canShowDonateWelcomePopup() {
   try {
@@ -5977,13 +5978,26 @@ function markDonateWelcomePopupShown() {
   }
 }
 
-function openDonateWelcomePopup() {
+async function openDonateWelcomePopup() {
   const popup = document.getElementById('donate-welcome-popup');
   const portal = document.getElementById('landing-portal');
-  if (!popup || !portal || portal.classList.contains('hidden') || donateWelcomeDismissed || !canShowDonateWelcomePopup()) return;
-  markDonateWelcomePopupShown();
-  popup.classList.add('show');
-  popup.setAttribute('aria-hidden', 'false');
+  if (!popup || !portal || portal.classList.contains('hidden') || document.hidden || donateWelcomeDismissed || donateWelcomeOpening || !canShowDonateWelcomePopup()) return;
+  const artwork = popup.querySelector('.donate-welcome-artwork');
+  if (!artwork) return;
+  donateWelcomeOpening = true;
+  try {
+    // Hidden/cooldown sessions never fetch the artwork. Decode before displaying.
+    if (!artwork.getAttribute('src')) artwork.src = artwork.dataset.src;
+    await artwork.decode();
+    if (portal.classList.contains('hidden') || document.hidden || donateWelcomeDismissed || !canShowDonateWelcomePopup()) return;
+    markDonateWelcomePopupShown();
+    popup.classList.add('show');
+    popup.setAttribute('aria-hidden', 'false');
+  } catch (_) {
+    // A missing/blocked image must not interrupt reading or show an empty popup.
+  } finally {
+    donateWelcomeOpening = false;
+  }
 }
 
 function closeDonateWelcomePopup() {
@@ -6013,7 +6027,32 @@ function initDonateWelcomePopup() {
       }
     } catch (_) { /* Reading remains available when browser storage is blocked. */ }
   });
-  setTimeout(openDonateWelcomePopup, 250);
+  if (!canShowDonateWelcomePopup()) return;
+  let queued = false;
+  let startupFallback;
+  const queuePopup = () => {
+    if (queued) return;
+    queued = true;
+    clearTimeout(startupFallback);
+    window.removeEventListener('load', queuePopup);
+    setTimeout(() => {
+      const showWhenVisible = () => {
+        if (document.hidden) return;
+        document.removeEventListener('visibilitychange', showWhenVisible);
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(() => { void openDonateWelcomePopup(); }, { timeout: 1000 });
+        } else {
+          void openDonateWelcomePopup();
+        }
+      };
+      if (document.hidden) document.addEventListener('visibilitychange', showWhenVisible);
+      else showWhenVisible();
+    }, 1000);
+  };
+  // Do not wait indefinitely for third-party ads to finish loading.
+  startupFallback = setTimeout(queuePopup, 2000);
+  if (document.readyState === 'complete') queuePopup();
+  else window.addEventListener('load', queuePopup, { once: true });
 }
 
 function openPortal(showCloseButton = true) {
