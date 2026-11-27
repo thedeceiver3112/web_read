@@ -8,6 +8,7 @@ RewriteRule ^ - [F,L]
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Robots-Tag "noindex, nofollow"
-  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), document-domain=()"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+  Header always set Origin-Agent-Cluster "?1"
   Header always set Content-Security-Policy "default-src 'none'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src https: 'unsafe-inline'; img-src https: data: blob:; font-src https: data:; connect-src https:; frame-src https: about: data: blob:; media-src https: blob:; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors https://thedeceiver.site https://www.thedeceiver.site"
 </IfModule>

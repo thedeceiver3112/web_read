@@ -1,7 +1,8 @@
 // Only the native placement can report its content height, to a fixed parent.
 (() => {
   if (window.parent === window) return;
-  const parentOrigin = 'https://thedeceiver.site';
+  const parentOrigin = document.referrer.startsWith('https://www.thedeceiver.site/')
+    ? 'https://www.thedeceiver.site' : 'https://thedeceiver.site';
   const content = document.getElementById('ad-content');
   if (!content) return;
   let previous = 0;
