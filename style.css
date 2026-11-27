@@ -22420,3 +22420,52 @@ body.theme-zalo .zalo-info-sidebar {
 @media (max-width: 799px) {
   .portal-ad-leaderboard { display: none; }
 }
+
+/* Keep the sponsor rail entirely in the unused desktop gutter. */
+.portal-container { position: relative; }
+.portal-smartlink-rail { display: none; }
+@media (min-width: 1880px) {
+  .portal-smartlink-rail {
+    display: block;
+    position: absolute;
+    left: -164px;
+    top: 54px;
+    width: 160px;
+  }
+}
+.portal-smartlink-banner {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  min-height: 600px;
+  padding: 24px 14px;
+  border: 1px solid #bae6fd;
+  border-radius: 16px;
+  background: #f0f9ff;
+  color: #0c4a6e;
+  text-align: center;
+  text-decoration: none;
+}
+.portal-smartlink-label { font-size: 10px; letter-spacing: 1.5px; color: #64748b; }
+.portal-smartlink-art { width: 120px; height: 150px; margin-top: 10px; flex: none; }
+.portal-smartlink-banner strong { font-size: 22px; line-height: 1.4; font-weight: 750; }
+.portal-smartlink-note { font-size: 12px; line-height: 1.7; color: #475569; }
+.portal-smartlink-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  padding: 11px 4px;
+  border-radius: 8px;
+  background: #0369a1;
+  color: white;
+  font-size: 12px;
+  font-weight: 650;
+  margin-top: auto;
+}
+.portal-smartlink-tab-note { font-size: 10px; line-height: 1.5; color: #64748b; }
+.portal-smartlink-banner:hover { border-color: #0284c7; background: #e0f2fe; }
+.portal-smartlink-banner:focus-visible { outline: 3px solid #0284c7; outline-offset: 4px; }
