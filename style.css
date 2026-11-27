@@ -22424,12 +22424,12 @@ body.theme-zalo .zalo-info-sidebar {
 /* Keep the sponsor rail entirely in the unused desktop gutter. */
 .portal-container { position: relative; }
 .portal-smartlink-rail { display: none; }
-@media (min-width: 1880px) {
+@media (min-width: 1880px) and (min-height: 720px) {
   .portal-smartlink-rail {
     display: block;
-    position: absolute;
-    left: -164px;
-    top: 54px;
+    position: fixed;
+    left: max(8px, calc((100% - 1540px) / 2 - 164px));
+    top: clamp(96px, 13vh, 132px);
     width: 160px;
   }
 }
