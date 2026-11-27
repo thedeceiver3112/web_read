@@ -87,7 +87,7 @@ test.describe('Thu Vien Phap Luat Authentic Portal Tests', () => {
     await expect(targetClause).toHaveClass(/active-clause/);
 
     // Take screenshot of authentic Light Mode
-    await page.screenshot({ path: 'static/tvpl_portal_light_verified.png' });
+    await page.screenshot({ path: 'output/playwright/tvpl_portal_light_verified.png' });
 
     // 6. Test Dark Mode Toggle
     const dmBtn = page.locator('#btn-tvpl-darkmode');
@@ -97,7 +97,7 @@ test.describe('Thu Vien Phap Luat Authentic Portal Tests', () => {
     await expect(page.locator('body')).toHaveClass(/dark-mode/);
 
     // Take screenshot of authentic Dark Mode
-    await page.screenshot({ path: 'static/tvpl_portal_dark_verified.png' });
+    await page.screenshot({ path: 'output/playwright/tvpl_portal_dark_verified.png' });
 
     // Toggle back to Light Mode
     await dmBtn.click();

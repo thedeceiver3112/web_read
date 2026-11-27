@@ -165,7 +165,7 @@ test.describe('Theme Adobe InDesign CC 2026', () => {
     expect(initialTops.leftTop).toBe(initialTops.rightTop);
 
     // Take screenshot at top of spread
-    await page.screenshot({ path: 'static/indesign_spread_reading.png' });
+    await page.screenshot({ path: 'output/playwright/indesign_spread_reading.png' });
 
     // Scroll down 600px inside the canvas scroll container
     await page.evaluate(() => {
@@ -193,7 +193,7 @@ test.describe('Theme Adobe InDesign CC 2026', () => {
     expect(scrolledTops.rightTop).toBeLessThan(initialTops.rightTop - 500);
 
     // Take screenshot while scrolled down to verify image is still pinned
-    await page.screenshot({ path: 'static/indesign_scroll_sticky.png' });
+    await page.screenshot({ path: 'output/playwright/indesign_scroll_sticky.png' });
 
     // 9. Verify Boss Mode (Esc / F2)
     const bossView = page.locator('#id-boss-view');

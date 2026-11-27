@@ -14,3 +14,8 @@ playwright-report/
 .env.*
 !.env.example
 tests/*.png
+
+# Local browser diagnostics, downloaded samples and verification artifacts.
+/.playwright-cli/
+/output/
+/scratch/

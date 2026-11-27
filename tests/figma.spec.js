@@ -179,7 +179,7 @@ test.describe('Figma UI3 Theme Tests', () => {
     // 10. Take verified Light Mode screenshot (controls hidden via 'H')
     await page.keyboard.press('h');
     await page.waitForTimeout(300);
-    await page.screenshot({ path: 'static/figma_ui3_stealth_clean.png', fullPage: false });
+    await page.screenshot({ path: 'output/playwright/figma_ui3_stealth_clean.png', fullPage: false });
 
     // Press 'H' again to restore controls
     await page.keyboard.press('h');
@@ -200,12 +200,12 @@ test.describe('Figma UI3 Theme Tests', () => {
     await expect(hexInput).toHaveValue('1E1E1E');
 
     // Take screenshot of Dark Mode with controls
-    await page.screenshot({ path: 'static/figma_ui3_dark_mode.png', fullPage: false });
+    await page.screenshot({ path: 'output/playwright/figma_ui3_dark_mode.png', fullPage: false });
 
     // Press 'H' to take Clean Dark Mode screenshot (full immersive desktop Figma UI3 dark)
     await page.keyboard.press('h');
     await page.waitForTimeout(300);
-    await page.screenshot({ path: 'static/figma_ui3_dark_clean.png', fullPage: false });
+    await page.screenshot({ path: 'output/playwright/figma_ui3_dark_clean.png', fullPage: false });
 
     // Test Alt+D shortcut toggles back to light mode
     await page.keyboard.press('Alt+d');

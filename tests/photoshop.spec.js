@@ -45,6 +45,6 @@ test.describe('Photoshop CC Theme Tests', () => {
     await expect(activePara.locator('.ps-chunk-body')).toContainText('như trong các ví dụ ở trên');
 
     // Take screenshot of clean Photoshop workspace
-    await page.screenshot({ path: 'static/photoshop_clean_verified.png' });
+    await page.screenshot({ path: 'output/playwright/photoshop_clean_verified.png' });
   });
 });
