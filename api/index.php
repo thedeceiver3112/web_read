@@ -9,6 +9,8 @@ const MAX_STORY_RESPONSE_BODY = 5242880;
 const STORY_PROXY_RATE_LIMIT = 120;
 const DEFAULT_ANALYTICS_ADMIN_EMAILS = ['nguyentranhaiphong2@gmail.com'];
 
+require_once __DIR__ . '/xtruyen.php';
+
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: same-origin');
 header('Cache-Control: no-store');
@@ -173,14 +175,14 @@ function online_story_request_json(array $config, string $url, array $params): a
     return $payload;
 }
 
-function online_story_request_text(array $config, string $url, array $params = []): string
+function online_story_request_text(array $config, string $url, array $params = [], int $timeout = 20): string
 {
     $body = '';
     $requestUrl = $url . ($params ? '?' . http_build_query($params) : '');
     $curl = curl_init($requestUrl);
     $curlOptions = [
         CURLOPT_CONNECTTIMEOUT => 4,
-        CURLOPT_TIMEOUT => 20,
+        CURLOPT_TIMEOUT => $timeout,
         CURLOPT_FOLLOWLOCATION => false,
         CURLOPT_HTTPHEADER => [
             'Accept: text/html,application/xhtml+xml',
@@ -277,7 +279,7 @@ function online_story_fetch_truyenfull(array $config, string $action, array $par
         $html = online_story_request_text($config, $base . '/ajax.php', [
             'type' => 'quick_search',
             'str' => $params['q'],
-        ]);
+        ], 8);
         preg_match_all('~<a\b(?P<tag>[^>]*)>(?P<body>.*?)</a>~is', $html, $matches, PREG_SET_ORDER);
         $items = [];
         $seen = [];
@@ -474,11 +476,27 @@ function online_story_fetch_hh3d(array $config, string $action, array $params, s
 
 function online_story_fetch(array $config, string $action, array $params, string $base): array
 {
+    if (($params['source'] ?? '') === 'xtruyen') {
+        return online_story_fetch_xtruyen($config, $action, $params);
+    }
     $provider = online_story_provider($config);
     if ($provider === 'hh3d') {
         return online_story_fetch_hh3d($config, $action, $params, $base);
     }
     if ($provider === 'truyenfull') {
+        if ($action === 'search' && ($params['source'] ?? '') === 'all') {
+            try {
+                $primary = online_story_fetch_truyenfull($config, $action, $params, $base);
+                if (!empty($primary['data'])) {
+                    return $primary;
+                }
+            } catch (RuntimeException $error) {
+                // Try the independent backup; keep chapter lists separate.
+            }
+            $backup = online_story_fetch_xtruyen($config, $action, $params);
+            $backup['backup'] = true;
+            return $backup;
+        }
         return online_story_fetch_truyenfull($config, $action, $params, $base);
     }
     $payload = online_story_request_json($config, $base . '/' . $action, $params);
@@ -529,7 +547,7 @@ function handle_online_story_proxy(array $config, string $path, string $method):
         json_response(400, ['success' => false, 'error' => 'Trang danh sách chương không hợp lệ.']);
     }
     $params['source'] = $params['source'] === '' ? 'all' : $params['source'];
-    if (!in_array($params['source'], ['all', 's1', 's2', 'hh3d', 'truyenfull'], true)) {
+    if (!in_array($params['source'], ['all', 's1', 's2', 'hh3d', 'truyenfull', 'xtruyen'], true)) {
         json_response(400, ['success' => false, 'error' => 'Nguồn truyện không hợp lệ.']);
     }
     $optional = $action === 'story' ? ['source', 'page'] : ['source'];

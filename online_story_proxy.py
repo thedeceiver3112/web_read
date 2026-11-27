@@ -15,9 +15,11 @@ from urllib.parse import parse_qs, urlsplit
 
 import requests
 
+from online_story_xtruyen import fetch_xtruyen
+
 
 PROXY_PREFIX = "/api/online-story/"
-ALLOWED_SOURCES = {"all", "s1", "s2", "hh3d", "truyenfull"}
+ALLOWED_SOURCES = {"all", "s1", "s2", "hh3d", "truyenfull", "xtruyen"}
 ACTION_RULES = {
     "search": {"required": ("q",), "ttl": 5 * 60},
     "story": {"required": ("story",), "ttl": 60 * 60},
@@ -161,7 +163,7 @@ def _request_upstream_json(url: str, params: dict[str, str]) -> dict[str, Any]:
     return payload
 
 
-def _request_upstream_html(url: str, params: dict[str, str] | None = None) -> str:
+def _request_upstream_html(url: str, params: dict[str, str] | None = None, timeout=(4, 20)) -> str:
     response = requests.get(
         url,
         params=params or {},
@@ -173,7 +175,7 @@ def _request_upstream_html(url: str, params: dict[str, str] | None = None) -> st
                 "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0 Safari/537.36"
             ),
         },
-        timeout=(4, 20),
+        timeout=timeout,
         allow_redirects=False,
         stream=True,
     )
@@ -255,6 +257,7 @@ def _fetch_truyenfull(action: str, params: dict[str, str], base_url: str) -> dic
         html = _request_upstream_html(
             f"{base_url}/ajax.php",
             {"type": "quick_search", "str": params["q"]},
+            timeout=(3, 6),
         )
         results = []
         seen = set()
@@ -440,9 +443,21 @@ def _fetch_upstream(action: str, params: dict[str, str]) -> dict[str, Any]:
     if not base_url:
         raise RuntimeError("proxy_not_configured")
 
+    if params.get("source") == "xtruyen":
+        return fetch_xtruyen(action, params)
     if _is_hh3d_provider(base_url):
         return _fetch_hh3d(action, params, base_url)
     if _is_truyenfull_provider(base_url):
+        if action == "search" and params.get("source") == "all":
+            try:
+                primary = _fetch_truyenfull(action, params, base_url)
+                if primary.get("data"):
+                    return primary
+            except (requests.RequestException, RuntimeError, ValueError):
+                pass
+            backup = fetch_xtruyen(action, params)
+            backup["backup"] = True
+            return backup
         return _fetch_truyenfull(action, params, base_url)
 
     payload = _request_upstream_json(f"{base_url}/{action}", params)

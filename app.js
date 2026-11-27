@@ -1603,7 +1603,7 @@ const FAVICONS = {
   'theme-gmail': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2038.5V13.8L24%2027.5l19.5-13.7v24.7c0%202.2-1.8%204-4%204H8.5c-2.2%200-4-1.8-4-4z%22/%3E%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M43.5%2013.8v24.7c0%202.2-1.8%204-4%204h-5V20.5l9-6.7z%22/%3E%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M4.5%2013.8v24.7c0%202.2%201.8%204%204%204h5V20.5l-9-6.7z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M13.5%205.5L24%2014.5l10.5-9h-21z%22/%3E%3Cpath%20fill%3D%22%23FBBC05%22%20d%3D%22M4.5%209.5C4.5%207.3%206.3%205.5%208.5%205.5h5l-9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23C5221F%22%20d%3D%22M43.5%209.5c0-2.2-1.8-4-4-4h-5l9%208.3v-4.3z%22/%3E%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M4.5%2013.8L24%2027.5%2043.5%2013.8%2024%2029%204.5%2013.8z%22/%3E%3C/svg%3E",
   'theme-outlook': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20x%3D%2214%22%20y%3D%228%22%20width%3D%2228%22%20height%3D%2232%22%20rx%3D%224%22%20fill%3D%22%230078D4%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10v22a4%204%200%200%201-4%204H18a4%204%200%200%201-4-4V14z%22%20fill%3D%22%2328A8EA%22%20opacity%3D%220.6%22/%3E%3Cpath%20d%3D%22M14%2014l14%2010%2014-10%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3Crect%20x%3D%226%22%20y%3D%2212%22%20width%3D%2222%22%20height%3D%2224%22%20rx%3D%224%22%20fill%3D%22%23005A9E%22/%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2224%22%20r%3D%226.5%22%20fill%3D%22none%22%20stroke%3D%22%23FFFFFF%22%20stroke-width%3D%223.2%22/%3E%3C/svg%3E",
   'theme-jira': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20d%3D%22M490.6%207.4H243.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V28.1c.1-11.7-9.2-20.7-21.3-20.7%22%20fill%3D%22%232684ff%22/%3E%3Cpath%20d%3D%22M368.7%20126.5H121.9c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.9c0%2059.6%2049.9%20108%20111.2%20108V147.3c.2-11.1-9.1-20.8-21.2-20.8%22%20fill%3D%22%230052cc%22/%3E%3Cpath%20d%3D%22M246.7%20246.3H0c0%2059.6%2049.9%20108%20111.2%20108h45.6v42.2c0%2059.6%2049.9%20108%20111.2%20108V267.1c.1-11.8-9.9-20.8-21.3-20.8%22%20fill%3D%22%230052cc%22/%3E%3C/svg%3E",
-  'theme-slack': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20122.8%20122.8%22%3E%3Cpath%20d%3D%22M25.8%2077.6c0%207.1-5.8%2012.9-12.9%2012.9S0%2084.7%200%2077.6s5.8-12.9%2012.9-12.9h12.9v12.9zm6.5%200c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9v32.3c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V77.6z%22%20fill%3D%22%23e01e5a%22/%3E%3Cpath%20d%3D%22M45.2%2025.8c-7.1%200-12.9-5.8-12.9-12.9S38.1%200%2045.2%200s12.9%205.8%2012.9%2012.9v12.9H45.2zm0%206.5c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H12.9C5.8%2058.1%200%2052.3%200%2045.2s5.8-12.9%2012.9-12.9h32.3z%22%20fill%3D%22%2336c5f0%22/%3E%3Cpath%20d%3D%22M97%2045.2c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9-5.8%2012.9-12.9%2012.9H97V45.2zm-6.5%200c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V12.9C77.6%205.8%2083.4%200%2090.5%200s12.9%205.8%2012.9%2012.9v32.3z%22%20fill%3D%22%232eb67d%22/%3E%3Cpath%20d%3D%22M77.6%2097c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9-5.8%2012.9-12.9-12.9V97h12.9zm0-6.5c-7.1%200-12.9-5.8-12.9-12.9s5.8-12.9%2012.9-12.9h32.3c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H77.6z%22%20fill%3D%22%23ecb22e%22/%3E%3C/svg%3E",
+  'theme-slack': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20122.8%20122.8%22%3E%3Cpath%20d%3D%22M25.8%2077.6c0%207.1-5.8%2012.9-12.9%2012.9S0%2084.7%200%2077.6s5.8-12.9%2012.9-12.9h12.9v12.9zm6.5%200c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9v32.3c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V77.6z%22%20fill%3D%22%23e01e5a%22/%3E%3Cpath%20d%3D%22M45.2%2025.8c-7.1%200-12.9-5.8-12.9-12.9S38.1%200%2045.2%200s12.9%205.8%2012.9%2012.9v12.9H45.2zm0%206.5c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H12.9C5.8%2058.1%200%2052.3%200%2045.2s5.8-12.9%2012.9-12.9h32.3z%22%20fill%3D%22%2336c5f0%22/%3E%3Cpath%20d%3D%22M97%2045.2c0-7.1%205.8-12.9%2012.9-12.9s12.9%205.8%2012.9%2012.9-5.8%2012.9-12.9%2012.9H97V45.2zm-6.5%200c0%207.1-5.8%2012.9-12.9%2012.9s-12.9-5.8-12.9-12.9V12.9C77.6%205.8%2083.4%200%2090.5%200s12.9%205.8%2012.9%2012.9v32.3z%22%20fill%3D%22%232eb67d%22/%3E%3Cpath%20d%3D%22M77.6%2097c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1%200-12.9-5.8-12.9-12.9s5.8-12.9%2012.9-12.9h32.3c7.1%200%2012.9%205.8%2012.9%2012.9s-5.8%2012.9-12.9%2012.9H77.6z%22%20fill%3D%22%23ecb22e%22/%3E%3C/svg%3E",
   'portal': "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230ea5e9%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231d4ed8%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2212%22%20fill%3D%22url%28%23bg%29%22/%3E%3Cpath%20d%3D%22M11%2014c4.5-2.5%209.5-2.5%2013%201v20c-3.5-3-8.5-3-13-.5V14z%22%20fill%3D%22%23ffffff%22%20opacity%3D%220.9%22/%3E%3Cpath%20d%3D%22M37%2014c-4.5-2.5-9.5-2.5-13%201v20c3.5-3%208.5-3%2013-.5V14z%22%20fill%3D%22%23ffffff%22/%3E%3Cpath%20d%3D%22M24%2015v20%22%20stroke%3D%22%230284c7%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E",
 };
 
@@ -3796,7 +3796,7 @@ function getThemePickerModalHTML() {
                   <path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9zm6.5 0c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="#e01e5a"/>
                   <path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2zm0 6.5c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="#36c5f0"/>
                   <path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2zm-6.5 0c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C77.6 5.8 83.4 0 90.5 0s12.9 5.8 12.9 12.9v32.3z" fill="#2eb67d"/>
-                  <path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-5.8 12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ecb22e"/>
+                  <path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9zm0-6.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ecb22e"/>
                 </svg>
               </div>
               <span class="theme-card-title">Slack</span>
@@ -4872,7 +4872,7 @@ function setOnlineStoryStatus(message = '', type = '') {
 }
 
 function getOnlineSourceLabel(source) {
-  return source === 's1' || source === 'truyenfull' ? 'TruyenFull' : source === 's2' ? 'VivuTruyen' : 'Nguồn online';
+  return source === 'xtruyen' ? 'Nguồn dự phòng' : source === 's1' || source === 'truyenfull' ? 'TruyenFull' : source === 's2' ? 'VivuTruyen' : 'Nguồn online';
 }
 
 function normalizeOnlineApiError(error) {
@@ -4892,7 +4892,9 @@ async function fetchOnlineStoryJson(path, params, options = {}) {
     const controller = new AbortController();
     onlineStoryAbortController?.abort();
     onlineStoryAbortController = controller;
-    const timeout = setTimeout(() => controller.abort(), ONLINE_STORY_FETCH_TIMEOUT);
+    const requestTimeout = path === 'search' ? 35000 : path === 'story' ? 45000
+      : params?.source === 'xtruyen' ? 25000 : ONLINE_STORY_FETCH_TIMEOUT;
+    const timeout = setTimeout(() => controller.abort(), requestTimeout);
     try {
       const url = new URL(`${ONLINE_STORY_API_BASE}/${path}`, window.location.origin);
       Object.entries(params || {}).forEach(([key, value]) => url.searchParams.set(key, value));
@@ -5019,7 +5021,7 @@ function renderOnlineStoryResults() {
   }
 
   container.innerHTML = onlineStoryPickerState.results.map((story, index) => {
-    const isSelected = onlineStoryPickerState.story?.storyId === (story.story_id || story.storyId);
+    const isSelected = onlineStoryPickerState.story?.source === story.source && onlineStoryPickerState.story?.storyId === (story.story_id || story.storyId);
     return `
     <button type="button" class="online-story-result ${isSelected ? 'selected' : ''}" data-online-result="${index}">
       <div class="online-story-result-icon">
@@ -5031,7 +5033,7 @@ function renderOnlineStoryResults() {
       <div class="online-story-result-content">
         <strong>${escapeHtml(story.title || 'Chưa có tên')}</strong>
         <span>
-          ${escapeHtml(story.author || 'Không rõ tác giả')}${story.latest_chapter ? ` · ${escapeHtml(story.latest_chapter)}` : ''}
+          ${escapeHtml(story.author || 'Không rõ tác giả')}${story.latest_chapter ? ` · ${escapeHtml(story.latest_chapter)}` : ''}${story.source === 'xtruyen' ? ' · Nguồn dự phòng' : ''}
         </span>
       </div>
       <div class="online-story-result-action">
@@ -5074,6 +5076,7 @@ function renderOnlineStoryDetail() {
   if (!container || !story) return;
 
   const remotePaged = isPagedOnlineStory(story);
+  const rangePageSize = remotePaged ? getOnlineStoryPageSize(story) : ONLINE_STORY_CHAPTERS_PER_PAGE;
   const totalChapters = remotePaged ? story.chapterCount : story.chapters.length;
   const filtered = getFilteredOnlineChapters();
   const pageCount = remotePaged
@@ -5086,7 +5089,7 @@ function renderOnlineStoryDetail() {
   const start = remotePaged ? getOnlineStoryPageOffset(story) : (currentPage - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE;
   const visible = remotePaged ? filtered : filtered.slice(start, start + ONLINE_STORY_CHAPTERS_PER_PAGE);
 
-  const isCurrentStory = state.onlineStory?.storyId === story.storyId;
+  const isCurrentStory = state.onlineStory?.source === story.source && state.onlineStory?.storyId === story.storyId;
   const currentChapterPosition = isCurrentStory
     ? Number(state.onlineStory?.currentChapterPosition ?? state.onlineStory?.currentChapterIndex ?? -1)
     : -1;
@@ -5099,8 +5102,8 @@ function renderOnlineStoryDetail() {
         <div class="online-story-range-tabs">
           ${Array.from({ length: pageCount }, (_, i) => {
             const p = i + 1;
-            const rStart = (p - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE + 1;
-            const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, totalChapters);
+            const rStart = (p - 1) * rangePageSize + 1;
+            const rEnd = Math.min(p * rangePageSize, totalChapters);
             const isActive = p === currentPage;
             return `<button type="button" class="online-story-range-tab ${isActive ? 'active' : ''}" data-online-page="${p}">${rStart}–${rEnd}</button>`;
           }).join('')}
@@ -5113,8 +5116,8 @@ function renderOnlineStoryDetail() {
           <select id="online-story-range-select" class="online-story-range-select" aria-label="Chọn phần chương">
             ${Array.from({ length: pageCount }, (_, i) => {
               const p = i + 1;
-              const rStart = (p - 1) * ONLINE_STORY_CHAPTERS_PER_PAGE + 1;
-              const rEnd = Math.min(p * ONLINE_STORY_CHAPTERS_PER_PAGE, totalChapters);
+              const rStart = (p - 1) * rangePageSize + 1;
+              const rEnd = Math.min(p * rangePageSize, totalChapters);
               return `<option value="${p}" ${p === currentPage ? 'selected' : ''}>Chương ${rStart} – ${rEnd}</option>`;
             }).join('')}
           </select>
@@ -5338,7 +5341,7 @@ async function loadOnlineStoryChapterAtPosition(story, position, options = {}) {
     showLoading(`Đang tải nhóm chương ${targetPage}/${story.chapterPages}...`);
     try {
       targetStory = await fetchOnlineStoryPage(story, targetPage);
-      if (onlineStoryPickerState.story?.storyId === targetStory.storyId) {
+      if (onlineStoryPickerState.story?.source === targetStory.source && onlineStoryPickerState.story?.storyId === targetStory.storyId) {
         onlineStoryPickerState.story = targetStory;
       }
     } catch (error) {
@@ -5560,7 +5563,7 @@ function initOnlineStoryPicker() {
     event.preventDefault();
     if (onlineStoryPickerState.busy) return;
     const query = document.getElementById('online-story-query')?.value.trim() || '';
-    const source = 'all';
+    const source = event.submitter?.dataset.onlineSource === 'xtruyen' ? 'xtruyen' : 'all';
     const button = document.getElementById('online-story-search-button');
     if (query.length < 2) {
       setOnlineStoryStatus('Nhập ít nhất 2 ký tự để tìm truyện.', 'error');
@@ -5579,7 +5582,7 @@ function initOnlineStoryPicker() {
     try {
       const payload = await fetchOnlineStoryJson('search', { q: query, source });
       onlineStoryPickerState.results = Array.isArray(payload.data) ? payload.data : [];
-      setOnlineStoryStatus(`Tìm thấy ${onlineStoryPickerState.results.length} kết quả phù hợp.`);
+      setOnlineStoryStatus(`${payload.backup || source === 'xtruyen' ? 'Đang dùng nguồn dự phòng. ' : ''}Tìm thấy ${onlineStoryPickerState.results.length} kết quả phù hợp.`);
       renderOnlineStoryResults();
     } catch (error) {
       onlineStoryPickerState.results = [];
